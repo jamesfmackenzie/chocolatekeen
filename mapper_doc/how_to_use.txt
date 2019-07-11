@@ -1,0 +1,157 @@
+===================
+A brief description
+===================
+
+Back when Keen 1-3 were originally made available, they were made with a
+PC keyboard as the main input device in mind.
+Basic support for 2-button joysticks was added as well. Technically the games
+have code supporting one of two such connected joysticks, although only one
+of them is usable in practice (at least without minor hex editing/patching).
+In addition, the games also have unused mouse input code.
+
+There are a few limitations in the games as originally released:
+- They weren't made with different game controllers in mind (say 4-buttons
+joysticks), even if for non-gameplay purposes (e.g., showing the help section).
+- Hence, a keyboard is still required, say for text input
+(high scores table) and sound toggling.
+
+As for Chocolate Keen, with a great inspiration from the DOSBox emulator
+(even having a similar file format), an input mapper is available. With this,
+it should be possible to map/bind events that the original games for DOS
+expect to different events in practice.
+
+For instance, you may press on a gamepad button to make the game act exactly
+like the "Space" key is pressed, showing the status window. It's not that the
+game code has any "awareness" of this mapping. It's just like the "Space" key
+is pressed.
+
+=====================
+Messing with bindings
+=====================
+
+Load the Chocolate Keen launcher, pick the input mapper
+(from the settings menu) and then pick an emulated event.
+
+You should then be able to add a new binding. Furthermore, in case there is
+any binding involving the given event, you should be able to:
+- Scroll over the event's bindings.
+- Delete a selected binding.
+- Change the modifiers of a selected binding.
+
+For instance, click on the "1" key in the UI (with the labels "!" and "1").
+By default it should have a binding to the key 1 on the physical keyboard
+(assuming US/QWERTY layout). But you can also delete the binding, and then
+ask to add a new binding, followed by a joystick button press.
+From this point onwards, you should be able to press on the same joystick
+button whenever Keen 1-3 expect a "1" key press (e.g., saved game selection).
+
+Be warned that the specific joystick button may already be involved in another
+binding. Furthermore, you may wish to have the joystick connected *before*
+loading the Chocolate Keen launcher (or even just Chocolate Keen).
+
+=======================
+A more involved example
+=======================
+
+Apart from emulated keyboard, joystick and mouse events, there are also
+special handler and modifier events.
+
+Consider the handler "Cursor lock toggle" (hand_capcursor) from the mapper UI.
+By default, you can (un)lock the mouse cursor by holding a Ctrl key and then
+pressing on the F10 key. In the binding itself you should see a mention of F10,
+along with the modifier mod1. It is the case that, by default, mod1 refers to
+any Ctrl key.
+
+Indeed, rather than the handler "Cursor lock toggle", you may pick the modifier
+"Mod 1" from the mapper UI and see a binding involving the Left Ctrl key.
+By scrolling over the modifier event's bindings you should be able to find a
+mention of Right Ctrl as well.
+
+The implication of that is the following: Any binding that activates the
+event "Mod 1" (LCtrl/RCtrl by default) should be in effect in order to toggle
+the mouse cursor on/off, before pressing on F10.
+
+================================
+Manually editing the mapper file
+================================
+
+In case of troubles (and only then), you may wish to manually edit the
+mapper file. If not already done, you can generate a mapper file by starting
+the Chocolate Keen launcher, picking the input mapper and then messing with it.
+For any change that's done (such as the addition of a new binding), a mapper
+file with updated contents should be (re)generated automatically.
+
+-----------------
+Locating the file
+-----------------
+
+At the moment it should be found where Chocolate Keen is being run from.
+
+-------------------------------------------------------------
+Mapping physical keyboard's keys to emulated in-game features
+-------------------------------------------------------------
+
+The mappings involving the physical keyboard are identified by strings like
+"key 100", including the quotation marks.
+
+To identify key numbers in chocolate-keen-mapper-sdl1_2.map, look for the
+keysym enumeration in SDL_1_2_keysym.h.txt.
+For the similar numbers in chocolate-keen-mapper-sdl2_0.map (of a different
+kind!) check the scancode enumeration in SDL_2_0_scancode.h.txt.
+
+For instance, with SDL 2.0.3 a binding of emulated key 1 to physical key 1
+(scancode no. 30) is given by:
+
+key_1 "key 30"
+
+--------------------------------------------------------
+Mapping physical game controller features (e.g. buttons)
+to emulated in-game features (like keyboard's keys)
+--------------------------------------------------------
+
+Rather than things like "key 100" scattered in the file, the physical game
+controller mappings have the following forms:
+
+"stick_0 axis 1 0" - Map controller no. 0's 2nd stick (counting from 0) to
+an emulated event, in the negative direction (usually up or left).
+"stick_0 axis 1 1" - Same but in the positive direction (often down/right).
+"stick_0 button 2" - Map controller no. 0's 3rd button (again counting from 0).
+"stick_0 hat 0 1" - Map controller no. 0's 1st hat to something, while pointing
+in a specific direction. Here, the last mention of the number '1' represents
+the "up" direction. Similarly you can use 2 for "right", 4 for "down" and 8
+for "left". (Don't ask why... ok it comes from SDL in a way, sort of. It also
+reminds of the numbers used in current DOSBox mapper files.)
+
+An example of a mapping of one button to the left control key, implying you can
+use the button for a "jump" action with the default vanilla Keen settings:
+
+key_lctrl "stick_0 button 0"
+
+------------------------------------------------------------
+Mapping physical mouse features to emulated in-game features
+------------------------------------------------------------
+
+For reference, here are the current default mouse mappings. You should be
+interested in anything enclosed by quotation marks, e.g. "mouse button 0".
+
+mbutton_left "mouse button 0"
+mbutton_right "mouse button 2"
+mbutton_middle "mouse button 1"
+maxis_horiz- "mouse axis 0 0"
+maxis_horiz+ "mouse axis 0 1"
+maxis_vert- "mouse axis 1 0"
+maxis_vert+ "mouse axis 1 1"
+
+Of course, mouse features can be used for different purposes. For instance:
+
+key_space "mouse button 1"
+
+--------------
+One final note
+--------------
+
+You can have multiple maps to the same emulated feature, i.e:
+
+key_lctrl "key 306" "stick_0 button 0"
+
+But the mapped action itself (e.g. key_lctrl) should appear JUST ONCE!

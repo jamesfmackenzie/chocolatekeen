@@ -21,5 +21,5 @@ if [ "$1" = "" ]; then
 else
 	SDL_PATH=$1
 	shift 1
-	make BINPREFIX=i686-w64-mingw32- SDLCONFIG="$SDL_PATH/bin/$SDLCONFIGBIN --prefix=$SDL_PATH" PLATFORM=WINDOWS CXXFLAGS=-Iwindows/include "$@"
+	make BINPREFIX=x86_64-w64-mingw32- SDLCONFIG="$SDL_PATH/bin/$SDLCONFIGBIN --prefix=$SDL_PATH" PLATFORM=WINDOWS CXXFLAGS=-Iwindows/include "$@"
 fi

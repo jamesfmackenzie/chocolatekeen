@@ -1,6 +1,8 @@
 # chocolatekeen
 Chocolate Keen is a reverse engineering of Commander Keen in C/C++ and SDL. The goal is to be super accurate versus the original
 
+The original authors are NY00123, QuantumG and Lemm. For more info see https://pckf.com/viewtopic.php?f=4&t=2536
+
 ## Releases
 Find binaries and game data in the Releases directory:
 

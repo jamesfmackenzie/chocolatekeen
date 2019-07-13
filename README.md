@@ -4,9 +4,19 @@ Chocolate Keen is a reverse engineering of Commander Keen in C/C++ and SDL. The 
 ## Releases
 Find binaries and game data in the Releases directory:
 
-* x86 - for 32-bit Windows
-* x64 - for 64-bit Windows
+* Releases/x86 - for 32-bit Windows
+* Releases/x64 - for 64-bit Windows
 
-# Building
- ./crossbuild_mingw-w64.sh /d/Development/SDL2-2.0.9/x86_64-w64-mingw32/
- ./crossbuild_mingw32.sh /d/Development/SDL2-2.0.9/i686-w64-mingw32/
+## How to Play
+Download the Releases subfolder that corresponds to your platform. Run `chocolate-keen.exe`  
+
+## Building
+1. Install MSYS2 and gcc toolchain: https://www.math.ucla.edu/~wotaoyin/windows_coding.html
+2. Download and unzip SDL 2.0 development libraries: https://www.libsdl.org/download-2.0.php
+2. Run build script that corresponds to your platform:
+* x86:
+  * `./crossbuild_mingw32.sh /path/to/SDL2`
+  * e.g. `./crossbuild_mingw32.sh /d/Development/SDL2-2.0.9/i686-w64-mingw32/`
+* x64:
+  * `./crossbuild_mingw32.sh /path/to/SDL2`
+  * e.g. `./crossbuild_mingw-w64.sh /d/Development/SDL2-2.0.9/x86_64-w64-mingw32/`

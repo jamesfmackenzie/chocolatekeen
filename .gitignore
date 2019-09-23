@@ -14,7 +14,6 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
 
 # Fortran module files
 *.mod
@@ -31,12 +30,6 @@
 *.app
 
 # Visual Studio
-.vs/chocolatekeen/v14/.suo
-chocolatekeen.sln
-*.sdf
-chocolatekeen.VC.opendb
-*.vcxproj
-chocolatekeen.vcxproj.filters
 
 # Commander Keen config files
 Releases/x64/chocolate-keen.cfg

@@ -1,5 +1,7 @@
 #!/bin/sh
 
+mkdir -p obj
+
 if [ -z "$SDLCONFIGBIN" ]; then
     export SDLCONFIGBIN=sdl2-config
 fi

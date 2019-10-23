@@ -3592,6 +3592,7 @@ right_after_drawing_sync:
             return 0;
     } while ((level_finished == LEVEL_END_DIE) && (sprites[0].type_));
 
+    // TODO: comment this out if sound running, otherwise the below will never finish
     CVort_engine_finishCurSound();
     CVort_fade_out();
     for (var_4 = 0; var_4 < 4; var_4++)
@@ -5073,7 +5074,7 @@ void CVort_think_keen_exit() {
     }
     if ((time << 12) <= temp_sprite.posX) {
         temp_sprite.type_ = 0;
-        level_finished = LEVEL_END_EXIT;
+        level_finished = LEVEL_END_EXIT;   
     }
 }
 

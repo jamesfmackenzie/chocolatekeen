@@ -2,6 +2,7 @@
 //#include <vector>
 #include "SDL.h"
 #include "SDL_endian.h"
+#include <emscripten.h>
 
 /* TODO: Currently unused */
 #if 0
@@ -404,7 +405,8 @@ void CVort_engine_displayCommandLineHelp() {
         //engine_shortSleep();
         // But let's use this:
         CVort_engine_updateActualDisplay();
-        SDL_Delay(1);
+        //SDL_Delay(1);
+        emscripten_sleep(1);
     } while (1);
     // We should NEVER reach this stage... so not calling CVort_engine_shutdownSDL().
 }
@@ -637,7 +639,8 @@ void CVort_engine_loadKeen(gameversion_T gameVer) {
 			//engine_shortSleep();
 			// But let's use this:
 			CVort_engine_updateActualDisplay();
-			SDL_Delay(1);
+        //SDL_Delay(1);
+        emscripten_sleep(1);
 		} while (1);
 		// We should NEVER reach this stage...
 	}
@@ -851,7 +854,8 @@ void CVort_engine_handleQuit() {
         //engine_shortSleep();
         // But let's use this:
         CVort_engine_updateActualDisplay();
-        SDL_Delay(1);
+        //SDL_Delay(1);
+        emscripten_sleep(1);
     } while (1);
 }
 
@@ -1004,7 +1008,8 @@ void CVort_engine_doWaitInterval(void) {
         CVort_engine_updateActualDisplay();
         engine_lastDisplayUpdateTime = SDL_GetTicks();
     } else { // Maybe we have waited for (host, real) VSync anyway?
-        SDL_Delay(1);
+        //SDL_Delay(1);
+        emscripten_sleep(1);
     }
 }
 
@@ -1017,7 +1022,8 @@ void CVort_engine_shortSleep(void) {
         CVort_engine_updateActualDisplay();
         engine_lastDisplayUpdateTime = SDL_GetTicks();
     }
-    SDL_Delay(1);
+        //SDL_Delay(1);
+        emscripten_sleep(1);
     CVort_engine_updateInputStatus();
     engine_doResetMomentToDelay = true;
 }

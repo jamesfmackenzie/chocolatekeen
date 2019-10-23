@@ -1613,10 +1613,12 @@ bool privCreateHostWindow(void) {
 
 	// Still under the assumption _CHOCOLATE_KEEN_ENABLE_OPENGL_ is defined;
 	// Make window resizable ONLY if it should have the launcher UI
-	engine_screen.sdl.window = SDL_CreateWindow("", SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), screenWidth, screenHeight, (engine_gfx_effective_arguments.isFullscreen ? (engine_screen.host.useFullDesktopDims ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_FULLSCREEN) : 0) | ((engine_gfx_effective_arguments.outputSystem == OUTPUTSYS_OPENGL) ? SDL_WINDOW_OPENGL : 0) | ((engine_screen.client.currVidMode == -1) ? SDL_WINDOW_RESIZABLE : 0));
+	//engine_screen.sdl.window = SDL_CreateWindow("", SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), screenWidth, screenHeight, (engine_gfx_effective_arguments.isFullscreen ? (engine_screen.host.useFullDesktopDims ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_FULLSCREEN) : 0) | ((engine_gfx_effective_arguments.outputSystem == OUTPUTSYS_OPENGL) ? SDL_WINDOW_OPENGL : 0) | ((engine_screen.client.currVidMode == -1) ? SDL_WINDOW_RESIZABLE : 0));
+	engine_screen.sdl.window = SDL_CreateWindow("", 0, 0, 640, 400, 0);
 #else // Not OpenGL
 	// Make window resizable ONLY if it should have the launcher UI
-	engine_screen.sdl.window = SDL_CreateWindow("", SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), screenWidth, screenHeight, (engine_gfx_effective_arguments.isFullscreen ? (engine_screen.host.useFullDesktopDims ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_FULLSCREEN) : 0) | ((engine_screen.client.currVidMode == -1) ? SDL_WINDOW_RESIZABLE : 0));
+	//engine_screen.sdl.window = SDL_CreateWindow("", SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), screenWidth, screenHeight, (engine_gfx_effective_arguments.isFullscreen ? (engine_screen.host.useFullDesktopDims ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_FULLSCREEN) : 0) | ((engine_screen.client.currVidMode == -1) ? SDL_WINDOW_RESIZABLE : 0));
+	engine_screen.sdl.window = SDL_CreateWindow("", 0, 0, 640, 400, 0);
 #endif // GL
 	if (!engine_screen.sdl.window) {
 #ifdef _CHOCOLATE_KEEN_ENABLE_OPENGL_

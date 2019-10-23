@@ -1,4 +1,6 @@
 #include "SDL.h"
+#include <emscripten.h>
+
 #ifdef __WIN32__
 #include "windows.h" // For LoadKeyboardLayout
 #endif
@@ -1593,7 +1595,8 @@ MappedInputEvent_T *CVort_engine_recordNewInputMapping(EmulatedInput_T emuInput,
 			CVort_engine_updateActualDisplay();
 			engine_lastDisplayUpdateTime = SDL_GetTicks();
 		}
-		SDL_Delay(1);
+		//SDL_Delay(1);
+        emscripten_sleep(1);
 	}
 	if (doWait) // Timed out
 		return NULL;

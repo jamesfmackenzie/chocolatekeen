@@ -8,9 +8,11 @@ Find binaries and game data in the Releases directory:
 
 * Releases/x86 - for 32-bit Windows
 * Releases/x64 - for 64-bit Windows
+* Releases/WebAssembly - WebAssembly version. Will run in most modern browsers
 
 ## How to Play
-Download the Releases subfolder that corresponds to your platform. Run `chocolate-keen.exe`  
+* To play in the browser, click <a href="http://www.jamesfmackenzie.com/chocolatekeen">here</a>
+* For local play, download the Releases subfolder that corresponds to your platform and run `chocolate-keen.exe`  
 
 ## Building
 This is a Makefile project. To build on Windows you'll need something like <a href="https://www.msys2.org/" target="_blank">MSYS2</a> and a gcc toolchain. Find setup instructions <a href="https://www.math.ucla.edu/~wotaoyin/windows_coding.html" target="_blank">here</a>

@@ -192,7 +192,7 @@ Module['FS_createPath']('/GAMEDATA', 'KEEN1', true, true);
   }
 
  }
- loadPackage({"files": [{"start": 0, "audio": 0, "end": 1088000, "filename": "/SDL2.dll"}, {"start": 1088000, "audio": 0, "end": 1473038, "filename": "/chocolate-keen.exe"}, {"start": 1473038, "audio": 0, "end": 1488606, "filename": "/GAMEDATA/KEEN1/EGAHEAD.CK1"}, {"start": 1488606, "audio": 0, "end": 1545671, "filename": "/GAMEDATA/KEEN1/EGALATCH.CK1"}, {"start": 1545671, "audio": 0, "end": 1563304, "filename": "/GAMEDATA/KEEN1/EGASPRIT.CK1"}, {"start": 1563304, "audio": 0, "end": 1564206, "filename": "/GAMEDATA/KEEN1/ENDTEXT.CK1"}, {"start": 1564206, "audio": 0, "end": 1572771, "filename": "/GAMEDATA/KEEN1/FINALE.CK1"}, {"start": 1572771, "audio": 0, "end": 1574630, "filename": "/GAMEDATA/KEEN1/HELPTEXT.CK1"}, {"start": 1574630, "audio": 0, "end": 1625820, "filename": "/GAMEDATA/KEEN1/KEEN1.EXE"}, {"start": 1625820, "audio": 0, "end": 1627188, "filename": "/GAMEDATA/KEEN1/LEVEL01.CK1"}, {"start": 1627188, "audio": 0, "end": 1627912, "filename": "/GAMEDATA/KEEN1/LEVEL02.CK1"}, {"start": 1627912, "audio": 0, "end": 1631386, "filename": "/GAMEDATA/KEEN1/LEVEL03.CK1"}, {"start": 1631386, "audio": 0, "end": 1633106, "filename": "/GAMEDATA/KEEN1/LEVEL04.CK1"}, {"start": 1633106, "audio": 0, "end": 1633916, "filename": "/GAMEDATA/KEEN1/LEVEL05.CK1"}, {"start": 1633916, "audio": 0, "end": 1634844, "filename": "/GAMEDATA/KEEN1/LEVEL06.CK1"}, {"start": 1634844, "audio": 0, "end": 1640494, "filename": "/GAMEDATA/KEEN1/LEVEL07.CK1"}, {"start": 1640494, "audio": 0, "end": 1643910, "filename": "/GAMEDATA/KEEN1/LEVEL08.CK1"}, {"start": 1643910, "audio": 0, "end": 1645548, "filename": "/GAMEDATA/KEEN1/LEVEL09.CK1"}, {"start": 1645548, "audio": 0, "end": 1647634, "filename": "/GAMEDATA/KEEN1/LEVEL10.CK1"}, {"start": 1647634, "audio": 0, "end": 1649270, "filename": "/GAMEDATA/KEEN1/LEVEL11.CK1"}, {"start": 1649270, "audio": 0, "end": 1651448, "filename": "/GAMEDATA/KEEN1/LEVEL12.CK1"}, {"start": 1651448, "audio": 0, "end": 1661356, "filename": "/GAMEDATA/KEEN1/LEVEL13.CK1"}, {"start": 1661356, "audio": 0, "end": 1668380, "filename": "/GAMEDATA/KEEN1/LEVEL14.CK1"}, {"start": 1668380, "audio": 0, "end": 1670614, "filename": "/GAMEDATA/KEEN1/LEVEL15.CK1"}, {"start": 1670614, "audio": 0, "end": 1676432, "filename": "/GAMEDATA/KEEN1/LEVEL16.CK1"}, {"start": 1676432, "audio": 0, "end": 1682070, "filename": "/GAMEDATA/KEEN1/LEVEL80.CK1"}, {"start": 1682070, "audio": 0, "end": 1682828, "filename": "/GAMEDATA/KEEN1/LEVEL81.CK1"}, {"start": 1682828, "audio": 0, "end": 1684090, "filename": "/GAMEDATA/KEEN1/LEVEL90.CK1"}, {"start": 1684090, "audio": 0, "end": 1689695, "filename": "/GAMEDATA/KEEN1/ORDER.FRM"}, {"start": 1689695, "audio": 0, "end": 1717581, "filename": "/GAMEDATA/KEEN1/PREVIEW2.CK1"}, {"start": 1717581, "audio": 0, "end": 1743010, "filename": "/GAMEDATA/KEEN1/PREVIEW3.CK1"}, {"start": 1743010, "audio": 0, "end": 1745122, "filename": "/GAMEDATA/KEEN1/PREVIEWS.CK1"}, {"start": 1745122, "audio": 0, "end": 1754020, "filename": "/GAMEDATA/KEEN1/SOUNDS.CK1"}, {"start": 1754020, "audio": 0, "end": 1757431, "filename": "/GAMEDATA/KEEN1/STORYTXT.CK1"}, {"start": 1757431, "audio": 0, "end": 1766112, "filename": "/GAMEDATA/KEEN1/VENDOR.DOC"}], "remote_package_size": 1766112, "package_uuid": "8e1ca90f-3e74-43ea-8fb0-0c521eb4eff0"});
+ loadPackage({"files": [{"start": 0, "audio": 0, "end": 1088000, "filename": "/SDL2.dll"}, {"start": 1088000, "audio": 0, "end": 1473038, "filename": "/chocolate-keen.exe"}, {"start": 1473038, "audio": 0, "end": 1488606, "filename": "/GAMEDATA/KEEN1/EGAHEAD.CK1"}, {"start": 1488606, "audio": 0, "end": 1545671, "filename": "/GAMEDATA/KEEN1/EGALATCH.CK1"}, {"start": 1545671, "audio": 0, "end": 1563304, "filename": "/GAMEDATA/KEEN1/EGASPRIT.CK1"}, {"start": 1563304, "audio": 0, "end": 1564206, "filename": "/GAMEDATA/KEEN1/ENDTEXT.CK1"}, {"start": 1564206, "audio": 0, "end": 1572771, "filename": "/GAMEDATA/KEEN1/FINALE.CK1"}, {"start": 1572771, "audio": 0, "end": 1574630, "filename": "/GAMEDATA/KEEN1/HELPTEXT.CK1"}, {"start": 1574630, "audio": 0, "end": 1625820, "filename": "/GAMEDATA/KEEN1/KEEN1.EXE"}, {"start": 1625820, "audio": 0, "end": 1627188, "filename": "/GAMEDATA/KEEN1/LEVEL01.CK1"}, {"start": 1627188, "audio": 0, "end": 1627912, "filename": "/GAMEDATA/KEEN1/LEVEL02.CK1"}, {"start": 1627912, "audio": 0, "end": 1631386, "filename": "/GAMEDATA/KEEN1/LEVEL03.CK1"}, {"start": 1631386, "audio": 0, "end": 1633106, "filename": "/GAMEDATA/KEEN1/LEVEL04.CK1"}, {"start": 1633106, "audio": 0, "end": 1633916, "filename": "/GAMEDATA/KEEN1/LEVEL05.CK1"}, {"start": 1633916, "audio": 0, "end": 1634844, "filename": "/GAMEDATA/KEEN1/LEVEL06.CK1"}, {"start": 1634844, "audio": 0, "end": 1640494, "filename": "/GAMEDATA/KEEN1/LEVEL07.CK1"}, {"start": 1640494, "audio": 0, "end": 1643910, "filename": "/GAMEDATA/KEEN1/LEVEL08.CK1"}, {"start": 1643910, "audio": 0, "end": 1645548, "filename": "/GAMEDATA/KEEN1/LEVEL09.CK1"}, {"start": 1645548, "audio": 0, "end": 1647634, "filename": "/GAMEDATA/KEEN1/LEVEL10.CK1"}, {"start": 1647634, "audio": 0, "end": 1649270, "filename": "/GAMEDATA/KEEN1/LEVEL11.CK1"}, {"start": 1649270, "audio": 0, "end": 1651448, "filename": "/GAMEDATA/KEEN1/LEVEL12.CK1"}, {"start": 1651448, "audio": 0, "end": 1661356, "filename": "/GAMEDATA/KEEN1/LEVEL13.CK1"}, {"start": 1661356, "audio": 0, "end": 1668380, "filename": "/GAMEDATA/KEEN1/LEVEL14.CK1"}, {"start": 1668380, "audio": 0, "end": 1670614, "filename": "/GAMEDATA/KEEN1/LEVEL15.CK1"}, {"start": 1670614, "audio": 0, "end": 1676432, "filename": "/GAMEDATA/KEEN1/LEVEL16.CK1"}, {"start": 1676432, "audio": 0, "end": 1682070, "filename": "/GAMEDATA/KEEN1/LEVEL80.CK1"}, {"start": 1682070, "audio": 0, "end": 1682828, "filename": "/GAMEDATA/KEEN1/LEVEL81.CK1"}, {"start": 1682828, "audio": 0, "end": 1684090, "filename": "/GAMEDATA/KEEN1/LEVEL90.CK1"}, {"start": 1684090, "audio": 0, "end": 1689695, "filename": "/GAMEDATA/KEEN1/ORDER.FRM"}, {"start": 1689695, "audio": 0, "end": 1717581, "filename": "/GAMEDATA/KEEN1/PREVIEW2.CK1"}, {"start": 1717581, "audio": 0, "end": 1743010, "filename": "/GAMEDATA/KEEN1/PREVIEW3.CK1"}, {"start": 1743010, "audio": 0, "end": 1745122, "filename": "/GAMEDATA/KEEN1/PREVIEWS.CK1"}, {"start": 1745122, "audio": 0, "end": 1754020, "filename": "/GAMEDATA/KEEN1/SOUNDS.CK1"}, {"start": 1754020, "audio": 0, "end": 1757431, "filename": "/GAMEDATA/KEEN1/STORYTXT.CK1"}, {"start": 1757431, "audio": 0, "end": 1766112, "filename": "/GAMEDATA/KEEN1/VENDOR.DOC"}], "remote_package_size": 1766112, "package_uuid": "b1847543-7913-45f7-9d77-35d09f464fd3"});
 
 })();
 
@@ -239,6 +239,13 @@ ENVIRONMENT_IS_SHELL = !ENVIRONMENT_IS_WEB && !ENVIRONMENT_IS_NODE && !ENVIRONME
 if (Module['ENVIRONMENT']) {
   throw new Error('Module.ENVIRONMENT has been deprecated. To force the environment, use the ENVIRONMENT compile-time option (for example, -s ENVIRONMENT=web or -s ENVIRONMENT=node)');
 }
+
+
+// Three configurations we can be running in:
+// 1) We could be the application main() thread running in the main JS UI thread. (ENVIRONMENT_IS_WORKER == false and ENVIRONMENT_IS_PTHREAD == false)
+// 2) We could be the application main() thread proxied to worker. (with Emscripten -s PROXY_TO_WORKER=1) (ENVIRONMENT_IS_WORKER == true, ENVIRONMENT_IS_PTHREAD == false)
+// 3) We could be an application pthread running in a worker. (ENVIRONMENT_IS_WORKER == true and ENVIRONMENT_IS_PTHREAD == true)
+
 
 
 
@@ -1408,11 +1415,12 @@ function updateGlobalBufferAndViews(buf) {
   Module['HEAPF64'] = HEAPF64 = new Float64Array(buf);
 }
 
+
 var STATIC_BASE = 1024,
-    STACK_BASE = 1481536,
+    STACK_BASE = 1481552,
     STACKTOP = STACK_BASE,
-    STACK_MAX = 6724416,
-    DYNAMIC_BASE = 6724416,
+    STACK_MAX = 6724432,
+    DYNAMIC_BASE = 6724432,
     DYNAMICTOP_PTR = 1481344;
 
 assert(STACK_BASE % 16 === 0, 'stack must start aligned');
@@ -1982,7 +1990,7 @@ function _emscripten_asm_const_iiii(code, a0, a1, a2) {
 
 
 
-// STATICTOP = STATIC_BASE + 1480512;
+// STATICTOP = STATIC_BASE + 1480528;
 /* global initializers */  __ATINIT__.push({ func: function() { ___emscripten_environ_constructor() } });
 
 
@@ -1993,7 +2001,7 @@ function _emscripten_asm_const_iiii(code, a0, a1, a2) {
 
 
 /* no memory initializer */
-var tempDoublePtr = 1481520
+var tempDoublePtr = 1481536
 assert(tempDoublePtr % 8 == 0);
 
 function copyTempFloat(ptr) { // functions, because inlining this code increases code size too much
@@ -2019,7 +2027,7 @@ function copyTempDouble(ptr) {
 var EMTSTACKTOP = getMemory(1048576);
 var EMT_STACK_MAX = EMTSTACKTOP + 1048576;
 
-var eb = getMemory(1724696);
+var eb = getMemory(1724840);
 assert(eb % 8 === 0);
 __ATPRERUN__.push(function() {
 
@@ -2027,7 +2035,7 @@ __ATPRERUN__.push(function() {
   if (!(bytecodeFile instanceof ArrayBuffer)) {
     throw "bad or missing emterpreter file. If you compiled to JS (and not HTML) make sure you set Module['emterpreterFile']";
   }
-  var codeSize = 1724696;
+  var codeSize = 1724840;
   HEAPU8.set(new Uint8Array(bytecodeFile).subarray(0, codeSize), eb);
   assert(HEAPU8[eb] === 140);
   assert(HEAPU8[eb+1] === 4);
@@ -2035,14 +2043,14 @@ __ATPRERUN__.push(function() {
   assert(HEAPU8[eb+3] === 4);
   var relocationsStart = (codeSize+3) >> 2;
   var relocations = (new Uint32Array(bytecodeFile)).subarray(relocationsStart);
-  assert(relocations.length === 49981);
+  assert(relocations.length === 49982);
   if (relocations.length > 0) {
     assert(relocations[0] === 300);
   }
 
   for (var i = 0; i < relocations.length; i++) {
     assert(relocations[i] % 4 === 0);
-    assert(relocations[i] >= 0 && relocations[i] < eb + 1724696); // in range
+    assert(relocations[i] >= 0 && relocations[i] < eb + 1724840); // in range
     assert(HEAPU32[eb + relocations[i] >> 2] + eb < (-1 >>> 0), [i, relocations[i]]); // no overflows
     HEAPU32[eb + relocations[i] >> 2] = HEAPU32[eb + relocations[i] >> 2] + eb;
   }
@@ -10218,10 +10226,7 @@ if (!Object.getOwnPropertyDescriptor(Module, "setTempRet0")) Module["setTempRet0
 if (!Object.getOwnPropertyDescriptor(Module, "callMain")) Module["callMain"] = function() { abort("'callMain' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") };
 if (!Object.getOwnPropertyDescriptor(Module, "abort")) Module["abort"] = function() { abort("'abort' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") };
 if (!Object.getOwnPropertyDescriptor(Module, "Pointer_stringify")) Module["Pointer_stringify"] = function() { abort("'Pointer_stringify' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") };
-if (!Object.getOwnPropertyDescriptor(Module, "warnOnce")) Module["warnOnce"] = function() { abort("'warnOnce' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") };
-Module["writeStackCookie"] = writeStackCookie;
-Module["checkStackCookie"] = checkStackCookie;
-Module["abortStackOverflow"] = abortStackOverflow;if (!Object.getOwnPropertyDescriptor(Module, "ALLOC_NORMAL")) Object.defineProperty(Module, "ALLOC_NORMAL", { configurable: true, get: function() { abort("'ALLOC_NORMAL' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") } });
+if (!Object.getOwnPropertyDescriptor(Module, "warnOnce")) Module["warnOnce"] = function() { abort("'warnOnce' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") };if (!Object.getOwnPropertyDescriptor(Module, "ALLOC_NORMAL")) Object.defineProperty(Module, "ALLOC_NORMAL", { configurable: true, get: function() { abort("'ALLOC_NORMAL' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") } });
 if (!Object.getOwnPropertyDescriptor(Module, "ALLOC_STACK")) Object.defineProperty(Module, "ALLOC_STACK", { configurable: true, get: function() { abort("'ALLOC_STACK' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") } });
 if (!Object.getOwnPropertyDescriptor(Module, "ALLOC_DYNAMIC")) Object.defineProperty(Module, "ALLOC_DYNAMIC", { configurable: true, get: function() { abort("'ALLOC_DYNAMIC' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") } });
 if (!Object.getOwnPropertyDescriptor(Module, "ALLOC_NONE")) Object.defineProperty(Module, "ALLOC_NONE", { configurable: true, get: function() { abort("'ALLOC_NONE' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") } });
@@ -10244,7 +10249,6 @@ function ExitStatus(status) {
 
 var calledMain = false;
 
-
 dependenciesFulfilled = function runCaller() {
   // If run has never been called, and we should call run (INVOKE_RUN is true, and Module.noInitialRun is not false)
   if (!calledRun) run();
@@ -10254,8 +10258,6 @@ dependenciesFulfilled = function runCaller() {
 function callMain(args) {
   assert(runDependencies == 0, 'cannot call main when async dependencies remain! (listen on Module["onRuntimeInitialized"])');
   assert(__ATPRERUN__.length == 0, 'cannot call main when preRun functions remain to be called');
-
-  var entryFunction = Module['_main'];
 
 
   args = args || [];
@@ -10273,7 +10275,7 @@ function callMain(args) {
   try {
 
 
-    var ret = entryFunction(argc, argv);
+    var ret = Module['_main'](argc, argv);
 
 
     // if we are saving the stack, then do not call exit, we are not
@@ -10414,7 +10416,7 @@ function exit(status, implicit) {
   if (noExitRuntime) {
     // if exit() was called, we may warn the user if the runtime isn't actually being shut down
     if (!implicit) {
-      err('program exited (with status: ' + status + '), but EXIT_RUNTIME is not set, so halting execution but not exiting the runtime or preventing further async execution (build with EXIT_RUNTIME=1, if you want a true shutdown)');
+      err('exit(' + status + ') called, but EXIT_RUNTIME is not set, so halting execution but not exiting the runtime or preventing further async execution (build with EXIT_RUNTIME=1, if you want a true shutdown)');
     }
   } else {
 

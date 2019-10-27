@@ -291,7 +291,7 @@ void CVort1_add_sprite_chain(int16_t tileX, int16_t tileY) {
 
     // FIXME FIXME!!!
     // This could be a pretty bad idea!!!!!! But let's try anyway...
-    sprites[sprIndex].think = (SpriteThinkFunction_T)(&CVort_think_contact_nop);
+    sprites[sprIndex].think = (SpriteThinkFunction_T)(&CVort_think_keengun);
 
     sprites[sprIndex].contact = &CVort1_contact_chain;
     sprites[sprIndex].frame = 0x72;

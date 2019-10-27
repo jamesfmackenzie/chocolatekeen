@@ -16,9 +16,9 @@ The original authors are NY00123, QuantumG and Lemm. For more info see https://p
 ## Releases
 Download the game package from the <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases">Releases</a> directory:
 
-* Releases/x86 - for 32-bit Windows. Download the zip, extract and run `chocolate-keen.exe`
-* Releases/x64 - for 64-bit Windows. Download the zip, extract and run `chocolate-keen.exe`
-* Releases/WebAssembly - WebAssembly version. Download the zip, extract and run `chocolate-keen.html`
+* <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/x86">Releases/x86</a> - for 32-bit Windows. Download the zip, extract and run `chocolate-keen.exe`
+* <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/x64">Releases/x64</a> - for 64-bit Windows. Download the zip, extract and run `chocolate-keen.exe`
+* <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/WebAssembly">Releases/WebAssembly</a> - WebAssembly version. Download the zip, extract and run `chocolate-keen.html`
 
 ## Building
 You can clone or download the chocolatekeen repo and build it yourself

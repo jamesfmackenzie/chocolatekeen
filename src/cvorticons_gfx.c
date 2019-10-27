@@ -1614,11 +1614,11 @@ bool privCreateHostWindow(void) {
 	// Still under the assumption _CHOCOLATE_KEEN_ENABLE_OPENGL_ is defined;
 	// Make window resizable ONLY if it should have the launcher UI
 	//engine_screen.sdl.window = SDL_CreateWindow("", SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), screenWidth, screenHeight, (engine_gfx_effective_arguments.isFullscreen ? (engine_screen.host.useFullDesktopDims ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_FULLSCREEN) : 0) | ((engine_gfx_effective_arguments.outputSystem == OUTPUTSYS_OPENGL) ? SDL_WINDOW_OPENGL : 0) | ((engine_screen.client.currVidMode == -1) ? SDL_WINDOW_RESIZABLE : 0));
-	engine_screen.sdl.window = SDL_CreateWindow("", 0, 0, 1280, 700, 0);
+	engine_screen.sdl.window = SDL_CreateWindow("", 0, 0, 736, 414, 0);
 #else // Not OpenGL
 	// Make window resizable ONLY if it should have the launcher UI
 	//engine_screen.sdl.window = SDL_CreateWindow("", SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), screenWidth, screenHeight, (engine_gfx_effective_arguments.isFullscreen ? (engine_screen.host.useFullDesktopDims ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_FULLSCREEN) : 0) | ((engine_screen.client.currVidMode == -1) ? SDL_WINDOW_RESIZABLE : 0));
-	engine_screen.sdl.window = SDL_CreateWindow("", 0, 0, 1280, 700, 0);
+	engine_screen.sdl.window = SDL_CreateWindow("", 0, 0, 736, 414, 0);
 #endif // GL
 	if (!engine_screen.sdl.window) {
 #ifdef _CHOCOLATE_KEEN_ENABLE_OPENGL_
@@ -2330,7 +2330,7 @@ bool privResizeHostWindow(void) {
 	//SDL_SetWindowPosition(engine_screen.sdl.window, SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber));
 	switch (fullScrFlags) {
 	case 0:
-		SDL_SetWindowSize(engine_screen.sdl.window, 1344, 828); // 672x414
+		SDL_SetWindowSize(engine_screen.sdl.window, 672, 414);
 		break;
 	case SDL_WINDOW_FULLSCREEN:
 	{

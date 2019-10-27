@@ -83,7 +83,7 @@ all: game
 game: $(EXE_PATH)
 
 $(EXE_PATH): $(OBJECTS)
-	$(CXX) $(OBJECTS) $(LDFLAGS) $(INTLDFLAGS) -o $@ --preload-file Releases/x86@/
+	$(CXX) $(OBJECTS) $(LDFLAGS) $(INTLDFLAGS) -o $@ --preload-file GAMEDATA@/
 
 $(EXE_PATH): $(OBJECTS)
 

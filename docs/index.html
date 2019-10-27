@@ -4,72 +4,98 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Commander Keen in WebAssembly</title>
-    <style>
-      body {
-        font-family: arial;
+    <style> 
+      * {
         margin: 0;
-        padding: none;
-        background-color: black; 
+        padding: 0;
+      }
+    
+      html, body {
+        height: 100%;
+      }
+      
+      body {
+        font-family: 'Noto Sans', sans-serif;
       }
 
-      div.emscripten_border { height: 100vh; position: relative; }
-      .emscripten { padding:0; margin:0; display: block; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-      div.emscripten { text-align: center; }      
+      .wrapper {
+        background-color: #111;
+        height: 100%;
+        text-align: center;
+      }
+    
+      .wrapper .inner {
+        background:url('background.png');
+        background-size: 100%;
+        height: 100%;
+        width: 160vh;
+        cursor: pointer; 
+      }
+      
+      canvas {
+        outline: none;
+      }
+      
+      @import url('https://fonts.googleapis.com/css?family=Noto+Sans:400,700');
 
-      /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
-      canvas.emscripten { border: 0px none; background-color: black; }
+      .corner-ribbon {
+        width: 200px;
+        background: #e43;
+        position: absolute;
+        top: 25px;
+        left: -50px;
+        text-align: center;
+        line-height: 40px;
+        letter-spacing: 1px;
+        color: #f0f0f0;
+        transform: rotate(-45deg);
+        -webkit-transform: rotate(-45deg);
+        font-size: 10pt;
+        position: fixed;
+        box-shadow: 0 0 3px rgba(0,0,0,.3);
+        background: #18bc9c;
+      }
 
-      .center {
-        height: 200px;
-  position: relative;
-  border: 3px solid green;
-}
-
-.center p {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
+      .corner-ribbon.top-right{
+        top: 25px;
+        right: -50px;
+        left: auto;
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+      }
+      
+      .corner-ribbon a {
+        text-decoration: none;
+        color: white;
+      }
     </style>
   </head>
   <body>
-    
-    <div class="emscripten_border">
-      <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
-      <button class="emscripten" id="startButton" style="font-size:32px;" onclick="startGame()">Click to play Commander Keen</button>
+    <div class="corner-ribbon top-right">
+      <a href="https://github.com/jamesfmackenzie/chocolatekeen" target="_blank">Learn More</a>
     </div>
-
+    <div class="wrapper">
+      <canvas class="inner" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
+    </div>
     <script type='text/javascript'>
-      var Module = {
-        preRun: [],
-        postRun: [],
-        print: (function() {
-          // do nothing
-        })(),
-        printErr: function(text) {
-          if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
-          console.error(text);
-        },
-        canvas: (function() {
-          var canvas = document.getElementById('canvas');
+var Module = {
+  preRun: [],
+  postRun: [],
+  canvas: (function() {
+    var canvas = document.getElementById('canvas');
 
-          // As a default initial behavior, pop up an alert when webgl context is lost. To make your
-          // application robust, you may want to override this behavior before shipping!
-          // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
-          canvas.addEventListener("webglcontextlost", function(e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
+    // As a default initial behavior, pop up an alert when webgl context is lost. To make your
+    // application robust, you may want to override this behavior before shipping!
+    // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
+    canvas.addEventListener("webglcontextlost", function(e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
 
-          return canvas;
-        })(),
-        setStatus: function(text) {
-          // do nothing
-        },
-        totalDependencies: 0,
-        monitorRunDependencies: function(left) {
-          this.totalDependencies = Math.max(this.totalDependencies, left);
-        }
-      };
+    return canvas;
+  })(),
+  totalDependencies: 0,
+  monitorRunDependencies: function(left) {
+    this.totalDependencies = Math.max(this.totalDependencies, left);
+  }
+};
     </script>
     <script>
 var ASSERTIONS = 1;
@@ -87,8 +113,6 @@ function isDataURI(filename) {
       filename.startsWith(dataURIPrefix) :
       filename.indexOf(dataURIPrefix) === 0;
 }
-
-
 
 // Copied from https://github.com/strophe/strophejs/blob/e06d027/src/polyfills.js#L149
 
@@ -196,34 +220,40 @@ function intArrayToString(array) {
   return ret.join('');
 }
 
+var alreadyStarted = false;
+
 function startGame() {
+  var emterpretURL = 'data.binary';
+  var emterpretXHR = new XMLHttpRequest();
+  emterpretXHR.open('GET', emterpretURL, true);
+  emterpretXHR.responseType = 'arraybuffer';
+  emterpretXHR.onload = function() {
+    if (emterpretXHR.status === 200 || emterpretXHR.status === 0) {
+      Module.emterpreterFile = emterpretXHR.response;
+    } else {
+      var emterpretURLBytes = tryParseAsDataURI(emterpretURL);
+      if (emterpretURLBytes) {
+        Module.emterpreterFile = emterpretURLBytes.buffer;
+      }
+    }
 
-          document.getElementById('startButton').style.display = "none";
+    var script = document.createElement('script');
+    script.src = "chocolate-keen.js";
+    document.body.appendChild(script);
+  };
 
-          var emterpretURL = 'data.binary';
-          var emterpretXHR = new XMLHttpRequest();
-          emterpretXHR.open('GET', emterpretURL, true);
-          emterpretXHR.responseType = 'arraybuffer';
-          emterpretXHR.onload = function() {
-            if (emterpretXHR.status === 200 || emterpretXHR.status === 0) {
-              Module.emterpreterFile = emterpretXHR.response;
-            } else {
-              var emterpretURLBytes = tryParseAsDataURI(emterpretURL);
-              if (emterpretURLBytes) {
-                Module.emterpreterFile = emterpretURLBytes.buffer;
-              }
-            }
-
-          var script = document.createElement('script');
-          script.src = "chocolate-keen.js";
-          document.body.appendChild(script);
-
-          };
-          emterpretXHR.send(null);
-        }
-
-</script>
+  emterpretXHR.send(null);
+}
+		
+function canvasClick() {
+  if (!alreadyStarted) {
+    alreadyStarted = true;
+    startGame();
+    document.getElementById('canvas').removeEventListener('click', canvasClick);
+  }
+}
+		
+document.getElementById('canvas').addEventListener('click', canvasClick);	
+    </script>
   </body>
 </html>
-
-

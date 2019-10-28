@@ -52,3 +52,11 @@ Releases/Windows-x86/SCORES.CK1
 # GAMEDATA
 Releases/Windows-x64/GAMEDATA
 Releases/Windows-x86/GAMEDATA
+
+# WebAssembly output
+chocolate-keen.data
+chocolate-keen.html
+chocolate-keen.js
+chocolate-keen.js.orig.js
+chocolate-keen.wasm
+data.binary

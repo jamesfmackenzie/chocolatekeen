@@ -1,9 +1,17 @@
 DEBUG=0
 BUILDASCPP=0
 BINPREFIX=
+CC=gcc
 
-CXX=emcc
-WINDRES=windres
+ifeq ($(BUILDASCPP), 1)
+	CXX=$(BINPREFIX)g++
+else
+	CXX=$(BINPREFIX)$(CC)
+endif
+
+STRIPBIN=$(BINPREFIX)strip
+WINDRES=$(BINPREFIX)windres
+SDLCONFIG=sdl2-config
 SRC=src
 RSRC=rsrc
 OBJ=obj
@@ -48,8 +56,13 @@ else
 	INTCXXFLAGS+= -O2
 endif
 
-INTCXXFLAGS+=-s USE_SDL=2 -s WASM=1 -s EMTERPRETIFY=1 -s EMTERPRETIFY_ASYNC=1 -s EMTERPRETIFY_FILE=data.binary -s ALLOW_MEMORY_GROWTH=1
-INTLDFLAGS=-s USE_SDL=2 -s WASM=1 -s EMTERPRETIFY=1 -s EMTERPRETIFY_ASYNC=1 -s EMTERPRETIFY_FILE=data.binary -s ALLOW_MEMORY_GROWTH=1
+ifeq ($(CC), emcc)
+	INTCXXFLAGS+= -s USE_SDL=2 -s WASM=1 -s EMTERPRETIFY=1 -s EMTERPRETIFY_ASYNC=1 -s EMTERPRETIFY_FILE=data.binary -s ALLOW_MEMORY_GROWTH=1
+	INTLDFLAGS=-s USE_SDL=2 -s WASM=1 -s EMTERPRETIFY=1 -s EMTERPRETIFY_ASYNC=1 -s EMTERPRETIFY_FILE=data.binary -s ALLOW_MEMORY_GROWTH=1
+else
+	INTCXXFLAGS+= -I$(SRC) `$(SDLCONFIG) --cflags`
+	INTLDFLAGS=`$(SDLCONFIG) --libs`
+endif
 
 ifeq ($(BUILDASCPP), 0)
 	INTCXXFLAGS+= -std=c99
@@ -63,17 +76,26 @@ endif
 
 ifeq ($(USE_OPENGL), 1)
 	INTCXXFLAGS+= -D_CHOCOLATE_KEEN_ENABLE_OPENGL_
+#	ifeq ($(PLATFORM), WINDOWS)
+#		INTLDFLAGS+= -lopengl32
+#	else
+#		INTLDFLAGS+= -lGL
+#	endif
 endif
 
 ifeq ($(PLATFORM), WINDOWS)
 	OBJECTS+= $(OBJ)/chocolate-keen_icon.o
-	EXE_EXT=.exe
+	EXT=.exe
+endif
+
+ifeq ($(CC), emcc)
+	EXT=.html
 endif
 
 ifeq ($(SINGLE_EPISODE),0)
-	EXE_PATH=chocolate-keen$(EXE_EXT).html
+	EXE_PATH=chocolate-keen$(EXT)
 else
-	EXE_PATH=chocolate-keen$(SINGLE_EPISODE)$(EXE_EXT).html
+	EXE_PATH=chocolate-keen$(SINGLE_EPISODE)$(EXT)
 endif
 
 .PHONY: all game clean veryclean
@@ -82,8 +104,16 @@ all: game
 
 game: $(EXE_PATH)
 
+PRELOAD_FILE=
+ifeq ($(CC), emcc)
+	PRELOAD_FILES= --preload-file data@/
+endif
+
 $(EXE_PATH): $(OBJECTS)
-	$(CXX) $(OBJECTS) $(LDFLAGS) $(INTLDFLAGS) -o $@ --preload-file GAMEDATA@/
+	$(CXX) $(OBJECTS) $(LDFLAGS) $(INTLDFLAGS) -o $@ $(PRELOAD_FILES)
+#ifeq ($(DEBUG),0)
+#	$(STRIPBIN) $(EXE_PATH)
+#endif
 
 $(EXE_PATH): $(OBJECTS)
 
@@ -100,7 +130,5 @@ $(OBJ)/imageRLE.o: $(SRC)/decompression/imageRLE.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/%.o: $(SRC)/%.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-veryclean:
-	-rm -f $(OBJ)/* chocolate-keen$(EXE_EXT) chocolate-keen1$(EXE_EXT) chocolate-keen2$(EXE_EXT) chocolate-keen3$(EXE_EXT)
 clean:
 	-rm -f $(EXE_PATH) $(OBJECTS)

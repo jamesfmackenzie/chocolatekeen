@@ -26,9 +26,9 @@ The downloadable releases above come packaged with Commander Keen "Invasion of t
     ├── chocolate-keen.exe
     └── GAMEDATA
         ├── KEEN1
-            └── ... Episode One level data (pre-packaged)
+        |   └── ... Episode One level data (pre-packaged)
         ├── KEEN2
-            └── ... Episode Two level data
+        |   └── ... Episode Two level data
         └── KEEN3
             └── ... Episode Three level data
     

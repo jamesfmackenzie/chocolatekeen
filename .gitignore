@@ -15,6 +15,9 @@
 *.so
 *.dylib
 
+# DLLs
+*.dll
+
 # Fortran module files
 *.mod
 *.smod
@@ -28,13 +31,24 @@
 # Executables
 *.out
 *.app
+*.exe
 
 # Visual Studio
 
 # Commander Keen config files
-Releases/x64/chocolate-keen.cfg
-Releases/x64/CTLPANEL.CK1
-Releases/x64/SCORES.CK1
-Releases/x86/chocolate-keen.cfg
-Releases/x86/CTLPANEL.CK1
-Releases/x86/SCORES.CK1
+Releases/Windows-x64/chocolate-keen.cfg
+Releases/Windows-x64/CTLPANEL.CK1
+Releases/Windows-x64/SCORES.CK1
+Releases/Windows-x64/chocolate-keen.cfg
+Releases/Windows-x64/CTLPANEL.CK1
+Releases/Windows-x64/SCORES.CK1
+Releases/Windows-x86/chocolate-keen.cfg
+Releases/Windows-x86/CTLPANEL.CK1
+Releases/Windows-x86/SCORES.CK1
+Releases/Windows-x86/chocolate-keen.cfg
+Releases/Windows-x86/CTLPANEL.CK1
+Releases/Windows-x86/SCORES.CK1
+
+# GAMEDATA
+Releases/Windows-x64/GAMEDATA
+Releases/Windows-x86/GAMEDATA

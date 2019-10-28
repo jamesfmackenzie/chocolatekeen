@@ -1,5 +1,5 @@
 # Chocolate Keen
-Chocolate Keen is a reverse engineering of Commander Keen in C/C++ and SDL. The goal is to be super accurate versus the original
+Chocolate Keen is a reverse engineering of Commander Keen in C and SDL. The goal is to be super accurate versus the original
 
 ## How to Play
 * You can play directly in the browser! Click <a href="http://www.jamesfmackenzie.com/chocolatekeen">here</a>
@@ -12,12 +12,12 @@ Chocolate Keen is a reverse engineering of Commander Keen in C/C++ and SDL. The 
 * Ctrl AND Alt - Fire raygun (if it has charges)
 
 ## Releases
-Download the game package from the <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases">Releases</a> directory:
+Downloadable game packages available in <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases">Releases</a>. All versions come packaged as zip files with game data. Just extract and run. On Linux, you'll need the <a href="https://wiki.libsdl.org/Installation#Linux.2FUnix" target="_blank">SDL 2.0 runtime</a> installed. Other versions come pre-packaged with SDL
 
-* <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/Linux">Releases/Linux</a> - Linux version. You'll need the <a href="https://wiki.libsdl.org/Installation#Linux.2FUnix" target="_blank">SDL 2.0 runtime</a> installed. On Ubuntu, it's `sudo apt-get install libsdl2-2.0`. Then download the zip, extract and run `./chocolate-keen`
-* <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/WebAssembly">Releases/WebAssembly</a> - WebAssembly version. Download the zip, extract and run `chocolate-keen.html`
-* <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/Windows-x86">Releases/Windows-x86</a> - for 32-bit Windows. Download the zip, extract and run `chocolate-keen.exe`
-* <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/Windows-x64">Releases/Windows-x64</a> - for 64-bit Windows. Download the zip, extract and run `chocolate-keen.exe`
+* <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/Linux">Releases/Linux</a> - Linux version. Run `./chocolate-keen`
+* <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/WebAssembly">Releases/WebAssembly</a> - WebAssembly version. Run `chocolate-keen.html`
+* <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/Windows-x86">Releases/Windows-x86</a> - for 32-bit Windows. Run `chocolate-keen.exe`
+* <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/Windows-x64">Releases/Windows-x64</a> - for 64-bit Windows. Run `chocolate-keen.exe`
 
 ## Building
 You can clone or download the chocolatekeen repo and build it yourself
@@ -51,7 +51,7 @@ This is a Makefile project. To build for Windows you'll need something like <a h
 ## Authors
 The original authors of Chocolate Keen are NY00123, QuantumG and Lemm. The project started with a reverse engineering of the original Keen code, and the goal is complete authenticity to the original - bugs and all. For more info see https://pckf.com/viewtopic.php?f=4&t=2536
 
-Since bringing this to GitHub, I've added support for WebAssembly. I intend to add support for other platforms too 
+Since bringing this to GitHub, I've ported to WebAssembly and I intend to support other platforms too 
 
 ## Developer Notes
 

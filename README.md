@@ -19,6 +19,21 @@ Downloadable game packages available in <a href="https://github.com/jamesfmacken
 * <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/Windows-x86">Releases/Windows-x86</a> - for 32-bit Windows. Run `chocolate-keen.exe`
 * <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/Windows-x64">Releases/Windows-x64</a> - for 64-bit Windows. Run `chocolate-keen.exe`
 
+### Episodes Two and Three
+The downloadable releases above come packaged with Commander Keen "Invasion of the Vorticons" Episode One: Marooned on Mars. But the engine supports the entire Vorticons trilogy. If you have Episode Two or Three, drop the level/data files into the GAMEDATA folder as follows:
+
+    .
+    ├── chocolate-keen.exe
+    └── GAMEDATA
+        ├── KEEN1
+            └── ... Episode One level data (pre-packaged)
+        ├── KEEN2
+            └── ... Episode Two level data
+        └── KEEN3
+            └── ... Episode Three level data
+    
+You can then start each episode via `chocolate-keen.exe -startkeen1`, `chocolate-keen.exe -startkeen2` and `chocolate-keen.exe -startkeen3` respectively
+
 ## Building
 You can clone or download the chocolatekeen repo and build it yourself
 
@@ -58,7 +73,7 @@ Since bringing this to GitHub, I've ported to WebAssembly and I intend to suppor
 ### WebAssembly Notes
 
 #### Performance
-The WebAssembly build of Chocolate Keen relies on <a href="https://github.com/emscripten-core/emscripten/wiki/Emterpreter" target="_blank">Emterpreter. This hinders performance significantly vs using Emscripten loops. If you don't have a sufficiently fast machine you may notice audio stutters or frame skips
+The WebAssembly build of Chocolate Keen relies on <a href="https://github.com/emscripten-core/emscripten/wiki/Emterpreter" target="_blank">Emterpreter</a>. This hinders performance significantly vs using Emscripten loops. If you don't have a sufficiently fast machine you may notice audio stutters or frame skips
 
 #### Graphics
 Although the original game supports both EGA and VGA graphics modes, the WebAssembly build is hardcoded to VGA. The original game resolution is 320x200, which is internally scan-doubled to 320x400. The x-axis is then doubled also to preserve the aspect ratio, yielding 640x400. Once overscan borders are added, the internal game resolution jumps to 672x414. This is rendered into the HTML canvas to provide a pixel perfect image, and then aspect-ratio corrected to 4:3 via CSS.

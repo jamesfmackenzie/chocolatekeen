@@ -192,7 +192,7 @@ Module['FS_createPath']('/GAMEDATA', 'KEEN1', true, true);
   }
 
  }
- loadPackage({"files": [{"start": 0, "audio": 0, "end": 1088000, "filename": "/SDL2.dll"}, {"start": 1088000, "audio": 0, "end": 1473038, "filename": "/chocolate-keen.exe"}, {"start": 1473038, "audio": 0, "end": 1488606, "filename": "/GAMEDATA/KEEN1/EGAHEAD.CK1"}, {"start": 1488606, "audio": 0, "end": 1545671, "filename": "/GAMEDATA/KEEN1/EGALATCH.CK1"}, {"start": 1545671, "audio": 0, "end": 1563304, "filename": "/GAMEDATA/KEEN1/EGASPRIT.CK1"}, {"start": 1563304, "audio": 0, "end": 1564246, "filename": "/GAMEDATA/KEEN1/ENDTEXT.CK1"}, {"start": 1564246, "audio": 0, "end": 1572811, "filename": "/GAMEDATA/KEEN1/FINALE.CK1"}, {"start": 1572811, "audio": 0, "end": 1574670, "filename": "/GAMEDATA/KEEN1/HELPTEXT.CK1"}, {"start": 1574670, "audio": 0, "end": 1625860, "filename": "/GAMEDATA/KEEN1/KEEN1.EXE"}, {"start": 1625860, "audio": 0, "end": 1627228, "filename": "/GAMEDATA/KEEN1/LEVEL01.CK1"}, {"start": 1627228, "audio": 0, "end": 1627952, "filename": "/GAMEDATA/KEEN1/LEVEL02.CK1"}, {"start": 1627952, "audio": 0, "end": 1631426, "filename": "/GAMEDATA/KEEN1/LEVEL03.CK1"}, {"start": 1631426, "audio": 0, "end": 1633146, "filename": "/GAMEDATA/KEEN1/LEVEL04.CK1"}, {"start": 1633146, "audio": 0, "end": 1633956, "filename": "/GAMEDATA/KEEN1/LEVEL05.CK1"}, {"start": 1633956, "audio": 0, "end": 1634884, "filename": "/GAMEDATA/KEEN1/LEVEL06.CK1"}, {"start": 1634884, "audio": 0, "end": 1640534, "filename": "/GAMEDATA/KEEN1/LEVEL07.CK1"}, {"start": 1640534, "audio": 0, "end": 1643950, "filename": "/GAMEDATA/KEEN1/LEVEL08.CK1"}, {"start": 1643950, "audio": 0, "end": 1645588, "filename": "/GAMEDATA/KEEN1/LEVEL09.CK1"}, {"start": 1645588, "audio": 0, "end": 1647674, "filename": "/GAMEDATA/KEEN1/LEVEL10.CK1"}, {"start": 1647674, "audio": 0, "end": 1649310, "filename": "/GAMEDATA/KEEN1/LEVEL11.CK1"}, {"start": 1649310, "audio": 0, "end": 1651488, "filename": "/GAMEDATA/KEEN1/LEVEL12.CK1"}, {"start": 1651488, "audio": 0, "end": 1661396, "filename": "/GAMEDATA/KEEN1/LEVEL13.CK1"}, {"start": 1661396, "audio": 0, "end": 1668420, "filename": "/GAMEDATA/KEEN1/LEVEL14.CK1"}, {"start": 1668420, "audio": 0, "end": 1670654, "filename": "/GAMEDATA/KEEN1/LEVEL15.CK1"}, {"start": 1670654, "audio": 0, "end": 1676472, "filename": "/GAMEDATA/KEEN1/LEVEL16.CK1"}, {"start": 1676472, "audio": 0, "end": 1682110, "filename": "/GAMEDATA/KEEN1/LEVEL80.CK1"}, {"start": 1682110, "audio": 0, "end": 1682868, "filename": "/GAMEDATA/KEEN1/LEVEL81.CK1"}, {"start": 1682868, "audio": 0, "end": 1684130, "filename": "/GAMEDATA/KEEN1/LEVEL90.CK1"}, {"start": 1684130, "audio": 0, "end": 1689844, "filename": "/GAMEDATA/KEEN1/ORDER.FRM"}, {"start": 1689844, "audio": 0, "end": 1717730, "filename": "/GAMEDATA/KEEN1/PREVIEW2.CK1"}, {"start": 1717730, "audio": 0, "end": 1743159, "filename": "/GAMEDATA/KEEN1/PREVIEW3.CK1"}, {"start": 1743159, "audio": 0, "end": 1745319, "filename": "/GAMEDATA/KEEN1/PREVIEWS.CK1"}, {"start": 1745319, "audio": 0, "end": 1754217, "filename": "/GAMEDATA/KEEN1/SOUNDS.CK1"}, {"start": 1754217, "audio": 0, "end": 1757721, "filename": "/GAMEDATA/KEEN1/STORYTXT.CK1"}, {"start": 1757721, "audio": 0, "end": 1766597, "filename": "/GAMEDATA/KEEN1/VENDOR.DOC"}], "remote_package_size": 1766597, "package_uuid": "ec457873-6478-41ef-9072-d046fd762e1b"});
+ loadPackage({"files": [{"start": 0, "audio": 0, "end": 391, "filename": "/chocolate-keen.cfg"}, {"start": 391, "audio": 0, "end": 435, "filename": "/GAMEDATA/KEEN1/CTLPANEL.CK1"}, {"start": 435, "audio": 0, "end": 16003, "filename": "/GAMEDATA/KEEN1/EGAHEAD.CK1"}, {"start": 16003, "audio": 0, "end": 73068, "filename": "/GAMEDATA/KEEN1/EGALATCH.CK1"}, {"start": 73068, "audio": 0, "end": 90701, "filename": "/GAMEDATA/KEEN1/EGASPRIT.CK1"}, {"start": 90701, "audio": 0, "end": 91643, "filename": "/GAMEDATA/KEEN1/ENDTEXT.CK1"}, {"start": 91643, "audio": 0, "end": 100208, "filename": "/GAMEDATA/KEEN1/FINALE.CK1"}, {"start": 100208, "audio": 0, "end": 102067, "filename": "/GAMEDATA/KEEN1/HELPTEXT.CK1"}, {"start": 102067, "audio": 0, "end": 153257, "filename": "/GAMEDATA/KEEN1/KEEN1.EXE"}, {"start": 153257, "audio": 0, "end": 154625, "filename": "/GAMEDATA/KEEN1/LEVEL01.CK1"}, {"start": 154625, "audio": 0, "end": 155349, "filename": "/GAMEDATA/KEEN1/LEVEL02.CK1"}, {"start": 155349, "audio": 0, "end": 158823, "filename": "/GAMEDATA/KEEN1/LEVEL03.CK1"}, {"start": 158823, "audio": 0, "end": 160543, "filename": "/GAMEDATA/KEEN1/LEVEL04.CK1"}, {"start": 160543, "audio": 0, "end": 161353, "filename": "/GAMEDATA/KEEN1/LEVEL05.CK1"}, {"start": 161353, "audio": 0, "end": 162281, "filename": "/GAMEDATA/KEEN1/LEVEL06.CK1"}, {"start": 162281, "audio": 0, "end": 167931, "filename": "/GAMEDATA/KEEN1/LEVEL07.CK1"}, {"start": 167931, "audio": 0, "end": 171347, "filename": "/GAMEDATA/KEEN1/LEVEL08.CK1"}, {"start": 171347, "audio": 0, "end": 172985, "filename": "/GAMEDATA/KEEN1/LEVEL09.CK1"}, {"start": 172985, "audio": 0, "end": 175071, "filename": "/GAMEDATA/KEEN1/LEVEL10.CK1"}, {"start": 175071, "audio": 0, "end": 176707, "filename": "/GAMEDATA/KEEN1/LEVEL11.CK1"}, {"start": 176707, "audio": 0, "end": 178885, "filename": "/GAMEDATA/KEEN1/LEVEL12.CK1"}, {"start": 178885, "audio": 0, "end": 188793, "filename": "/GAMEDATA/KEEN1/LEVEL13.CK1"}, {"start": 188793, "audio": 0, "end": 195817, "filename": "/GAMEDATA/KEEN1/LEVEL14.CK1"}, {"start": 195817, "audio": 0, "end": 198051, "filename": "/GAMEDATA/KEEN1/LEVEL15.CK1"}, {"start": 198051, "audio": 0, "end": 203869, "filename": "/GAMEDATA/KEEN1/LEVEL16.CK1"}, {"start": 203869, "audio": 0, "end": 209507, "filename": "/GAMEDATA/KEEN1/LEVEL80.CK1"}, {"start": 209507, "audio": 0, "end": 210265, "filename": "/GAMEDATA/KEEN1/LEVEL81.CK1"}, {"start": 210265, "audio": 0, "end": 211527, "filename": "/GAMEDATA/KEEN1/LEVEL90.CK1"}, {"start": 211527, "audio": 0, "end": 217241, "filename": "/GAMEDATA/KEEN1/ORDER.FRM"}, {"start": 217241, "audio": 0, "end": 245127, "filename": "/GAMEDATA/KEEN1/PREVIEW2.CK1"}, {"start": 245127, "audio": 0, "end": 270556, "filename": "/GAMEDATA/KEEN1/PREVIEW3.CK1"}, {"start": 270556, "audio": 0, "end": 272716, "filename": "/GAMEDATA/KEEN1/PREVIEWS.CK1"}, {"start": 272716, "audio": 0, "end": 272920, "filename": "/GAMEDATA/KEEN1/SCORES.CK1"}, {"start": 272920, "audio": 0, "end": 604696, "filename": "/GAMEDATA/KEEN1/SDL.dll"}, {"start": 604696, "audio": 0, "end": 618008, "filename": "/GAMEDATA/KEEN1/SDL_net.dll"}, {"start": 618008, "audio": 0, "end": 626906, "filename": "/GAMEDATA/KEEN1/SOUNDS.CK1"}, {"start": 626906, "audio": 0, "end": 630410, "filename": "/GAMEDATA/KEEN1/STORYTXT.CK1"}, {"start": 630410, "audio": 0, "end": 639286, "filename": "/GAMEDATA/KEEN1/VENDOR.DOC"}, {"start": 639286, "audio": 0, "end": 3839286, "filename": "/GAMEDATA/KEEN1/dosbox.exe"}, {"start": 3839286, "audio": 0, "end": 3874582, "filename": "/GAMEDATA/KEEN1/uninstall.exe"}], "remote_package_size": 3874582, "package_uuid": "6a1fb818-68ad-4272-8fca-77045a87313d"});
 
 })();
 
@@ -239,13 +239,6 @@ ENVIRONMENT_IS_SHELL = !ENVIRONMENT_IS_WEB && !ENVIRONMENT_IS_NODE && !ENVIRONME
 if (Module['ENVIRONMENT']) {
   throw new Error('Module.ENVIRONMENT has been deprecated. To force the environment, use the ENVIRONMENT compile-time option (for example, -s ENVIRONMENT=web or -s ENVIRONMENT=node)');
 }
-
-
-// Three configurations we can be running in:
-// 1) We could be the application main() thread running in the main JS UI thread. (ENVIRONMENT_IS_WORKER == false and ENVIRONMENT_IS_PTHREAD == false)
-// 2) We could be the application main() thread proxied to worker. (with Emscripten -s PROXY_TO_WORKER=1) (ENVIRONMENT_IS_WORKER == true, ENVIRONMENT_IS_PTHREAD == false)
-// 3) We could be an application pthread running in a worker. (ENVIRONMENT_IS_WORKER == true and ENVIRONMENT_IS_PTHREAD == true)
-
 
 
 
@@ -1415,12 +1408,11 @@ function updateGlobalBufferAndViews(buf) {
   Module['HEAPF64'] = HEAPF64 = new Float64Array(buf);
 }
 
-
 var STATIC_BASE = 1024,
-    STACK_BASE = 1481552,
+    STACK_BASE = 1481536,
     STACKTOP = STACK_BASE,
-    STACK_MAX = 6724432,
-    DYNAMIC_BASE = 6724432,
+    STACK_MAX = 6724416,
+    DYNAMIC_BASE = 6724416,
     DYNAMICTOP_PTR = 1481344;
 
 assert(STACK_BASE % 16 === 0, 'stack must start aligned');
@@ -1990,7 +1982,7 @@ function _emscripten_asm_const_iiii(code, a0, a1, a2) {
 
 
 
-// STATICTOP = STATIC_BASE + 1480528;
+// STATICTOP = STATIC_BASE + 1480512;
 /* global initializers */  __ATINIT__.push({ func: function() { ___emscripten_environ_constructor() } });
 
 
@@ -2001,7 +1993,7 @@ function _emscripten_asm_const_iiii(code, a0, a1, a2) {
 
 
 /* no memory initializer */
-var tempDoublePtr = 1481536
+var tempDoublePtr = 1481520
 assert(tempDoublePtr % 8 == 0);
 
 function copyTempFloat(ptr) { // functions, because inlining this code increases code size too much
@@ -2027,7 +2019,7 @@ function copyTempDouble(ptr) {
 var EMTSTACKTOP = getMemory(1048576);
 var EMT_STACK_MAX = EMTSTACKTOP + 1048576;
 
-var eb = getMemory(1724840);
+var eb = getMemory(1724936);
 assert(eb % 8 === 0);
 __ATPRERUN__.push(function() {
 
@@ -2035,7 +2027,7 @@ __ATPRERUN__.push(function() {
   if (!(bytecodeFile instanceof ArrayBuffer)) {
     throw "bad or missing emterpreter file. If you compiled to JS (and not HTML) make sure you set Module['emterpreterFile']";
   }
-  var codeSize = 1724840;
+  var codeSize = 1724936;
   HEAPU8.set(new Uint8Array(bytecodeFile).subarray(0, codeSize), eb);
   assert(HEAPU8[eb] === 140);
   assert(HEAPU8[eb+1] === 4);
@@ -2043,14 +2035,14 @@ __ATPRERUN__.push(function() {
   assert(HEAPU8[eb+3] === 4);
   var relocationsStart = (codeSize+3) >> 2;
   var relocations = (new Uint32Array(bytecodeFile)).subarray(relocationsStart);
-  assert(relocations.length === 49982);
+  assert(relocations.length === 49981);
   if (relocations.length > 0) {
     assert(relocations[0] === 300);
   }
 
   for (var i = 0; i < relocations.length; i++) {
     assert(relocations[i] % 4 === 0);
-    assert(relocations[i] >= 0 && relocations[i] < eb + 1724840); // in range
+    assert(relocations[i] >= 0 && relocations[i] < eb + 1724936); // in range
     assert(HEAPU32[eb + relocations[i] >> 2] + eb < (-1 >>> 0), [i, relocations[i]]); // no overflows
     HEAPU32[eb + relocations[i] >> 2] = HEAPU32[eb + relocations[i] >> 2] + eb;
   }
@@ -10226,7 +10218,10 @@ if (!Object.getOwnPropertyDescriptor(Module, "setTempRet0")) Module["setTempRet0
 if (!Object.getOwnPropertyDescriptor(Module, "callMain")) Module["callMain"] = function() { abort("'callMain' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") };
 if (!Object.getOwnPropertyDescriptor(Module, "abort")) Module["abort"] = function() { abort("'abort' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") };
 if (!Object.getOwnPropertyDescriptor(Module, "Pointer_stringify")) Module["Pointer_stringify"] = function() { abort("'Pointer_stringify' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") };
-if (!Object.getOwnPropertyDescriptor(Module, "warnOnce")) Module["warnOnce"] = function() { abort("'warnOnce' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") };if (!Object.getOwnPropertyDescriptor(Module, "ALLOC_NORMAL")) Object.defineProperty(Module, "ALLOC_NORMAL", { configurable: true, get: function() { abort("'ALLOC_NORMAL' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") } });
+if (!Object.getOwnPropertyDescriptor(Module, "warnOnce")) Module["warnOnce"] = function() { abort("'warnOnce' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") };
+Module["writeStackCookie"] = writeStackCookie;
+Module["checkStackCookie"] = checkStackCookie;
+Module["abortStackOverflow"] = abortStackOverflow;if (!Object.getOwnPropertyDescriptor(Module, "ALLOC_NORMAL")) Object.defineProperty(Module, "ALLOC_NORMAL", { configurable: true, get: function() { abort("'ALLOC_NORMAL' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") } });
 if (!Object.getOwnPropertyDescriptor(Module, "ALLOC_STACK")) Object.defineProperty(Module, "ALLOC_STACK", { configurable: true, get: function() { abort("'ALLOC_STACK' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") } });
 if (!Object.getOwnPropertyDescriptor(Module, "ALLOC_DYNAMIC")) Object.defineProperty(Module, "ALLOC_DYNAMIC", { configurable: true, get: function() { abort("'ALLOC_DYNAMIC' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") } });
 if (!Object.getOwnPropertyDescriptor(Module, "ALLOC_NONE")) Object.defineProperty(Module, "ALLOC_NONE", { configurable: true, get: function() { abort("'ALLOC_NONE' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") } });
@@ -10249,6 +10244,7 @@ function ExitStatus(status) {
 
 var calledMain = false;
 
+
 dependenciesFulfilled = function runCaller() {
   // If run has never been called, and we should call run (INVOKE_RUN is true, and Module.noInitialRun is not false)
   if (!calledRun) run();
@@ -10258,6 +10254,8 @@ dependenciesFulfilled = function runCaller() {
 function callMain(args) {
   assert(runDependencies == 0, 'cannot call main when async dependencies remain! (listen on Module["onRuntimeInitialized"])');
   assert(__ATPRERUN__.length == 0, 'cannot call main when preRun functions remain to be called');
+
+  var entryFunction = Module['_main'];
 
 
   args = args || [];
@@ -10275,7 +10273,7 @@ function callMain(args) {
   try {
 
 
-    var ret = Module['_main'](argc, argv);
+    var ret = entryFunction(argc, argv);
 
 
     // if we are saving the stack, then do not call exit, we are not
@@ -10416,7 +10414,7 @@ function exit(status, implicit) {
   if (noExitRuntime) {
     // if exit() was called, we may warn the user if the runtime isn't actually being shut down
     if (!implicit) {
-      err('exit(' + status + ') called, but EXIT_RUNTIME is not set, so halting execution but not exiting the runtime or preventing further async execution (build with EXIT_RUNTIME=1, if you want a true shutdown)');
+      err('program exited (with status: ' + status + '), but EXIT_RUNTIME is not set, so halting execution but not exiting the runtime or preventing further async execution (build with EXIT_RUNTIME=1, if you want a true shutdown)');
     }
   } else {
 

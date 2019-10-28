@@ -10,7 +10,7 @@ else
 endif
 
 STRIPBIN=$(BINPREFIX)strip
-WINDRES=$(BINPREFIX)windres
+WINDRES=windres
 SDLCONFIG=sdl2-config
 SRC=src
 RSRC=rsrc
@@ -131,4 +131,4 @@ $(OBJ)/imageRLE.o: $(SRC)/decompression/imageRLE.c
 $(OBJ)/%.o: $(SRC)/%.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 clean:
-	-rm -f $(EXE_PATH) $(OBJECTS)
+	-rm -rf $(OBJ)

@@ -14,7 +14,7 @@ Chocolate Keen is a reverse engineering of Commander Keen in C/C++ and SDL. The 
 ## Releases
 Download the game package from the <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases">Releases</a> directory:
 
-* <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/Linux">Releases/Linux</a> - WebAssembly version. Download the zip, extract and run `./chocolate-keen`
+* <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/Linux">Releases/Linux</a> - Linux version. You'll need the <a href="https://wiki.libsdl.org/Installation#Linux.2FUnix" target="_blank">SDL runtime</a> installed. On Ubuntu, it's `sudo apt-get install libsdl2-2.0`. Then download the zip, extract and run `./chocolate-keen`
 * <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/WebAssembly">Releases/WebAssembly</a> - WebAssembly version. Download the zip, extract and run `chocolate-keen.html`
 * <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/Windows-x86">Releases/Windows-x86</a> - for 32-bit Windows. Download the zip, extract and run `chocolate-keen.exe`
 * <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/Windows-x64">Releases/Windows-x64</a> - for 64-bit Windows. Download the zip, extract and run `chocolate-keen.exe`

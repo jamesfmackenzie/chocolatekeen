@@ -33,6 +33,9 @@
 *.app
 *.exe
 
+# Linux executable
+chocolate-keen
+
 # Visual Studio
 
 # Commander Keen config files
@@ -48,8 +51,15 @@ Releases/Windows-x86/SCORES.CK1
 Releases/Windows-x86/chocolate-keen.cfg
 Releases/Windows-x86/CTLPANEL.CK1
 Releases/Windows-x86/SCORES.CK1
+Releases/Linux/chocolate-keen.cfg
+Releases/Linux/CTLPANEL.CK1
+Releases/Linux/SCORES.CK1
+Releases/Linux/chocolate-keen.cfg
+Releases/Linux/CTLPANEL.CK1
+Releases/Linux/SCORES.CK1
 
 # GAMEDATA
+Releases/Linux/GAMEDATA
 Releases/Windows-x64/GAMEDATA
 Releases/Windows-x86/GAMEDATA
 

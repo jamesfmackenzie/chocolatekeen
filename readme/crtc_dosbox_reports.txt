@@ -1,0 +1,31 @@
+*******************************************************************************
+WARNING: SOME (A LOT?) OF THESE COULD BE VERY INACCURATE!! YOU'VE BEEN WARNED!!
+*******************************************************************************
+
+Reports from a "recent" SVN build
+(with Keen 4 scrolling "broken" on machine=ega):
+
+machine=cga
+Video mode 4
+Blinking ???
+VGA:h total 57 end 40 blank (40/57) retrace (41/51)
+VGA:v total 262 end 200 blank (200/262) retrace (224/240)
+
+machine=ega
+Video mode D
+Blinking 0
+VGA:h total 114 end 40 blank (40/90) retrace (43/74)
+VGA:v total 262 end 200 blank (224/270) retrace (224/226)
+Video Mode 4
+...Same as video mode D on ega.
+
+machine=...default
+Video Mode 13
+VGA:h total 100 end 80 blank (80/98) retrace (84/96)
+VGA:v total 449 end 400 blank (407/442) retrace (412/414)
+Video Mode D
+VGA:h total 100 end 40 blank (40/48) retrace (43/64)
+VGA:v total 449 end 400 blank (407/442) retrace (412/414)
+Video Mode 4
+VGA:h total 100 end 40 blank (40/48) retrace (43/64)
+VGA:v total 449 end 400 blank (407/442) retrace (412/414)

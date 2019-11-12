@@ -1,0 +1,53 @@
+Here is, (very) partially, how is scrolling done...sort of
+*IGNORING THE USAGE OF TWO PAGES (FOR THE FLIPPING) FOR NOW*
+
+Given DWORDs scrollX and scrollY:
+
+ega_regen_start_addr = 4;
+if (scrollX & 0x800)
+	ega_regen_start_addr++;
+pel_panning = (scrollX >> 16) & 7; // One more kind of panning
+
+ega_regen_start_addr += 0x600+unsigned_mul(0x30*((scrollY >> 16) & 0x0F))
+
+So... to conclude, the location in memory (withtin a specific page) that we draw from is:
+
+ega_regen_start_addr = 0x604+unsigned_mul(0x30*((scrollY >> 16) & 0x0F)) + ((scrollX & 0x800) >> 11);
+
+And:
+
+pel_panning = (scrollX >> 16) & 7;
+
+===================================
+
+Wait, there are a few more things notice:
+
+- First, we add 0x3000 to ega_regen_start_addr if we want to draw to the second page.
+- page_current_seg is also updated accordingly. page_current is NOT, at least at the moment.
+- dstseg should now be a segment retrieved from the "absolute location" ega_regen_start_addr, which does *not* have the number 0xA000 or even 0xA0000 involved in any way. How? Well:
+
+dstseg = (ega_regen_start_addr >> 4) + 0xA000;
+
+===================================
+
+Finally, if we want to use absolute locations all the time and not segments, then:
+- We update page_current_seg accordingly, i.e. with either 0 or 0x3000.
+- Now dstseg is updated by removing the 4 least significant bits as follows:
+
+dstseg = (ega_regen_start_addr >> 4) << 4;
+
+===================================
+
+We are not done, though: What if we want to store the various addresses in terms of one BYTE per pixel, rather than BIT?
+
+Well, we should then multiply everything by 8... with the exception of pel_panning.
+So:
+
+ega_regen_start_addr = 0x3020+unsigned_mul(0x180*((scrollY >> 16) & 0x0F)) + ((scrollX & 0x800) >> 8);
+pel_panning = (scrollX >> 16) & 7;
+<Rather than 0x3000, add 0x18000 to ega_regen_start_addr if we want to draw in the second page.>
+<Similarly, page_current_seg should be set to either 0 or 0x18000.>
+
+And... dstseg is retrieved from ega_regen_start_addr as follows???
+
+dstseg = (ega_regen_start_addr >> 7) << 7; // ???

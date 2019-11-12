@@ -1,0 +1,51 @@
+Chocolate Keen plan:
+
+How to optimize things:
+
+Textual mode:
+-------------
+
+- In addition to emulated video RAM contents (4000 bytes of text),
+store actual graphics contents; Usually 32-bits per pixel.
+- If a 8-bit paletted window surface is used, rather use 8-bits per pixel.
+- When it's time to update a cell on screen, update *both* buffers.
+- Upon displaying contents on screen, scan for blinking chars and cursors and
+update screen buffer if necessary, using a few variables that tell if there is
+anything to update at all.
+
+Graphical mode
+--------------
+
+- As before, have a paletted buffer.
+- Futhermore, unless a 8-bit paletted window surface is used,
+also allocated a non-paletted "clone" of the buffer (32-bits per pixel).
+
+
+In general
+----------
+
+- Know how things are *forced* to be updated with engine_shortSleep or so?
+Well, rather do so from the updateActualDisplay function.
+Reason: Think of the textual mode cursor blinking. (Save unnecessary updates)
+- In fact, maybe enable this OPTIONALLY using a command line argument, since
+this is not necessary on some environments and may even be considered worse,
+say, during a pause.
+- If software rendering is done in *any* way (either via a window surface or by
+using a software SDL renderer), *never* zoom unless -scalet boxed is specified.
+- Furthermore, give up zooming if -nearest is specified, again unless one
+requests -scalet boxed.
+- Remind that "-nearest" does NOT apply for SDL 1.2 overlay!!!
+- If an overlay is used, work as before with software zooming, BUT maybe
+disable zooms by default. (Because some width is double anyway...)
+- For the GL path, init texture to transparency/black using glCopyTexSubImage2D.
+- Furthermore, zoom in hardware with the help of glCopyTexSubImage2D.
+- If SDL 2.0 textures are used, check if render targets are supported
+(should be). If yes, use a second texture for zooming in hardware. Otherwise,
+work as before (software zoom).
+- One should remember to set the linear/nearest scaling flag while using
+render targets in such a way.
+- Anyway, the contents of the secondary "zoomed" texture should come from the
+(non-paletted) screen buffer. Its width MIGHT differ from what one expects, due
+to POT size constraints and overscan border handling.
+- Oh, and finally: For the SDL 1.2 path, support an 8-bit indexed color window
+surface (since that may require less RAM).

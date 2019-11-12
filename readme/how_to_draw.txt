@@ -1,0 +1,11 @@
+How to draw graphics in vanilla style but efficiently (a possible approach):
+
+- Upon loading graphics, forget of the EGA planes. Use one byte per pixel
+(one out of 16 possible colors, and another bit (plane) for the sprites).
+- Store two surfaces: One using EGA indexes (just indexes!), the other with
+actual colors (RGBA if a 32-bit surface is used).
+- When a screen update with a new sprite or so is desired, draw on *both*
+surfaces. Use the current (emulated) EGA palette set to map each EGA color index
+to an actual color.
+- When a palette change is desired, do replace a palette and then repeat the
+previous step for the whole screen.

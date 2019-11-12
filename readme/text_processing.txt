@@ -1,0 +1,29 @@
+Text parsing behavior (for files like STORYTXT.CK1, when just loaded)...
+
+- First we count the characters in "di", until we encounter 1Ah.
+Afterwards, "si" is used as a new counter.
+
+Looping over "si", as long as we don't encounter 1Ah...
+<jump to loc_1B3A4>
+- Skip the current character if it's not 1Fh nor 0Dh.
+- If it is 1Fh, *replace* it with 0Dh and continue.
+Otherwise curr char is 0Dh and...
+==> Compare the character number si+2 ("next next") to 0Dh.
+- If *not* 0Dh, set character si to 20h. And then...
+1. Push the difference di-si to stack.
+2. Push the *offset*(?) of character si+1 to stack.
+3. Push the *segment*(?) of char si+1 to stack.
+4. Push the *offset*(?) of char si+2 to stack.
+5. Push the *segment*(?) of char si+2 to stack.
+6. Call "movedata" function.
+
+==> Apparently, we want to *shift* text by one char.
+We then decrease di by 1 (there is one character less now), but *keep* si as-is.
+And continue the loop on si...
+
+We still have one more case to check. Chars si and si+2 are both 0Dh.
+If that's the case... check again hat char si is 0Dh
+(it's done more than once...). If yes (now yes!) then we increase si *by two*,
+and repeat. As long as we encounter 0Dh we do si += 2. Once we don't, we do...
+si-- and then si++. So basically we can simply do nothing.
+And then the original loop over si continues.

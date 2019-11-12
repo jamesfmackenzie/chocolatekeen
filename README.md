@@ -42,25 +42,28 @@ For Linux builds you'll need a C compiler (e.g. gcc) and toolchain. The setup va
 
 1. Install the SDL 2.0 development libraries. This varies between Linux distros. For Ubuntu it's `sudo apt-get install libsdl2-dev`. More info <a href="https://wiki.libsdl.org/Installation#Linux.2FUnix" target="_blank">here</a>
 2. Launch a shell
-3. Run `./build_linux.sh`
+3. Navigate to `/build/linux`
+4. Run `./build_linux.sh`
 
 ### WebAssembly
 To build for WebAssembly, you'll need the <a href="https://github.com/emscripten-core/emsdk" target="_blank">Emscripten SDK</a>. Find setup instructions <a href="https://emscripten.org/docs/getting_started/downloads.html" target="_blank">here</a>
 
 1. Launch a shell with emscripten build tools (emsdk) in the PATH
-2. Run `build_emscripten.sh`
+2. Navigate to `/build/emscripten`
+3. Run `./emscripten/build_emscripten.sh`
 
 ### Windows (x86/x64)
 This is a Makefile project. To build for Windows you'll need something like <a href="https://www.msys2.org/" target="_blank">MSYS2</a> and a gcc toolchain. Find setup instructions <a href="https://www.math.ucla.edu/~wotaoyin/windows_coding.html" target="_blank">here</a>
 
 1. Download and unzip SDL 2.0 development libraries: https://www.libsdl.org/download-2.0.php
 2. Launch a UNIX shell
-3. Run build script that corresponds to your platform:
+3. Navigate to `/build/MingGW`
+4. Run build script that corresponds to your platform:
 * Windows x86:
-  * `./build_mingw32.sh /path/to/SDL2`
+  * `./mingw32/build_mingw32.sh /path/to/SDL2`
   * e.g. `./build_mingw32.sh /d/Development/SDL2-2.0.9/i686-w64-mingw32/`
 * Window x64:
-  * `./build_mingw-w64.sh /path/to/SDL2`
+  * `./mingw-w64/build_mingw-w64.sh /path/to/SDL2`
   * e.g. `./build_mingw-w64.sh /d/Development/SDL2-2.0.9/x86_64-w64-mingw32/`
 
 ## Authors

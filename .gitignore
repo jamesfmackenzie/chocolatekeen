@@ -63,6 +63,14 @@ Releases/Linux/GAMEDATA
 Releases/Windows-x64/GAMEDATA
 Releases/Windows-x86/GAMEDATA
 
+# build output
+build/mingw32/GAMEDATA
+build/mingw32/obj
+build/mingw32/SDL2.dll
+build/mingw-w64/GAMEDATA
+build/mingw-w64/obj
+build/mingw-w64/SDL2.dll
+
 # WebAssembly output
 chocolate-keen.data
 chocolate-keen.html
@@ -70,3 +78,11 @@ chocolate-keen.js
 chocolate-keen.js.orig.js
 chocolate-keen.wasm
 data.binary
+
+# game config files
+CTLPANEL.CK1
+CTLPANEL.CK2
+CTLPANEL.CK3
+SCORES.CK1
+SCORES.CK2
+SCORES.CK3

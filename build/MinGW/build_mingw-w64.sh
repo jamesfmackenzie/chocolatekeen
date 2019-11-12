@@ -1,5 +1,7 @@
 #!/bin/sh
 
+cp -r ../../data/GAMEDATA GAMEDATA
+cp lib/x64/SDL2.dll .
 mkdir -p obj
 
 if [ -z "$SDLCONFIGBIN" ]; then
@@ -25,3 +27,4 @@ else
 	shift 1
 	make BINPREFIX=x86_64-w64-mingw32- SDLCONFIG="$SDL_PATH/bin/$SDLCONFIGBIN --prefix=$SDL_PATH" PLATFORM=WINDOWS CXXFLAGS=-Iwindows/include "$@"
 fi
+

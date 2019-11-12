@@ -1116,6 +1116,7 @@ void CVort_engine_prepareWindowRects(bool doBoxing) {
 	/*************************
 	Some output specific setup
 	*************************/
+#ifdef _CHOCOLATE_KEEN_ENABLE_OPENGL_
 	if (engine_gfx_effective_arguments.outputSystem == OUTPUTSYS_OPENGL) {
 #if 0
 		if (engine_screen.host.bilinearInterpolation && engine_screen.gl.offScreenRendering && engine_screen.gl.haveFramebufferBlit) {
@@ -1141,6 +1142,7 @@ void CVort_engine_prepareWindowRects(bool doBoxing) {
 		        );
 		}
 	}
+#endif
 }
 
 void privResetBorderColor(void);
@@ -1328,6 +1330,7 @@ bool CVort_engine_prepareScreen() {
 // Modified from the function CheckExtension given in:
 // http://www.mesa3d.org/brianp/sig97/exten.htm
 bool CVort_engine_isGLExtensionAvailable(const char *extName) {
+#ifdef _CHOCOLATE_KEEN_ENABLE_OPENGL_
 	/* Naive usage of strstr can yield unexpected results */
 	char *extPtr = (char *)engine_glGetString(GL_EXTENSIONS);
 	char *extEnd = extPtr + strlen(extPtr);
@@ -1340,6 +1343,7 @@ bool CVort_engine_isGLExtensionAvailable(const char *extName) {
 		}
 		extPtr += (n + 1);
 	}
+#endif
 	return false;
 }
 
@@ -1618,11 +1622,9 @@ bool privCreateHostWindow(void) {
 	// Still under the assumption _CHOCOLATE_KEEN_ENABLE_OPENGL_ is defined;
 	// Make window resizable ONLY if it should have the launcher UI
 	engine_screen.sdl.window = SDL_CreateWindow("", SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), screenWidth, screenHeight, (engine_gfx_effective_arguments.isFullscreen ? (engine_screen.host.useFullDesktopDims ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_FULLSCREEN) : 0) | ((engine_gfx_effective_arguments.outputSystem == OUTPUTSYS_OPENGL) ? SDL_WINDOW_OPENGL : 0) | ((engine_screen.client.currVidMode == -1) ? SDL_WINDOW_RESIZABLE : 0));
-	//engine_screen.sdl.window = SDL_CreateWindow("", 0, 0, 736, 414, 0);
 #else // Not OpenGL
 	// Make window resizable ONLY if it should have the launcher UI
 	engine_screen.sdl.window = SDL_CreateWindow("", SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), screenWidth, screenHeight, (engine_gfx_effective_arguments.isFullscreen ? (engine_screen.host.useFullDesktopDims ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_FULLSCREEN) : 0) | ((engine_screen.client.currVidMode == -1) ? SDL_WINDOW_RESIZABLE : 0));
-	//engine_screen.sdl.window = SDL_CreateWindow("", 0, 0, 736, 414, 0);
 #endif // GL
 	if (!engine_screen.sdl.window) {
 #ifdef _CHOCOLATE_KEEN_ENABLE_OPENGL_
@@ -2334,7 +2336,6 @@ bool privResizeHostWindow(void) {
 	//SDL_SetWindowPosition(engine_screen.sdl.window, SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber));
 	switch (fullScrFlags) {
 	case 0:
-		//SDL_SetWindowSize(engine_screen.sdl.window, 672, 414);
 		SDL_SetWindowSize(engine_screen.sdl.window, screenWidth, screenHeight);
 		break;
 	case SDL_WINDOW_FULLSCREEN:

@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E6E1F291-D879-454F-968A-B5B6C0FFFFBE}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;CHOCOLATE_KEEN_IS_EPISODE1_ENABLED;CHOCOLATE_KEEN_IS_EPISODE2_ENABLED;CHOCOLATE_KEEN_IS_EPISODE3_ENABLED;_CHOCOLATE_KEEN_ENABLE_OPENGL_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <BrowseInformation>true</BrowseInformation>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)..\..\data\GAMEDATA" "$(TargetDir)GAMEDATA" /s /e /y /i</Command>
+    </PostBuildEvent>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;CHOCOLATE_KEEN_IS_EPISODE1_ENABLED;CHOCOLATE_KEEN_IS_EPISODE2_ENABLED;CHOCOLATE_KEEN_IS_EPISODE3_ENABLED;_CHOCOLATE_KEEN_ENABLE_OPENGL_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy $(SolutionDir)..\..\data\GAMEDATA $(TargetDir)GAMEDATA /s /e /y /i</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\chocolate-keen.c" />
+    <ClCompile Include="..\..\src\cvorticons.c" />
+    <ClCompile Include="..\..\src\cvorticons1.c" />
+    <ClCompile Include="..\..\src\cvorticons1_engine.c" />
+    <ClCompile Include="..\..\src\cvorticons1_memdata.c" />
+    <ClCompile Include="..\..\src\cvorticons2.c" />
+    <ClCompile Include="..\..\src\cvorticons2_engine.c" />
+    <ClCompile Include="..\..\src\cvorticons2_memdata.c" />
+    <ClCompile Include="..\..\src\cvorticons3.c" />
+    <ClCompile Include="..\..\src\cvorticons3_engine.c" />
+    <ClCompile Include="..\..\src\cvorticons3_memdata.c" />
+    <ClCompile Include="..\..\src\cvorticons_engine.c" />
+    <ClCompile Include="..\..\src\cvorticons_gfx.c" />
+    <ClCompile Include="..\..\src\cvorticons_gui.c" />
+    <ClCompile Include="..\..\src\cvorticons_input.c" />
+    <ClCompile Include="..\..\src\cvorticons_memdata.c" />
+    <ClCompile Include="..\..\src\decompression\cgenius\fileio\compression\CRLE.c" />
+    <ClCompile Include="..\..\src\decompression\cgenius\fileio\compression\Cunlzexe.c" />
+    <ClCompile Include="..\..\src\decompression\cgenius\fileio\lz.c" />
+    <ClCompile Include="..\..\src\decompression\imageRLE.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\rsrc\chocolate-keen_icon.h" />
+    <ClInclude Include="..\..\rsrc\chocolate-keen_vga_fonts.h" />
+    <ClInclude Include="..\..\src\chocolate-keen_config.h" />
+    <ClInclude Include="..\..\src\cvorticons.h" />
+    <ClInclude Include="..\..\src\cvorticons1.h" />
+    <ClInclude Include="..\..\src\cvorticons2.h" />
+    <ClInclude Include="..\..\src\cvorticons3.h" />
+    <ClInclude Include="..\..\src\cvorticons_gfx.h" />
+    <ClInclude Include="..\..\src\cvorticons_input.h" />
+    <ClInclude Include="..\..\src\decompression\cgenius\fileio\compression\CRLE.h" />
+    <ClInclude Include="..\..\src\decompression\cgenius\fileio\compression\Cunlzexe.h" />
+    <ClInclude Include="..\..\src\decompression\cgenius\fileio\lz.h" />
+    <ClInclude Include="..\..\src\decompression\cgenius\fileio\TypeDefinitions.h" />
+    <ClInclude Include="..\..\src\decompression\imageRLE.h" />
+    <ClInclude Include="..\..\windows\include\gl\glext.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\rsrc\chocolate-keen.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\sdl2.redist.2.0.5\build\native\sdl2.redist.targets" Condition="Exists('packages\sdl2.redist.2.0.5\build\native\sdl2.redist.targets')" />
+    <Import Project="packages\sdl2.2.0.5\build\native\sdl2.targets" Condition="Exists('packages\sdl2.2.0.5\build\native\sdl2.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\sdl2.redist.2.0.5\build\native\sdl2.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sdl2.redist.2.0.5\build\native\sdl2.redist.targets'))" />
+    <Error Condition="!Exists('packages\sdl2.2.0.5\build\native\sdl2.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sdl2.2.0.5\build\native\sdl2.targets'))" />
+  </Target>
+</Project>

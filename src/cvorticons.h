@@ -16,7 +16,11 @@
 #define NO_SDL_GLEXT
 #endif
 #include "SDL_opengl.h"
+#ifdef WIN32
+#include "../windows/include/GL/glext.h"
+#else
 #include "GL/glext.h"
+#endif
 #endif
 
 #define PC_PIT_RATE 1193182 // It is actually 1193181.8181...Hz

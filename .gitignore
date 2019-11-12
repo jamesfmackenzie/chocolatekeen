@@ -37,6 +37,15 @@
 chocolate-keen
 
 # Visual Studio
+.vs
+*.suo
+*.sdf
+*.opendb
+packages/
+.user
+/build/Visual C++/ChocolateKeen.vcxproj.user
+/build/Visual C++/bin
+/build/Visual C++/obj
 
 # Commander Keen config files
 Releases/Windows-x64/chocolate-keen.cfg

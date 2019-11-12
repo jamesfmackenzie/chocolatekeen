@@ -52,7 +52,7 @@ To build for WebAssembly, you'll need the <a href="https://github.com/emscripten
 2. Navigate to `/build/emscripten`
 3. Run `./emscripten/build_emscripten.sh`
 
-### Windows (x86/x64)
+### Windows (MinGW)
 This is a Makefile project. To build for Windows you'll need something like <a href="https://www.msys2.org/" target="_blank">MSYS2</a> and a gcc toolchain. Find setup instructions <a href="https://www.math.ucla.edu/~wotaoyin/windows_coding.html" target="_blank">here</a>
 
 1. Download and unzip SDL 2.0 development libraries: https://www.libsdl.org/download-2.0.php
@@ -65,6 +65,17 @@ This is a Makefile project. To build for Windows you'll need something like <a h
 * Window x64:
   * `./mingw-w64/build_mingw-w64.sh /path/to/SDL2`
   * e.g. `./build_mingw-w64.sh /d/Development/SDL2-2.0.9/x86_64-w64-mingw32/`
+
+### Windows (Visual Studio)
+Build and Debug with Microsoft Visual Studio / Visual C++
+
+1. Navigate to `/build/Visual C++`
+2. Open Solution file (`ChocolateKeen.sln`) in Visual Studio
+3. Restore NuGet dependencies (Project -> Manage NuGet Dependencies > Restore)
+4. Build (Build > Build Solution)
+5. Run (Debug > Start Without Debugging) or Debug (Debug > Start Debugging)
+
+Game data is automatically copied to the Target Directory as part of build - so everything should "just run"
 
 ## Authors
 The original authors of Chocolate Keen are NY00123, QuantumG and Lemm. The project started with a reverse engineering of the original Keen code, and the goal is complete authenticity to the original - bugs and all. For more info see https://pckf.com/viewtopic.php?f=4&t=2536

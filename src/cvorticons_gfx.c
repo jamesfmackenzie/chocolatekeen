@@ -13,7 +13,11 @@
 #define NO_SDL_GLEXT
 #endif
 #include "SDL_opengl.h"
+#ifdef WIN32
+#include "../windows/include/GL/glext.h"
+#else
 #include "GL/glext.h"
+#endif
 #endif
 
 // Set in CVort_engine_resetWindow

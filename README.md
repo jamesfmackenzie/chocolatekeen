@@ -50,7 +50,7 @@ To build for WebAssembly, you'll need the <a href="https://github.com/emscripten
 
 1. Launch a shell with emscripten build tools (emsdk) in the PATH
 2. Navigate to `/build/emscripten`
-3. Run `./emscripten/build_emscripten.sh`
+3. Run `./build_emscripten.sh`
 
 ### Windows (MinGW)
 This is a Makefile project. To build for Windows you'll need something like <a href="https://www.msys2.org/" target="_blank">MSYS2</a> and a gcc toolchain. Find setup instructions <a href="https://www.math.ucla.edu/~wotaoyin/windows_coding.html" target="_blank">here</a>
@@ -60,10 +60,10 @@ This is a Makefile project. To build for Windows you'll need something like <a h
 3. Navigate to `/build/MingGW`
 4. Run build script that corresponds to your platform:
 * Windows x86:
-  * `./mingw32/build_mingw32.sh /path/to/SDL2`
+  * `./build_mingw32.sh /path/to/SDL2`
   * e.g. `./build_mingw32.sh /d/Development/SDL2-2.0.9/i686-w64-mingw32/`
 * Window x64:
-  * `./mingw-w64/build_mingw-w64.sh /path/to/SDL2`
+  * `./build_mingw-w64.sh /path/to/SDL2`
   * e.g. `./build_mingw-w64.sh /d/Development/SDL2-2.0.9/x86_64-w64-mingw32/`
 
 ### Windows (Visual Studio)

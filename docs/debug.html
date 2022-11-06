@@ -134,342 +134,186 @@
     </style>
   </head>
   <body>
-	<div class="corner-ribbon top-right">
+    
+    <div class="corner-ribbon top-right">
       <a href="http://www.jamesfmackenzie.com/2019/10/28/commander-keen-ported-to-webassembly/" target="_blank">Learn More</a>
     </div>
+    
     <div class="wrapper">
-	    <canvas class="inner" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1 alt="Click to Play Commander Keen!"></canvas>
-	</div>
+      <canvas class="inner" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1 alt="Click to Play Commander Keen!"></canvas>
+    </div>
 	
-	<div id="controls">
-	
-	<div class="control-group"> 
-		
-<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" class="controls" data-key="ArrowLeft" data-which="37">
-  <path pointer-events="none" fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
-</svg>
+    <div id="controls">
+      <div class="control-group"> 
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" class="controls" data-key="ArrowLeft" data-which="37">
+          <path pointer-events="none" fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" class="controls" data-key="ArrowRight" data-which="39">
+          <path pointer-events="none" fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" class="controls" data-key="ArrowUp" data-which="38">
+          <path pointer-events="none" fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" class="controls" data-key="ArrowDown" data-which="40">
+          <path pointer-events="none" fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
+        </svg>
+      </div>
+      <div class="control-group">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" id="ctrlalt">
+          <path pointer-events="none" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8Zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0ZM9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383h1.312Z"/>
+        </svg>  
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" class="controls" data-key="AltLeft" data-which="18">
+          <path pointer-events="none" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8Zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0ZM6.646 6.24v.07H5.375v-.064c0-1.213.879-2.402 2.637-2.402 1.582 0 2.613.949 2.613 2.215 0 1.002-.6 1.667-1.287 2.43l-.096.107-1.974 2.22v.077h3.498V12H5.422v-.832l2.97-3.293c.434-.475.903-1.008.903-1.705 0-.744-.557-1.236-1.313-1.236-.843 0-1.336.615-1.336 1.306Z"/>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" class="controls" data-key="CtrlLeft" data-which="17">
+          <path pointer-events="none" d="M7.918 8.414h-.879V7.342h.838c.78 0 1.348-.522 1.342-1.237 0-.709-.563-1.195-1.348-1.195-.79 0-1.312.498-1.348 1.055H5.275c.036-1.137.95-2.115 2.625-2.121 1.594-.012 2.608.885 2.637 2.062.023 1.137-.885 1.776-1.482 1.875v.07c.703.07 1.71.64 1.734 1.917.024 1.459-1.277 2.396-2.93 2.396-1.705 0-2.707-.967-2.754-2.144H6.33c.059.597.68 1.06 1.541 1.066.973.006 1.6-.563 1.588-1.354-.006-.779-.621-1.318-1.541-1.318Z"/>
+          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0ZM1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8Z"/>
+        </svg>
+      </div>
+    </div>
 
-<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" class="controls" data-key="ArrowRight" data-which="39">
-  <path pointer-events="none" fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
-</svg>
+    <script type='text/javascript'>
+      // Reference:
+      // https://github.com/emscripten-core/emscripten/issues/3614#issuecomment-142032269
+      
+      var create_and_fire_event = function (event, type) {								
+        Module.canvas.dispatchEvent(
+          new KeyboardEvent(type, {
+            code: event.target.dataset.key,
+            key: event.target.dataset.key,
+            keyCode: event.target.dataset.which,
+            which: event.target.dataset.which,
+            bubbles: true
+          })
+        );
+      };
+          
+      var create_and_fire_ctrlalt_event = function (type) {
+        Module.canvas.dispatchEvent(
+          new KeyboardEvent(type, {
+            code: "CtrlLeft",
+            key: "CtrlLeft",
+            keyCode: 17,
+            which: 17,
+            bubbles: true
+          })
+        );
 
-<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" class="controls" data-key="ArrowUp" data-which="38">
-  <path pointer-events="none" fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
-</svg>
+        Module.canvas.dispatchEvent(
+          new KeyboardEvent(type, {
+            code: "AltLeft",
+            key: "AltLeft",
+            keyCode: 18,
+            which: 18,
+            bubbles: true
+          })
+        );
+      };
 
-<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" class="controls" data-key="ArrowDown" data-which="40">
-  <path pointer-events="none" fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
-</svg>
+      var register_controls = function () {
+        // single button keys
+        Array.from(document.querySelectorAll('.controls')).forEach(
+          function (control) {
+            if ('ontouchstart' in document.documentElement) {
+              // Mobile:
+              control.addEventListener('touchstart', function (event) {
+                  create_and_fire_event(event, 'keydown');
+              });
+              control.addEventListener('touchend', function (event) {
+                  create_and_fire_event(event, 'keyup');
+              });
+            } else {
+              // Desktop:
+              control.addEventListener('mousedown', function (event) {
+                  create_and_fire_event(event, 'keydown');
+              });
+              control.addEventListener('mouseup', function (event) {
+                  create_and_fire_event(event, 'keyup');
+              });
+            }
+          }
+        );
+            
+        // ctrl+alt key
+        Array.from(document.querySelectorAll('#ctrlalt')).forEach(
+          function (control) {
+            if ('ontouchstart' in document.documentElement) {
+              // Mobile:
+              control.addEventListener('touchstart', function (event) {
+                  create_and_fire_ctrlalt_event('keydown');
+              });
+              control.addEventListener('touchend', function (event) {
+                  create_and_fire_ctrlalt_event('keyup');
+              });
+            } else {
+              // Desktop:
+              control.addEventListener('mousedown', function (event) {
+                  create_and_fire_ctrlalt_event('keydown');
+              });
+              control.addEventListener('mouseup', function (event) {
+                  create_and_fire_ctrlalt_event('keyup');
+              });
+            }
+          }
+        );
 
-</div>
-
-<div class="control-group"> 
- <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" id="ctrlalt">
-  <path pointer-events="none" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8Zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0ZM9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383h1.312Z"/>
-</svg>
-	
-<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" class="controls" data-key="AltLeft" data-which="18">
-  <path pointer-events="none" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8Zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0ZM6.646 6.24v.07H5.375v-.064c0-1.213.879-2.402 2.637-2.402 1.582 0 2.613.949 2.613 2.215 0 1.002-.6 1.667-1.287 2.43l-.096.107-1.974 2.22v.077h3.498V12H5.422v-.832l2.97-3.293c.434-.475.903-1.008.903-1.705 0-.744-.557-1.236-1.313-1.236-.843 0-1.336.615-1.336 1.306Z"/>
-</svg>
-
-<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" class="controls" data-key="CtrlLeft" data-which="17">
-  <path pointer-events="none" d="M7.918 8.414h-.879V7.342h.838c.78 0 1.348-.522 1.342-1.237 0-.709-.563-1.195-1.348-1.195-.79 0-1.312.498-1.348 1.055H5.275c.036-1.137.95-2.115 2.625-2.121 1.594-.012 2.608.885 2.637 2.062.023 1.137-.885 1.776-1.482 1.875v.07c.703.07 1.71.64 1.734 1.917.024 1.459-1.277 2.396-2.93 2.396-1.705 0-2.707-.967-2.754-2.144H6.33c.059.597.68 1.06 1.541 1.066.973.006 1.6-.563 1.588-1.354-.006-.779-.621-1.318-1.541-1.318Z"/>
-  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0ZM1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8Z"/>
-</svg>
-</div>
-
-</div>
-
-
-	<script type='text/javascript'>
-	// stop double tap to zoom
-	/*
-	document.ondblclick = function(e) {
-		e.preventDefault();
-	}*/
-
-var count = 0;
-	
-			// Thanks to @juj for some hints on this issue as to how to get this working:
-            // https://github.com/emscripten-core/emscripten/issues/3614#issuecomment-142032269
-            var create_and_fire_event = function (event, type) {								
-
-			  Module.canvas.dispatchEvent(
-					new KeyboardEvent(type, {
-						code: event.target.dataset.key,
-						key: event.target.dataset.key,
-						keyCode: event.target.dataset.which,
-						which: event.target.dataset.which,
-						bubbles: true
-					})
-				);
-					
-            };
-			
-			var create_and_fire_ctrlalt_event = function (type) {
-
-				Module.canvas.dispatchEvent(
-					new KeyboardEvent(type, {
-						code: "CtrlLeft",
-						key: "CtrlLeft",
-						keyCode: 17,
-						which: 17,
-						bubbles: true
-					})
-				);
-
-				Module.canvas.dispatchEvent(
-					new KeyboardEvent(type, {
-						code: "AltLeft",
-						key: "AltLeft",
-						keyCode: 18,
-						which: 18,
-						bubbles: true
-					})
-				);
-            };
-
-            var register_controls = function () {
-                // single button keys
-				Array.from(document.querySelectorAll('.controls')).forEach(
-                    function (control) {
-                         if ('ontouchstart' in document.documentElement) {
-							// Mobile:
-                            control.addEventListener('touchstart', function (event) {
-                                create_and_fire_event(event, 'keydown');
-                            });
-                            control.addEventListener('touchend', function (event) {
-                                create_and_fire_event(event, 'keyup');
-                            });
-                        } else {
-							// Desktop:
-                            control.addEventListener('mousedown', function (event) {
-                                create_and_fire_event(event, 'keydown');
-							});
-                            control.addEventListener('mouseup', function (event) {
-                                create_and_fire_event(event, 'keyup');
-							});
-                        }
-                    }
-                );
-				
-				// ctrl+alt key
-				Array.from(document.querySelectorAll('#ctrlalt')).forEach(
-                    function (control) {
-                         if ('ontouchstart' in document.documentElement) {
-                            // Mobile:
-                            control.addEventListener('touchstart', function (event) {
-                                create_and_fire_ctrlalt_event('keydown');
-                            });
-                            control.addEventListener('touchend', function (event) {
-                                create_and_fire_ctrlalt_event('keyup');
-                            });
-                        } else {
-                            // Desktop:
-                            control.addEventListener('mousedown', function (event) {
-                                create_and_fire_ctrlalt_event('keydown');
-							});
-                            control.addEventListener('mouseup', function (event) {
-                                create_and_fire_ctrlalt_event('keyup');
-							});
-                        }
-                    }
-                );
-				
-            };
-
-var Module = {
-  preRun: [],
-  postRun: [register_controls],
-  canvas: (function() {
-    var canvas = document.getElementById('canvas');
-
-    // As a default initial behavior, pop up an alert when webgl context is lost. To make your
-    // application robust, you may want to override this behavior before shipping!
-    // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
-    canvas.addEventListener("webglcontextlost", function(e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
-
-    return canvas;
-  })(),
-  totalDependencies: 0,
-  monitorRunDependencies: function(left) {
-    this.totalDependencies = Math.max(this.totalDependencies, left);
-  }
-};
+      };
     </script>
-    <script>
-var ASSERTIONS = 1;
-// Copyright 2017 The Emscripten Authors.  All rights reserved.
-// Emscripten is available under two separate licenses, the MIT license and the
-// University of Illinois/NCSA Open Source License.  Both these licenses can be
-// found in the LICENSE file.
 
-// Prefix of data URIs emitted by SINGLE_FILE and related options.
-var dataURIPrefix = 'data:application/octet-stream;base64,';
+    <script type='text/javascript'>
+      var Module = {
+        preRun: [],
+        postRun: [register_controls],
+        canvas: (function() {
+          var canvas = document.getElementById('canvas');
 
-// Indicates whether filename is a base64 data URI.
-function isDataURI(filename) {
-  return String.prototype.startsWith ?
-      filename.startsWith(dataURIPrefix) :
-      filename.indexOf(dataURIPrefix) === 0;
-}
+          // As a default initial behavior, pop up an alert when webgl context is lost. To make your
+          // application robust, you may want to override this behavior before shipping!
+          // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
+          canvas.addEventListener("webglcontextlost", function(e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
 
-// Copied from https://github.com/strophe/strophejs/blob/e06d027/src/polyfills.js#L149
+          return canvas;
+        })(),
+        totalDependencies: 0,
+        monitorRunDependencies: function(left) {
+          this.totalDependencies = Math.max(this.totalDependencies, left);
+        }
+      };
+          </script>
+        <script>
+      var alreadyStarted = false;
 
-// This code was written by Tyler Akins and has been placed in the
-// public domain.  It would be nice if you left this header intact.
-// Base64 code from Tyler Akins -- http://rumkin.com
-
-/**
- * Decodes a base64 string.
- * @param {String} input The string to decode.
- */
-var decodeBase64 = typeof atob === 'function' ? atob : function (input) {
-  var keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-
-  var output = '';
-  var chr1, chr2, chr3;
-  var enc1, enc2, enc3, enc4;
-  var i = 0;
-  // remove all characters that are not A-Z, a-z, 0-9, +, /, or =
-  input = input.replace(/[^A-Za-z0-9\+\/\=]/g, '');
-  do {
-    enc1 = keyStr.indexOf(input.charAt(i++));
-    enc2 = keyStr.indexOf(input.charAt(i++));
-    enc3 = keyStr.indexOf(input.charAt(i++));
-    enc4 = keyStr.indexOf(input.charAt(i++));
-
-    chr1 = (enc1 << 2) | (enc2 >> 4);
-    chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
-    chr3 = ((enc3 & 3) << 6) | enc4;
-
-    output = output + String.fromCharCode(chr1);
-
-    if (enc3 !== 64) {
-      output = output + String.fromCharCode(chr2);
-    }
-    if (enc4 !== 64) {
-      output = output + String.fromCharCode(chr3);
-    }
-  } while (i < input.length);
-  return output;
-};
-
-// Converts a string of base64 into a byte array.
-// Throws error on invalid input.
-function intArrayFromBase64(s) {
-  if (typeof ENVIRONMENT_IS_NODE === 'boolean' && ENVIRONMENT_IS_NODE) {
-    var buf;
-    try {
-      buf = Buffer.from(s, 'base64');
-    } catch (_) {
-      buf = new Buffer(s, 'base64');
-    }
-    return new Uint8Array(buf.buffer, buf.byteOffset, buf.byteLength);
-  }
-
-  try {
-    var decoded = decodeBase64(s);
-    var bytes = new Uint8Array(decoded.length);
-    for (var i = 0 ; i < decoded.length ; ++i) {
-      bytes[i] = decoded.charCodeAt(i);
-    }
-    return bytes;
-  } catch (_) {
-    throw new Error('Converting base64 string to bytes failed.');
-  }
-}
-
-// If filename is a base64 data URI, parses and returns data (Buffer on node,
-// Uint8Array otherwise). If filename is not a base64 data URI, returns undefined.
-function tryParseAsDataURI(filename) {
-  if (!isDataURI(filename)) {
-    return;
-  }
-
-  return intArrayFromBase64(filename.slice(dataURIPrefix.length));
-}
-
-
-// Copyright 2017 The Emscripten Authors.  All rights reserved.
-// Emscripten is available under two separate licenses, the MIT license and the
-// University of Illinois/NCSA Open Source License.  Both these licenses can be
-// found in the LICENSE file.
-
-/** @type {function(string, boolean=, number=)} */
-function intArrayFromString(stringy, dontAddNull, length) {
-  var len = length > 0 ? length : lengthBytesUTF8(stringy)+1;
-  var u8array = new Array(len);
-  var numBytesWritten = stringToUTF8Array(stringy, u8array, 0, u8array.length);
-  if (dontAddNull) u8array.length = numBytesWritten;
-  return u8array;
-}
-
-function intArrayToString(array) {
-  var ret = [];
-  for (var i = 0; i < array.length; i++) {
-    var chr = array[i];
-    if (chr > 0xFF) {
-      if (ASSERTIONS) {
-        assert(false, 'Character code ' + chr + ' (' + String.fromCharCode(chr) + ')  at offset ' + i + ' not in 0x00-0xFF.');
+      function startGame() {
+          var script = document.createElement('script');
+          script.src = "chocolate-keen.js";
+          document.body.appendChild(script);
       }
-      chr &= 0xFF;
-    }
-    ret.push(String.fromCharCode(chr));
-  }
-  return ret.join('');
-}
-
-var alreadyStarted = false;
-
-function startGame() {
-  var emterpretURL = 'data.binary';
-  var emterpretXHR = new XMLHttpRequest();
-  emterpretXHR.open('GET', emterpretURL, true);
-  emterpretXHR.responseType = 'arraybuffer';
-  emterpretXHR.onload = function() {
-    if (emterpretXHR.status === 200 || emterpretXHR.status === 0) {
-      Module.emterpreterFile = emterpretXHR.response;
-    } else {
-      var emterpretURLBytes = tryParseAsDataURI(emterpretURL);
-      if (emterpretURLBytes) {
-        Module.emterpreterFile = emterpretURLBytes.buffer;
+          
+      function canvasClick() {  
+        if (!alreadyStarted) {
+          alreadyStarted = true;
+          startGame();
+          document.getElementById('canvas').removeEventListener('click', canvasClick);
+        }
       }
-    }
-
-    var script = document.createElement('script');
-    script.src = "chocolate-keen.js";
-    document.body.appendChild(script);
-  };
-
-  emterpretXHR.send(null);
-}
-		
-function canvasClick() {  
-  if (!alreadyStarted) {
-    alreadyStarted = true;
-    startGame();
-    document.getElementById('canvas').removeEventListener('click', canvasClick);
-  }
-}
-		
-document.getElementById('canvas').addEventListener('click', canvasClick);	
+          
+      document.getElementById('canvas').addEventListener('click', canvasClick);	
     </script>
     <!-- Google Analytics Tracking Code -->
     <script>
-(function (i, s, o, g, r, a, m) {
-  i['GoogleAnalyticsObject'] = r;
-  i[r] = i[r] || function () {
-    (i[r].q = i[r].q || []).push(arguments)
-  }, i[r].l = 1 * new Date();
-  a = s.createElement(o),
-    m = s.getElementsByTagName(o)[0];
-  a.async = 1;
-  a.src = g;
-  m.parentNode.insertBefore(a, m)
-})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-ga('create', 'UA-65863388-1', 'auto');
-ga('send', 'pageview');
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+      ga('create', 'UA-65863388-1', 'auto');
+      ga('send', 'pageview');
     </script>
   </body>
 </html>

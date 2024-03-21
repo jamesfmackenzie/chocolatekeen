@@ -4,6 +4,7 @@
 #include "cvorticons3.h"
 
 int main(int argc, char **argv) {
+    chdir("/apps/chocolate-keen");
     EngineArguments_T arguments;
     if (!CVort_engine_processArguments(argc, argv))
         return 0;

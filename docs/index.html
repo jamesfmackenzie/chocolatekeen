@@ -48,6 +48,7 @@
         position: fixed;
         box-shadow: 0 0 3px rgba(0,0,0,.3);
         background: #18bc9c;
+   	display: none;
       }
 
       .corner-ribbon.top-right{
@@ -121,10 +122,14 @@
 		height: 80px;
 	  }
 	  
-	  /* desktop device: hide controls */
+	  /* desktop device: hide controls, show ribbon */
 	  @media (min-width: 640px) {
 		 #controls {
 		   display: none;
+		 }
+
+		 .corner-ribbon {
+	           display: block;
 		 }
 		}
 	  

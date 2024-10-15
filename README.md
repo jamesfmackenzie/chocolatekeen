@@ -11,6 +11,8 @@ Chocolate Keen is a reverse engineering of Commander Keen in C and SDL. The goal
 * Alt/Option - Use Pogo/Stop Pogo (if you have one)
 * Ctrl AND Alt/Option - Fire raygun (if it has charges)
 
+If you’re having issues with the controls (e.g. on a Mac keyboard), you can change the key bindings with F3.
+
 ## Releases
 Downloadable game packages available in <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases">Releases</a>. All versions come packaged as zip files with game data. Just extract and run. On Linux, you'll need the <a href="https://wiki.libsdl.org/Installation#Linux.2FUnix" target="_blank">SDL 2.0 runtime</a> installed. Other versions come pre-packaged with SDL
 

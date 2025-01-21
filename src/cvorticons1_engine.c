@@ -54,13 +54,13 @@ void CVort1_engine_processEXE() {
     exeFieldsEp1.win3 = (int16_t *)(exeImage + 0x15A66);
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
     // Byte-swap everything
-    for (loopVar = 0; loopVar < 30) {
+    for (loopVar = 0; loopVar < 30; loopVar++) {
         exeFieldsEp1.win1[loopVar] = SDL_Swap16(exeFieldsEp1.win1[loopVar]);
     }
-    for (loopVar = 0; loopVar < 86) {
+    for (loopVar = 0; loopVar < 86; loopVar++) {
         exeFieldsEp1.win2[loopVar] = SDL_Swap16(exeFieldsEp1.win2[loopVar]);
     }
-    for (loopVar = 0; loopVar < 80) {
+    for (loopVar = 0; loopVar < 80; loopVar++) {
         exeFieldsEp1.win3[loopVar] = SDL_Swap16(exeFieldsEp1.win3[loopVar]);
     }
 #endif

@@ -1707,8 +1707,9 @@ size_t CVort_engine_cross_freadInt8LE(void *ptr, size_t count, FILE *stream) {
 size_t CVort_engine_cross_freadInt16LE(void *ptr, size_t count, FILE *stream) {
     count = fread(ptr, 2, count, stream);
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    for (size_t loopVar = 0; loopVar < count; loopVar++, ((uint16_t *) ptr)++)
-        *(uint16_t *) ptr = SDL_Swap16(*(uint16_t *) ptr);
+    uint16_t *p = ptr;
+    for (size_t loopVar = 0; loopVar < count; loopVar++, p++)
+        *p = SDL_Swap16(*p);
 #endif
     return count;
 }
@@ -1716,8 +1717,9 @@ size_t CVort_engine_cross_freadInt16LE(void *ptr, size_t count, FILE *stream) {
 size_t CVort_engine_cross_freadInt32LE(void *ptr, size_t count, FILE *stream) {
     count = fread(ptr, 4, count, stream);
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    for (size_t loopVar = 0; loopVar < count; loopVar++, ((uint32_t *) ptr)++)
-        *(uint32_t *) ptr = SDL_Swap32(*(uint32_t *) ptr);
+    uint32_t *p = ptr;
+    for (size_t loopVar = 0; loopVar < count; loopVar++, p++)
+        *p = SDL_Swap32(*p);
 #endif
     return count;
 }
@@ -1730,10 +1732,10 @@ size_t CVort_engine_cross_fwriteInt16LE(void *ptr, size_t count, FILE *stream) {
 #if SDL_BYTEORDER == SDL_LIL_ENDIAN
     return fwrite(ptr, 2, count, stream);
 #else
-    uint16_t val;
+    uint16_t val, *p = ptr;
     size_t actualCount = 0;
-    for (size_t loopVar = 0; loopVar < count; loopVar++, ((uint16_t *) ptr)++) {
-        val = SDL_Swap16(*(uint16_t *) ptr);
+    for (size_t loopVar = 0; loopVar < count; loopVar++, p++) {
+        val = SDL_Swap16(*p);
         actualCount += fwrite(&val, 2, 1, stream);
     }
     return actualCount;
@@ -1744,10 +1746,10 @@ size_t CVort_engine_cross_fwriteInt32LE(void *ptr, size_t count, FILE *stream) {
 #if SDL_BYTEORDER == SDL_LIL_ENDIAN
     return fwrite(ptr, 4, count, stream);
 #else
-    uint32_t val;
+    uint32_t val, *p = ptr;
     size_t actualCount = 0;
-    for (size_t loopVar = 0; loopVar < count; loopVar++, ((uint32_t *) ptr)++) {
-        val = SDL_Swap32(*(uint32_t *) ptr);
+    for (size_t loopVar = 0; loopVar < count; loopVar++, p++) {
+        val = SDL_Swap32(*p);
         actualCount += fwrite(&val, 4, 1, stream);
     }
     return actualCount;

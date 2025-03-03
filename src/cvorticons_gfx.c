@@ -2235,7 +2235,7 @@ void privUpdateClientWindowDims(void) {
 	// For now, if no zoom level is manually specified, assume 2
 	// for graphical/GUI mode or non-boxed scaling and 1 otherwise.
 	engine_screen.dims.zoomFactor = engine_gfx_effective_arguments.zoomLevel ? engine_gfx_effective_arguments.zoomLevel
-	                                : (((engine_screen.client.currVidMode != 3) || (engine_gfx_effective_arguments.scaleType != GFX_SCALE_BOXED)) ? 2 : 1);
+	                                : (((engine_screen.client.currVidMode != 3) || (engine_gfx_effective_arguments.scaleType != GFX_SCALE_BOXED)) ? 1 : 1);
 	engine_screen.dims.clientOffsettedZoomedRect.x = engine_screen.dims.zoomFactor*((engine_screen.client.currVidMode == 0xD) ? engine_arguments.calc.overscanGfxLeft : (engine_screen.client.currVidMode == 3) ? engine_arguments.calc.overscanTxtLeft : 0);
 	// Take VGA 200-line mode double scanning into consideration
 	if (engine_screen.client.currVidMode == 0xD) { // Graphical

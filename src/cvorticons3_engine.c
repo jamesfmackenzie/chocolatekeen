@@ -69,7 +69,7 @@ void CVort3_engine_processEXE() {
     TILEINFO_LEdge = (int16_t *) (exeImage + CVort3_TILEINFO_OFFSET) + CVort3_TILENUM * 5;
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
     // Byte swap again...
-    for (loopVar = 0; loopVar < TILENUM; loopVar++) {
+    for (loopVar = 0; loopVar < CVort3_TILENUM; loopVar++) {
         TILEINFO_Anim[loopVar] = SDL_Swap16(TILEINFO_Anim[loopVar]);
         TILEINFO_Type[loopVar] = SDL_Swap16(TILEINFO_Type[loopVar]);
         TILEINFO_UEdge[loopVar] = SDL_Swap16(TILEINFO_UEdge[loopVar]);

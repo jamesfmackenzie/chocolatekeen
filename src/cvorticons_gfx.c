@@ -3029,25 +3029,25 @@ uint16_t CVort_engine_drawSpriteAt(int32_t posX, int32_t posY, uint16_t frame)
 
 	sdraw_xbyte = (sdraw_xbyte+0x20)/8-4;
 	tileX1 = sdraw_xbyte/2;
-	if (tileX1 > 0x15)
+	if (tileX1 > ENGINE_SPRITE_CLIP_MAX_X)
 		return 0;
 	if (tileX1 < 0)
 		tileX1 = 0;
 	tileX2 = (sdraw_xbyte+temp_MSE.width-1)/2;
 	if (tileX2 < 0)
 		return 0;
-	if (tileX2 > 0x15)
-		tileX2 = 0x15;
+	if (tileX2 > ENGINE_SPRITE_CLIP_MAX_X)
+		tileX2 = ENGINE_SPRITE_CLIP_MAX_X;
 	tileY1 = sdraw_yrow/0x10;
-	if (tileY1 > 0xE) // This is not a typo. 0xE, not 0xD.
+	if (tileY1 > ENGINE_SPRITE_CLIP_MAX_Y1) // This is not a typo. 0xE, not 0xD.
 		return 0;
 	if (tileY1 < 0)
 		tileY1 = 0;
 	tileY2 = (sdraw_yrow+temp_MSE.height-1)/0x10;
 	if (tileY2 < 0)
 		return 0;
-	if (tileY2 > 0xD) // And yet, here we have 0xD as a bound.
-		tileY2 = 0xD;
+	if (tileY2 > ENGINE_SPRITE_CLIP_MAX_Y2) // And yet, here we have 0xD as a bound.
+		tileY2 = ENGINE_SPRITE_CLIP_MAX_Y2;
 
 	sdraw_xbyte += 4;
 	sdraw_yrow += 0x20;
@@ -3060,7 +3060,7 @@ uint16_t CVort_engine_drawSpriteAt(int32_t posX, int32_t posY, uint16_t frame)
 			if (tileType >= 0)
 			{
 				// For ATR: Update this tile
-				screentiles[screentiles_i] = currY*0x15+currX;
+				screentiles[screentiles_i] = currY*ENGINE_SCREEN_TILE_ROW_WIDTH+currX;
 				screentiles_i++;
 			}
 			else
@@ -3073,7 +3073,7 @@ uint16_t CVort_engine_drawSpriteAt(int32_t posX, int32_t posY, uint16_t frame)
 				{
 					tiledraws[tiledraws_i].tile_id |= 0x8000;
 					// For ATR: Update this tile
-					screentiles[screentiles_i] = currY*0x15+currX;
+					screentiles[screentiles_i] = currY*ENGINE_SCREEN_TILE_ROW_WIDTH+currX;
 					screentiles_i++;
 				}
 				tiledraws_c++;
@@ -3099,25 +3099,25 @@ uint16_t CVort_engine_drawTileAt(int32_t posX, int32_t posY, uint16_t tilenum)
 
 	sdraw_xbyte = (sdraw_xbyte+0x20)/8-4;
 	tileX1 = sdraw_xbyte/2;
-	if (tileX1 > 0x15)
+	if (tileX1 > ENGINE_SPRITE_CLIP_MAX_X)
 		return 0;
 	if (tileX1 < 0)
 		tileX1 = 0;
 	tileX2 = (sdraw_xbyte+temp_MSE.width-1)/2;
 	if (tileX2 < 0)
 		return 0;
-	if (tileX2 > 0x14)
-		tileX2 = 0x14;
+	if (tileX2 > ENGINE_SPRITE_CLIP_MAX_X2)
+		tileX2 = ENGINE_SPRITE_CLIP_MAX_X2;
 	tileY1 = sdraw_yrow/0x10;
-	if (tileY1 > 0xD) // 0xD is a common bound here...
+	if (tileY1 > ENGINE_SPRITE_CLIP_MAX_Y2) // 0xD is a common bound here...
 		return 0;
 	if (tileY1 < 0)
 		tileY1 = 0;
 	tileY2 = (sdraw_yrow+temp_MSE.height-1)/0x10;
 	if (tileY2 < 0)
 		return 0;
-	if (tileY2 > 0xD) // ...and here.
-		tileY2 = 0xD;
+	if (tileY2 > ENGINE_SPRITE_CLIP_MAX_Y2) // ...and here.
+		tileY2 = ENGINE_SPRITE_CLIP_MAX_Y2;
 
 	sdraw_xbyte += 4;
 	sdraw_yrow += 0x20;
@@ -3125,7 +3125,7 @@ uint16_t CVort_engine_drawTileAt(int32_t posX, int32_t posY, uint16_t tilenum)
 	for (int16_t currY = tileY1, currX; currY <= tileY2; currY++)
 		for (currX = tileX1; currX <= tileX2; currX++)
 		{
-			screentiles[screentiles_i] = currY*0x15+currX;
+			screentiles[screentiles_i] = currY*ENGINE_SCREEN_TILE_ROW_WIDTH+currX;
 			screentiles_i++;
 		}
 	tiledraws[tiledraws_i].x_byte = sdraw_xbyte;

@@ -505,7 +505,7 @@ int16_t CVort_sprite_active_screen() {
         temp_sprite.type_ = 0;
         return 1;
     }
-    if ((scrollX_T - 8 <= scaledX) && (scrollY_T - 8 <= scaledY) && (scrollX_T + 0x1C >= scaledX) && (scrollY_T + 0x12 >= scaledY))
+    if ((scrollX_T - ENGINE_VIEWPORT_ACTIVATE_MARGIN_X <= scaledX) && (scrollY_T - ENGINE_VIEWPORT_ACTIVATE_MARGIN_Y <= scaledY) && (scrollX_T + ENGINE_VIEWPORT_ACTIVATE_WIDTH_TILES >= scaledX) && (scrollY_T + ENGINE_VIEWPORT_ACTIVATE_HEIGHT_TILES >= scaledY))
         return 0;
     if (temp_sprite.type_ >= OBJONEBEFOREKEENSHOT) {
         temp_sprite.type_ = 0;

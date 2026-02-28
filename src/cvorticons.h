@@ -90,6 +90,34 @@
 #define ENGINE_VGA_VERTICAL_RETRACE_LEN 2
 #define ENGINE_VGA_TOTAL_SCANLINE_COUNT 449
 
+// Viewport dimensions in tiles (how many tiles are visible on screen)
+#define ENGINE_VIEWPORT_WIDTH_TILES  23  // 0x17 tiles wide
+#define ENGINE_VIEWPORT_HEIGHT_TILES 12  // 0xC tiles high
+#define ENGINE_VIEWPORT_MAX_X_TILE   21  // 0x15 - max tile X coordinate for screen drawing
+#define ENGINE_VIEWPORT_MAX_Y_TILE   19  // 0x13 - max tile Y coordinate for episode 3
+
+// Extended viewport bounds for sprite activation (viewport + margin)
+#define ENGINE_VIEWPORT_ACTIVATE_WIDTH_TILES  28  // 0x1C
+#define ENGINE_VIEWPORT_ACTIVATE_HEIGHT_TILES 18  // 0x12
+#define ENGINE_VIEWPORT_ACTIVATE_MARGIN_X     8   // margin for activation check
+#define ENGINE_VIEWPORT_ACTIVATE_MARGIN_Y     8   // margin for activation check
+
+// Sprite visibility margins (tiles from viewport edge)
+#define ENGINE_SPRITE_MARGIN_MIN  2   // minimum margin from viewport left/top
+#define ENGINE_SPRITE_MARGIN_CANNON 4 // margin for cannon firing checks
+#define ENGINE_SPRITE_MARGIN_LARGE 8 // large margin for sprite active check
+
+// Extended viewport for cannon checks
+#define ENGINE_VIEWPORT_CANNON_EXTRA_X 24 // 0x18
+#define ENGINE_VIEWPORT_CANNON_EXTRA_Y 14 // 0xE
+
+// Sprite rendering/clipping bounds (for tile-based sprite drawing)
+#define ENGINE_SPRITE_CLIP_MAX_X       21  // 0x15 - max tile X for sprite drawing
+#define ENGINE_SPRITE_CLIP_MAX_X2      20  // 0x14 - max tile X for sprite end in some functions
+#define ENGINE_SPRITE_CLIP_MAX_Y1      14  // 0xE - max tile Y for sprite start check
+#define ENGINE_SPRITE_CLIP_MAX_Y2      13  // 0xD - max tile Y for sprite end check
+#define ENGINE_SCREEN_TILE_ROW_WIDTH   21  // 0x15 - number of tiles per row in screen buffer
+
 // In the original game, 4 planes of EGA memory are used. For each such plane,
 // 6000h=24576 bytes can be used (or 3000h=12288 per page for the page flipping
 // feature). This consists of a total of 18000h=98304 bytes. In our case,

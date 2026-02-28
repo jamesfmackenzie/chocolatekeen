@@ -434,7 +434,7 @@ void CVort_load_level_data(uint16_t levelnum) {
     map_height_T = map_data[1];
     map_width_B = map_width_T << 1;
     //screen_wrap = map_width_B-0x2A; // map width in tiles x2 MINUS tiles displayed on screen x2
-    screen_wrap_single = map_width_T - 0x15; // map width in tiles MINUS tiles displayed on screen
+    screen_wrap_single = map_width_T - ENGINE_VIEWPORT_MAX_X_TILE; // map width in tiles MINUS tiles displayed on screen
 
     scrollX_min = scrollY_min = 0x2000;
 
@@ -677,7 +677,7 @@ static void CVort_level_update_sprites(void) {
         if (!temp_sprite.active) {
             var_4 = temp_sprite.posX >> 12;
             var_6 = temp_sprite.posY >> 12;
-            if ((scrollX_T - 2 < var_4) && (scrollY_T - 2 < var_6) && (scrollX_T + 0x17 > var_4) && (scrollY_T + 0xC > var_6)) {
+            if ((scrollX_T - ENGINE_SPRITE_MARGIN_MIN < var_4) && (scrollY_T - ENGINE_SPRITE_MARGIN_MIN < var_6) && (scrollX_T + ENGINE_VIEWPORT_WIDTH_TILES > var_4) && (scrollY_T + ENGINE_VIEWPORT_HEIGHT_TILES > var_6)) {
                 temp_sprite.active = 1;
 #if CHOCOLATE_KEEN_IS_EPISODE1_ENABLED
                 if (engine_gameVersion == GAMEVER_KEEN1) {

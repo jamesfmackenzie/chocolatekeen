@@ -580,13 +580,13 @@ void CVort1_body_ice_cannon(Body_T *cannon) {
     if (((CVort_ptr_engine_getTicks()&0xFFFF) >> 7) == cannon->field_C)
         return;
     cannon->field_C = ((CVort_ptr_engine_getTicks()&0xFFFF) >> 7);
-    if (scrollX_T - 4 >= cannon->tile_x)
+    if (scrollX_T - ENGINE_SPRITE_MARGIN_CANNON >= cannon->tile_x)
         return;
-    if (scrollY_T - 4 >= cannon->tile_y)
+    if (scrollY_T - ENGINE_SPRITE_MARGIN_CANNON >= cannon->tile_y)
         return;
-    if (scrollX_T + 0x18 <= cannon->tile_x)
+    if (scrollX_T + ENGINE_VIEWPORT_CANNON_EXTRA_X <= cannon->tile_x)
         return;
-    if (scrollY_T + 0xE <= cannon->tile_y)
+    if (scrollY_T + ENGINE_VIEWPORT_CANNON_EXTRA_Y <= cannon->tile_y)
         return;
     CVort_engine_setCurSound(0x17);
     CVort1_add_sprite_cube(cannon->tile_x << 12, cannon->tile_y << 12, cannon->variant);

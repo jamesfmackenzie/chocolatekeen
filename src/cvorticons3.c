@@ -696,9 +696,9 @@ void CVort3_think_foob_walk() {
     currTileX = temp_sprite.posX >> 12;
     currTileY = temp_sprite.posY >> 12;
     if ((currTileX > scrollX_T) && (currTileY > scrollY_T)
-        && (scrollX_T + 0x13 > currTileX)) {
+        && (scrollX_T + ENGINE_VIEWPORT_MAX_Y_TILE > currTileX)) {
         int16_t currRand = (CVort_get_random() < (sprite_sync << 1)) ? 1 : 0,
-                secondQuery = (scrollY_T + 0xC > currTileY) ? 1 : 0;
+                secondQuery = (scrollY_T + ENGINE_VIEWPORT_HEIGHT_TILES > currTileY) ? 1 : 0;
         if (currRand & secondQuery) {
             temp_sprite.time = 0;
             temp_sprite.think = &CVort3_think_foob_scared;

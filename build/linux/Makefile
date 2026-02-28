@@ -26,6 +26,7 @@ OBJECTS=$(OBJ)/cvorticons.o \
         $(OBJ)/cvorticons_ui.o \
         $(OBJ)/cvorticons_physics.o \
         $(OBJ)/cvorticons_enemies.o \
+        $(OBJ)/cvorticons_episode_constants.o \
         $(OBJ)/cvorticons_memdata.o \
         $(OBJ)/cvorticons_engine.o \
         $(OBJ)/cvorticons_gfx.o \

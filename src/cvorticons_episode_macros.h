@@ -1,28 +1,64 @@
 #ifndef _CHOCOLATE_KEEN_EPISODE_MACROS_
 #define _CHOCOLATE_KEEN_EPISODE_MACROS_
 
+#include <stdint.h>
+
+/* Per-episode constants table — one row per episode. */
+typedef struct {
+    /* sprite frame IDs used by VORTFRAME() */
+    uint16_t spr_vortstand1;
+    uint16_t spr_vortright1;
+    uint16_t spr_vortleft1;
+    uint16_t spr_vortjumpl;
+    uint16_t spr_vortjumpr;
+    uint16_t spr_vortdie1;
+    /* sprite frame IDs used by YOUTHFRAME() — 0 for Ep1 (no youth) */
+    uint16_t spr_youthleft1;
+    uint16_t spr_youthright1;
+    uint16_t spr_youthleft4;
+    uint16_t spr_youthright4;
+    uint16_t spr_youthdie1;
+    /* other sprite frame IDs */
+    uint16_t spr_keenshot;
+    uint16_t spr_tankshot;
+    uint16_t spr_shotsplashr;
+    uint16_t spr_shotsplashl;
+    /* object type IDs */
+    uint16_t obj_null;
+    uint16_t obj_dead;
+    uint16_t obj_zapzot;
+    uint16_t obj_keen;
+    uint16_t obj_enemyshot;   /* Ep3 reuses CVort2_obj_enemyshot */
+    uint16_t obj_keenshot;
+    uint16_t obj_onebeforekeenshot;
+    uint16_t obj_vorticon;
+    uint16_t obj_youth;       /* 0 for Ep1 (no youth) */
+    /* sound IDs */
+    uint16_t snd_shothit;
+    uint16_t snd_vortscream;
+} EpisodeConstants_T;
+
+extern const EpisodeConstants_T ep_constants[GAMEVER_TOTALAMOUNT];
+
 /* Episode-dispatch macros: resolve sprite/object/sound IDs to the correct
  * episode-specific constant at runtime, based on engine_gameVersion. */
 
-#define VORTFRAME(a) ((engine_gameVersion == GAMEVER_KEEN1) ? CVort1_spr_vort##a : ((engine_gameVersion == GAMEVER_KEEN2) ? CVort2_spr_vort##a : CVort3_spr_vort##a))
-#define YOUTHFRAME(a) ((engine_gameVersion == GAMEVER_KEEN2) ? CVort2_spr_youth##a : CVort3_spr_youth##a)
-
-#define SPRKEENSHOT ((engine_gameVersion == GAMEVER_KEEN1) ? CVort1_spr_keenshot : ((engine_gameVersion == GAMEVER_KEEN2) ? CVort2_spr_keenshot : CVort3_spr_keenshot))
-#define SPRTANKSHOT ((engine_gameVersion == GAMEVER_KEEN1) ? CVort1_spr_tankshot : ((engine_gameVersion == GAMEVER_KEEN2) ? CVort2_spr_tankshot : CVort3_spr_tankshot))
-#define SPRSHOTSPLASHR ((engine_gameVersion == GAMEVER_KEEN1) ? CVort1_spr_shotsplashr : ((engine_gameVersion == GAMEVER_KEEN2) ? CVort2_spr_shotsplashr : CVort3_spr_shotsplashr))
-#define SPRSHOTSPLASHL ((engine_gameVersion == GAMEVER_KEEN1) ? CVort1_spr_shotsplashl : ((engine_gameVersion == GAMEVER_KEEN2) ? CVort2_spr_shotsplashl : CVort3_spr_shotsplashl))
-
-#define OBJNULL ((engine_gameVersion == GAMEVER_KEEN1) ? CVort1_obj_null : ((engine_gameVersion == GAMEVER_KEEN2) ? CVort2_obj_null : CVort3_obj_null))
-#define OBJDEAD ((engine_gameVersion == GAMEVER_KEEN1) ? CVort1_obj_dead : ((engine_gameVersion == GAMEVER_KEEN2) ? CVort2_obj_dead : CVort3_obj_dead))
-#define OBJZAPZOT ((engine_gameVersion == GAMEVER_KEEN1) ? CVort1_obj_zapzot : ((engine_gameVersion == GAMEVER_KEEN2) ? CVort2_obj_zapzot : CVort3_obj_zapzot))
-#define OBJKEEN ((engine_gameVersion == GAMEVER_KEEN1) ? CVort1_obj_keen : ((engine_gameVersion == GAMEVER_KEEN2) ? CVort2_obj_keen : CVort3_obj_keen))
-#define OBJENEMYSHOT ((engine_gameVersion == GAMEVER_KEEN1) ? CVort1_obj_enemyshot :  CVort2_obj_enemyshot)
-#define OBJKEENSHOT ((engine_gameVersion == GAMEVER_KEEN1) ? CVort1_obj_keenshot : ((engine_gameVersion == GAMEVER_KEEN2) ? CVort2_obj_keenshot : CVort3_obj_keenshot))
-#define OBJONEBEFOREKEENSHOT ((engine_gameVersion == GAMEVER_KEEN1) ? CVort1_obj_onebeforekeenshot : ((engine_gameVersion == GAMEVER_KEEN2) ? CVort2_obj_onebeforekeenshot : CVort3_obj_onebeforekeenshot))
-#define OBJVORTICON ((engine_gameVersion == GAMEVER_KEEN1) ? CVort1_obj_vorticon : ((engine_gameVersion == GAMEVER_KEEN2) ? CVort2_obj_vorticon : CVort3_obj_vorticon))
-#define OBJYOUTH ((engine_gameVersion == GAMEVER_KEEN2) ? CVort2_obj_youth : CVort3_obj_youth)
-
-#define SNDSHOTHIT ((engine_gameVersion == GAMEVER_KEEN1) ? CVort1_snd_shothit : ((engine_gameVersion == GAMEVER_KEEN2) ? CVort2_snd_shothit : CVort3_snd_shothit))
-#define SNDVORTSCREAM ((engine_gameVersion == GAMEVER_KEEN1) ? CVort1_snd_vortscream : ((engine_gameVersion == GAMEVER_KEEN2) ? CVort2_snd_vortscream : CVort3_snd_vortscream))
+#define VORTFRAME(a)          (ep_constants[engine_gameVersion].spr_vort##a)
+#define YOUTHFRAME(a)         (ep_constants[engine_gameVersion].spr_youth##a)
+#define SPRKEENSHOT           (ep_constants[engine_gameVersion].spr_keenshot)
+#define SPRTANKSHOT           (ep_constants[engine_gameVersion].spr_tankshot)
+#define SPRSHOTSPLASHR        (ep_constants[engine_gameVersion].spr_shotsplashr)
+#define SPRSHOTSPLASHL        (ep_constants[engine_gameVersion].spr_shotsplashl)
+#define OBJNULL               (ep_constants[engine_gameVersion].obj_null)
+#define OBJDEAD               (ep_constants[engine_gameVersion].obj_dead)
+#define OBJZAPZOT             (ep_constants[engine_gameVersion].obj_zapzot)
+#define OBJKEEN               (ep_constants[engine_gameVersion].obj_keen)
+#define OBJENEMYSHOT          (ep_constants[engine_gameVersion].obj_enemyshot)
+#define OBJKEENSHOT           (ep_constants[engine_gameVersion].obj_keenshot)
+#define OBJONEBEFOREKEENSHOT  (ep_constants[engine_gameVersion].obj_onebeforekeenshot)
+#define OBJVORTICON           (ep_constants[engine_gameVersion].obj_vorticon)
+#define OBJYOUTH              (ep_constants[engine_gameVersion].obj_youth)
+#define SNDSHOTHIT            (ep_constants[engine_gameVersion].snd_shothit)
+#define SNDVORTSCREAM         (ep_constants[engine_gameVersion].snd_vortscream)
 
 #endif

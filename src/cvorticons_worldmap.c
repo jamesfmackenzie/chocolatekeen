@@ -318,8 +318,7 @@ void CVort_game_over() {
     char ranknames[][7] = {"first", "second", "third", "fourth", "fifth", "sixth", "last"};
     char score_file[14], scorestr[10], citystr[10];
     int16_t oldX, oldY;
-    strncpy(score_file, "SCORES.", 13);
-    strcat(score_file, game_ext);
+    snprintf(score_file, sizeof(score_file), "SCORES.%s", game_ext);
     int16_t scoreEntry = 0, loopVar;
     // Check if we have a new high score
     for (loopVar = 0; loopVar < 7; loopVar++)
@@ -349,7 +348,7 @@ void CVort_game_over() {
         cursorX = cursorX_save = oldX + 1;
         cursorY = oldY + 4;
         CVort_draw_string("         SCORE:");
-        sprintf(scorestr, "%" PRId32, keen_gp.score);
+        snprintf(scorestr, sizeof(scorestr), "%" PRId32, keen_gp.score);
         CVort_draw_string(scorestr);
         cursorX = cursorX_save + 0xB;
         if (engine_gameVersion == GAMEVER_KEEN1) {
@@ -369,7 +368,7 @@ void CVort_game_over() {
 
             cursorX = cursorX_save + 6;
             cursorY += 2;
-            sprintf(citystr, "%" PRIu16, citiesSaved);
+            snprintf(citystr, sizeof(citystr), "%" PRIu16, citiesSaved);
             CVort_draw_string("You saved ");
             if (!citiesSaved)
             {
@@ -404,7 +403,7 @@ void CVort_game_over() {
             // NOTE THE ORDER!!! (It may not matter HERE, but it DOES elsewhere!)
             high_scores_table.parts[loopVar + 1][3] = high_scores_table.parts[loopVar][3];
             high_scores_table.parts[loopVar + 1][2] = high_scores_table.parts[loopVar][2];
-            strcpy(high_scores_table.names[loopVar + 1], high_scores_table.names[loopVar]);
+            strncpy(high_scores_table.names[loopVar + 1], high_scores_table.names[loopVar], sizeof(high_scores_table.names[loopVar]));
         }
         CVort_clear_keys();
         CVort_get_string_input(high_scores_table.names[scoreEntry], 12);

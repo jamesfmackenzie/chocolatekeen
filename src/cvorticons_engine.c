@@ -529,17 +529,17 @@ void privPrepareGameDataFilePathBuffers(gameversion_T gameVer) {
 		case GAMEVER_KEEN1:
 			engine_gameDataPrefixLen = strlen(KEEN1_GAMEDATA_PREFIX_WITH_SLASH);
 			engine_gameDataFullPathBuffer = (char *)malloc(engine_gameDataPrefixLen+13);
-			strcpy(engine_gameDataFullPathBuffer, KEEN1_GAMEDATA_PREFIX_WITH_SLASH);
+			snprintf(engine_gameDataFullPathBuffer, engine_gameDataPrefixLen+13, "%s", KEEN1_GAMEDATA_PREFIX_WITH_SLASH);
 			break;
 		case GAMEVER_KEEN2:
 			engine_gameDataPrefixLen = strlen(KEEN2_GAMEDATA_PREFIX_WITH_SLASH);
 			engine_gameDataFullPathBuffer = (char *)malloc(engine_gameDataPrefixLen+13);
-			strcpy(engine_gameDataFullPathBuffer, KEEN2_GAMEDATA_PREFIX_WITH_SLASH);
+			snprintf(engine_gameDataFullPathBuffer, engine_gameDataPrefixLen+13, "%s", KEEN2_GAMEDATA_PREFIX_WITH_SLASH);
 			break;
 		case GAMEVER_KEEN3:
 			engine_gameDataPrefixLen = strlen(KEEN3_GAMEDATA_PREFIX_WITH_SLASH);
 			engine_gameDataFullPathBuffer = (char *)malloc(engine_gameDataPrefixLen+13);
-			strcpy(engine_gameDataFullPathBuffer, KEEN3_GAMEDATA_PREFIX_WITH_SLASH);
+			snprintf(engine_gameDataFullPathBuffer, engine_gameDataPrefixLen+13, "%s", KEEN3_GAMEDATA_PREFIX_WITH_SLASH);
 			break;
 	}
 }
@@ -1003,8 +1003,7 @@ void CVort_engine_loadSounds(void) {
     uint8_t *soundDataPtr;
 
     if (engine_gameVersion == GAMEVER_KEEN1) {
-        strcpy(string_buf, "SOUNDS.");
-        strcat(string_buf, game_ext);
+        snprintf(string_buf, sizeof(string_buf), "SOUNDS.%s", game_ext);
         FILE *fp = CVort_engine_cross_ro_data_fopen(string_buf);
         // TODO: What if we fail to load the file?
         if (fp) {

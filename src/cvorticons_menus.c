@@ -24,7 +24,7 @@ void CVort_record_demo(int16_t demo_number) {
 
 void CVort_load_demo(int16_t demo_number) {
     FILE *fp;
-    sprintf(string_buf, "DEMO%d.%s", demo_number, game_ext);
+    snprintf(string_buf, sizeof(string_buf), "DEMO%d.%s", demo_number, game_ext);
     fp = CVort_engine_cross_rw_misc_fopen(string_buf, "rb");
     uint32_t filesize = CVort_filelength(fp);
     fread(demo_actions_including_level_num, filesize, 1, fp);
@@ -36,7 +36,7 @@ void CVort_load_demo(int16_t demo_number) {
 
 void CVort_save_demo(int16_t demo_number) {
     FILE *fp;
-    sprintf(string_buf, "DEMO%d.%s", demo_number, game_ext);
+    snprintf(string_buf, sizeof(string_buf), "DEMO%d.%s", demo_number, game_ext);
     fp = CVort_engine_cross_rw_misc_fopen(string_buf, "wb");
     fwrite(demo_actions_including_level_num, demo_action_ptr-demo_actions_including_level_num, 1, fp);
     fclose(fp);
@@ -111,7 +111,7 @@ void CVort_do_intro_and_menu() {
                 introTickCounter -= sprite_sync;
                 if (introTickCounter <= 0) {
                     for (; introCurrScreen < 10; introCurrScreen++) {
-                        sprintf(string_buf, "DEMO%d.%s", introCurrScreen, game_ext);
+                        snprintf(string_buf, sizeof(string_buf), "DEMO%d.%s", introCurrScreen, game_ext);
                         fp = CVort_engine_cross_rw_misc_fopen(string_buf, "rb");
                         if (!fp) {
                             continue;
@@ -564,8 +564,7 @@ void CVort_save_game() {
     FILE *fp;
     int8_t inputChar, confirmChar;
     // FIXME: Quite hackish but... more true to the original?
-    strncpy(path, "SAVED?.", 13);
-    strcat(path, game_ext);
+    snprintf(path, sizeof(path), "SAVED?.%s", game_ext);
     if (!on_world_map) {
         CVort_draw_box_opening_main(0x16, 3);
         CVort_draw_string("You can SAVE the game\n");
@@ -637,10 +636,9 @@ uint16_t CVort_private_continue_game() {
     FILE *fp;
     int8_t inputChar;
     // FIXME: Again hackish but... same as CVort_save_game()...
-    strncpy(path, "SAVED?.", 13);
     // Possibly a bit less vanilla, but actually works the proper
     // (and vanilla) way!
-    strcat(path, game_ext);
+    snprintf(path, sizeof(path), "SAVED?.%s", game_ext);
     CVort_engine_drawChar(cursorX, cursorY << 3, ' ');
     do {
         CVort_draw_box_opening_main(0x19, 2);
@@ -1121,8 +1119,7 @@ void CVort_load_high_scores_table() {
     // FIXME: This is a wrong way to do it, but...... more vanilla!
     static char default_names[][15] = {"Yorpy", "Gargile", "Zzapp!"};
     char path[14];
-    strcpy(path, "SCORES.");
-    strcat(path, game_ext);
+    snprintf(path, sizeof(path), "SCORES.%s", game_ext);
 
     int entryCounter, partCounter;
 
@@ -1156,8 +1153,7 @@ void CVort_save_high_scores_table() {
     // FIXME: This is a wrong way to do it, but...... more vanilla!
     // Or rather, vanilla on the *loading* side...
     char path[14];
-    strcpy(path, "SCORES.");
-    strcat(path, game_ext);
+    snprintf(path, sizeof(path), "SCORES.%s", game_ext);
 
     FILE *fp = CVort_engine_cross_rw_misc_fopen(path, "wb");
     if (!fp) // TODO: ???

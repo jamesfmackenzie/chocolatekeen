@@ -54,12 +54,12 @@ void CVort1_show_pause_menu() {
     CVort_draw_string_80(" \n");
     CVort_draw_string_80("     PLEASE PRESS A KEY     ");
 
-    sprintf(string_buf, "%" PRId32, keen_gp.score);
+    snprintf(string_buf, sizeof(string_buf), "%" PRId32, keen_gp.score);
     cursorX = origCursorX + 0xA - strlen(string_buf);
     cursorY = origCursorY + 1;
     CVort_draw_string(string_buf);
 
-    sprintf(string_buf, "%" PRId32, extra_life_pts + 20000);
+    snprintf(string_buf, sizeof(string_buf), "%" PRId32, extra_life_pts + 20000);
     cursorX = origCursorX + 0x1A - strlen(string_buf);
     CVort_draw_string(string_buf);
 
@@ -1191,7 +1191,7 @@ void CVort1_draw_scores() {
         // Score
         // FIXME: This is dangerous, but (more) true to the original...
 
-        sprintf(radixStr, "%" PRId32, high_scores_table.scores[currEntry]);
+        snprintf(radixStr, sizeof(radixStr), "%" PRId32, high_scores_table.scores[currEntry]);
         cursorX = 0x1d - strlen(radixStr);
         CVort_draw_string_80(radixStr);
 

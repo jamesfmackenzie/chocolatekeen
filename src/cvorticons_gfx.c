@@ -41,8 +41,7 @@ void CVort_engine_decompGraphics()
 	/******************************
 	First part: Load the EGA header
 	******************************/
-	strcpy(string_buf, "EGAHEAD.");
-	strcat(string_buf, game_ext);
+	snprintf(string_buf, sizeof(string_buf), "EGAHEAD.%s", game_ext);
 	FILE *fp = CVort_engine_cross_ro_data_fopen(string_buf);
 	// TODO: What if we fail to load the file?
 	if (!fp)
@@ -112,8 +111,7 @@ void CVort_engine_decompGraphics()
 	Second part: Load EGALATCH, uncompress if required and then 
 	convert to single-byte format (instead of 4-plane structures).
 	*************************************************************/
-	strcpy(string_buf, "EGALATCH.");
-	strcat(string_buf, game_ext);
+	snprintf(string_buf, sizeof(string_buf), "EGALATCH.%s", game_ext);
 	// TODO: What if we fail to load the file?
 	fp = CVort_engine_cross_ro_data_fopen(string_buf);
 	if (!fp)
@@ -246,8 +244,7 @@ void CVort_engine_decompGraphics()
 	Third part: Load EGASPRIT, uncompress if required and then 
 	convert to single-byte format (instead of 5-plane structures).
 	*************************************************************/
-	strcpy(string_buf, "EGASPRIT.");
-	strcat(string_buf, game_ext);
+	snprintf(string_buf, sizeof(string_buf), "EGASPRIT.%s", game_ext);
 	// TODO: What if we fail to load the file?
 	fp = CVort_engine_cross_ro_data_fopen(string_buf);
 	if (!fp)

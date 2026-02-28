@@ -83,13 +83,13 @@ void CVort_handle_cheat_keys() {
 
 void CVort_main() {
     if (engine_gameVersion == GAMEVER_KEEN1) {
-        strcpy(game_ext, "CK1");
+        snprintf(game_ext, sizeof(game_ext), "CK1");
         CVort_engine_puts("Loading Commander Keen part 1... (version 1.31 1/23/90)");
     } else if (engine_gameVersion == GAMEVER_KEEN2) {
-        strcpy(game_ext, "CK2");
+        snprintf(game_ext, sizeof(game_ext), "CK2");
         CVort_engine_puts("Loading Commander Keen part 2... (version 1.31 1/23/90)");
     } else if (engine_gameVersion == GAMEVER_KEEN3) {
-        strcpy(game_ext, "CK3");
+        snprintf(game_ext, sizeof(game_ext), "CK3");
         CVort_engine_puts("Loading Commander Keen part 3... (version 1.31 1/23/90)");
     }
 
@@ -250,14 +250,12 @@ int16_t CVort_add_body() {
 void CVort_main_loop() {
 
     // The file names ARE constructed on vanilla Keen 2, although never used
-    static char helptext[14] = "HELPTEXT.";
-    static char endtext[14] = "ENDTEXT.";
-    static char storytext[14] = "STORYTXT.";
-    static char previewtext[14] = "PREVIEWS.";
-    strcat((char*) helptext, game_ext);
-    strcat((char*) endtext, game_ext);
-    strcat((char*) storytext, game_ext);
-    strcat((char*) previewtext, game_ext);
+    char helptext[14],    endtext[14],
+         storytext[14],  previewtext[14];
+    snprintf(helptext,    sizeof(helptext),    "HELPTEXT.%s",  game_ext);
+    snprintf(endtext,     sizeof(endtext),     "ENDTEXT.%s",   game_ext);
+    snprintf(storytext,   sizeof(storytext),   "STORYTXT.%s",  game_ext);
+    snprintf(previewtext, sizeof(previewtext), "PREVIEWS.%s",  game_ext);
 
     if (engine_gameVersion == GAMEVER_KEEN1) {
         CVort_load_and_process_text_file(helptext, &help_text);
@@ -407,8 +405,8 @@ void CVort_add_score(int16_t points) {
 
 void CVort_load_level_data(uint16_t levelnum) {
     current_level = levelnum;
-    char filename[13];
-    sprintf(filename, "%s%02" PRIu16 ".%s", "LEVEL", levelnum, game_ext);
+    char filename[16];
+    snprintf(filename, sizeof(filename), "%s%02" PRIu16 ".%s", "LEVEL", levelnum, game_ext);
     FILE *fp = CVort_engine_cross_ro_data_fopen(filename);
     /* TODO? We could apply random map generation if file is not found */
     /* (e.g. if Keen enters a "random" map from the worldmap while a   */

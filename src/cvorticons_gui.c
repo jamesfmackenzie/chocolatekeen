@@ -1925,11 +1925,11 @@ int CVort_gui_createScreenResolutionBuffers(void) {
 	char *windowedModeStrData = (char *)((uint8_t *)fullScreenModeStrData + strlen("Desktop") + 1 + strLengthUpperBoundWithNull*numOfModes);
 
 	// First add our default choices
-	strcpy(fullScreenModeStrData, "Desktop");
+	memcpy(fullScreenModeStrData, "Desktop", sizeof("Desktop"));
 	*fullScreenModeStrs = fullScreenModeStrData;
 	fullScreenModeStrs++;
 	fullScreenModeStrData += strlen("Desktop") + 1;
-	strcpy(windowedModeStrData, "Default");
+	memcpy(windowedModeStrData, "Default", sizeof("Default"));
 	*windowedModeStrs = windowedModeStrData;
 	windowedModeStrs++;
 	windowedModeStrData += strlen("Default") + 1;

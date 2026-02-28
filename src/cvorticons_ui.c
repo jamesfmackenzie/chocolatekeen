@@ -46,7 +46,7 @@ void CVort_draw_keyname(int16_t key) {
     if ((key >= 0x3B) && (key <= 0x44)) {
         CVort_draw_string("F");
         char fKeyNumAsStr[3];
-        sprintf(fKeyNumAsStr, "%" PRId16, key - 0x3A);
+        snprintf(fKeyNumAsStr, sizeof(fKeyNumAsStr), "%" PRId16, key - 0x3A);
         CVort_draw_string(fKeyNumAsStr);
         return;
     }
@@ -191,8 +191,7 @@ void CVort_handle_redef_keys() {
 }
 
 void CVort_init_ctrls() {
-    strcpy(string_buf, "CTLPANEL.");
-    strcat(string_buf, game_ext);
+    snprintf(string_buf, sizeof(string_buf), "CTLPANEL.%s", game_ext);
     FILE *fp = CVort_engine_cross_rw_misc_fopen(string_buf, "rb");
     if (fp) {
         CVort_engine_cross_freadInt16LE(&want_sound, 1, fp);
@@ -236,8 +235,7 @@ void CVort_init_ctrls() {
 }
 
 void CVort_save_ctrls() {
-    strcpy(string_buf, "CTLPANEL.");
-    strcat(string_buf, game_ext);
+    snprintf(string_buf, sizeof(string_buf), "CTLPANEL.%s", game_ext);
     FILE *fp = CVort_engine_cross_rw_misc_fopen(string_buf, "wb");
     if (!fp)
         return;
@@ -453,12 +451,12 @@ void CVort_draw_string(const char *str) {
 }
 
 void CVort_draw_number_word(uint16_t value) {
-    sprintf(string_buf, "%" PRIu16, value);
+    snprintf(string_buf, sizeof(string_buf), "%" PRIu16, value);
     CVort_draw_string(string_buf);
 }
 
 void CVort_draw_number_dword(uint32_t value) {
-    sprintf(string_buf, "%" PRIu32, value);
+    snprintf(string_buf, sizeof(string_buf), "%" PRIu32, value);
     CVort_draw_string(string_buf);
 }
 

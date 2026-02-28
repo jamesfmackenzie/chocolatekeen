@@ -13,38 +13,6 @@
 //#define VORTICONS_KEEN1
 //#define VORTICONS_EPISODE 1
 
-#if 0
-#define GAMEEXT "CK1"
-#define EXENAME "KEEN1.EXE"
-//#define EXE_COMPRESSED_SIZE 51190
-//#define EXE_DECOMPRESSED_SIZE
-
-// Offsets in the EXE Image of some data files
-// A value of zero means it wasn't linked in the EXE
-#define TILEINFO_OFFSET 0x130F8
-#define TRANS_MAP_OFFSET 0x18100
-#define RND_VALS_OFFSET 0x181A9
-#define FIBS17_OFFSET 0x182D1
-#define POINTS_TABLE_OFFSET 0x15076
-#define PALETTES_OFFSET 0x15558
-#define CHAR_MAP_OFFSET 0x1549E
-#define UPPERCASE_TABLE_OFFSET 0x1831F
-#define ANSI_QUIT_SCREEN_OFFSET 0x12080 
-
-#define SOUNDS_OFFSET 0
-#define PREVIEWS_TEXT_OFFSET 0
-#define STORY_TEXT_OFFSET 0
-#define HELP_TEXT_OFFSET 0
-#define END_TEXT_OFFSET 0
-
-
-// Values
-#define TILENUM 611
-
-// Some strings
-#define LOADING_STRING
-#endif
-
 //class CVorticons1 : public CVorticons {
 //public:
 
@@ -341,4 +309,3 @@
 //};
 
 #endif	/* _CHOCOLATE_KEEN_VORTICONS1_ */
-

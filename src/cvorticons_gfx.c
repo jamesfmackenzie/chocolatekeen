@@ -324,7 +324,6 @@ void CVort_private_engine_setEgaMemStartLocAndPanning(uint32_t egaStart, uint16_
 	privResetEgaMemStartLocAndPanning();
 }
 
-
 /* Some code that fills rectangles with colors on the host side follows.
  * There are implementations for a few specific color depths, as well as
  * a general implementation for any other color depth.
@@ -923,11 +922,6 @@ void CVort_engine_updateActualDisplay(void) {
 #endif
 				break;
 			}
-#if 0
-			if (engine_screen.gl.outputGLClass == OUTPUTGL_CLASS_2_0) {
-				engine_glActiveTexture(GL_TEXTURE0);
-			}
-#endif
 			engine_glBindTexture(GL_TEXTURE_2D, engine_screen.gl.textureNames[0]);
 			if (engine_screen.host.bilinearInterpolation) {
 				// No GPU palette cycling is done here,
@@ -1118,21 +1112,12 @@ void CVort_engine_prepareWindowRects(bool doBoxing) {
 	*************************/
 #ifdef _CHOCOLATE_KEEN_ENABLE_OPENGL_
 	if (engine_gfx_effective_arguments.outputSystem == OUTPUTSYS_OPENGL) {
-#if 0
-		if (engine_screen.host.bilinearInterpolation && engine_screen.gl.offScreenRendering && engine_screen.gl.haveFramebufferBlit) {
-			/* We call glBlitFramebufferEXT so use whole window */
-			engine_glViewport(0, 0, windowWidth, windowHeight);
-		} else {
-#endif
 			/* Otherwise discard black bars */
 			engine_glViewport(engine_screen.dims.borderedViewportRect.x,
 			                  engine_screen.dims.borderedViewportRect.y,
 			                  engine_screen.dims.borderedViewportRect.w,
 			                  engine_screen.dims.borderedViewportRect.h
 			);
-#if 0
-		}
-#endif
 		if (!engine_screen.host.bilinearInterpolation) {
 		        // We further need this! (Note: It's not yet enabled.)
 		        engine_glScissor(engine_screen.dims.borderedViewportRect.x,
@@ -1157,25 +1142,6 @@ void CVort_engine_reactToWindowResize(int width, int height)
 	 *
 	 * For now we also don't store new non-fullscreen window dimensions.
 	 */
-#if 0
-	if (engine_gfx_effective_arguments.isFullscreen) {
-		// Do NOT - this may come from window snapping or so
-		engine_screen.host.fullWidth = width;
-		engine_screen.host.fullHeight = height;
-	} else {
-		// For now it's also better to not set this
-		engine_screen.host.winWidth = width;
-		engine_screen.host.winHeight = height;
-	}
-#endif
-#if 0
-	/*************************
-	Some output specific setup
-	*************************/
-	if (engine_gfx_effective_arguments.outputSystem == OUTPUTSYS_SURFACE) {
-		engine_screen.sdl.windowSurface = SDL_GetWindowSurface(engine_screen.sdl.window);
-	}
-#endif
 	CVort_engine_prepareWindowRects((engine_gfx_effective_arguments.scaleType != GFX_SCALE_FILL));
 	// Reset current border color (at least one case covered)
 	privResetBorderColor();
@@ -1183,7 +1149,6 @@ void CVort_engine_reactToWindowResize(int width, int height)
 	//CVort_engine_setVideoMode(engine_screen.client.currVidMode);
 #endif
 }
-
 
 #if SDL_VERSION_ATLEAST(2,0,0)
 void CVort_engine_handleWindowSideChange(void) {
@@ -1200,7 +1165,6 @@ void CVort_engine_handleWindowSideChange(void) {
 	}
 }
 #endif
-
 
 bool CVort_engine_prepareScreen() {
 	engine_screen.sdl.windowSurface = NULL;
@@ -1246,69 +1210,20 @@ bool CVort_engine_prepareScreen() {
 	engine_screen.host.desktopWidth = engine_screen.sdl.videoInfo->current_w;
 	engine_screen.host.desktopHeight = engine_screen.sdl.videoInfo->current_h;
 #endif
-#if 0
-	if (!engine_gfx_effective_arguments.windowWidth || !engine_gfx_effective_arguments.windowHeight) {
-		// Is there really a need to involve
-		// the golden ratio here? Hmm...
-		engine_screen.host.winWidth = engine_screen.host.desktopWidth * 309 / 500;
-		engine_screen.host.winHeight = engine_screen.host.desktopHeight * 319 / 500;
-	} else {
-		engine_screen.host.winWidth = engine_gfx_effective_arguments.windowWidth;
-		engine_screen.host.winHeight = engine_gfx_effective_arguments.windowHeight;
-	}
-#endif
 #if SDL_VERSION_ATLEAST(2,0,0)
 	// Don't set this now. Should be set BEFORE the SDL video subssystem
 	// is initialized, along with SDL_HINT_FRAMEBUFFER_ACCELERATION.
-#if 0
-	if (engine_arguments.rendererDriver) {
-		SDL_SetHint(SDL_HINT_RENDER_DRIVER, engine_arguments.rendererDriver);
-	}
-#endif
 #endif
 #ifdef _CHOCOLATE_KEEN_ENABLE_OPENGL_
 	if (engine_arguments.outputSystem == OUTPUTSYS_OPENGL) {
 		// TODO: If we fail loading this, no problem.
 		SDL_GL_LoadLibrary(NULL);
-#if 0
-		if (SDL_GL_LoadLibrary(NULL) < 0) {
-			CVort_engine_cross_logMessage(CVORT_LOG_MSG_ERROR, "Cannot load the OpenGL library. Is it installed?\n"
-			                                                   "More details: %s\n", SDL_GetError());
-			CVort_engine_shutdownSDL();
-			return false;
-		}
-#endif
 		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 2);
 		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 2);
 		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 2);
 		//SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 #if SDL_VERSION_ATLEAST(2,0,0)
-#if 0
-		switch (engine_arguments.outputGLVersion) {
-#ifdef _CHOCOLATE_KEEN_HAVE_OPENGL_1_1_
-		case OUTPUTGL_1_1:
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 1);
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-			break;
-#endif
-#ifdef _CHOCOLATE_KEEN_HAVE_OPENGL_2_0_
-		case OUTPUTGL_2_0:
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-			break;
-#endif
-#ifdef _CHOCOLATE_KEEN_HAVE_OPENGL_ES_2_0_
-		case OUTPUTGL_ES_2_0:
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-			SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
-			break;
-#endif
-		}
-#endif
 		// That is done AFTER the GL context is (re)created, and by
 		// accessing engine_gfx_effective_arguments.vSync instead.
 		//SDL_GL_SetSwapInterval(engine_arguments.vSync ? 1 : 0);
@@ -1501,25 +1416,6 @@ bool privCreateWindowResources(void) {
 #endif
 #ifdef _CHOCOLATE_KEEN_ENABLE_OPENGL_
 		case OUTPUTSYS_OPENGL:
-#if 0
-#ifdef _CHOCOLATE_KEEN_HAVE_OPENGL_2_0_ANY_
-			if ((engine_screen.gl.outputGLClass == OUTPUTGL_CLASS_2_0)) {
-	 			// Consider this
-				// FIXME: Is accessing engine_arguments here ok?
-				engine_screen.gl.gpuPaletteCycling = engine_arguments.gpuPaletteCycling;
-				// Don't, if offscreen rendering is disabled and we want bilinear interpolation
-				engine_screen.gl.gpuPaletteCycling &= (engine_screen.gl.offScreenRendering || !engine_screen.host.bilinearInterpolation);
-				// Based on that...
-				engine_screen.host.bytesPerPixel = engine_screen.gl.gpuPaletteCycling ? 1 : 4;
-				engine_screen.host.isIndexedColorFormatted = engine_screen.gl.gpuPaletteCycling;
-			} else {
-				engine_screen.gl.gpuPaletteCycling = false;
-				engine_screen.host.bytesPerPixel = 4;
-			}
-#else
-			engine_screen.host.bytesPerPixel = 4;
-#endif
-#endif
 			if (engine_screen.host.bilinearInterpolation && !engine_screen.gl.offScreenRendering) {
 				engine_screen.sdl.secondarySurface = SDL_CreateRGBSurface(
 				    0, engine_screen.dims.clientOffsettedZoomedRect.w,
@@ -1538,21 +1434,6 @@ bool privCreateWindowResources(void) {
 			break;
 #endif
 		case OUTPUTSYS_SURFACE:
-#if 0
-#if SDL_VERSION_ATLEAST(2,0,0)
-			engine_screen.sdl.windowSurface = SDL_GetWindowSurface(engine_screen.sdl.window);
-			if (!engine_screen.sdl.windowSurface) {
-				CVort_engine_cross_logMessage(CVORT_LOG_MSG_ERROR, "Couldn't retrieve window surface: %s\n", SDL_GetError());
-				CVort_engine_shutdownSDL();
-				return false;
-			}
-#endif
-			engine_screen.host.bytesPerPixel = engine_screen.sdl.windowSurface->format->BytesPerPixel;
-			// Maybe a resized sub-window of some kind is used...
-			if (!engine_arguments.doForceCutFullScreen && engine_gfx_effective_arguments.isFullscreen) {
-				SDL_FillRect(engine_screen.sdl.windowSurface, NULL, SDL_MapRGB(engine_screen.sdl.windowSurface->format, 0, 0, 0));
-			}
-#endif
 			// FIXME: Prepare a secondary surface based on existing system RAM
 			break;
 	}
@@ -1945,12 +1826,6 @@ bool privCreateHostWindow(void) {
 		}
 #endif
 		engine_screen.host.bytesPerPixel = engine_screen.sdl.windowSurface->format->BytesPerPixel;
-#if 0
-		// Maybe a resized sub-window of some kind is used...
-		if (!engine_arguments.doForceCutFullScreen && engine_gfx_effective_arguments.isFullscreen) {
-			SDL_FillRect(engine_screen.sdl.windowSurface, NULL, SDL_MapRGB(engine_screen.sdl.windowSurface->format, 0, 0, 0));
-		}
-#endif
 		// FIXME: Prepare a secondary surface based on existing system RAM
 		break;
 	}
@@ -2154,22 +2029,6 @@ bool privCreateHostWindow(void) {
 
 void privSetVideoModeLow(int16_t vidMode) {
 	assert((vidMode == -1) || (vidMode == 3) || (vidMode == 0xD));
-#if 0
-	// NOTE: It is possible that egaMemoryPtr == byteEgaMemory
-	// (in the 8-bit case). The following code should work anyway.
-
-	// Fill virtual EGA display with black, which in the
-	// Overlay case is not just a plain zero value,
-	// but rather: Y=0, U=128, V=128.
-#if !SDL_VERSION_ATLEAST(2,0,0) // SDL 1.2 ONLY!
-	if (engine_gfx_effective_arguments.outputSystem == OUTPUTSYS_OVERLAY) {
-		for (int currPix = 0; currPix < sizeof(engine_screen.client.byteEgaMemory); currPix++) {
-			((uint32_t *)engine_screen.host.egaMemoryPtr)[currPix] = 0x00800080;
-		}
-	} else
-#endif
-		memset(engine_screen.host.egaMemoryPtr, 0, engine_screen.host.bytesPerPixel*ENGINE_EGA_MEMORY_IN_BITS);
-#endif
 	//Don't yet reset border color - we also reset the palette
 	//CVort_engine_setBorderColor(0);
 
@@ -2467,7 +2326,6 @@ bool CVort_engine_setVideoMode(int16_t vidMode) {
 	//CVort_engine_toggleCursorLock((engine_screen.client.currVidMode != -1) && engine_gfx_effective_arguments.isFullscreen && engine_arguments.cursorAutoLock);
 	return true;
 }
-
 
 #ifdef _CHOCOLATE_KEEN_ENABLE_OPENGL_
 
@@ -3003,12 +2861,6 @@ bool CVort_engine_preparegl() {
 }
 #endif
 
-#if 0
-void CVort_engine_updatePanning(uint16_t panning)
-{
-	engine_panning = panning;
-}
-#endif
 bool CVort_engine_isVerticalBlank()
 {
 	// Here we think of a refresh rate of 70Hz, and each frame is measured
@@ -3017,9 +2869,6 @@ bool CVort_engine_isVerticalBlank()
 	// for the rate (which is not an exact integer otherwise), and again to
 	// consider the time units used by SDL_GetTicks.
 	return ((Uint64)(engine_arguments.calc.scaledRefreshRate*SDL_GetTicks()/ENGINE_EGAVGA_REFRESHRATE_SCALE_FACTOR)%1000 <= 1000*engine_screen.client.vertRetraceLen/engine_screen.client.totalScanHeight);
-#if 0
-	return (((Uint64)(engine_arguments.calc.scaledRefreshRate)*SDL_GetTicks()/ENGINE_EGAVGA_REFRESHRATE_SCALE_FACTOR)%1000 <= ENGINE_EGA_VBLANKCAP);
-#endif
 }
 
 void CVort_engine_copyToTxtMemory(uint8_t *buffer) {
@@ -3369,26 +3218,6 @@ void CVort_engine_doDrawing()
 
 	CVort_private_engine_setEgaMemStartLocAndPanning(engine_egaStart, pel_panning);
 
-#if 0
-	//FIXME: Wastes more CPU cycles but possibly more accurate.
-	while (engine_isVerticalBlank());
-	//engine_currSetEgaStart = engine_egaStart;
-	while (!engine_isVerticalBlank());
-#endif
-#if 0
-   // Taken from CVort_engine_delay - simulates waits for (emulated) vertical
-   // retrace and then for the end of the retrace
-   engine_momentToDelayToInScanlines -= (engine_momentToDelayToInScanlines % engine_arguments.client.totalScanHeight);
-   engine_momentToDelayToInScanlines += engine_arguments.client.totalScanHeight;
-#endif
-#if 0
-	while (engine_isVerticalBlank())
-		CVort_engine_shortSleep(true);
-	//engine_currSetEgaStart = engine_egaStart;
-	while (!engine_isVerticalBlank())
-		CVort_engine_shortSleep(true);
-#endif
-
 	//engine_screen.client.currPanning = pel_panning;
 
    // Now AFTER panning is set, we might update the display contents
@@ -3704,13 +3533,6 @@ void privResetPalette(void) {
 		break;
 #endif
 	}
-#if 0
-	// Now we update *both* pages (surfaces).
-	for (uint32_t page = 0, pixIndex; page < 2; page++)
-		for (pixIndex = 0; pixIndex < engine_egapages[page]->w*engine_egapages[page]->h; pixIndex++)
-			((uint32_t *)engine_egapages[page]->pixels)[pixIndex] = engine_screen.host.mappedEgaColorTable[engine_palettedpages[page][pixIndex]];
-	// Let one see the results
-#endif
 	engine_isFrameReadyToDisplay = true;
 	//engine_updateActualDisplay();
 }
@@ -3741,7 +3563,6 @@ void CVort_engine_showImageFile(const char *filename)
 	scrollX = scrollY = 0;
 	CVort_engine_syncDrawing();
 	CVort_engine_drawScreen();
-
 
 	// The image data is planar and we need to convert it; Twice.
 	uint8_t currPixelVal;

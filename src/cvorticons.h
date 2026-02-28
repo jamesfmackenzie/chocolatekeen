@@ -10,7 +10,6 @@
 #include "cvorticons_gfx.h"
 #include "cvorticons_input.h"
 
-
 #ifdef _CHOCOLATE_KEEN_ENABLE_OPENGL_
 #ifndef NO_SDL_GLEXT
 #define NO_SDL_GLEXT
@@ -170,15 +169,6 @@ typedef enum LevelEnd_T {
 #define TILES_TELESNOW0 0x156
 // FIXME? Same but for sounds
 #define TELEPORTSND 0x12
-
-#if 0
-// Flags for a function handling (emulated) video mode changes
-typedef enum gfxVideoModeFuncCall_T {
-    GFX_VIDEOMODE_FUNC_VIDEOMODECHANGE,
-    GFX_VIDEOMODE_FUNC_FULLSCREENTOGGLE,
-    /*GFX_VIDEOMODE_FUNC_HOSTWINDOWRESIZE,*/
-} gfxVideoModeFuncCall_T;
-#endif
 
 typedef enum gfxOutputSystem_T {
     OUTPUTSYS_SURFACE = 0,
@@ -524,13 +514,6 @@ in CVorticons as virtual, but that may not be much better.)
     void CVort_engine_restoreCurSound();
     void CVort_engine_finishCurSound();
 
-#if 0
-#if SDL_VERSION_ATLEAST(2,0,0)
-    uint8_t CVort_engine_convertSDLKeysymToDOSScancode(SDL_Keycode key);
-#else
-    uint8_t CVort_engine_convertSDLKeysymToDOSScancode(SDLKey key);
-#endif
-#endif
     void CVort_engine_updateInputStatus();
     void CVort_engine_handleEvent(const MappedInputEvent_T *pMappedEvent, int32_t action);
     void CVort_engine_toggleCursorLock(bool toggle);
@@ -1144,22 +1127,6 @@ in CVorticons as virtual, but that may not be much better.)
     extern int engine_currSoundLocation;
     extern int16_t engine_currSoundPlaying;
 
-#if 0
-    // EGA color table, in RGBA/ABGR format. To be more specific,
-    // it is RGBA on Big-Endian platforms and ABGR on Little-Endian ones.
-    // TODO: Make this more cross-platform and work with other color depths?
-    const uint32_t engine_egaABGRColorTableLE[] = {
-        0X00000000, 0x0000aa00, 0x00aa0000, 0x00aaaa00, 0xaa000000, 0xaa00aa00, 0xaaaa0000, 0xaaaaaa00,
-        0x00005500, 0x0000ff00, 0x00aa5500, 0x00aaff00, 0xaa005500, 0xaa00ff00, 0xaaaa5500, 0xaaaaff00,
-        0x00550000, 0x0055aa00, 0x00ff0000, 0x00ffaa00, 0xaa550000, 0xaa55aa00, 0xaaff0000, 0xaaffaa00,
-        0x00555500, 0x0055ff00, 0x00ff5500, 0x00ffff00, 0xaa555500, 0xaa55ff00, 0xaaff5500, 0xaaffff00,
-        0x55000000, 0x5500aa00, 0x55aa0000, 0x55aaaa00, 0xff000000, 0xff00aa00, 0xffaa0000, 0xffaaaa00,
-        0x55005500, 0x5500ff00, 0x55aa5500, 0x55aaff00, 0xff005500, 0xff00ff00, 0xffaa5500, 0xffaaff00,
-        0x55550000, 0x5555aa00, 0x55ff0000, 0x55ffaa00, 0xff550000, 0xff55aa00, 0xffff0000, 0xffffaa00,
-        0x55555500, 0x5555ff00, 0x55ff5500, 0x55ffff00, 0xff555500, 0xff55ff00, 0xffff5500, 0xffffff00
-    };
-#endif
-
     extern uint8_t engine_lastScanCode;
     extern uint32_t engine_lastKeyTime;
     extern bool engine_isBeforeKeyDelay;
@@ -1189,38 +1156,11 @@ in CVorticons as virtual, but that may not be much better.)
     } CVort_EXE_FIELDS_T;
     extern CVort_EXE_FIELDS_T exeFields;
 
-#if 0
-#if VORTICONS_EPISODE == 1
-    struct {
-        uint32_t *ordering_sprites_x, *ordering_sprites_y;
-        uint16_t *ordering_sprites_frames;
-
-        // Actually, win3 is used before win1.
-        int16_t *win1, *win2, *win3;
-    } exeFieldsEp1;
-#elif VORTICONS_EPISODE == 2
-    struct {
-        uint16_t *earth_expl3, *earth_explX, *earth_explY, *earth_expl;
-    } exeFieldsEp2;
-#endif
-#endif
-
     /************************************
     Vanilla Keen variables; Well, mostly.
      ************************************/
     // Initialized Variables
-#if 0
-    const static uint8_t rnd_vals[];
-    const static uint8_t trans_map[];
-    const static uint8_t char_map[];
-    const static uint8_t uppercase_table[];
-    const static int16_t points_tbl[];
-    const static uint8_t palettes[][17];
-#endif
     extern uint8_t key_map[128]; // All zeros
-#if 0
-    const static uint16_t fibs_17[];
-#endif
     extern uint16_t jump_height_table[18];
     extern uint16_t spritejump_1, spritejump_2;
 

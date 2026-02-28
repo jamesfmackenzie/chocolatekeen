@@ -39,19 +39,6 @@ void CVort3_engine_processEXE() {
 
     exeFields.endScreen = exeImage + CVort3_ANSI_QUIT_SCREEN_OFFSET;
 
-#if 0
-    exeFieldsEp2.earth_expl3 = (uint16_t *)(exeImage + 0x19ED6);
-    exeFieldsEp2.earth_explX = (uint16_t *)(exeImage + 0x19F74);
-    exeFieldsEp2.earth_explY = (uint16_t *)(exeImage + 0x19F86);
-    exeFieldsEp2.earth_expl  = (uint16_t *)(exeImage + 0x19F98);
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    // These all consist of one single continous buffer, so we
-    // simply loop over ther four arrays' contents at once (SORT OF A HACK)
-    for (loopVar = 0; loopVar < 118; loopVar++)
-        exeFieldsEp2.earth_expl3[loopVar] = SDL_Swap16(exeFieldsEp2.earth_expl3[loopVar]);
-#endif
-#endif
-
     // TODO: Maybe we can remove "exeFields" from all things in general?
     // Or do a different thing...
 

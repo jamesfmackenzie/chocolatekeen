@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-//#include <vector>
 
 #ifndef __STDC_FORMAT_MACROS
 #define __STDC_FORMAT_MACROS
@@ -118,7 +117,6 @@ void CVort2_show_pause_menu() {
         cursorY = origCursorY + 10;
         CVort_draw_string("Wash D.C.");
     }
-
 
     CVort_clear_keys();
     //engine_updateActualDisplay(); // THIS IS IMPORTANT!
@@ -378,7 +376,6 @@ void CVort2_think_guardbot_shoot()
         if (temp_sprite.time > 150)
             temp_sprite.think = &CVort2_think_guardbot_move;
 
-
         if ((temp_sprite.varB+=sprite_sync)>20)
         {
             temp_sprite.varB = 0;
@@ -602,7 +599,6 @@ void CVort2_contact_scrub(Sprite_T *scrub, Sprite_T *contacted)
     }
 }
 
-
 void CVort2_add_sprite_platform(int16_t tileX, int16_t tileY) {
 
     uint16_t sprIndex;
@@ -730,7 +726,6 @@ void CVort2_contact_tantalus(Sprite_T *tantalus, Sprite_T *contacted)
     }
 }
 
-
 void CVort2_body_destroy_tantalus(Body_T *tantalus)
 {
     uint16_t var4, var_si;
@@ -812,7 +807,6 @@ void CVort2_tantalus_explosion(uint16_t tileX, uint16_t tileY, uint16_t tilenum)
     map_data_tiles[(tileY) * map_width_T + tileX] = tilenum;
 }
 
-
 void CVort2_inlevel_message() {
     uint32_t tickcount = CVort_ptr_engine_getTicks();
     CVort_draw_box(0x16, 0xD);
@@ -890,7 +884,6 @@ void CVort2_draw_earth_explode() {
         CVort_engine_drawScreen();
     }
 
-
     // The Earth Explodes!
     CVort_engine_setCurSound(CVort2_snd_earthpow);
     earthX = 0x2F000;
@@ -926,7 +919,6 @@ void CVort2_draw_earth_explode() {
             CVort_engine_drawSpriteAt(earthX - var1C, earthY + var1C / 2 + 0x1000, explodeTick / 2 % 4 + CVort2_spr_lilchunk1);
             CVort_engine_drawSpriteAt(earthX + var1C + 0x1000, earthY + var1C / 2 + 0x1000, explodeTick / 2 % 4 + CVort2_spr_lilchunk1);
 
-
         }
 
         // Draw the four big earth chunks
@@ -937,14 +929,7 @@ void CVort2_draw_earth_explode() {
             CVort_engine_drawSpriteAt(earthX - var1C, earthY + var1C + 0x1000, explodeTick / 2 % 4 + CVort2_spr_earthchunk1);
             CVort_engine_drawSpriteAt(earthX + var1C + 0x1000, earthY + var1C + 0x1000, explodeTick / 2 % 4 + CVort2_spr_earthchunk1);
 
-
         }
-#if 0
-        static uint16_t earth_explX[] = {2, 1, 3, 1, 3, 0, 2, 2, 4};
-        static uint16_t earth_explY[] = {2, 1, 1, 3, 3, 2, 0, 4, 2};
-        static uint16_t earth_expl[] = {0, 2, 4, 6, 8, 10, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40};
-        static uint16_t earth_expl3[] = {0, 0, 1, 1, 2, 2, 3, 3, 2, 2, 3, 3, 2, 2, 3, 3, 2, 2, 1, 1, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
-#endif
 
         // Draw the nine earth explosions
         for (di = 0; di < 9; di++) {
@@ -963,12 +948,10 @@ void CVort2_draw_earth_explode() {
                     );
         }
 
-
         CVort_engine_drawScreen();
         CVort_engine_delay(3);
 
     }
-
 
 }
 
@@ -1033,7 +1016,6 @@ void CVort2_draw_win()
     CVort_engine_delay(120);
     CVort_fade_out();
 
-
     // Mothership limps back to Vorticon VI
     CVort_engine_syncDrawing();
 
@@ -1067,7 +1049,6 @@ void CVort2_draw_win()
     }
 
     CVort_fade_out();
-
 
     // Back on earth, snow day!
 
@@ -1107,7 +1088,6 @@ void CVort2_draw_win()
     CVort_draw_box2(0x4, 0x12, 0x10, 0x14);
     CVort_draw_string_finale("Ok, mom...");
     CVort_engine_delay(120);
-
 
     CVort2_draw_win_text();
     CVort_draw_box2(0xC, 0x3, 0x20, 0x5);

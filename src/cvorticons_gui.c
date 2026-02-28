@@ -515,18 +515,6 @@ GUI_Menu_Item_T guiMenuItemNextMapperBinding = {
 0, 0, 0, 0, 0, 0, "Next binding", NULL, 0, 0, &CVort_gui_handler_showNextMapperBinding
 };
 
-#if 0
-GUI_Menu_Item_T guiMenuItemPrevMapperBinding = {
-0, 0, 0, 0, 0, 0, "Previous binding", NULL, 0, 0, &CVort_gui_handler_showPrevMapperBinding
-};
-#endif
-
-#if 0
-GUI_Menu_Item_T guiMenuItemMapperBindingLeaveMenu = {
-0, 0, 0, 0, 0, 0, "Leave current menu", NULL, 0, 0, &CVort_gui_handler_leaveMapperBindingMenu
-};
-#endif
-
 GUI_Menu_Item_T guiMenuItemMapperBindingLabel = {
 0, 0, 0, 0, 0, 0, "To be written later", NULL, 0, 0, NULL
 };
@@ -1515,13 +1503,6 @@ GUI_Mapper_Tile_T
 	                              NULL, "Fullscreen toggle", NULL, {EMULATEDINPUT_HANDLER, INPUTHANDLER_FULLSCREEN},
 	                              {NULL, &guiMapperMod3, &guiMapperHandlerCaptureCursor, NULL/*&guiMapperHandlerSaveInputMappings*/}
 	                             },
-#if 0
-	guiMapperHandlerSaveInputMappings = {GUI_MAPPER_TOP_ROW_LEFTMOST_XPOS, GUI_MAPPER_TOP_ROW_TOPMOST_YPOS+5*GUI_MAPPER_SPACED_TILE_HEIGHT,
-	                                     GUI_MAPPER_TILE_WIDTH+4*GUI_MAPPER_SPACED_TILE_WIDTH, GUI_MAPPER_TILE_HEIGHT,
-	                                     NULL, "Input mapping saving", NULL, {EMULATEDINPUT_HANDLER, INPUTHANDLER_SAVEINPUTMAPPINGS},
-	                                     {NULL, NULL, &guiMapperHandlerFullScreen, NULL}
-	                                    },
-#endif
 	guiMapperModifiersDescription = {GUI_MAPPER_TOP_ROW_LEFTMOST_XPOS+11*GUI_MAPPER_SPACED_TILE_WIDTH/2, GUI_MAPPER_TOP_ROW_TOPMOST_YPOS,
 	                                 GUI_MAPPER_TILE_WIDTH+3*GUI_MAPPER_SPACED_TILE_WIDTH/2, GUI_MAPPER_TILE_HEIGHT,
 	                                 NULL, "Modifiers:", NULL, {EMULATEDINPUT_NONE, 0},
@@ -1542,7 +1523,6 @@ GUI_Mapper_Tile_T
 	                 NULL, "Mod 3", NULL, {EMULATEDINPUT_MODTOGGLE, 4},
 	                 {&guiMapperHandlerFullScreen, NULL, &guiMapperMod2, NULL}
 	                };
-
 
 GUI_Mapper_Page_T guiMapperMainLeftKeyPage = {
 	(GUI_Mapper_Tile_T *[])
@@ -1830,7 +1810,6 @@ void CVort_gui_mapper_drawCurrentPage(void) {
 	engine_isFrameReadyToDisplay = true;
 }
 
-
 // Calculates menu item dimensions without horizontal spacing (but not the positions)
 void CVort_gui_layoutMenuItem(GUI_Menu_Item_T *item) {
 	int numOfRows = 1, maxLabelRowWidth = 0, currRowWidth = 0;
@@ -1904,7 +1883,6 @@ void CVort_gui_layoutMenu(GUI_Menu_T *menu) {
 	}
 }
 
-
 typedef struct {
 	int w, h;
 } GUI_VideoMode_T;
@@ -1945,7 +1923,6 @@ int CVort_gui_createScreenResolutionBuffers(void) {
 	guiWindowedModeStrs = (const char **)windowedModeStrs;
 	char *fullScreenModeStrData = (char *)((uint8_t *)windowedModeStrs + (numOfModes + 2) * sizeof(char *));
 	char *windowedModeStrData = (char *)((uint8_t *)fullScreenModeStrData + strlen("Desktop") + 1 + strLengthUpperBoundWithNull*numOfModes);
-
 
 	// First add our default choices
 	strcpy(fullScreenModeStrData, "Desktop");
@@ -2531,11 +2508,6 @@ void CVort_gui_handler_showNextMapperBinding(GUI_Menu_Item_T *item) {
 	CVort_gui_drawCurrentMenu();
 }
 
-#if 0
-void CVort_gui_handler_showPrevMapperBinding(GUI_Menu_Item_T *item) {
-}
-#endif
-
 void CVort_gui_handler_leaveMapperBindingMenu(void/*GUI_Menu_Item_T *item*/) {
 	// We return to the mapper UI loop (but don't leave the usual loop!)
 	CVort_engine_gui_clearScreen();
@@ -2807,7 +2779,6 @@ void CVort_gui_drawCurrentMenu(void) {
 	engine_isFrameReadyToDisplay = true;
 }
 
-
 int CVort_gui_transformMouseCoordinates(int *xPtr, int *yPtr) {
 	(*xPtr) -= engine_screen.dims.borderedViewportRect.x;
 	(*yPtr) -= engine_screen.dims.borderedViewportRect.y;
@@ -3004,12 +2975,6 @@ void CVort_gui_handle_mouse_selection(int pressX, int pressY, int releaseX, int 
 		} else {
 			CVort_gui_selectNextItemChoice(*guiCurrentMenuItemSelectionPtr);
 		}
-#if 0
-		} else if ((pressX >= (*guiCurrentMenuItemSelectionPtr)->x + (guiCurrentMenuPtr->width - (*guiCurrentMenuItemSelectionPtr)->choiceMaxPixWidth/2 - 2*GUI_MENU_ITEM_TEXT_CHAR_WIDTH)) &&
-		           (releaseX >= (*guiCurrentMenuItemSelectionPtr)->x + (guiCurrentMenuPtr->width - (*guiCurrentMenuItemSelectionPtr)->choiceMaxPixWidth/2 - 2*GUI_MENU_ITEM_TEXT_CHAR_WIDTH))) {
-			CVort_gui_selectNextItemChoice(*guiCurrentMenuItemSelectionPtr);
-		}
-#endif
 	} else {
 		(*guiCurrentMenuItemSelectionPtr)->handler(*guiCurrentMenuItemSelectionPtr);
 	}
@@ -3360,7 +3325,6 @@ void CVort_gui_mapper_handle_dpad_activate(void) {
 	}
 	CVort_gui_mapper_handle_tile((*guiCurrentMapperTilePtr)->emuEvent.emulatedInput, (*guiCurrentMapperTilePtr)->emuEvent.value);
 }
-
 
 // Does NOT set current mapper page, which should be set externally (if at all).
 void CVort_gui_mapper_runLoop(void) {

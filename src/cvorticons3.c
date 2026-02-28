@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-//#include <vector>
 
 #ifndef __STDC_FORMAT_MACROS
 #define __STDC_FORMAT_MACROS
@@ -185,16 +184,6 @@ void CVort3_init_level(uint16_t levelnum) {
             }
         }
 }
-
-#if 0
-void CVort3_add_sprite_vorticon(int16_t tileX, int16_t tileY) {
-}
-#endif
-
-#if 0
-void CVort3_add_sprite_youth(int16_t tileX, int16_t tileY) {
-}
-#endif
 
 void CVort3_add_sprite_vortimom(int16_t tileX, int16_t tileY) {
     uint16_t sprIndex;
@@ -407,120 +396,7 @@ void CVort3_contact_keen(Sprite_T *keen, Sprite_T *contacted) {
 
         default: ;
     }
-#if 0
-    switch (contacted->type_) {
-        case obj_grunt:
-        case obj_elite:
-        case obj_guardbot:
-        case CVort3_obj_enemyshot:
-            CVort_kill_keen();
-            break;
-
-        case obj_youth:
-            if (keen->think == &CVort_think_keen_stunned)
-                return;
-
-            keen->think = &CVort_think_keen_stunned;
-            keen->velX = contacted->velX;
-            keen->velY = contacted->velY;
-            keen->time = 400;
-            break;
-
-        case obj_scrub:
-        case CVort3_obj_platform: // Push Keen
-            CVort_carry_keen(keen, contacted);
-            break;
-
-    }
-#endif
 }
-
-#if 0
-
-void CVort3_add_sprite_youth(int16_t tileX, int16_t tileY) {
-
-    uint16_t sprIndex;
-
-    sprIndex = CVort_add_sprite();
-    sprites[sprIndex].type_ = obj_youth;
-    sprites[sprIndex].posX = tileX << 12;
-    sprites[sprIndex].posY = tileY << 12;
-    sprites[sprIndex].think = &CVort3_think_youth_walk;
-    sprites[sprIndex].contact = &CVort3_contact_youth;
-    sprites[sprIndex].health = 1;
-    sprites[sprIndex].velX = sprites[0].posX > sprites[sprIndex].posX ? 250 : -250;
-    sprites[sprIndex].frame = spr_youthleft1;
-}
-#endif
-
-#if 0
-void CVort3_think_youth_walk() {
-#if 0
-    uint16_t blocking;
-
-    temp_sprite.frame = temp_sprite.velX > 0 ? spr_youthright1 : spr_youthleft1;
-    temp_sprite.frame += (CVort_ptr_engine_getTicks() >> 4)&3;
-    if (CVort_get_random() < sprite_sync * 3) {
-        temp_sprite.velY = -CVort_calc_jump_height(400);
-        temp_sprite.think = &CVort3_think_youth_jump;
-    }
-
-    CVort_do_fall();
-    blocking = CVort_compute_sprite_delta();
-
-    if (!(blocking & 2)) {
-        temp_sprite.think = &CVort3_think_youth_jump;
-    }
-
-    if (blocking & 4) {
-        temp_sprite.velX = -250;
-    }
-
-    if (blocking & 1) {
-        temp_sprite.velX = 250;
-    }
-
-#endif
-}
-
-void CVort3_think_youth_jump() {
-#if 0
-    uint16_t blocking;
-
-    temp_sprite.frame = temp_sprite.velX > 0 ? spr_youthright4 : spr_youthleft4;
-
-    CVort_do_fall();
-    blocking = CVort_compute_sprite_delta();
-
-    if (blocking & 2) {
-        temp_sprite.think = &CVort3_think_youth_walk;
-    }
-
-    if (blocking & 4) {
-        temp_sprite.velX = -250;
-    }
-
-    if (blocking & 1) {
-        temp_sprite.velX = 250;
-    }
-
-#endif
-}
-
-void CVort3_contact_youth(Sprite_T *youth, Sprite_T *contacted) {
-#if 0
-    if (contacted->type_ == obj_keenshot || contacted->type_ == CVort3_obj_enemyshot) {
-        CVort_engine_setCurSound(snd_vortscream);
-        youth->time = 0;
-        youth->varB = 2;
-        youth->frame = spr_youthdie1;
-        youth->contact = &CVort3_contact_nop;
-        youth->think = &CVort3_think_kill_sprite;
-    }
-
-#endif
-}
-#endif
 
 void CVort3_think_vortimom_walk() {
     int32_t currPosY;

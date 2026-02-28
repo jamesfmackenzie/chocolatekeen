@@ -1,5 +1,4 @@
 #include <stdio.h>
-//#include <vector>
 #include "SDL.h"
 #include "SDL_endian.h"
 #ifdef __EMSCRIPTEN__
@@ -7,14 +6,6 @@
 #endif
 
 /* TODO: Currently unused */
-#if 0
-#ifdef __WIN32__
-#include <direct.h> // For _mkdir
-#include <shlobj.h> // For SHGetFolderPath
-#else
-#include <sys/stat.h> // For mkdir
-#endif
-#endif
 
 #include "../rsrc/chocolate-keen_vga_fonts.h"
 #include "cvorticons.h"
@@ -40,24 +31,6 @@ const uint32_t engine_egaRGBColorTable[] = {
     0X000000, 0x0000aa, 0x00aa00, 0x00aaaa, 0xaa0000, 0xaa00aa, 0xaa5500, 0xaaaaaa,
     0x555555, 0x5555ff, 0x55ff55, 0x55ffff, 0xff5555, 0xff55ff, 0xffff55, 0xffffff
 };
-#if 0
-const uint32_t engine_defaultEgaABGRColorTableLE[] = {
-    0X00000000, 0x0000aa00, 0x00aa0000, 0x00aaaa00, 0xaa000000, 0xaa00aa00, 0xaa550000, 0xaaaaaa00,
-    0x55555500, 0x5555ff00, 0x55ff5500, 0x55ffff00, 0xff555500, 0xff55ff00, 0xffff5500, 0xffffff00
-};
-#endif
-#if 0
-const uint32_t engine_defaultEgaABGRColorTableLE[] = {
-    0X00000000, 0x00aa0000, 0x0000aa00, 0x00aaaa00, 0x000000aa, 0x00aa00aa, 0x000055aa, 0x00aaaaaa,
-    0x00555555, 0x00ff5555, 0x0055ff55, 0x00ffff55, 0x005555ff, 0x00ff55ff, 0x0055ffff, 0x00ffffff
-};
-#endif
-#if 0
-const uint32_t engine_defaultEgaABGRColorTableLE[] = {
-    0X000000, 0x0000aa, 0x00aa00, 0x00aaaa, 0xaa0000, 0xaa00aa, 0xaa5500, 0xaaaaaa,
-    0x555555, 0x5555ff, 0x55ff55, 0x55ffff, 0xff5555, 0xff55ff, 0xffff55, 0xffffff
-};
-#endif
 
 void CVort_engine_parseCalculatedEngineArguments(void) {
     if (engine_arguments.isEmulatedGfxCardVga) {
@@ -444,12 +417,6 @@ bool CVort_engine_start(void) {
     //if (engine_arguments.outputSystem == OUTPUTSYS_SURFACE) {
     //    SDL_SetHint(SDL_HINT_RENDER_DRIVER, "software");
     // }
-#if 0
-    // Otherwise, we simply set this.
-    if (engine_arguments.rendererDriver) {
-        SDL_SetHint(SDL_HINT_RENDER_DRIVER, engine_arguments.rendererDriver);
-    }
-#endif
 #endif
 
     if (SDL_Init(SDL_INIT_TIMER |
@@ -729,13 +696,6 @@ void CVort_engine_loadKeen(gameversion_T gameVer) {
 	CVort_main();
 }
 
-#if 0
-uint64_t CVort_engine_getTimeInScanlines()
-{
-   return ((uint64_t)SDL_GetTicks())*engine_arguments.calc.scaledRefreshRate*engine_arguments.totalScanHeight/(1000*ENGINE_EGAVGA_REFRESHRATE_SCALE_FACTOR);
-}
-#endif
-
 void CVort_engine_shutdown() {
     // TODO/FIXME: Free host joystick resources
 
@@ -747,10 +707,6 @@ void CVort_engine_shutdown() {
 
     //	SDL_FreeSurface(engine_egapages[0]);
     //	SDL_FreeSurface(engine_egapages[1]);
-#if 0
-    if (engine_arguments.outputSystem == OUTPUTSYS_OVERLAY)
-      SDL_FreeYUVOverlay(engine_overlay);
-#endif
     CVort_engine_saveConfigFile();
     CVort_engine_shutdownSDL();
 }
@@ -900,15 +856,6 @@ int64_t CVort_engine_convertMomentFromGameTicksToMicroSec(uint32_t momentInGameT
 
 void CVort_private_engine_setTicks(uint32_t currTicks) {
    engine_gameTicksStart = currTicks-(CVort_private_engine_getTicks()-engine_gameTicksStart);
-#if 0
-   engine_gameTicksStart = currTicks;
-   engine_sdlMicroTicksStart = ((int64_t)1000)*((int64_t)SDL_GetTicks());
-   /* We need to take the offsets into consideration, BUT in an intelligent
-    * way. If we naively increase engine_gameTicksStart in order to
-    * compensate for the offset, things can go wrong later.
-    */
-   engine_gameTicksStart -= (CVort_private_engine_getTicks() - currTicks);
-#endif
 }
 
 uint32_t CVort_private_engine_getTicks() {
@@ -1212,12 +1159,6 @@ void CVort_engine_toggleCursorLock(bool toggle) {
     // If the following is NOT done, when the cursor is re-locked
     // a bit of "random" motion may be in effect right afterwards
     SDL_GetRelativeMouseState(NULL, NULL);
-#if 0
-    if (toggle) {
-        SDL_WarpMouse(engine_aspectCorrectedScreenRect.x + engine_aspectCorrectedScreenRect.w / 2,
-                      engine_aspectCorrectedScreenRect.y + engine_aspectCorrectedScreenRect.h / 2);
-    }
-#endif
 #endif
 }
 
@@ -1780,7 +1721,6 @@ int32_t CVort_engine_signExtend16To32(int16_t inputVal) {
         result += 0xFFFF0000;
     return result;
 }
-
 
 int16_t CVort_engine_toupper(int16_t c) {
     if (c == -1)

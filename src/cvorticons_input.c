@@ -1070,38 +1070,6 @@ void CVort_engine_setDefaultInputMappings(void) {
         memset(engine_inputMappings.joystickMappings[loopVar].joystickNVertHatMappings, 0, engine_inputMappings.joystickMappings[loopVar].numOfHats * sizeof(MappedInputEventList_T));
     }
 
-#if 0
-    // Count the total amount of default keyboard events
-    int totalEventsAmount = 0, eventCounter, eventKeyStart , eventMouseStart, eventJoyStart/*, eventHandlerStart, eventModStart*/;
-    eventKeyStart = 0;
-    for (loopVar = 0; loopVar < sizeof(defaultKeyMappings)/sizeof(MappedInputEvent_T); loopVar++) {
-        if (defaultKeyMappings[loopVar].emulatedInput == EMULATEDINPUT_KEYPRESS) {
-            totalEventsAmount++;
-        }
-    }
-
-    // Add more for mouse events
-    eventMouseStart = totalEventsAmount;
-    totalEventsAmount += 7;
-
-    // Add more for joystick events
-    eventJoyStart = totalEventsAmount;
-    totalEventsAmount += 12;
-#if 0
-    // A few more for our handlers (fullscreen, lock, quit)
-    eventHandlerStart = totalEventsAmount;
-    totalEventsAmount += 3;
-
-    // We should not forget the modifiers either (fullscreen, lock, quit)
-    eventModStart = totalEventsAmount;
-    totalEventsAmount += 3;
-#endif
-
-    // TODO: This is the amount for the default, for now:
-    // Number of actual key mappings + mouse mappings + joystick mappings
-    engine_inputMappings.mainEventsBuffer = (MappedInputEvent_T *)calloc(totalEventsAmount, sizeof(MappedInputEvent_T));
-    eventCounter = eventKeyStart;
-#endif
     // First prepare keyboard event maps
     for (loopVar = 0; loopVar < sizeof(defaultKeyMappings)/sizeof(MappedInputEvent_T); loopVar++) {
         if (defaultKeyMappings[loopVar].emulatedInput == EMULATEDINPUT_KEYPRESS) {
@@ -1175,22 +1143,6 @@ void CVort_engine_setDefaultInputMappings(void) {
                 engine_inputMappings.keyMappings[loopVar].list[0] = defaultKeyMappings[loopVar];
                 // Quit
                 engine_inputMappings.keyMappings[loopVar].list[1] = defaultQuitHandlerMapping;
-#if 0
-            } else
-#if SDL_VERSION_ATLEAST(2,0,0)
-                   if (loopVar == SDL_SCANCODE_F8)
-#else
-                   if (loopVar == SDLK_F8)
-#endif
-            {
-                // Add input mapping saving
-                engine_inputMappings.keyMappings[loopVar].numOfEvents = 2;
-                //engine_inputMappings.keyMappings[loopVar].list = (MappedInputEvent_T *)malloc(engine_inputMappings.keyMappings[loopVar].numOfEvents*sizeof(MappedInputEvent_T));
-                // The usual...
-                engine_inputMappings.keyMappings[loopVar].list[0] = defaultKeyMappings[loopVar];
-                // Input mapping saving
-                engine_inputMappings.keyMappings[loopVar].list[1] = defaultSaveInputMapsMapping;
-#endif
             } else {
                 engine_inputMappings.keyMappings[loopVar].numOfEvents = 1;
                 //engine_inputMappings.mainEventsBuffer[eventCounter] = defaultKeyMappings[loopVar];
@@ -1229,73 +1181,8 @@ void CVort_engine_setDefaultInputMappings(void) {
     engine_inputMappings.mouseRelNAxisMappings[1].list[0].emulatedInput = EMULATEDINPUT_MOUSEMOTION;
     engine_inputMappings.mouseRelNAxisMappings[1].list[0].value = -2;
     engine_inputMappings.mouseRelNAxisMappings[1].numOfEvents = 1;
-#if 0
-    // Continue with the mouse: Buttons first
-    eventCounter = eventMouseStart;
-    engine_inputMappings.mainEventsBuffer[eventCounter].emulatedInput = EMULATEDINPUT_MOUSEBUTTONPRESS;
-    engine_inputMappings.mainEventsBuffer[eventCounter].value = 1;
-    engine_inputMappings.mouseButtonMappings[SDL_BUTTON_LEFT-1].list = &engine_inputMappings.mainEventsBuffer[eventCounter];
-    engine_inputMappings.mouseButtonMappings[SDL_BUTTON_LEFT-1].numOfEvents = 1;
-    eventCounter++;
-
-    engine_inputMappings.mainEventsBuffer[eventCounter].emulatedInput = EMULATEDINPUT_MOUSEBUTTONPRESS;
-    engine_inputMappings.mainEventsBuffer[eventCounter].value = 2;
-    engine_inputMappings.mouseButtonMappings[SDL_BUTTON_RIGHT-1].list = &engine_inputMappings.mainEventsBuffer[eventCounter];
-    engine_inputMappings.mouseButtonMappings[SDL_BUTTON_RIGHT-1].numOfEvents = 1;
-    eventCounter++;
-
-    engine_inputMappings.mainEventsBuffer[eventCounter].emulatedInput = EMULATEDINPUT_MOUSEBUTTONPRESS;
-    engine_inputMappings.mainEventsBuffer[eventCounter].value = 4;
-    engine_inputMappings.mouseButtonMappings[SDL_BUTTON_MIDDLE-1].list = &engine_inputMappings.mainEventsBuffer[eventCounter];
-    engine_inputMappings.mouseButtonMappings[SDL_BUTTON_MIDDLE-1].numOfEvents = 1;
-    eventCounter++;
-
-    // Mouse motion comes next
-    engine_inputMappings.mainEventsBuffer[eventCounter].emulatedInput = EMULATEDINPUT_MOUSEMOTION;
-    engine_inputMappings.mainEventsBuffer[eventCounter].value = 1;
-    engine_inputMappings.mouseRelPAxisMappings[0].list = &engine_inputMappings.mainEventsBuffer[eventCounter];
-    engine_inputMappings.mouseRelPAxisMappings[0].numOfEvents = 1;
-    eventCounter++;
-
-    engine_inputMappings.mainEventsBuffer[eventCounter].emulatedInput = EMULATEDINPUT_MOUSEMOTION;
-    engine_inputMappings.mainEventsBuffer[eventCounter].value = 2;
-    engine_inputMappings.mouseRelPAxisMappings[1].list = &engine_inputMappings.mainEventsBuffer[eventCounter];
-    engine_inputMappings.mouseRelPAxisMappings[1].numOfEvents = 1;
-    eventCounter++;
-
-    engine_inputMappings.mainEventsBuffer[eventCounter].emulatedInput = EMULATEDINPUT_MOUSEMOTION;
-    engine_inputMappings.mainEventsBuffer[eventCounter].value = -1;
-    engine_inputMappings.mouseRelNAxisMappings[0].list = &engine_inputMappings.mainEventsBuffer[eventCounter];
-    engine_inputMappings.mouseRelNAxisMappings[0].numOfEvents = 1;
-    eventCounter++;
-
-    engine_inputMappings.mainEventsBuffer[eventCounter].emulatedInput = EMULATEDINPUT_MOUSEMOTION;
-    engine_inputMappings.mainEventsBuffer[eventCounter].value = -2;
-    engine_inputMappings.mouseRelNAxisMappings[1].list = &engine_inputMappings.mainEventsBuffer[eventCounter];
-    engine_inputMappings.mouseRelNAxisMappings[1].numOfEvents = 1;
-    eventCounter++;
-#endif
 
     // Next, handle (host) joysticks.
-
-#if 0
-    //We should also initialize some things...
-    // FIXME: Use a single call to malloc/calloc?
-
-    eventCounter = eventJoyStart;
-    engine_inputMappings.mainEventsBuffer[eventCounter++] = defaultJoyButtonMappings[0];
-    engine_inputMappings.mainEventsBuffer[eventCounter++] = defaultJoyButtonMappings[1];
-    engine_inputMappings.mainEventsBuffer[eventCounter++] = defaultJoyButtonMappings[2];
-    engine_inputMappings.mainEventsBuffer[eventCounter++] = defaultJoyButtonMappings[3];
-    engine_inputMappings.mainEventsBuffer[eventCounter++] = defaultJoyPAxisMappings[0];
-    engine_inputMappings.mainEventsBuffer[eventCounter++] = defaultJoyPAxisMappings[1];
-    engine_inputMappings.mainEventsBuffer[eventCounter++] = defaultJoyPAxisMappings[2];
-    engine_inputMappings.mainEventsBuffer[eventCounter++] = defaultJoyPAxisMappings[3];
-    engine_inputMappings.mainEventsBuffer[eventCounter++] = defaultJoyNAxisMappings[0];
-    engine_inputMappings.mainEventsBuffer[eventCounter++] = defaultJoyNAxisMappings[1];
-    engine_inputMappings.mainEventsBuffer[eventCounter++] = defaultJoyNAxisMappings[2];
-    engine_inputMappings.mainEventsBuffer[eventCounter++] = defaultJoyNAxisMappings[3];
-#endif
 
     for (loopVar = 0; loopVar < engine_inputMappings.numOfJoysticks; loopVar++) {
         // Map buttons as-is, mod 4
@@ -1304,12 +1191,6 @@ void CVort_engine_setDefaultInputMappings(void) {
             //engine_inputMappings.joystickMappings[loopVar].joystickButtonMappings[secondaryLoopVar].list = &engine_inputMappings.mainEventsBuffer[eventCounter];
             engine_inputMappings.joystickMappings[loopVar].joystickButtonMappings[secondaryLoopVar].list[0] = defaultJoyButtonMappings[secondaryLoopVar%4];
             engine_inputMappings.joystickMappings[loopVar].joystickButtonMappings[secondaryLoopVar].numOfEvents = 1;
-#if 0
-            eventCounter++;
-            if (eventCounter == eventJoyStart + 4) {
-                eventCounter = eventJoyStart;
-            }
-#endif
         }
 
         // Map axes in the positive directions as-is, for the first 4 axes only
@@ -1318,13 +1199,6 @@ void CVort_engine_setDefaultInputMappings(void) {
             //engine_inputMappings.joystickMappings[loopVar].joystickPAxisMappings[secondaryLoopVar].list = &engine_inputMappings.mainEventsBuffer[eventCounter];
             engine_inputMappings.joystickMappings[loopVar].joystickPAxisMappings[secondaryLoopVar].list[0] = defaultJoyPAxisMappings[secondaryLoopVar/*%4*/];
             engine_inputMappings.joystickMappings[loopVar].joystickPAxisMappings[secondaryLoopVar].numOfEvents = 1;
-#if 0
-            eventCounter++;
-            if (eventCounter == eventJoyStart + 8) {
-                secondaryLoopVar++;
-                break;
-            }
-#endif
         }
         // For any other axis we have possibly left out,
         // assign an empty list of events
@@ -1337,13 +1211,6 @@ void CVort_engine_setDefaultInputMappings(void) {
             //engine_inputMappings.joystickMappings[loopVar].joystickNAxisMappings[secondaryLoopVar].list = &engine_inputMappings.mainEventsBuffer[eventCounter];
             engine_inputMappings.joystickMappings[loopVar].joystickNAxisMappings[secondaryLoopVar].list[0] = defaultJoyNAxisMappings[secondaryLoopVar/*%4*/];
             engine_inputMappings.joystickMappings[loopVar].joystickNAxisMappings[secondaryLoopVar].numOfEvents = 1;
-#if 0
-            eventCounter++;
-            if (eventCounter == eventJoyStart + 12) {
-                secondaryLoopVar++;
-                break;
-            }
-#endif
         }
         // As before, assign empty event lists
         for (; secondaryLoopVar < engine_inputMappings.joystickMappings[loopVar].numOfAxes; secondaryLoopVar++)
@@ -1401,13 +1268,6 @@ void CVort_engine_setDefaultInputMappings(void) {
             //eventCounter = eventJoyStart + 8
         }
     }
-#if 0
-    // Handlers come next...
-    eventCounter = eventHandlerStart;
-
-    // Finally, modifiers...
-    eventCounter = eventModStart;
-#endif
 }
 
 void CVort_engine_setupInputMappings(void) {
@@ -2207,11 +2067,6 @@ void CVort_engine_handleEvent(const MappedInputEvent_T *pMappedEvent, int32_t ac
                     case INPUTHANDLER_CAPTURECURSOR:
                         CVort_engine_toggleCursorLock(!engine_isCursorLocked);
                         break;
-#if 0
-                    case INPUTHANDLER_SAVEINPUTMAPPINGS:
-                        CVort_engine_saveInputMappings();
-                        break;
-#endif
                     case INPUTHANDLER_SHUTDOWN:
                         CVort_engine_shutdown();
                         exit(0); // TODO: Is this ok?

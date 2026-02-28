@@ -21,6 +21,11 @@ USE_OPENGL=1
 SINGLE_EPISODE=0
 
 OBJECTS=$(OBJ)/cvorticons.o \
+        $(OBJ)/cvorticons_worldmap.o \
+        $(OBJ)/cvorticons_menus.o \
+        $(OBJ)/cvorticons_ui.o \
+        $(OBJ)/cvorticons_physics.o \
+        $(OBJ)/cvorticons_enemies.o \
         $(OBJ)/cvorticons_memdata.o \
         $(OBJ)/cvorticons_engine.o \
         $(OBJ)/cvorticons_gfx.o \

@@ -43,14 +43,6 @@ typedef struct
 	char name[8];
 } EGAHeadUnmasked_T; // Section 2
 
-#if 0
-typedef struct
-{
-	MaskedSpriteEntry_T entry;
-	uint8_t copies[3*32]; // Unused?
-} EGAHeadSprite_T; // Section 3
-#endif
-
 /* EGDHeadSprite_T is a special case here: Each sprite consists of one 32-byte
 sized entry, along with 3 extra entries for shifts of the same sprite.
 For compatibility with original code, we actually treat each such shift as its

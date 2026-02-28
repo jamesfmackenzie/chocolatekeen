@@ -28,12 +28,6 @@ typedef struct {
     uint8_t dosScanCode;
 } EmulatedKey_T;
 
-#if 0
-typedef enum EmulatedMouseButtonMask_T {
-    EMULATED_MOUSE_BUTTON_LEFT = 1, EMULATED_MOUSE_BUTTON_RIGHT = 2
-} EmulatedMouseButtonMask_T;
-#endif
-
 typedef struct {
     //uint8_t key_map[128];
     uint8_t mouseButtonsMask; // 1 == Left, 2 == Right, 4 == Middle
@@ -150,7 +144,6 @@ typedef enum EmulatedKeyIndex_T {
     EMULATEDKEYINDEX_KP_PERIOD,
     EMULATEDKEYINDEX_KEY_INDICES_COUNT
 } EmulatedKeyIndex_T;
-
 
 static const char * mapperClientJoyButtonNames[] = {
     "jbutton_0_0", "jbutton_0_1", "jbutton_1_0", "jbutton_1_1",

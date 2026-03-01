@@ -136,6 +136,8 @@ $(OBJ)/Cunlzexe.o: $(SRC)/third_party/cgenius/fileio/compression/Cunlzexe.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/imageRLE.o: $(SRC)/decompression/imageRLE.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/cvorticons.o: $(SRC)/game/cvorticons.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/cvorticons_worldmap.o: $(SRC)/game/cvorticons_worldmap.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/cvorticons_menus.o: $(SRC)/game/cvorticons_menus.c
@@ -145,6 +147,8 @@ $(OBJ)/cvorticons_ui.o: $(SRC)/game/cvorticons_ui.c
 $(OBJ)/cvorticons_physics.o: $(SRC)/game/cvorticons_physics.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/cvorticons_enemies.o: $(SRC)/game/cvorticons_enemies.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/cvorticons_episode_constants.o: $(SRC)/game/cvorticons_episode_constants.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/cvorticons_memdata.o: $(SRC)/render/cvorticons_memdata.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@

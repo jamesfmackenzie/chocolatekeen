@@ -973,7 +973,7 @@ bool CVort_engine_tryToLoadInputMappings(void) {
      * of its events to reside with no gaps within the buffer just allocated.
      */
 
-    char tempBuffer[30];
+    char tempBuffer[64];
 
     // For convenience, defining some macro...
 

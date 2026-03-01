@@ -1974,11 +1974,11 @@ int CVort_gui_createScreenResolutionBuffers(void) {
 // Returns max. amount of characters per display number string
 int CVort_gui_createDisplayNumberBuffers(void) {
 	int numOfModes = SDL_GetNumVideoDisplays();
-	const int strLengthUpperBoundWithNull = 3;
+	const int strLengthUpperBoundWithNull = 12;
 	void *buffers = malloc(strLengthUpperBoundWithNull * numOfModes + // Room for display numbers
 	                       (numOfModes + 1) * sizeof(char *)          // Pointer table
 	);
-	char **displayNumStrs = (char **)((uint8_t *)buffers + 3 * numOfModes);
+	char **displayNumStrs = (char **)((uint8_t *)buffers + strLengthUpperBoundWithNull * numOfModes);
 	guiDisplayNumStrs = (const char **)displayNumStrs;
 	char *displayNumbersData = (char *)buffers;
 	for (int index = 0; index < numOfModes; index++) {
@@ -2445,7 +2445,7 @@ struct {
 
 MappedInputEvent_T *guiCurrentMappedInputEvent;
 
-static char guiMapperMenuBindingString[38];
+static char guiMapperMenuBindingString[64];
 
 void CVort_gui_refreshMapperMenu(void);
 

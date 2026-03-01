@@ -194,26 +194,30 @@ void CVort_init_ctrls() {
     snprintf(g_game.string_buf, sizeof(g_game.string_buf), "CTLPANEL.%s", game_ext);
     FILE *fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "rb");
     if (fp) {
-        CVort_engine_cross_freadInt16LE(&g_game.want_sound, 1, fp);
-        CVort_engine_cross_freadInt16LE(g_input.ctrl_type, 3, fp);
-        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[0], 1, fp);
-        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[0] + 1, 1, fp);
-        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[0] + 2, 1, fp);
-        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[2], 1, fp);
-        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[2] + 1, 1, fp);
-        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[2] + 2, 1, fp);
-        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[1], 1, fp);
-        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[1] + 1, 1, fp);
-        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[1] + 2, 1, fp);
-        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[3], 1, fp);
-        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[3] + 1, 1, fp);
-        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[3] + 2, 1, fp);
-        CVort_engine_cross_freadInt16LE(&g_input.mouse_ctrl_1, 1, fp);
-        CVort_engine_cross_freadInt8LE(g_input.sc_dir, 8, fp);
-        CVort_engine_cross_freadInt8LE(&g_input.sc_but1, 1, fp);
-        CVort_engine_cross_freadInt8LE(&g_input.sc_but2, 1, fp);
+        bool loadOk = true;
+        loadOk = loadOk && (CVort_engine_cross_freadInt16LE(&g_game.want_sound, 1, fp) == 1);
+        loadOk = loadOk && (CVort_engine_cross_freadInt16LE(g_input.ctrl_type, 3, fp) == 3);
+        loadOk = loadOk && (CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[0], 1, fp) == 1);
+        loadOk = loadOk && (CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[0] + 1, 1, fp) == 1);
+        loadOk = loadOk && (CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[0] + 2, 1, fp) == 1);
+        loadOk = loadOk && (CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[2], 1, fp) == 1);
+        loadOk = loadOk && (CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[2] + 1, 1, fp) == 1);
+        loadOk = loadOk && (CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[2] + 2, 1, fp) == 1);
+        loadOk = loadOk && (CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[1], 1, fp) == 1);
+        loadOk = loadOk && (CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[1] + 1, 1, fp) == 1);
+        loadOk = loadOk && (CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[1] + 2, 1, fp) == 1);
+        loadOk = loadOk && (CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[3], 1, fp) == 1);
+        loadOk = loadOk && (CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[3] + 1, 1, fp) == 1);
+        loadOk = loadOk && (CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[3] + 2, 1, fp) == 1);
+        loadOk = loadOk && (CVort_engine_cross_freadInt16LE(&g_input.mouse_ctrl_1, 1, fp) == 1);
+        loadOk = loadOk && (CVort_engine_cross_freadInt8LE(g_input.sc_dir, 8, fp) == 8);
+        loadOk = loadOk && (CVort_engine_cross_freadInt8LE(&g_input.sc_but1, 1, fp) == 1);
+        loadOk = loadOk && (CVort_engine_cross_freadInt8LE(&g_input.sc_but2, 1, fp) == 1);
         fclose(fp);
-    } else {
+        if (loadOk)
+            return;
+    }
+    {
         g_game.want_sound = 1;
         g_input.ctrl_type[1] = 0;
         g_input.ctrl_type[2] = 2;
@@ -239,25 +243,27 @@ void CVort_save_ctrls() {
     FILE *fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "wb");
     if (!fp)
         return;
-    CVort_engine_cross_fwriteInt16LE(&g_game.want_sound, 1, fp);
-    CVort_engine_cross_fwriteInt16LE(g_input.ctrl_type, 3, fp);
-    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[0], 1, fp);
-    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[0] + 1, 1, fp);
-    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[0] + 2, 1, fp);
-    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[2], 1, fp);
-    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[2] + 1, 1, fp);
-    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[2] + 2, 1, fp);
-    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[1], 1, fp);
-    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[1] + 1, 1, fp);
-    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[1] + 2, 1, fp);
-    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[3], 1, fp);
-    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[3] + 1, 1, fp);
-    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[3] + 2, 1, fp);
-    CVort_engine_cross_fwriteInt16LE(&g_input.mouse_ctrl_1, 1, fp);
-    CVort_engine_cross_fwriteInt8LE(g_input.sc_dir, 8, fp);
-    CVort_engine_cross_fwriteInt8LE(&g_input.sc_but1, 1, fp);
-    CVort_engine_cross_fwriteInt8LE(&g_input.sc_but2, 1, fp);
+    bool saveOk = true;
+    saveOk = saveOk && (CVort_engine_cross_fwriteInt16LE(&g_game.want_sound, 1, fp) == 1);
+    saveOk = saveOk && (CVort_engine_cross_fwriteInt16LE(g_input.ctrl_type, 3, fp) == 3);
+    saveOk = saveOk && (CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[0], 1, fp) == 1);
+    saveOk = saveOk && (CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[0] + 1, 1, fp) == 1);
+    saveOk = saveOk && (CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[0] + 2, 1, fp) == 1);
+    saveOk = saveOk && (CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[2], 1, fp) == 1);
+    saveOk = saveOk && (CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[2] + 1, 1, fp) == 1);
+    saveOk = saveOk && (CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[2] + 2, 1, fp) == 1);
+    saveOk = saveOk && (CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[1], 1, fp) == 1);
+    saveOk = saveOk && (CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[1] + 1, 1, fp) == 1);
+    saveOk = saveOk && (CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[1] + 2, 1, fp) == 1);
+    saveOk = saveOk && (CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[3], 1, fp) == 1);
+    saveOk = saveOk && (CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[3] + 1, 1, fp) == 1);
+    saveOk = saveOk && (CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[3] + 2, 1, fp) == 1);
+    saveOk = saveOk && (CVort_engine_cross_fwriteInt16LE(&g_input.mouse_ctrl_1, 1, fp) == 1);
+    saveOk = saveOk && (CVort_engine_cross_fwriteInt8LE(g_input.sc_dir, 8, fp) == 8);
+    saveOk = saveOk && (CVort_engine_cross_fwriteInt8LE(&g_input.sc_but1, 1, fp) == 1);
+    saveOk = saveOk && (CVort_engine_cross_fwriteInt8LE(&g_input.sc_but2, 1, fp) == 1);
     fclose(fp);
+    (void)saveOk;
 }
 
 GameInput_T CVort_handle_ctrl(uint16_t input_type) {

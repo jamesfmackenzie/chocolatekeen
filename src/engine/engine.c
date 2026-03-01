@@ -1631,25 +1631,35 @@ FILE *CVort_engine_configpath_fopen(const char *filename, const char *mode) {
 }
 
 size_t CVort_engine_cross_freadInt8LE(void *ptr, size_t count, FILE *stream) {
-    return fread(ptr, 1, count, stream);
+    size_t actualCount = fread(ptr, 1, count, stream);
+    if (actualCount < count) {
+        memset((uint8_t *)ptr + actualCount, 0, count - actualCount);
+    }
+    return actualCount;
 }
 
 size_t CVort_engine_cross_freadInt16LE(void *ptr, size_t count, FILE *stream) {
-    count = fread(ptr, 2, count, stream);
+    size_t actualCount = fread(ptr, 2, count, stream);
+    if (actualCount < count) {
+        memset((uint8_t *)ptr + 2 * actualCount, 0, 2 * (count - actualCount));
+    }
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    for (size_t loopVar = 0; loopVar < count; loopVar++, ((uint16_t *) ptr)++)
+    for (size_t loopVar = 0; loopVar < actualCount; loopVar++, ((uint16_t *) ptr)++)
         *(uint16_t *) ptr = SDL_Swap16(*(uint16_t *) ptr);
 #endif
-    return count;
+    return actualCount;
 }
 
 size_t CVort_engine_cross_freadInt32LE(void *ptr, size_t count, FILE *stream) {
-    count = fread(ptr, 4, count, stream);
+    size_t actualCount = fread(ptr, 4, count, stream);
+    if (actualCount < count) {
+        memset((uint8_t *)ptr + 4 * actualCount, 0, 4 * (count - actualCount));
+    }
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    for (size_t loopVar = 0; loopVar < count; loopVar++, ((uint32_t *) ptr)++)
+    for (size_t loopVar = 0; loopVar < actualCount; loopVar++, ((uint32_t *) ptr)++)
         *(uint32_t *) ptr = SDL_Swap32(*(uint32_t *) ptr);
 #endif
-    return count;
+    return actualCount;
 }
 
 size_t CVort_engine_cross_fwriteInt8LE(void *ptr, size_t count, FILE *stream) {

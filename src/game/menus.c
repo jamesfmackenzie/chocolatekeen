@@ -27,11 +27,15 @@ void CVort_load_demo(int16_t demo_number) {
     FILE *fp;
     snprintf(g_game.string_buf, sizeof(g_game.string_buf), "DEMO%d.%s", demo_number, game_ext);
     fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "rb");
-    if (!fp)
+    if (!fp) {
+        CK_IO_WARN_ON_OPEN_FAIL_FOR_READ(g_game.string_buf);
         return;
+    }
     uint32_t filesize = CVort_filelength(fp);
-    if (fread(demo_actions_including_level_num, filesize, 1, fp) != 1) {
+    bool loadOk = (fread(demo_actions_including_level_num, filesize, 1, fp) == 1);
+    if (!loadOk) {
         fclose(fp);
+        CK_IO_WARN_ON_READ_FAIL(loadOk, g_game.string_buf);
         return;
     }
     fclose(fp);
@@ -1164,6 +1168,7 @@ void CVort_load_high_scores_table() {
         fclose(fp);
         if (loadOk)
             return;
+        CK_IO_WARN_ON_READ_FAIL(loadOk, path);
     }
     {
         for (entryCounter = 0; entryCounter < 7; entryCounter++) {

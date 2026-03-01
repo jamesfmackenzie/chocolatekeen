@@ -217,6 +217,7 @@ void CVort_init_ctrls() {
         fclose(fp);
         if (loadOk)
             return;
+        CK_IO_WARN_ON_READ_FAIL(loadOk, g_game.string_buf);
     }
     {
         g_game.want_sound = 1;

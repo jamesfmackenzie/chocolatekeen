@@ -605,7 +605,7 @@ void CVort_chg_vid_and_error(const char *msg) {
     CVort_engine_handleQuit();
 }
 
-static void CVort_level_init(void) {
+static void level_init(void) {
     g_entities.sprites[0].type_ = 1;
     g_entities.sprites[0].think = &CVort_think_keen_ground;
     g_entities.sprites[0].contact = CVort_ptr_contact_keen; // NOT &CVort_ptr_contact_keen
@@ -623,7 +623,7 @@ static void CVort_level_init(void) {
     }
 }
 
-static void CVort_level_setup_camera(void) {
+static void level_setup_camera(void) {
     scroll_x = g_entities.sprites[0].pos_x + 0xFFFF6000;
     scroll_y = g_entities.sprites[0].pos_y + 0xFFFFB000;
     // Some scrolling stuff...
@@ -637,7 +637,7 @@ static void CVort_level_setup_camera(void) {
         scroll_y = scroll_y_max;
 }
 
-static void CVort_level_init_screen(void) {
+static void level_init_screen(void) {
     CVort_engine_syncDrawing();
     CVort_fade_out();
     g_game.lights = 1;
@@ -649,7 +649,7 @@ static void CVort_level_init_screen(void) {
     scroll_y_tile = scroll_y >> 12;
 }
 
-static void CVort_run_sprite_think(void) {
+static void run_sprite_think(void) {
     CVort_update_sprite_hitbox();
     g_entities.temp_sprite.del_x = g_entities.temp_sprite.del_y = 0;
     (g_entities.temp_sprite.think)();
@@ -662,7 +662,7 @@ static void CVort_run_sprite_think(void) {
  * episode-specific on-wake state adjustments), or tick an already-active
  * sprite that is still in range. Operates on g_entities.temp_sprite.
  */
-static void CVort_activate_and_think_sprite(int16_t sprite_counter) {
+static void activate_and_think_sprite(int16_t sprite_counter) {
     int16_t var_4, var_6;
     if (!g_entities.temp_sprite.active) {
         var_4 = g_entities.temp_sprite.pos_x >> 12;
@@ -692,29 +692,29 @@ static void CVort_activate_and_think_sprite(int16_t sprite_counter) {
                 }
             }
 #endif
-            CVort_run_sprite_think();
+            run_sprite_think();
         }
     } else if (!sprite_counter
     // Platforms always move
     || ((engine_gameVersion == GAMEVER_KEEN2) && (g_entities.temp_sprite.type_ == CVort2_obj_platform))
     || ((engine_gameVersion == GAMEVER_KEEN3) && (g_entities.temp_sprite.type_ == 10))
     || !CVort_sprite_active_screen() ) {
-        CVort_run_sprite_think();
+        run_sprite_think();
     }
 }
 
-static void CVort_level_update_sprites(void) {
+static void level_update_sprites(void) {
     int16_t sprite_counter;
     for (sprite_counter = 0; sprite_counter < g_entities.num_sprites; sprite_counter++) {
         if (!g_entities.sprites[sprite_counter].type_)
             continue;
         g_entities.temp_sprite = g_entities.sprites[sprite_counter];
-        CVort_activate_and_think_sprite(sprite_counter);
+        activate_and_think_sprite(sprite_counter);
         g_entities.sprites[sprite_counter] = g_entities.temp_sprite;
     }
 }
 
-static void CVort_level_detect_collisions(void) {
+static void level_detect_collisions(void) {
     int16_t sprite_counter, var_A;
     // Seems like collision code
     for (sprite_counter = 0; sprite_counter < g_entities.num_sprites; sprite_counter++) {
@@ -731,7 +731,7 @@ static void CVort_level_detect_collisions(void) {
     }
 }
 
-static void CVort_level_draw_sprites(void) {
+static void level_draw_sprites(void) {
     int16_t sprite_counter;
     // Remember to draw g_entities.sprites; Here, we scan in REVERSED order.
     for (sprite_counter = g_entities.num_sprites - 1; sprite_counter >= 0; sprite_counter--)
@@ -740,7 +740,7 @@ static void CVort_level_draw_sprites(void) {
 }
 
 #if CHOCOLATE_KEEN_IS_EPISODE3_ENABLED
-static void CVort_level_draw_invincibility(void) {
+static void level_draw_invincibility(void) {
     if (engine_gameVersion == GAMEVER_KEEN3) {
         if (g_game.keen_invincible || g_game.god_mode) {
             if (g_game.keen_invincible > 250) {
@@ -757,7 +757,7 @@ static void CVort_level_draw_invincibility(void) {
 }
 #endif
 
-static void CVort_level_update_bodies(void) {
+static void level_update_bodies(void) {
     int16_t sprite_counter;
     // Now call body "think" functions
     for (sprite_counter = 0; sprite_counter < g_entities.num_bodies; sprite_counter++)
@@ -766,7 +766,7 @@ static void CVort_level_update_bodies(void) {
             //((*this).*(*this).g_entities.bodies[sprite_counter].think_ptr)(&g_entities.bodies[sprite_counter]);
 }
 
-static void CVort_level_handle_death(uint16_t levelnum) {
+static void level_handle_death(uint16_t levelnum) {
     if (engine_gameVersion == GAMEVER_KEEN1) {
         // Since Keen has just died, If a new item for the BWB has been
         // collected, we should basically FORGET of that item for now.
@@ -820,12 +820,12 @@ static void CVort_level_handle_death(uint16_t levelnum) {
 uint16_t CVort_draw_level(uint16_t levelnum) {
     int16_t about_to_encounter_mortimer;
 
-    CVort_level_init();
+    level_init();
     about_to_encounter_mortimer =
         engine_arguments.extras.vorticonsDemoModeToggle ? 0 : 1;
     CVort_ptr_init_level(levelnum);
-    CVort_level_setup_camera();
-    CVort_level_init_screen();
+    level_setup_camera();
+    level_init_screen();
 
     // TEST TEST
     uint32_t frame_counter_start_time = SDL_GetTicks();
@@ -846,17 +846,17 @@ uint16_t CVort_draw_level(uint16_t levelnum) {
         CVort_engine_syncDrawing();
 right_after_drawing_sync:
         g_input.input_new = CVort_handle_ctrl(1);
-        CVort_level_update_sprites();
+        level_update_sprites();
         CVort_do_scrolling();
-        CVort_level_detect_collisions();
+        level_detect_collisions();
         scroll_x_tile = scroll_x >> 12;
         scroll_y_tile = scroll_y >> 12;
-        CVort_level_draw_sprites();
+        level_draw_sprites();
 #if CHOCOLATE_KEEN_IS_EPISODE3_ENABLED
-        CVort_level_draw_invincibility();
+        level_draw_invincibility();
 #endif
         CVort_keen_bgtile_col();
-        CVort_level_update_bodies();
+        level_update_bodies();
         // Alright, let's update what is to be seen!
         CVort_engine_drawScreen();
         g_input.input_old = g_input.input_new;
@@ -883,7 +883,7 @@ right_after_drawing_sync:
     if (g_game.level_finished != LEVEL_END_DIE)
         return g_game.level_finished;
 
-    CVort_level_handle_death(levelnum);
+    level_handle_death(levelnum);
     return g_game.level_finished;
 }
 

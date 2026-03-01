@@ -20,12 +20,12 @@ USE_OPENGL=1
 
 SINGLE_EPISODE=0
 
-OBJECTS=$(OBJ)/cvorticons.o \
-        $(OBJ)/cvorticons_memdata.o \
-        $(OBJ)/cvorticons_engine.o \
-        $(OBJ)/cvorticons_gfx.o \
-        $(OBJ)/cvorticons_input.o \
-        $(OBJ)/cvorticons_gui.o \
+OBJECTS=$(OBJ)/game_gameplay.o \
+        $(OBJ)/render_memdata.o \
+        $(OBJ)/engine_engine.o \
+        $(OBJ)/render_gfx.o \
+        $(OBJ)/input_input.o \
+        $(OBJ)/ui_gui.o \
 	$(OBJ)/lz.o \
 	$(OBJ)/CRLE.o \
 	$(OBJ)/Cunlzexe.o \
@@ -35,19 +35,19 @@ OBJECTS=$(OBJ)/cvorticons.o \
 	$(OBJ)/chocolate-keen.o
 
 ifeq ($(SINGLE_EPISODE),$(filter $(SINGLE_EPISODE),0 1))
-	OBJECTS+= $(OBJ)/cvorticons1.o \
-	          $(OBJ)/cvorticons1_memdata.o \
-	          $(OBJ)/cvorticons1_engine.o
+	OBJECTS+= $(OBJ)/episodes_episode1.o \
+	          $(OBJ)/episodes_episode1_memdata.o \
+	          $(OBJ)/episodes_episode1_engine.o
 endif
 ifeq ($(SINGLE_EPISODE),$(filter $(SINGLE_EPISODE),0 2))
-	OBJECTS+= $(OBJ)/cvorticons2.o \
-	          $(OBJ)/cvorticons2_memdata.o \
-	          $(OBJ)/cvorticons2_engine.o
+	OBJECTS+= $(OBJ)/episodes_episode2.o \
+	          $(OBJ)/episodes_episode2_memdata.o \
+	          $(OBJ)/episodes_episode2_engine.o
 endif
 ifeq ($(SINGLE_EPISODE),$(filter $(SINGLE_EPISODE),0 3))
-	OBJECTS+= $(OBJ)/cvorticons3.o \
-	          $(OBJ)/cvorticons3_memdata.o \
-	          $(OBJ)/cvorticons3_engine.o
+	OBJECTS+= $(OBJ)/episodes_episode3.o \
+	          $(OBJ)/episodes_episode3_memdata.o \
+	          $(OBJ)/episodes_episode3_engine.o
 endif
 
 INTCXXFLAGS=
@@ -132,47 +132,47 @@ $(OBJ)/imageRLE.o: $(SRC)/decompression/imageRLE.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/chocolate-keen.o: $(SRC)/app/chocolate-keen.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons.o: $(SRC)/game/gameplay.c
+$(OBJ)/game_gameplay.o: $(SRC)/game/gameplay.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons1.o: $(SRC)/episodes/episode1.c
+$(OBJ)/episodes_episode1.o: $(SRC)/episodes/episode1.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons1_memdata.o: $(SRC)/episodes/episode1_memdata.c
+$(OBJ)/episodes_episode1_memdata.o: $(SRC)/episodes/episode1_memdata.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons1_engine.o: $(SRC)/episodes/episode1_engine.c
+$(OBJ)/episodes_episode1_engine.o: $(SRC)/episodes/episode1_engine.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons2.o: $(SRC)/episodes/episode2.c
+$(OBJ)/episodes_episode2.o: $(SRC)/episodes/episode2.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons2_memdata.o: $(SRC)/episodes/episode2_memdata.c
+$(OBJ)/episodes_episode2_memdata.o: $(SRC)/episodes/episode2_memdata.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons2_engine.o: $(SRC)/episodes/episode2_engine.c
+$(OBJ)/episodes_episode2_engine.o: $(SRC)/episodes/episode2_engine.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons3.o: $(SRC)/episodes/episode3.c
+$(OBJ)/episodes_episode3.o: $(SRC)/episodes/episode3.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons3_memdata.o: $(SRC)/episodes/episode3_memdata.c
+$(OBJ)/episodes_episode3_memdata.o: $(SRC)/episodes/episode3_memdata.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons3_engine.o: $(SRC)/episodes/episode3_engine.c
+$(OBJ)/episodes_episode3_engine.o: $(SRC)/episodes/episode3_engine.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_worldmap.o: $(SRC)/game/worldmap.c
+$(OBJ)/game_worldmap.o: $(SRC)/game/worldmap.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_menus.o: $(SRC)/game/menus.c
+$(OBJ)/game_menus.o: $(SRC)/game/menus.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_ui.o: $(SRC)/game/ui.c
+$(OBJ)/game_ui.o: $(SRC)/game/ui.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_physics.o: $(SRC)/game/physics.c
+$(OBJ)/game_physics.o: $(SRC)/game/physics.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_enemies.o: $(SRC)/game/enemies.c
+$(OBJ)/game_enemies.o: $(SRC)/game/enemies.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_episode_constants.o: $(SRC)/game/episode_constants.c
+$(OBJ)/game_episode_constants.o: $(SRC)/game/episode_constants.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_memdata.o: $(SRC)/render/memdata.c
+$(OBJ)/render_memdata.o: $(SRC)/render/memdata.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_engine.o: $(SRC)/engine/engine.c
+$(OBJ)/engine_engine.o: $(SRC)/engine/engine.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_gfx.o: $(SRC)/render/gfx.c
+$(OBJ)/render_gfx.o: $(SRC)/render/gfx.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_input.o: $(SRC)/input/input.c
+$(OBJ)/input_input.o: $(SRC)/input/input.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_gui.o: $(SRC)/ui/gui.c
+$(OBJ)/ui_gui.o: $(SRC)/ui/gui.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/platform_sleep_native.o: $(SRC)/platform/sleep_native.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@

@@ -25,6 +25,14 @@ This repository is organized by subsystem to keep platform, game logic, renderin
 - `src/third_party/cgenius/`
   - Imported third-party decompression components.
 
+## Naming Conventions
+
+- Files are named by subsystem responsibility and feature (for example: `src/render/gfx.c`, `src/episodes/episode1_engine.c`).
+- New file names should avoid historical `cvorticons_` prefixes unless matching untouched upstream content.
+- Core headers in `src/core/` use concise names (`core.h`, `types.h`, `globals.h`, `constants.h`).
+- Build object targets in Makefiles should mirror subsystem-oriented names (for example: `game_gameplay.o`, `render_gfx.o`).
+- Public cross-file APIs currently keep legacy `CVort_` names for compatibility; prefer neutral names for new internal `static` helpers.
+
 ## Build Layout
 
 - `build/linux/`

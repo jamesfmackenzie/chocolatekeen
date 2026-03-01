@@ -5,7 +5,7 @@
 #include "core/cvorticons_types.h"
 #include "game/sprites.h"
 #include "render/opengl.h"
-#include "input/cvorticons_input.h"
+#include "input/input.h"
 
 /* ---------------------------------------------------------------
  * Grouped global state structs (Step 6 refactor)

@@ -166,13 +166,13 @@ $(OBJ)/cvorticons_episode_constants.o: $(SRC)/game/episode_constants.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/cvorticons_memdata.o: $(SRC)/render/memdata.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_engine.o: $(SRC)/engine/cvorticons_engine.c
+$(OBJ)/cvorticons_engine.o: $(SRC)/engine/engine.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/cvorticons_gfx.o: $(SRC)/render/gfx.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_input.o: $(SRC)/input/cvorticons_input.c
+$(OBJ)/cvorticons_input.o: $(SRC)/input/input.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_gui.o: $(SRC)/ui/cvorticons_gui.c
+$(OBJ)/cvorticons_gui.o: $(SRC)/ui/gui.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/platform_sleep_native.o: $(SRC)/platform/sleep_native.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@

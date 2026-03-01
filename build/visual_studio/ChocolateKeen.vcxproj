@@ -99,10 +99,10 @@
     <ClCompile Include="..\..\src\episodes\cvorticons3.c" />
     <ClCompile Include="..\..\src\episodes\cvorticons3_engine.c" />
     <ClCompile Include="..\..\src\episodes\cvorticons3_memdata.c" />
-    <ClCompile Include="..\..\src\engine\cvorticons_engine.c" />
+    <ClCompile Include="..\..\src\engine\engine.c" />
     <ClCompile Include="..\..\src\render\gfx.c" />
-    <ClCompile Include="..\..\src\ui\cvorticons_gui.c" />
-    <ClCompile Include="..\..\src\input\cvorticons_input.c" />
+    <ClCompile Include="..\..\src\ui\gui.c" />
+    <ClCompile Include="..\..\src\input\input.c" />
     <ClCompile Include="..\..\src\render\memdata.c" />
     <ClCompile Include="..\..\src\third_party\cgenius\fileio\compression\CRLE.c" />
     <ClCompile Include="..\..\src\third_party\cgenius\fileio\compression\Cunlzexe.c" />
@@ -123,7 +123,7 @@
     <ClInclude Include="..\..\src\episodes\cvorticons2.h" />
     <ClInclude Include="..\..\src\episodes\cvorticons3.h" />
     <ClInclude Include="..\..\src\render\gfx.h" />
-    <ClInclude Include="..\..\src\input\cvorticons_input.h" />
+    <ClInclude Include="..\..\src\input\input.h" />
     <ClInclude Include="..\..\src\third_party\cgenius\fileio\compression\CRLE.h" />
     <ClInclude Include="..\..\src\third_party\cgenius\fileio\compression\Cunlzexe.h" />
     <ClInclude Include="..\..\src\third_party\cgenius\fileio\lz.h" />

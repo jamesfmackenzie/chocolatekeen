@@ -13,7 +13,7 @@
 #include "episodes/cvorticons3.h"
 #include "third_party/cgenius/fileio/compression/CRLE.h"
 
-#include "episodes/cvorticons_episode_macros.h"
+#include "episodes/episode_macros.h"
 
 void CVort_add_sprite_vorticon(int16_t tileX, int16_t tileY)
 {

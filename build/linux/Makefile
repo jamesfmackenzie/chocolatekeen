@@ -104,7 +104,7 @@ else
 	EXE_PATH=chocolate-keen$(SINGLE_EPISODE)$(EXT)
 endif
 
-.PHONY: all game clean veryclean
+.PHONY: all game clean veryclean test
 
 all: game
 
@@ -140,3 +140,7 @@ clean:
 	-rm -rf $(OBJ)
 	-rm -rf GAMEDATA
 	-rm -f chocolate-keen
+
+# Run tests
+test:
+	$(MAKE) -C ../../tests run

@@ -41,3 +41,8 @@ jobs:
         run: |
           mkdir -p build/emscripten/obj
           make -C build/emscripten CC=emcc -j4
+
+      - name: Build (Emscripten with packaged data)
+        run: |
+          chmod +x build/emscripten/build_emscripten.sh
+          (cd build/emscripten && ./build_emscripten.sh -j4)

@@ -2112,7 +2112,7 @@ void CVort_gui_prepareMenuItemsChoiceBuffers(void) {
 	};
 
 	CVort_gui_setChoicesBuffer(&guiMenuItemScaleType, scaleTypeStrs);
-	guiMenuItemScaleType.value = engine_arguments.scaleType, scaleTypeStrs;
+	guiMenuItemScaleType.value = engine_arguments.scaleType;
 
 	// Scale factor
 	static const char *scaleFactorStrs[] = {
@@ -2777,7 +2777,7 @@ void CVort_gui_drawCurrentMenu(void) {
 	engine_isFrameReadyToDisplay = true;
 }
 
-int CVort_gui_transformMouseCoordinates(int *xPtr, int *yPtr) {
+static void CVort_gui_transformMouseCoordinates(int *xPtr, int *yPtr) {
 	(*xPtr) -= engine_screen.dims.borderedViewportRect.x;
 	(*yPtr) -= engine_screen.dims.borderedViewportRect.y;
 	*xPtr = (*xPtr) * ENGINE_GUI_WIDTH / engine_screen.dims.borderedViewportRect.w;

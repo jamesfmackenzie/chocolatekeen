@@ -451,7 +451,7 @@ static bool load_exe_image(gameversion_T gameVer, uint8_t **pExeImageBuffer);
 
 void CVort_engine_prepareEpisodeSpecificFuncPointers(void) {
     size_t numOfTiles;
-    switch (engine_gameVersion) {
+	    switch (engine_gameVersion) {
         //case GAMEVER_AUTO: return; // Don't allocate memory for animating tiles
 #ifdef CHOCOLATE_KEEN_IS_EPISODE1_ENABLED
         case GAMEVER_KEEN1:
@@ -485,8 +485,8 @@ void CVort_engine_prepareEpisodeSpecificFuncPointers(void) {
             CVort_ptr_contact_keen = &CVort2_contact_keen;
             break;
 #endif
-#ifdef CHOCOLATE_KEEN_IS_EPISODE3_ENABLED
-        case GAMEVER_KEEN3:
+	#ifdef CHOCOLATE_KEEN_IS_EPISODE3_ENABLED
+	        case GAMEVER_KEEN3:
             numOfTiles = CVort3_TILENUM;
             CVort_ptr_engine_processEXE = &CVort3_engine_processEXE;
             CVort_ptr_show_pause_menu = &CVort3_show_pause_menu;
@@ -498,10 +498,13 @@ void CVort_engine_prepareEpisodeSpecificFuncPointers(void) {
             CVort_ptr_do_ordering = &CVort3_do_ordering;
             CVort_ptr_inlevel_message = &CVort3_inlevel_message;
             CVort_ptr_worldmap_sprites = &CVort3_worldmap_sprites;
-            CVort_ptr_contact_keen = &CVort3_contact_keen;
-            break;
-#endif
-    }
+	            CVort_ptr_contact_keen = &CVort3_contact_keen;
+	            break;
+	#endif
+	        default:
+	            CVort_engine_cross_logMessage(CVORT_LOG_MSG_ERROR, "Unsupported game version while preparing episode pointers.\n");
+	            return;
+	    }
     anim_frame_tiles[0] = (uint16_t *)malloc(4*numOfTiles*sizeof(uint16_t));
     anim_frame_tiles[1] = anim_frame_tiles[0] + numOfTiles;
     anim_frame_tiles[2] = anim_frame_tiles[0] + 2*numOfTiles;
@@ -519,7 +522,7 @@ static void prepare_game_data_file_path_buffers(gameversion_T gameVer) {
 	if (engine_gameDataFullPathBuffer) {
 		free(engine_gameDataFullPathBuffer);
 	}
-	switch (gameVer) {
+		switch (gameVer) {
 		case GAMEVER_KEEN1:
 			engine_gameDataPrefixLen = strlen(KEEN1_GAMEDATA_PREFIX_WITH_SLASH);
 			engine_gameDataFullPathBuffer = (char *)malloc(engine_gameDataPrefixLen+13);
@@ -530,13 +533,17 @@ static void prepare_game_data_file_path_buffers(gameversion_T gameVer) {
 			engine_gameDataFullPathBuffer = (char *)malloc(engine_gameDataPrefixLen+13);
 			snprintf(engine_gameDataFullPathBuffer, engine_gameDataPrefixLen+13, "%s", KEEN2_GAMEDATA_PREFIX_WITH_SLASH);
 			break;
-		case GAMEVER_KEEN3:
-			engine_gameDataPrefixLen = strlen(KEEN3_GAMEDATA_PREFIX_WITH_SLASH);
-			engine_gameDataFullPathBuffer = (char *)malloc(engine_gameDataPrefixLen+13);
-			snprintf(engine_gameDataFullPathBuffer, engine_gameDataPrefixLen+13, "%s", KEEN3_GAMEDATA_PREFIX_WITH_SLASH);
-			break;
+			case GAMEVER_KEEN3:
+				engine_gameDataPrefixLen = strlen(KEEN3_GAMEDATA_PREFIX_WITH_SLASH);
+				engine_gameDataFullPathBuffer = (char *)malloc(engine_gameDataPrefixLen+13);
+				snprintf(engine_gameDataFullPathBuffer, engine_gameDataPrefixLen+13, "%s", KEEN3_GAMEDATA_PREFIX_WITH_SLASH);
+				break;
+			default:
+				engine_gameDataPrefixLen = 0;
+				engine_gameDataFullPathBuffer = NULL;
+				break;
+		}
 	}
-}
 
 void CVort_engine_loadKeen(gameversion_T gameVer) {
 	bool exeLoadedSuccessfully;

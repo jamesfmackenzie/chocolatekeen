@@ -1672,15 +1672,17 @@ bool privCreateHostWindow(void) {
 						}
 						break;
 #endif
-#ifdef _CHOCOLATE_KEEN_HAVE_OPENGL_2_0_
-					case OUTPUTGL_2_0:
+	#ifdef _CHOCOLATE_KEEN_HAVE_OPENGL_2_0_
+						case OUTPUTGL_2_0:
 						if ((ourGLmajorVer > 2) || ((ourGLmajorVer == 2) && (ourGLminorVer >= 0))) {
 							engine_screen.gl.outputGLClass = OUTPUTGL_CLASS_2_0;
 							foundCompatibleGLVersion = true;
 							CVort_engine_cross_logMessage(CVORT_LOG_MSG_NORMAL, "Using OpenGL 2.0 / ES 2.0 renderer.\n");
-						}
-						break;
-#endif
+							}
+							break;
+	#endif
+						default:
+							break;
 					}
 				}
 #endif // _CHOCOLATE_KEEN_HAVE_OPENGL_DESKTOP_ANY_
@@ -1817,7 +1819,7 @@ bool privCreateHostWindow(void) {
 #endif // _CHOCOLATE_KEEN_HAVE_OPENGL_2_0_ANY_
 
 #ifdef _CHOCOLATE_KEEN_HAVE_OPENGL_2_0_ANY_
-		if ((engine_screen.gl.outputGLClass == OUTPUTGL_CLASS_2_0)) {
+			if (engine_screen.gl.outputGLClass == OUTPUTGL_CLASS_2_0) {
 	 		// Consider this
 			// FIXME: Is accessing engine_arguments here ok?
 			engine_screen.gl.gpuPaletteCycling = engine_arguments.gpuPaletteCycling;
@@ -3540,7 +3542,7 @@ void privResetPalette(void) {
 			//engine_screen.host.egaMemoryPtr[currPix] = engine_screen.host.mappedEgaColorTable[engine_screen.client.byteEgaMemory[currPix]];
 		}
 	} else switch (engine_gfx_effective_arguments.outputSystem) { // Indexed color
-#ifdef _CHOCOLATE_KEEN_HAVE_OPENGL_2_0_ANY_
+	#ifdef _CHOCOLATE_KEEN_HAVE_OPENGL_2_0_ANY_
 	case OUTPUTSYS_OPENGL:
 		if (engine_screen.gl.gpuPaletteCycling) {
 			static uint32_t actualPalette[16]; // TODO: Can it be non-static?
@@ -3556,7 +3558,9 @@ void privResetPalette(void) {
 	                engine_glActiveTexture(GL_TEXTURE0 + 0);
 		}
 		break;
-#endif
+	#endif
+	default:
+		break;
 	}
 	engine_isFrameReadyToDisplay = true;
 	//engine_updateActualDisplay();

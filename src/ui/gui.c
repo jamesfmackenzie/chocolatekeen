@@ -1,7 +1,7 @@
 #include <assert.h>
 
 #include "../rsrc/chocolate-keen_vga_fonts.h"
-#include "core/core.h"
+#include "core/globals.h"
 // FIXME: Why do we need this here??? (For "unnecessary" SDL 2.0 check)
 // Actually cvorticons.h includes that anyway...
 #include "SDL.h"

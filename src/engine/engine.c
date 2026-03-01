@@ -5,7 +5,7 @@
 /* TODO: Currently unused */
 
 #include "../rsrc/chocolate-keen_vga_fonts.h"
-#include "core/core.h"
+#include "core/globals.h"
 #include "platform/platform.h"
 #include "episodes/episode1.h"
 #include "episodes/episode2.h"

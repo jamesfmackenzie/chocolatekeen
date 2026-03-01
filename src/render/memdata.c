@@ -1,5 +1,5 @@
 #include "chocolate-keen_config.h"
-#include "core/core.h"
+#include "core/globals.h"
 
     /* Contains MOST data declared in cvorticons.h at the moment */
 

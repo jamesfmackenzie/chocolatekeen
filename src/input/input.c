@@ -1,6 +1,6 @@
 #include "SDL.h"
 
-#include "core/core.h"
+#include "core/globals.h"
 #include "platform/platform.h"
 
 // Practically used as a deadzone for analog axes

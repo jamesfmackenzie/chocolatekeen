@@ -1,4 +1,4 @@
-#include "core/core.h"
+#include "core/globals.h"
 #include "episodes/episode1.h"
 #include "episodes/episode2.h"
 #include "episodes/episode3.h"

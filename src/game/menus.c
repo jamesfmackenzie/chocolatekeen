@@ -5,7 +5,7 @@
 #define __STDC_FORMAT_MACROS
 #endif
 #include <inttypes.h>
-#include "core/core.h"
+#include "core/globals.h"
 #include "core/io_helpers.h"
 #include "core/path_helpers.h"
 #include "episodes/episode1.h"

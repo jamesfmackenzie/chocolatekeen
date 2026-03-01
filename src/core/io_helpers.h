@@ -10,4 +10,12 @@
             CVort_engine_cross_logMessage(CVORT_LOG_MSG_WARNING, "Failed writing %s.\n", (path)); \
     } while (0)
 
+#define CK_IO_RETURN_IF_OPEN_FAIL_FOR_WRITE(fp, path) \
+    do { \
+        if (!(fp)) { \
+            CVort_engine_cross_logMessage(CVORT_LOG_MSG_WARNING, "Failed opening %s for writing.\n", (path)); \
+            return; \
+        } \
+    } while (0)
+
 #endif

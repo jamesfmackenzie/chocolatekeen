@@ -242,8 +242,7 @@ void CVort_init_ctrls() {
 void CVort_save_ctrls() {
     snprintf(g_game.string_buf, sizeof(g_game.string_buf), "CTLPANEL.%s", game_ext);
     FILE *fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "wb");
-    if (!fp)
-        return;
+    CK_IO_RETURN_IF_OPEN_FAIL_FOR_WRITE(fp, g_game.string_buf);
     bool saveOk = true;
     CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(&g_game.want_sound, 1, fp), 1);
     CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(g_input.ctrl_type, 3, fp), 3);

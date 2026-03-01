@@ -44,8 +44,7 @@ void CVort_save_demo(int16_t demo_number) {
     FILE *fp;
     snprintf(g_game.string_buf, sizeof(g_game.string_buf), "DEMO%d.%s", demo_number, game_ext);
     fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "wb");
-    if (!fp)
-        return;
+    CK_IO_RETURN_IF_OPEN_FAIL_FOR_WRITE(fp, g_game.string_buf);
     bool saveOk = true;
     CK_IO_EXPECT(saveOk, fwrite(demo_actions_including_level_num, demo_action_ptr-demo_actions_including_level_num, 1, fp), 1);
     fclose(fp);
@@ -619,8 +618,7 @@ void CVort_save_game() {
     keen_gp.mapY = keen_wmap_y_pos;
 
     fp = CVort_engine_cross_rw_misc_fopen(path, "wb");
-    if (!fp) // FIXME: And what if it fails...
-        return;
+    CK_IO_RETURN_IF_OPEN_FAIL_FOR_WRITE(fp, path);
     bool saveOk = true;
     CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(keen_gp.stuff, 9, fp), 9);
     CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(keen_gp.levels, 16, fp), 16);
@@ -1186,8 +1184,7 @@ void CVort_save_high_scores_table() {
     snprintf(path, sizeof(path), "SCORES.%s", game_ext);
 
     FILE *fp = CVort_engine_cross_rw_misc_fopen(path, "wb");
-    if (!fp) // TODO: ???
-        return;
+    CK_IO_RETURN_IF_OPEN_FAIL_FOR_WRITE(fp, path);
 
     bool saveOk = true;
     int entryCounter, partCounter;

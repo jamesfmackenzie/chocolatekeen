@@ -652,65 +652,64 @@ static void CVort_level_init_screen(void) {
 static void CVort_run_sprite_think(void) {
     CVort_update_sprite_hitbox();
     g_entities.temp_sprite.delX = g_entities.temp_sprite.delY = 0;
-    /* GUESSED(?!) EXPLANATION (while using C++ with classes):
-     * 1. The "think" function can only operate on some object
-     * of class CVorticons, thus the first mention of *this.
-     * 2. It is also stored in g_entities.temp_sprite, a member of such
-     * a specific object again. Hence, the second mention.
-     * 3. Finally the function should be prefixed with
-     * an asterisk (*).
-     */
     (g_entities.temp_sprite.think)();
-    //((*this).*(*this).g_entities.temp_sprite.think)();
     g_entities.temp_sprite.posX += g_entities.temp_sprite.delX;
     g_entities.temp_sprite.posY += g_entities.temp_sprite.delY;
     CVort_update_sprite_hitbox();
 }
 
+/* Activate an inactive sprite that has entered the viewport (applying
+ * episode-specific on-wake state adjustments), or tick an already-active
+ * sprite that is still in range. Operates on g_entities.temp_sprite.
+ */
+static void CVort_activate_and_think_sprite(int16_t sprite_counter) {
+    int16_t var_4, var_6;
+    if (!g_entities.temp_sprite.active) {
+        var_4 = g_entities.temp_sprite.posX >> 12;
+        var_6 = g_entities.temp_sprite.posY >> 12;
+        if ((scrollX_T - ENGINE_SPRITE_MARGIN_MIN < var_4) && (scrollY_T - ENGINE_SPRITE_MARGIN_MIN < var_6) && (scrollX_T + ENGINE_VIEWPORT_WIDTH_TILES > var_4) && (scrollY_T + ENGINE_VIEWPORT_HEIGHT_TILES > var_6)) {
+            g_entities.temp_sprite.active = 1;
+#if CHOCOLATE_KEEN_IS_EPISODE1_ENABLED
+            if (engine_gameVersion == GAMEVER_KEEN1) {
+                if (g_entities.temp_sprite.think == &CVort1_think_yorp_stunned) {
+                    g_entities.temp_sprite.think = &CVort1_think_yorp_look;
+                    g_entities.temp_sprite.time = 0;
+                }
+            }
+#endif
+#ifndef CHOCOLATE_KEEN_CONFIG_SPECIFIC_EPISODE
+            else
+#endif
+#if CHOCOLATE_KEEN_IS_EPISODE3_ENABLED
+              if (engine_gameVersion == GAMEVER_KEEN3) {
+                if (g_entities.temp_sprite.think == &CVort3_think_foob_run) {
+                    g_entities.temp_sprite.think = &CVort3_think_foob_walk;
+                    if (g_entities.temp_sprite.posX > g_entities.sprites[0].posX) {
+                        g_entities.temp_sprite.velX = 50;
+                    } else {
+                        g_entities.temp_sprite.velX = -50;
+                    }
+                }
+            }
+#endif
+            CVort_run_sprite_think();
+        }
+    } else if (!sprite_counter
+    // Platforms always move
+    || ((engine_gameVersion == GAMEVER_KEEN2) && (g_entities.temp_sprite.type_ == CVort2_obj_platform))
+    || ((engine_gameVersion == GAMEVER_KEEN3) && (g_entities.temp_sprite.type_ == 10))
+    || !CVort_sprite_active_screen() ) {
+        CVort_run_sprite_think();
+    }
+}
+
 static void CVort_level_update_sprites(void) {
-    int16_t var_4, var_6, sprite_counter;
-    // Apply g_entities.sprites behaviors if relevant
+    int16_t sprite_counter;
     for (sprite_counter = 0; sprite_counter < g_entities.num_sprites; sprite_counter++) {
         if (!g_entities.sprites[sprite_counter].type_)
             continue;
         g_entities.temp_sprite = g_entities.sprites[sprite_counter];
-        if (!g_entities.temp_sprite.active) {
-            var_4 = g_entities.temp_sprite.posX >> 12;
-            var_6 = g_entities.temp_sprite.posY >> 12;
-            if ((scrollX_T - ENGINE_SPRITE_MARGIN_MIN < var_4) && (scrollY_T - ENGINE_SPRITE_MARGIN_MIN < var_6) && (scrollX_T + ENGINE_VIEWPORT_WIDTH_TILES > var_4) && (scrollY_T + ENGINE_VIEWPORT_HEIGHT_TILES > var_6)) {
-                g_entities.temp_sprite.active = 1;
-#if CHOCOLATE_KEEN_IS_EPISODE1_ENABLED
-                if (engine_gameVersion == GAMEVER_KEEN1) {
-                    if (g_entities.temp_sprite.think == &CVort1_think_yorp_stunned) {
-                        g_entities.temp_sprite.think = &CVort1_think_yorp_look;
-                        g_entities.temp_sprite.time = 0;
-                    }
-                }
-#endif
-#ifndef CHOCOLATE_KEEN_CONFIG_SPECIFIC_EPISODE
-                else
-#endif
-#if CHOCOLATE_KEEN_IS_EPISODE3_ENABLED
-                  if (engine_gameVersion == GAMEVER_KEEN3) {
-                    if (g_entities.temp_sprite.think == &CVort3_think_foob_run) {
-                        g_entities.temp_sprite.think = &CVort3_think_foob_walk;
-                        if (g_entities.temp_sprite.posX > g_entities.sprites[0].posX) {
-                            g_entities.temp_sprite.velX = 50;
-                        } else {
-                            g_entities.temp_sprite.velX = -50;
-                        }
-                    }
-                }
-#endif
-                CVort_run_sprite_think();
-            }
-        } else if (!sprite_counter
-        // Platforms always move
-        || ((engine_gameVersion == GAMEVER_KEEN2) && (g_entities.temp_sprite.type_ == CVort2_obj_platform))
-        || ((engine_gameVersion == GAMEVER_KEEN3) && (g_entities.temp_sprite.type_ == 10))
-        || !CVort_sprite_active_screen() ) {
-            CVort_run_sprite_think();
-        }
+        CVort_activate_and_think_sprite(sprite_counter);
         g_entities.sprites[sprite_counter] = g_entities.temp_sprite;
     }
 }
@@ -726,12 +725,8 @@ static void CVort_level_detect_collisions(void) {
                 continue;
             if (!CVort_detect_sprite_col(&g_entities.sprites[sprite_counter], &g_entities.sprites[var_A]))
                 continue;
-            //*this.*(g_entities.sprites[sprite_counter].contact)(&g_entities.sprites[sprite_counter], &g_entities.sprites[var_A]);
-            //*this.*(g_entities.sprites[var_A].contact)(&g_entities.sprites[var_A], &g_entities.sprites[sprite_counter]);
             (g_entities.sprites[sprite_counter].contact)(&g_entities.sprites[sprite_counter], &g_entities.sprites[var_A]);
             (g_entities.sprites[var_A].contact)(&g_entities.sprites[var_A], &g_entities.sprites[sprite_counter]);
-            //((*this).*(*this).g_entities.sprites[sprite_counter].contact)(&g_entities.sprites[sprite_counter], &g_entities.sprites[var_A]);
-            //((*this).*(*this).g_entities.sprites[var_A].contact)(&g_entities.sprites[var_A], &g_entities.sprites[sprite_counter]);
         }
     }
 }

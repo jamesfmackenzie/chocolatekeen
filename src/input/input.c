@@ -1476,7 +1476,7 @@ MappedInputEvent_T *CVort_engine_recordNewInputMapping(EmulatedInput_T emuInput,
 	return &(inputEventList->list[loopVar]);
 }
 
-MappedInputEventList_T *privGetInputEventList(HostInput_T inputT, int inputId, int inputVal) {
+static MappedInputEventList_T *get_input_event_list(HostInput_T inputT, int inputId, int inputVal) {
 	switch (inputT) {
 	case HOSTINPUT_KEYPRESS:
 		return &engine_inputMappings.keyMappings[inputVal];
@@ -1520,7 +1520,7 @@ MappedInputEventList_T *privGetInputEventList(HostInput_T inputT, int inputId, i
 }
 
 void CVort_engine_deleteInputMapping(EmulatedInput_T emuInput, int emuValue, HostInput_T inputT, int inputId, int inputVal) {
-	MappedInputEventList_T *inputEventList = privGetInputEventList(inputT, inputId, inputVal);
+	MappedInputEventList_T *inputEventList = get_input_event_list(inputT, inputId, inputVal);
 	if (!inputEventList)
 		return;
 	int loopVar;
@@ -1535,7 +1535,7 @@ void CVort_engine_deleteInputMapping(EmulatedInput_T emuInput, int emuValue, Hos
 	}
 }
 
-void privIncInputMappingHostSide(HostInput_T *pInputT, int *pInputId, int *pInputVal) {
+static void inc_input_mapping_host_side(HostInput_T *pInputT, int *pInputId, int *pInputVal) {
 	switch (*pInputT) {
 	case HOSTINPUT_NONE:
 		*pInputT = HOSTINPUT_KEYPRESS;
@@ -1680,10 +1680,10 @@ void privIncInputMappingHostSide(HostInput_T *pInputT, int *pInputId, int *pInpu
 }
 
 // TODO: Should we implement this?
-void privDecInputMappingHostSide(HostInput_T *pInputT, int *pInputId, int *pInputVal) {
+static void dec_input_mapping_host_side(HostInput_T *pInputT, int *pInputId, int *pInputVal) {
 }
 
-MappedInputEvent_T *privGetInputMapping_Template(
+static MappedInputEvent_T *get_input_mapping_template(
     EmulatedInput_T emuInput, int value,
     HostInput_T inputT, int inputId, int inputVal,
     HostInput_T *retInputT, int *retInputId, int *retInputVal,
@@ -1695,7 +1695,7 @@ MappedInputEvent_T *privGetInputMapping_Template(
 	do {
 		// Increment/Decrement our "variable"
 		hostInputStepFunc(&currInputT, &currInputId, &currInputVal);
-		inputEventList = privGetInputEventList(currInputT, currInputId, currInputVal);
+		inputEventList = get_input_event_list(currInputT, currInputId, currInputVal);
 		if (!inputEventList)
 			continue;
 		for (loopVar = 0; loopVar < inputEventList->numOfEvents; loopVar++) {
@@ -1718,11 +1718,11 @@ MappedInputEvent_T *CVort_engine_getNextInputMapping(
     HostInput_T inputT, int inputId, int inputVal,
     HostInput_T *retInputT, int *retInputId, int *retInputVal
 ) {
-	return privGetInputMapping_Template(
+	return get_input_mapping_template(
 	           emuInput, value,
 	           inputT, inputId, inputVal,
 	           retInputT, retInputId, retInputVal,
-	           &privIncInputMappingHostSide);
+	           &inc_input_mapping_host_side);
 }
 
 MappedInputEvent_T *CVort_engine_getPrevInputMapping(
@@ -1730,11 +1730,11 @@ MappedInputEvent_T *CVort_engine_getPrevInputMapping(
     HostInput_T inputT, int inputId, int inputVal,
     HostInput_T *retInputT, int *retInputId, int *retInputVal
 ) {
-	return privGetInputMapping_Template(
+	return get_input_mapping_template(
 	           emuInput, value,
 	           inputT, inputId, inputVal,
 	           retInputT, retInputId, retInputVal,
-	           &privDecInputMappingHostSide);
+	           &dec_input_mapping_host_side);
 }
 
 void CVort_engine_writeEventModifiers(FILE *fp, int modMask) {

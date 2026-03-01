@@ -36,10 +36,9 @@ all: game
 
 game: $(EXE_PATH)
 
-PRELOAD_FILE=
-ifeq ($(CC), emcc)
-	PRELOAD_FILES= --preload-file data@/
-endif
+PRELOAD_DATA_DIR=data
+PRELOAD_REQUIRE_EXISTING_DIR=0
+include ../common_preload.mk
 
 $(EXE_PATH): $(OBJECTS)
 	$(CXX) $(OBJECTS) $(LDFLAGS) $(INTLDFLAGS) -o $@ $(PRELOAD_FILES)

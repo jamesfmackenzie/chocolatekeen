@@ -36,12 +36,9 @@ all: game
 
 game: $(EXE_PATH)
 
-PRELOAD_FILE=
-ifeq ($(CC), emcc)
-ifneq ($(wildcard data),)
-	PRELOAD_FILES= --preload-file data@/
-endif
-endif
+PRELOAD_DATA_DIR=data
+PRELOAD_REQUIRE_EXISTING_DIR=1
+include ../common_preload.mk
 
 $(EXE_PATH): $(OBJECTS)
 	$(CXX) $(OBJECTS) $(LDFLAGS) $(INTLDFLAGS) -o $@ $(PRELOAD_FILES)

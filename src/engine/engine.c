@@ -746,7 +746,12 @@ static bool load_exe_image(gameversion_T gameVer, uint8_t **pExeImageBuffer) {
         CVort_engine_cross_logMessage(CVORT_LOG_MSG_ERROR, "Out of memory for temporary EXE storage!\n");
         return false;
     }
-    fread(wholeExeData, len, 1, fp);
+    if (fread(wholeExeData, len, 1, fp) != 1) {
+        fclose(fp);
+        free(wholeExeData);
+        CVort_engine_cross_logMessage(CVORT_LOG_MSG_ERROR, "Failed reading EXE image data.\n");
+        return false;
+    }
     fclose(fp);
 
     uint32_t headerSize;
@@ -986,8 +991,16 @@ void CVort_engine_loadSounds(void) {
         if (fp) {
             len = CVort_filelength(fp);
             soundDataPtr = (uint8_t *) malloc(len);
-            fread(soundDataPtr, len, 1, fp);
+            if (!soundDataPtr || (fread(soundDataPtr, len, 1, fp) != 1)) {
+                if (soundDataPtr)
+                    free(soundDataPtr);
+                fclose(fp);
+                CVort_engine_cross_logMessage(CVORT_LOG_MSG_WARNING, "Failed reading %s.\n", g_game.string_buf);
+                return;
+            }
             fclose(fp);
+        } else {
+            return;
         }
     } else if (engine_gameVersion == GAMEVER_KEEN2 || engine_gameVersion == GAMEVER_KEEN3) {
         soundDataPtr = (uint8_t*) exeImage + (engine_gameVersion == GAMEVER_KEEN2? CVort2_SOUNDS_OFFSET : CVort3_SOUNDS_OFFSET);

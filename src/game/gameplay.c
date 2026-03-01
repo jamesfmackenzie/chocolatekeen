@@ -416,7 +416,15 @@ void CVort_load_level_data(uint16_t levelnum) {
         return;
     uint32_t len = CVort_filelength(fp);
     uint8_t *compressedMapData = (uint8_t*)malloc(sizeof(uint8_t) * len);
-    fread(compressedMapData, len, 1, fp);
+    if (!compressedMapData) {
+        fclose(fp);
+        return;
+    }
+    if (fread(compressedMapData, len, 1, fp) != 1) {
+        fclose(fp);
+        free(compressedMapData);
+        return;
+    }
     fclose(fp);
 
     // Here, code from Commander Genius is used as-is

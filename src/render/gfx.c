@@ -78,7 +78,10 @@ void CVort_engine_decompGraphics()
 		CVort_engine_cross_freadInt16LE(&engine_egaHeadUnmasked[loopVar].h, 1, fp);
 		CVort_engine_cross_freadInt16LE(&engine_egaHeadUnmasked[loopVar].v, 1, fp);
 		CVort_engine_cross_freadInt32LE(&engine_egaHeadUnmasked[loopVar].loc, 1, fp);
-		fread(engine_egaHeadUnmasked[loopVar].name, 8, 1, fp);
+		if (fread(engine_egaHeadUnmasked[loopVar].name, 8, 1, fp) != 1) {
+			fclose(fp);
+			return;
+		}
 		bmpTotalPixelCount += 8*engine_egaHeadUnmasked[loopVar].h*engine_egaHeadUnmasked[loopVar].v;
 	}
 	// We now jump to the third, although we treat each "copy" out of
@@ -98,7 +101,10 @@ void CVort_engine_decompGraphics()
 		CVort_engine_cross_freadInt16LE(&engine_maskedSpriteEntry[loopVar].hitbox_u, 1, fp);
 		CVort_engine_cross_freadInt16LE(&engine_maskedSpriteEntry[loopVar].hitbox_r, 1, fp);
 		CVort_engine_cross_freadInt16LE(&engine_maskedSpriteEntry[loopVar].hitbox_b, 1, fp);
-		fread(engine_maskedSpriteEntry[loopVar].name, 12, 1, fp);
+		if (fread(engine_maskedSpriteEntry[loopVar].name, 12, 1, fp) != 1) {
+			fclose(fp);
+			return;
+		}
 		CVort_engine_cross_freadInt32LE(&engine_maskedSpriteEntry[loopVar].h_v_off, 1, fp);
 		//fread(engine_maskedSpriteEntry[loopVar].copies, 32, 3, fp); // Unused
 
@@ -120,8 +126,11 @@ void CVort_engine_decompGraphics()
 	// FIXME: Maybe the compression field is used incorrectly here.
 	if (engine_egaHeadGeneral.compression & 2)
 		lz_decompress(fp, egaLatchData);
-	else
-		fread(egaLatchData, engine_egaHeadGeneral.latchPlaneSize*4, 1, fp);
+	else if (fread(egaLatchData, engine_egaHeadGeneral.latchPlaneSize*4, 1, fp) != 1) {
+		fclose(fp);
+		free(egaLatchData);
+		return;
+	}
 	fclose(fp);
 	/********************************************************************
 	FIXME? This is a real hack that forces the display of some textual
@@ -253,8 +262,11 @@ void CVort_engine_decompGraphics()
 	// FIXME: Maybe the compression field is used incorrectly here.
 	if (engine_egaHeadGeneral.compression & 1)
 		lz_decompress(fp, egaSpriteData);
-	else
-		fread(egaSpriteData, engine_egaHeadGeneral.sprPlaneSize*5, 1, fp);
+	else if (fread(egaSpriteData, engine_egaHeadGeneral.sprPlaneSize*5, 1, fp) != 1) {
+		fclose(fp);
+		free(egaSpriteData);
+		return;
+	}
 	fclose(fp);
 	// Load g_entities.sprites in our format.
 	// Do NOT make 4 copies of each sprite, though.
@@ -3551,7 +3563,11 @@ void CVort_engine_showImageFile(const char *filename)
 		return;
 	}
 	// The original code does read to a part of the map_data structure!!!
-	fread(map_data + 0x4000, CVort_filelength(fp), 1, fp);
+	if (fread(map_data + 0x4000, CVort_filelength(fp), 1, fp) != 1) {
+		fclose(fp);
+		scroll_x = scroll_y = 0;
+		return;
+	}
 	fclose(fp);
 	// It also decompresses from one part to the other.
 	// NOTE NOTE NOTE: The initial 4-byte value is LITTLE-ENDIAN ordered!!!

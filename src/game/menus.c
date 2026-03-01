@@ -26,8 +26,13 @@ void CVort_load_demo(int16_t demo_number) {
     FILE *fp;
     snprintf(g_game.string_buf, sizeof(g_game.string_buf), "DEMO%d.%s", demo_number, game_ext);
     fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "rb");
+    if (!fp)
+        return;
     uint32_t filesize = CVort_filelength(fp);
-    fread(demo_actions_including_level_num, filesize, 1, fp);
+    if (fread(demo_actions_including_level_num, filesize, 1, fp) != 1) {
+        fclose(fp);
+        return;
+    }
     fclose(fp);
     g_game.current_level = demo_actions_including_level_num[0];
     demo_action_ptr = 1 + demo_actions_including_level_num;
@@ -1034,7 +1039,14 @@ void CVort_load_and_process_text_file(const char *filename, uint8_t ** pBuffer) 
     uint32_t len = CVort_filelength(fp);
     *pBuffer = (uint8_t *) malloc(len);
     // If we are out of memory then we are in a problem...
-    fread(*pBuffer, len, 1, fp);
+    if (!(*pBuffer) || (fread(*pBuffer, len, 1, fp) != 1)) {
+        if (*pBuffer) {
+            free(*pBuffer);
+            *pBuffer = NULL;
+        }
+        fclose(fp);
+        CVort_chg_vid_and_error("Failed to read a text file!");
+    }
     fclose(fp);
 
     CVort_process_text_file(*pBuffer);
@@ -1125,6 +1137,7 @@ void CVort_load_high_scores_table() {
 
     FILE *fp = CVort_engine_cross_rw_misc_fopen(path, "rb");
     if (fp) {
+        bool loadOk = true;
         for (entryCounter = 0; entryCounter < 7; entryCounter++)
             CVort_engine_cross_freadInt32LE(high_scores_table.scores + entryCounter, 1, fp);
         for (partCounter = 0; partCounter < 4; partCounter++)
@@ -1134,10 +1147,17 @@ void CVort_load_high_scores_table() {
             CVort_engine_cross_freadInt16LE(high_scores_table.targets + entryCounter, 1, fp);
         for (entryCounter = 0; entryCounter < 7; entryCounter++)
             CVort_engine_cross_freadInt16LE(high_scores_table.unknown + entryCounter, 1, fp);
-        for (entryCounter = 0; entryCounter < 7; entryCounter++)
-            fread(high_scores_table.names[entryCounter], sizeof (high_scores_table.names[entryCounter]), 1, fp);
+        for (entryCounter = 0; entryCounter < 7; entryCounter++) {
+            if (fread(high_scores_table.names[entryCounter], sizeof (high_scores_table.names[entryCounter]), 1, fp) != 1) {
+                loadOk = false;
+                break;
+            }
+        }
         fclose(fp);
-    } else {
+        if (loadOk)
+            return;
+    }
+    {
         for (entryCounter = 0; entryCounter < 7; entryCounter++) {
             high_scores_table.scores[entryCounter] = 100;
             strcpy(high_scores_table.names[entryCounter], default_names[entryCounter % 3]);

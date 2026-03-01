@@ -947,7 +947,13 @@ bool CVort_engine_tryToLoadInputMappings(void) {
     }
     uint32_t numOfDblQuotes = 0, length = CVort_filelength(fp), loopVar, joystickNum;
     char *fileBuffer = (char *)malloc((length+1)*sizeof(char));
-    fread(fileBuffer, length, 1, fp);
+    if (!fileBuffer || (fread(fileBuffer, length, 1, fp) != 1)) {
+        if (fileBuffer) {
+            free(fileBuffer);
+        }
+        fclose(fp);
+        return false;
+    }
     fclose(fp);
     // DON'T FORGET THIS!!
     fileBuffer[length] = '\0';

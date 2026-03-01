@@ -46,6 +46,20 @@ void CVort_engine_decompGraphics()
 	// TODO: What if we fail to load the file?
 	if (!fp)
 		return;
+#define CHOCOLATE_KEEN_READ16_OR_RETURN(dst) \
+	do { \
+		if (CVort_engine_cross_freadInt16LE((dst), 1, fp) != 1) { \
+			fclose(fp); \
+			return; \
+		} \
+	} while (0)
+#define CHOCOLATE_KEEN_READ32_OR_RETURN(dst) \
+	do { \
+		if (CVort_engine_cross_freadInt32LE((dst), 1, fp) != 1) { \
+			fclose(fp); \
+			return; \
+		} \
+	} while (0)
 	/***********************************************************************
 	WARNING: We should *NOT* read the EGA Header as-is and then simply treat
 	parts of it as structs. There are two issues with it:
@@ -53,21 +67,21 @@ void CVort_engine_decompGraphics()
 	- The actual size of a struct may be larger than what you expect,
 	due to compiler optimizations.
 	***********************************************************************/
-	CVort_engine_cross_freadInt32LE(&engine_egaHeadGeneral.latchPlaneSize, 1, fp);
-	CVort_engine_cross_freadInt32LE(&engine_egaHeadGeneral.sprPlaneSize, 1, fp);
-	CVort_engine_cross_freadInt32LE(&engine_egaHeadGeneral.imgDataStart, 1, fp);
-	CVort_engine_cross_freadInt32LE(&engine_egaHeadGeneral.sprDataStart, 1, fp);
-	CVort_engine_cross_freadInt16LE(&engine_egaHeadGeneral.fontNum, 1, fp);
-	CVort_engine_cross_freadInt32LE(&engine_egaHeadGeneral.fontLoc, 1, fp);
-	CVort_engine_cross_freadInt16LE(&engine_egaHeadGeneral.unkNum, 1, fp); // Unused
-	CVort_engine_cross_freadInt32LE(&engine_egaHeadGeneral.unkLoc, 1, fp); // Unused
-	CVort_engine_cross_freadInt16LE(&engine_egaHeadGeneral.tileNum, 1, fp);
-	CVort_engine_cross_freadInt32LE(&engine_egaHeadGeneral.tileLoc, 1, fp);
-	CVort_engine_cross_freadInt16LE(&engine_egaHeadGeneral.bmpNum, 1, fp);
-	CVort_engine_cross_freadInt32LE(&engine_egaHeadGeneral.bmpLoc, 1, fp);
-	CVort_engine_cross_freadInt16LE(&engine_egaHeadGeneral.spriteNum, 1, fp);
-	CVort_engine_cross_freadInt32LE(&engine_egaHeadGeneral.spriteLoc, 1, fp);
-	CVort_engine_cross_freadInt16LE(&engine_egaHeadGeneral.compression, 1, fp);
+	CHOCOLATE_KEEN_READ32_OR_RETURN(&engine_egaHeadGeneral.latchPlaneSize);
+	CHOCOLATE_KEEN_READ32_OR_RETURN(&engine_egaHeadGeneral.sprPlaneSize);
+	CHOCOLATE_KEEN_READ32_OR_RETURN(&engine_egaHeadGeneral.imgDataStart);
+	CHOCOLATE_KEEN_READ32_OR_RETURN(&engine_egaHeadGeneral.sprDataStart);
+	CHOCOLATE_KEEN_READ16_OR_RETURN(&engine_egaHeadGeneral.fontNum);
+	CHOCOLATE_KEEN_READ32_OR_RETURN(&engine_egaHeadGeneral.fontLoc);
+	CHOCOLATE_KEEN_READ16_OR_RETURN(&engine_egaHeadGeneral.unkNum); // Unused
+	CHOCOLATE_KEEN_READ32_OR_RETURN(&engine_egaHeadGeneral.unkLoc); // Unused
+	CHOCOLATE_KEEN_READ16_OR_RETURN(&engine_egaHeadGeneral.tileNum);
+	CHOCOLATE_KEEN_READ32_OR_RETURN(&engine_egaHeadGeneral.tileLoc);
+	CHOCOLATE_KEEN_READ16_OR_RETURN(&engine_egaHeadGeneral.bmpNum);
+	CHOCOLATE_KEEN_READ32_OR_RETURN(&engine_egaHeadGeneral.bmpLoc);
+	CHOCOLATE_KEEN_READ16_OR_RETURN(&engine_egaHeadGeneral.spriteNum);
+	CHOCOLATE_KEEN_READ32_OR_RETURN(&engine_egaHeadGeneral.spriteLoc);
+	CHOCOLATE_KEEN_READ16_OR_RETURN(&engine_egaHeadGeneral.compression);
 	// Now we get to the second section
 	engine_egaHeadUnmasked = (EGAHeadUnmasked_T *)malloc(engine_egaHeadGeneral.bmpNum*sizeof(EGAHeadUnmasked_T));
 	uint16_t loopVar;
@@ -75,9 +89,9 @@ void CVort_engine_decompGraphics()
 	fseek(fp, engine_egaHeadGeneral.imgDataStart, SEEK_SET);
 	for (loopVar = 0; loopVar < engine_egaHeadGeneral.bmpNum; loopVar++)
 	{
-		CVort_engine_cross_freadInt16LE(&engine_egaHeadUnmasked[loopVar].h, 1, fp);
-		CVort_engine_cross_freadInt16LE(&engine_egaHeadUnmasked[loopVar].v, 1, fp);
-		CVort_engine_cross_freadInt32LE(&engine_egaHeadUnmasked[loopVar].loc, 1, fp);
+		CHOCOLATE_KEEN_READ16_OR_RETURN(&engine_egaHeadUnmasked[loopVar].h);
+		CHOCOLATE_KEEN_READ16_OR_RETURN(&engine_egaHeadUnmasked[loopVar].v);
+		CHOCOLATE_KEEN_READ32_OR_RETURN(&engine_egaHeadUnmasked[loopVar].loc);
 		if (fread(engine_egaHeadUnmasked[loopVar].name, 8, 1, fp) != 1) {
 			fclose(fp);
 			return;
@@ -91,21 +105,21 @@ void CVort_engine_decompGraphics()
 	fseek(fp, engine_egaHeadGeneral.sprDataStart, SEEK_SET);
 	for (loopVar = 0; loopVar < 4*engine_egaHeadGeneral.spriteNum; loopVar++)
 	{
-		CVort_engine_cross_freadInt16LE(&engine_maskedSpriteEntry[loopVar].width, 1, fp);
-		CVort_engine_cross_freadInt16LE(&engine_maskedSpriteEntry[loopVar].height, 1, fp);
-		CVort_engine_cross_freadInt16LE(&engine_maskedSpriteEntry[loopVar].loc_offset, 1, fp);
-		CVort_engine_cross_freadInt16LE(&engine_maskedSpriteEntry[loopVar].location, 1, fp);
+		CHOCOLATE_KEEN_READ16_OR_RETURN(&engine_maskedSpriteEntry[loopVar].width);
+		CHOCOLATE_KEEN_READ16_OR_RETURN(&engine_maskedSpriteEntry[loopVar].height);
+		CHOCOLATE_KEEN_READ16_OR_RETURN(&engine_maskedSpriteEntry[loopVar].loc_offset);
+		CHOCOLATE_KEEN_READ16_OR_RETURN(&engine_maskedSpriteEntry[loopVar].location);
 		//CVort_engine_cross_freadInt32LE(&engine_maskedSpriteEntry[loopVar].hitbox_ul, 1, fp);
 		//CVort_engine_cross_freadInt32LE(&engine_maskedSpriteEntry[loopVar].hitbox_br, 1, fp);
-		CVort_engine_cross_freadInt16LE(&engine_maskedSpriteEntry[loopVar].hitbox_l, 1, fp);
-		CVort_engine_cross_freadInt16LE(&engine_maskedSpriteEntry[loopVar].hitbox_u, 1, fp);
-		CVort_engine_cross_freadInt16LE(&engine_maskedSpriteEntry[loopVar].hitbox_r, 1, fp);
-		CVort_engine_cross_freadInt16LE(&engine_maskedSpriteEntry[loopVar].hitbox_b, 1, fp);
+		CHOCOLATE_KEEN_READ16_OR_RETURN(&engine_maskedSpriteEntry[loopVar].hitbox_l);
+		CHOCOLATE_KEEN_READ16_OR_RETURN(&engine_maskedSpriteEntry[loopVar].hitbox_u);
+		CHOCOLATE_KEEN_READ16_OR_RETURN(&engine_maskedSpriteEntry[loopVar].hitbox_r);
+		CHOCOLATE_KEEN_READ16_OR_RETURN(&engine_maskedSpriteEntry[loopVar].hitbox_b);
 		if (fread(engine_maskedSpriteEntry[loopVar].name, 12, 1, fp) != 1) {
 			fclose(fp);
 			return;
 		}
-		CVort_engine_cross_freadInt32LE(&engine_maskedSpriteEntry[loopVar].h_v_off, 1, fp);
+		CHOCOLATE_KEEN_READ32_OR_RETURN(&engine_maskedSpriteEntry[loopVar].h_v_off);
 		//fread(engine_maskedSpriteEntry[loopVar].copies, 32, 3, fp); // Unused
 
 		// We don't duplicate copies of the same sprite in RAM, though.
@@ -307,6 +321,8 @@ void CVort_engine_decompGraphics()
 		}
 	}
 	free(egaSpriteData);
+#undef CHOCOLATE_KEEN_READ32_OR_RETURN
+#undef CHOCOLATE_KEEN_READ16_OR_RETURN
 }
 
 void privResetEgaMemStartLocAndPanning(void) {

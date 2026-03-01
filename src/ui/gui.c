@@ -545,7 +545,7 @@ GUI_Menu_Item_T *guiMenuItemsMapperSomeBindings[] = {
 0
 };
 
-void CVort_gui_handler_leaveMapperBindingMenu(void);
+static void CVort_gui_handler_leaveMapperBindingMenu(void);
 
 GUI_Menu_T guiMapperMenu = {
 	0, 0, "Current (emulated) event" /* May change */, 0,
@@ -565,7 +565,7 @@ GUI_Menu_T guiMapperBindingRecordingMenu = {
 	NULL, NULL, NULL, 0, false
 };
 
-int getMaxStringLength(const char **stringArray) {
+static int getMaxStringLength(const char **stringArray) {
 	int maxLength = 0;
 	for (; *stringArray; stringArray++) {
 		if (maxLength < strlen(*stringArray)) {
@@ -575,7 +575,7 @@ int getMaxStringLength(const char **stringArray) {
 	return maxLength;
 }
 
-int getNumOfStrings(const char **stringArray) {
+static int getNumOfStrings(const char **stringArray) {
 	int count = 0;
 	for (; *stringArray; stringArray++, count++);
 	return count;
@@ -2506,7 +2506,7 @@ void CVort_gui_handler_showNextMapperBinding(GUI_Menu_Item_T *item) {
 	CVort_gui_drawCurrentMenu();
 }
 
-void CVort_gui_handler_leaveMapperBindingMenu(void/*GUI_Menu_Item_T *item*/) {
+static void CVort_gui_handler_leaveMapperBindingMenu(void/*GUI_Menu_Item_T *item*/) {
 	// We return to the mapper UI loop (but don't leave the usual loop!)
 	CVort_engine_gui_clearScreen();
 	CVort_gui_mapper_drawCurrentPage();

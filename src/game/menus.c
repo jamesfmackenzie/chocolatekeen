@@ -17,6 +17,10 @@
 void CVort_demo_toggle_reset_player_partial_state_before();
 void CVort_demo_toggle_reset_player_partial_state_after();
 
+static void CVort_private_format_demo_path(int16_t demo_number) {
+    snprintf(g_game.string_buf, sizeof(g_game.string_buf), "DEMO%d.%s", demo_number, game_ext);
+}
+
 void CVort_record_demo(int16_t demo_number) {
     demo_actions_including_level_num[0] = g_game.current_level;
     demo_action_ptr = 1 + demo_actions_including_level_num;
@@ -25,7 +29,7 @@ void CVort_record_demo(int16_t demo_number) {
 
 void CVort_load_demo(int16_t demo_number) {
     FILE *fp;
-    snprintf(g_game.string_buf, sizeof(g_game.string_buf), "DEMO%d.%s", demo_number, game_ext);
+    CVort_private_format_demo_path(demo_number);
     fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "rb");
     if (!fp) {
         CK_IO_WARN_ON_OPEN_FAIL_FOR_READ(g_game.string_buf);
@@ -46,7 +50,7 @@ void CVort_load_demo(int16_t demo_number) {
 
 void CVort_save_demo(int16_t demo_number) {
     FILE *fp;
-    snprintf(g_game.string_buf, sizeof(g_game.string_buf), "DEMO%d.%s", demo_number, game_ext);
+    CVort_private_format_demo_path(demo_number);
     fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "wb");
     CK_IO_RETURN_IF_OPEN_FAIL_FOR_WRITE(fp, g_game.string_buf);
     bool saveOk = true;
@@ -124,7 +128,7 @@ void CVort_do_intro_and_menu() {
                 introTickCounter -= g_game.sprite_sync;
                 if (introTickCounter <= 0) {
                     for (; introCurrScreen < 10; introCurrScreen++) {
-                        snprintf(g_game.string_buf, sizeof(g_game.string_buf), "DEMO%d.%s", introCurrScreen, game_ext);
+                        CVort_private_format_demo_path(introCurrScreen);
                         fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "rb");
                         if (!fp) {
                             continue;

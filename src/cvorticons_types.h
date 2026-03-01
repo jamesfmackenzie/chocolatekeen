@@ -337,6 +337,5 @@ typedef struct {
 } CVort_EXE_FIELDS_T;
 
 typedef void (*DrawFunction_T)();
-//typedef void (CVorticons::*DrawFunction_T)();
 
 #endif

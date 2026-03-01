@@ -52,9 +52,6 @@ typedef struct {
     GameInput_T input_new, input_old;
 } InputState_T;
 
-//class CVorticons {
-//public:
-    //void CVorticonsConst(gameversion_T ver) { engine_gameVersion = ver; }
     /*********************
     GUI/Launcher functions
     *********************/
@@ -66,9 +63,9 @@ typedef struct {
     void CVort_engine_loadKeen(gameversion_T gameVer);
     void CVort_engine_shutdown(void);
 
-    /*static*/ bool CVort_engine_isGameExeAvailable(gameversion_T gameVer);
+    bool CVort_engine_isGameExeAvailable(gameversion_T gameVer);
 
-    /*static*/ bool CVort_engine_processArguments(int argc, char **argv);
+    bool CVort_engine_processArguments(int argc, char **argv);
 
     extern void (*CVort_ptr_engine_processEXE)();
 
@@ -214,7 +211,7 @@ typedef struct {
     void CVort_engine_showImageFile(const char *filename);
 
     void CVort_engine_loadSounds();
-    /*static*/ void CVort_engine_sndCallback(void *unused, uint8_t *stream, int len);
+    void CVort_engine_sndCallback(void *unused, uint8_t *stream, int len);
     void CVort_engine_setCurSound(uint16_t sound);
     void CVort_engine_saveCurSound();
     void CVort_engine_restoreCurSound();
@@ -226,27 +223,27 @@ typedef struct {
     JoystickPoll_T CVort_engine_pollJoystick(int16_t joystickNum);
 
     /* Used for loading read-only vanilla Keen data */
-    /*static*/ FILE *CVort_engine_cross_ro_data_fopen(const char *filename);
+    FILE *CVort_engine_cross_ro_data_fopen(const char *filename);
     /* Used for loading read/write vanilla Keen files (CTLPANEL and more) */
-    /*static*/ FILE *CVort_engine_cross_rw_misc_fopen(const char *filename, const char *mode);
+    FILE *CVort_engine_cross_rw_misc_fopen(const char *filename, const char *mode);
     /* Opens a file used by Chocolate Keen internally (not the "emulated" game)
     from a possibly different location.                                      */
-    /*static*/ FILE *CVort_engine_configpath_fopen(const char *filename, const char *mode);
+    FILE *CVort_engine_configpath_fopen(const char *filename, const char *mode);
     void CVort_engine_loadConfigFile(void);
     void CVort_engine_saveConfigFile(void);
     /* Used for reading buffers of a specific type, assuming Little-Endian
     byte order in the file's data itself. It gets converted to native order. */
-    /*static*/ size_t CVort_engine_cross_freadInt8LE(void *ptr, size_t count, FILE *stream);
-    /*static*/ size_t CVort_engine_cross_freadInt16LE(void *ptr, size_t count, FILE *stream);
-    /*static*/ size_t CVort_engine_cross_freadInt32LE(void *ptr, size_t count, FILE *stream);
+    size_t CVort_engine_cross_freadInt8LE(void *ptr, size_t count, FILE *stream);
+    size_t CVort_engine_cross_freadInt16LE(void *ptr, size_t count, FILE *stream);
+    size_t CVort_engine_cross_freadInt32LE(void *ptr, size_t count, FILE *stream);
     /* Used for writing buffers of a specific type, converting
     native byte order to Little-Endian order within the file. */
-    /*static*/ size_t CVort_engine_cross_fwriteInt8LE(void *ptr, size_t count, FILE *stream);
-    /*static*/ size_t CVort_engine_cross_fwriteInt16LE(void *ptr, size_t count, FILE *stream);
-    /*static*/ size_t CVort_engine_cross_fwriteInt32LE(void *ptr, size_t count, FILE *stream);
+    size_t CVort_engine_cross_fwriteInt8LE(void *ptr, size_t count, FILE *stream);
+    size_t CVort_engine_cross_fwriteInt16LE(void *ptr, size_t count, FILE *stream);
+    size_t CVort_engine_cross_fwriteInt32LE(void *ptr, size_t count, FILE *stream);
 
     /* Writes a message to a log in case of some problem */
-    /*static*/ void CVort_engine_cross_logMessage(CVort_Log_Message_Class_T msgClass, const char *format, ...);
+    void CVort_engine_cross_logMessage(CVort_Log_Message_Class_T msgClass, const char *format, ...);
 
     int16_t CVort_engine_signExtend8To16(int8_t inputVal);
     int32_t CVort_engine_signExtend16To32(int16_t inputVal);
@@ -397,7 +394,7 @@ typedef struct {
     void CVort_clear_keys();
     void CVort_init_rnd(bool doRand);
     int16_t CVort_get_random();
-    /*static*/ uint32_t CVort_filelength(FILE * fp);
+    uint32_t CVort_filelength(FILE * fp);
     void CVort_setup_jump_heights(uint16_t seed);
     int16_t CVort_calc_jump_height(uint16_t max_height);
     void CVort_chg_vid_and_error(const char *msg);
@@ -449,8 +446,6 @@ typedef struct {
     void CVort_lights_on();
     void CVort_lights_out();
     void CVort_toggle_switch();
-
-//protected:
 
     /***********
     Engine stuff
@@ -604,6 +599,5 @@ typedef struct {
     extern int32_t messie_xpos, messie_ypos, messie_delX, messie_delY;
 
     extern Teleporter_T teleporters[16];
-//};
 
 #endif

@@ -13,8 +13,6 @@
 //#define VORTICONS_KEEN2
 //#define VORTICONS_EPISODE 2
 
-//class CVorticons2 : public CVorticons {
-//public:
 
     // Here we could put in enumerated bmp names, sound names, etc
 
@@ -317,12 +315,10 @@
     void CVort2_draw_win_text();
     /*virtual*/ void CVort2_draw_win();
 
-//protected:
 
     typedef struct {
         uint16_t *earth_expl3, *earth_explX, *earth_explY, *earth_expl;
     } CVort2_EXE_FIELDS_T;
     extern CVort2_EXE_FIELDS_T exeFieldsEp2;
-//};
 
 #endif	/* _CHOCOLATE_KEEN_VORTICONS2_ */

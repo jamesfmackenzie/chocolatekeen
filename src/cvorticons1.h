@@ -13,8 +13,6 @@
 //#define VORTICONS_KEEN1
 //#define VORTICONS_EPISODE 1
 
-//class CVorticons1 : public CVorticons {
-//public:
 
     // Here we could put in enumerated bmp names, sound names, etc
     typedef enum CVort1_bmptype {
@@ -294,7 +292,6 @@
 
     /*virtual*/ void CVort1_draw_win();
 
-//protected:
 
     typedef struct {
         uint32_t *ordering_sprites_x, *ordering_sprites_y;
@@ -306,6 +303,5 @@
     extern CVort1_EXE_FIELDS_T exeFieldsEp1;
 
     //Teleporter_T teleporters[3];
-//};
 
 #endif	/* _CHOCOLATE_KEEN_VORTICONS1_ */

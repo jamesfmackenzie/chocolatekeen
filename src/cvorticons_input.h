@@ -29,7 +29,6 @@ typedef struct {
 } EmulatedKey_T;
 
 typedef struct {
-    //uint8_t key_map[128];
     uint8_t mouseButtonsMask; // 1 == Left, 2 == Right, 4 == Middle
     uint8_t modifiersMask; // 1, 2 and/or 4
     int16_t mouseColumn, mouseRow;

@@ -13,8 +13,6 @@
 //#define VORTICONS_KEEN2
 //#define VORTICONS_EPISODE 2
 
-//class CVorticons3 : public CVorticons {
-//public:
 
     // Here we could put in enumerated bmp names, sound names, etc
 
@@ -395,7 +393,6 @@
     void CVort3_do_messie(Sprite_T* keen);
     /*virtual*/ int16_t CVort3_worldmap_sprites(int16_t map_sprite_standing, Sprite_T* spritedraw, int16_t pos_x, int16_t pos_y);
 
-//protected:
 
     typedef struct {
         uint8_t *palette_camFlash;
@@ -403,6 +400,5 @@
     extern CVort3_EXE_FIELDS_T exeFieldsEp3;
 
     //Teleporter_T CVort3_teleporters[16];
-//};
 
 #endif	/* _CHOCOLATE_KEEN_VORTICONS3_ */

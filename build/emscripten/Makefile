@@ -1,4 +1,8 @@
 include ../common_base.mk
+BUILD_PROFILE=emscripten
+ifeq ($(origin CC), file)
+CC=emcc
+endif
 
 PLATFORM_OBJECTS=$(OBJ)/platform_sleep_emscripten.o \
 	$(OBJ)/platform_input_stub.o

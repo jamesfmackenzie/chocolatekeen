@@ -14,3 +14,4 @@ OBJ ?= obj
 
 USE_OPENGL ?= 1
 SINGLE_EPISODE ?= 0
+BUILD_PROFILE ?= native

@@ -31,7 +31,7 @@ ifeq ($(PLATFORM), WINDOWS)
 	EXT=.exe
 endif
 
-ifeq ($(CC), emcc)
+ifeq ($(BUILD_PROFILE), emscripten)
 	EXT=.html
 endif
 

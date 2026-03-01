@@ -92,7 +92,7 @@ void CVort_engine_parseCalculatedEngineArguments(void) {
 
 bool CVort_engine_parseConfigLine(const char *line);
 
-bool privProcessEngineArguments(int argc, char **argv) {
+static bool process_engine_arguments(int argc, char **argv) {
     // First set internal default
     engine_arguments.fullWidth = engine_arguments.fullHeight = engine_arguments.windowWidth = engine_arguments.windowHeight = 0;
     engine_arguments.zoomLevel = 0;
@@ -255,7 +255,7 @@ bool CVort_engine_prepareInstructionsScreen() {
     return true;
 }
 
-bool privClearKeysAndCheckForQuit(void) {
+static bool clear_keys_and_check_for_quit(void) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) { // Clear keys
         switch (event.type) {
@@ -280,7 +280,7 @@ bool privClearKeysAndCheckForQuit(void) {
     return false;
 }
 
-bool privCheckForUserInputAndQuit(void) {
+static bool check_for_user_input_and_quit(void) {
     SDL_Event event;
     if (SDL_PollEvent(&event)) {
         switch (event.type) {
@@ -364,12 +364,12 @@ void CVort_engine_displayCommandLineHelp() {
     CVort_engine_puts("Example 1: chocolate-keen -startkeen1 -fullscreen=false -scalefactor=3");
     CVort_engine_puts("Example 2: chocolate-keen -showlauncher");
 #endif
-    if (privClearKeysAndCheckForQuit()) {
+    if (clear_keys_and_check_for_quit()) {
         CVort_engine_shutdownSDL();
         return;
     }
     do {
-        if (privCheckForUserInputAndQuit()) {
+        if (check_for_user_input_and_quit()) {
             CVort_engine_shutdownSDL();
             return;
         }
@@ -384,7 +384,7 @@ void CVort_engine_displayCommandLineHelp() {
 }
 
 bool CVort_engine_processArguments(int argc, char **argv) {
-    if (privProcessEngineArguments(argc, argv)) {
+    if (process_engine_arguments(argc, argv)) {
         return true;
     }
     CVort_engine_displayCommandLineHelp();
@@ -439,7 +439,7 @@ bool CVort_engine_start(void) {
     SDL_ShowCursor(SDL_ENABLE);
 
 #ifndef CHOCOLATE_KEEN_CONFIG_SPECIFIC_EPISODE
-    // Already done in privProcessEngineArguments otherwise
+    // Already done in process_engine_arguments otherwise
     engine_forceSpecificEpisode = true;
 #endif
     CVort_gui_runLoop();
@@ -447,7 +447,7 @@ bool CVort_engine_start(void) {
     return true;
 }
 
-bool privLoadEXE(gameversion_T gameVer, uint8_t **pExeImageBuffer);
+static bool load_exe_image(gameversion_T gameVer, uint8_t **pExeImageBuffer);
 
 void CVort_engine_prepareEpisodeSpecificFuncPointers(void) {
     size_t numOfTiles;
@@ -512,10 +512,10 @@ void CVort_engine_prepareEpisodeSpecificFuncPointers(void) {
 #define KEEN2_GAMEDATA_PREFIX_WITH_SLASH "GAMEDATA/KEEN2/"
 #define KEEN3_GAMEDATA_PREFIX_WITH_SLASH "GAMEDATA/KEEN3/"
 
-size_t engine_gameDataPrefixLen;
-char *engine_gameDataFullPathBuffer = NULL;
+static size_t engine_gameDataPrefixLen;
+static char *engine_gameDataFullPathBuffer = NULL;
 
-void privPrepareGameDataFilePathBuffers(gameversion_T gameVer) {
+static void prepare_game_data_file_path_buffers(gameversion_T gameVer) {
 	if (engine_gameDataFullPathBuffer) {
 		free(engine_gameDataFullPathBuffer);
 	}
@@ -542,25 +542,25 @@ void CVort_engine_loadKeen(gameversion_T gameVer) {
 	bool exeLoadedSuccessfully;
 	if (engine_forceSpecificEpisode) {
 		engine_gameVersion = gameVer;
-		exeLoadedSuccessfully = privLoadEXE(gameVer, &exeImage);
+		exeLoadedSuccessfully = load_exe_image(gameVer, &exeImage);
 	} else {
 		do { // a Use loop so we can break when
 #ifdef CHOCOLATE_KEEN_IS_EPISODE1_ENABLED
-			exeLoadedSuccessfully = privLoadEXE(GAMEVER_KEEN1, &exeImage);
+			exeLoadedSuccessfully = load_exe_image(GAMEVER_KEEN1, &exeImage);
 			if (exeLoadedSuccessfully) {
 				engine_gameVersion = GAMEVER_KEEN1;
 				break;
 			}
 #endif
 #ifdef CHOCOLATE_KEEN_IS_EPISODE2_ENABLED
-			exeLoadedSuccessfully = privLoadEXE(GAMEVER_KEEN2, &exeImage);
+			exeLoadedSuccessfully = load_exe_image(GAMEVER_KEEN2, &exeImage);
 			if (exeLoadedSuccessfully) {
 				engine_gameVersion = GAMEVER_KEEN2;
 				break;
 			}
 #endif
 #ifdef CHOCOLATE_KEEN_IS_EPISODE3_ENABLED
-			exeLoadedSuccessfully = privLoadEXE(GAMEVER_KEEN3, &exeImage);
+			exeLoadedSuccessfully = load_exe_image(GAMEVER_KEEN3, &exeImage);
 			if (exeLoadedSuccessfully) {
 				engine_gameVersion = GAMEVER_KEEN3;
 				break;
@@ -585,7 +585,7 @@ void CVort_engine_loadKeen(gameversion_T gameVer) {
 			CVort_engine_puts("Supported Commander Keen 1/2/3 version: 1.31");
 		}
 
-		if (privClearKeysAndCheckForQuit()) {
+		if (clear_keys_and_check_for_quit()) {
 			// Don't call CVort_engine_shutdown:
 			// We don't want to save (video) settings.
 			// FIXME: If the user changed something in the launcher?
@@ -593,7 +593,7 @@ void CVort_engine_loadKeen(gameversion_T gameVer) {
 			exit(0);
 		}
 		do {
-			if (privCheckForUserInputAndQuit()) {
+			if (check_for_user_input_and_quit()) {
 				// Don't call CVort_engine_shutdown:
 				// We don't want to save (video) settings.
 				// FIXME: If the user changed something in the launcher?
@@ -678,7 +678,6 @@ void CVort_engine_loadKeen(gameversion_T gameVer) {
 	engine_sdlMicroTicksDelayOffset = 0;
 	engine_gameTicksDelayOffset = 0;
 	engine_gameTicksStart = 0;
-	extern void CVort_private_engine_setTicks(uint32_t currTicks);
 	CVort_private_engine_setTicks(0);
 	//engine_gameTicksDelayOffsets[0] = engine_gameTicksDelayOffsets[1] = 0;
 	// engine_isFrameReadyToDisplay = true;
@@ -719,24 +718,24 @@ typedef struct KeenVer_Info_T {
 	const char *exeFilename;
 } KeenVer_Info_T;
 
-KeenVer_Info_T CVorticons_engine_keenVersionInfo[GAMEVER_TOTALAMOUNT];
+static KeenVer_Info_T keen_version_info[GAMEVER_TOTALAMOUNT];
 
 void CVort_engine_initializeKeenVerStructs(void) {
-	CVorticons_engine_keenVersionInfo[GAMEVER_KEEN1].exeSize.compressed = KEEN1_EXE_COMPRESSED_SIZE;
-	CVorticons_engine_keenVersionInfo[GAMEVER_KEEN1].exeSize.decompressed = KEEN1_EXE_DECOMPRESSED_SIZE;
-	CVorticons_engine_keenVersionInfo[GAMEVER_KEEN1].exeFilename = KEEN1_EXE_FILENAME;
-	CVorticons_engine_keenVersionInfo[GAMEVER_KEEN2].exeSize.compressed = KEEN2_EXE_COMPRESSED_SIZE;
-	CVorticons_engine_keenVersionInfo[GAMEVER_KEEN2].exeSize.decompressed = KEEN2_EXE_DECOMPRESSED_SIZE;
-	CVorticons_engine_keenVersionInfo[GAMEVER_KEEN2].exeFilename = KEEN2_EXE_FILENAME;
-	CVorticons_engine_keenVersionInfo[GAMEVER_KEEN3].exeSize.compressed = KEEN3_EXE_COMPRESSED_SIZE;
-	CVorticons_engine_keenVersionInfo[GAMEVER_KEEN3].exeSize.decompressed = KEEN3_EXE_DECOMPRESSED_SIZE;
-	CVorticons_engine_keenVersionInfo[GAMEVER_KEEN3].exeFilename = KEEN3_EXE_FILENAME;
+	keen_version_info[GAMEVER_KEEN1].exeSize.compressed = KEEN1_EXE_COMPRESSED_SIZE;
+	keen_version_info[GAMEVER_KEEN1].exeSize.decompressed = KEEN1_EXE_DECOMPRESSED_SIZE;
+	keen_version_info[GAMEVER_KEEN1].exeFilename = KEEN1_EXE_FILENAME;
+	keen_version_info[GAMEVER_KEEN2].exeSize.compressed = KEEN2_EXE_COMPRESSED_SIZE;
+	keen_version_info[GAMEVER_KEEN2].exeSize.decompressed = KEEN2_EXE_DECOMPRESSED_SIZE;
+	keen_version_info[GAMEVER_KEEN2].exeFilename = KEEN2_EXE_FILENAME;
+	keen_version_info[GAMEVER_KEEN3].exeSize.compressed = KEEN3_EXE_COMPRESSED_SIZE;
+	keen_version_info[GAMEVER_KEEN3].exeSize.decompressed = KEEN3_EXE_DECOMPRESSED_SIZE;
+	keen_version_info[GAMEVER_KEEN3].exeFilename = KEEN3_EXE_FILENAME;
 }
 
-bool privLoadEXE(gameversion_T gameVer, uint8_t **pExeImageBuffer) {
+static bool load_exe_image(gameversion_T gameVer, uint8_t **pExeImageBuffer) {
     uint8_t *wholeExeData;
-    privPrepareGameDataFilePathBuffers(gameVer);
-    FILE *fp = CVort_engine_cross_ro_data_fopen(CVorticons_engine_keenVersionInfo[gameVer].exeFilename);
+    prepare_game_data_file_path_buffers(gameVer);
+    FILE *fp = CVort_engine_cross_ro_data_fopen(keen_version_info[gameVer].exeFilename);
     if (!fp)
         return false;
     uint32_t len = CVort_filelength(fp);
@@ -751,7 +750,7 @@ bool privLoadEXE(gameversion_T gameVer, uint8_t **pExeImageBuffer) {
     fclose(fp);
 
     uint32_t headerSize;
-    if (len == CVorticons_engine_keenVersionInfo[gameVer].exeSize.compressed) {
+    if (len == keen_version_info[gameVer].exeSize.compressed) {
         BYTE *uncompressedExeData;
         Cunlzexe_decompress(wholeExeData, &uncompressedExeData);
         headerSize = Cunlzexe_getHeaderSize();
@@ -778,14 +777,14 @@ bool privLoadEXE(gameversion_T gameVer, uint8_t **pExeImageBuffer) {
 }
 
 bool CVort_engine_isGameExeAvailable(gameversion_T gameVer) {
-	privPrepareGameDataFilePathBuffers(gameVer);
-	FILE *fp = CVort_engine_cross_ro_data_fopen(CVorticons_engine_keenVersionInfo[gameVer].exeFilename);
+	prepare_game_data_file_path_buffers(gameVer);
+	FILE *fp = CVort_engine_cross_ro_data_fopen(keen_version_info[gameVer].exeFilename);
 	if (!fp) {
 		return false;
 	}
 	uint32_t len = CVort_filelength(fp);
 	fclose(fp);
-	return ((len == CVorticons_engine_keenVersionInfo[gameVer].exeSize.compressed) || (len == CVorticons_engine_keenVersionInfo[gameVer].exeSize.decompressed));
+	return ((len == keen_version_info[gameVer].exeSize.compressed) || (len == keen_version_info[gameVer].exeSize.decompressed));
 }
 
 void CVort_engine_freeEXE(uint8_t *exeImageBuffer) {
@@ -793,13 +792,13 @@ void CVort_engine_freeEXE(uint8_t *exeImageBuffer) {
 }
 
 void CVort_engine_handleQuit() {
-    if (privClearKeysAndCheckForQuit()) {
+    if (clear_keys_and_check_for_quit()) {
         CVort_engine_shutdown();
         exit(0);
     }
     // Now begin for real
     do {
-        if (privCheckForUserInputAndQuit()) {
+        if (check_for_user_input_and_quit()) {
             CVort_engine_shutdown();
             exit(0);
         }

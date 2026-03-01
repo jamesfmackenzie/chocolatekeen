@@ -1,4 +1,5 @@
 include ../common_base.mk
+include ../common_profiles.mk
 
 PLATFORM_OBJECTS=$(OBJ)/platform_sleep_native.o \
 	$(OBJ)/platform_input_windows.o
@@ -12,8 +13,6 @@ include ../common_objects.mk
 OBJECTS=$(COMMON_OBJECTS) $(EPISODE_OBJECTS) $(PLATFORM_OBJECTS)
 include ../common_flags.mk
 
-EMCC_CFLAGS=-s USE_SDL=2 -s WASM=1 -s EMTERPRETIFY=1 -s EMTERPRETIFY_ASYNC=1 -s EMTERPRETIFY_FILE=data.binary -s ALLOW_MEMORY_GROWTH=1
-EMCC_LDFLAGS=-s USE_SDL=2 -s WASM=1 -s EMTERPRETIFY=1 -s EMTERPRETIFY_ASYNC=1 -s EMTERPRETIFY_FILE=data.binary -s ALLOW_MEMORY_GROWTH=1
 include ../common_toolchain.mk
 
 .PHONY: all game clean veryclean

@@ -1,7 +1,7 @@
 EMCC_CFLAGS ?= -s USE_SDL=2
 EMCC_LDFLAGS ?= -s USE_SDL=2 -s WASM=1 -s ASYNCIFY -s ALLOW_MEMORY_GROWTH=1
 
-ifeq ($(BUILD_PROFILE), emscripten)
+ifneq ($(filter $(BUILD_PROFILE),emscripten emscripten-legacy),)
 	INTCXXFLAGS+= -I$(SRC) $(EMCC_CFLAGS)
 	INTLDFLAGS=$(EMCC_LDFLAGS)
 else

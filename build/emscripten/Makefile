@@ -3,6 +3,7 @@ BUILD_PROFILE=emscripten
 ifeq ($(origin CC), file)
 CC=emcc
 endif
+include ../common_profiles.mk
 
 PLATFORM_OBJECTS=$(OBJ)/platform_sleep_emscripten.o \
 	$(OBJ)/platform_input_stub.o
@@ -16,8 +17,6 @@ include ../common_objects.mk
 OBJECTS=$(COMMON_OBJECTS) $(EPISODE_OBJECTS) $(PLATFORM_OBJECTS)
 include ../common_flags.mk
 
-EMCC_CFLAGS=-s USE_SDL=2
-EMCC_LDFLAGS=-s USE_SDL=2 -s WASM=1 -s ASYNCIFY -s ALLOW_MEMORY_GROWTH=1
 include ../common_toolchain.mk
 
 .PHONY: all game clean veryclean

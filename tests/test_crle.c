@@ -9,7 +9,7 @@
 #include "test_framework.h"
 
 /* Include the CRLE implementation */
-#include "../src/decompression/CGenius/fileio/compression/CRLE.h"
+#include "../src/third_party/cgenius/fileio/compression/CRLE.h"
 
 /* Test: Simple no-compression case
  * When there's no key marker, data should be copied as-is */

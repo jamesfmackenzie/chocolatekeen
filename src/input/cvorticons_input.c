@@ -1,7 +1,7 @@
 #include "SDL.h"
 
 #include "cvorticons.h"
-#include "platform.h"
+#include "platform/platform.h"
 
 // Practically used as a deadzone for analog axes
 #define CHOCOLATE_KEEN_EVENT_HANDLING_THRESHOLD 16384

@@ -14,7 +14,7 @@ TEST_EXE=test_runner
 TEST_SRC=test_runner.c
 
 # Source files we're testing (need to compile these too)
-CRLE_SRC=../src/decompression/CGenius/fileio/compression/CRLE.c
+CRLE_SRC=../src/third_party/cgenius/fileio/compression/CRLE.c
 
 # Build rule
 $(TEST_EXE): $(TEST_SRC) $(CRLE_SRC)

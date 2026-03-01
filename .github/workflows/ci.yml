@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  linux-build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libsdl2-dev
+
+      - name: Build (Linux)
+        run: |
+          mkdir -p build/linux/obj
+          make -C build/linux -j4
+
+      - name: Run tests
+        run: make -C tests run
+
+  emscripten-smoke-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Emscripten SDK
+        uses: mymindstorm/setup-emsdk@v14
+
+      - name: Build (Emscripten smoke test)
+        run: |
+          mkdir -p build/emscripten/obj
+          make -C build/emscripten CC=emcc -j4

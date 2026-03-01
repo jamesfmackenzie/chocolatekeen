@@ -14,12 +14,12 @@ Chocolate Keen is a reverse engineering of Commander Keen in C and SDL. The goal
 If you’re having issues with the controls (e.g. on a Mac keyboard), you can change the key bindings with F3.
 
 ## Releases
-Downloadable game packages available in <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases">Releases</a>. All versions come packaged as zip files with game data. Just extract and run. On Linux, you'll need the <a href="https://wiki.libsdl.org/Installation#Linux.2FUnix" target="_blank">SDL 2.0 runtime</a> installed. Other versions come pre-packaged with SDL
+Downloadable game packages available in <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/releases">releases</a>. All versions come packaged as zip files with game data. Just extract and run. On Linux, you'll need the <a href="https://wiki.libsdl.org/Installation#Linux.2FUnix" target="_blank">SDL 2.0 runtime</a> installed. Other versions come pre-packaged with SDL
 
-* <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/Linux">Releases/Linux</a> - Linux version. Run `./chocolate-keen`
-* <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/WebAssembly">Releases/WebAssembly</a> - WebAssembly version. Run `chocolate-keen.html`
-* <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/Windows-x86">Releases/Windows-x86</a> - for 32-bit Windows. Run `chocolate-keen.exe`
-* <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/Releases/Windows-x64">Releases/Windows-x64</a> - for 64-bit Windows. Run `chocolate-keen.exe`
+* <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/releases/linux">releases/linux</a> - Linux version. Run `./chocolate-keen`
+* <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/releases/webassembly">releases/webassembly</a> - WebAssembly version. Run `chocolate-keen.html`
+* <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/releases/windows-x86">releases/windows-x86</a> - for 32-bit Windows. Run `chocolate-keen.exe`
+* <a href="https://github.com/jamesfmackenzie/chocolatekeen/tree/master/releases/windows-x64">releases/windows-x64</a> - for 64-bit Windows. Run `chocolate-keen.exe`
 
 ### Episodes Two and Three
 The downloadable releases above come packaged with Commander Keen "Invasion of the Vorticons" Episode One: Marooned on Mars. But the engine supports the entire Vorticons trilogy. If you have Episode Two or Three, drop the level/data files into the GAMEDATA folder as follows:
@@ -59,7 +59,7 @@ This is a Makefile project. To build for Windows you'll need something like <a h
 
 1. Download and unzip SDL 2.0 development libraries: https://www.libsdl.org/download-2.0.php
 2. Launch a UNIX shell
-3. Navigate to `/build/MingGW`
+3. Navigate to `/build/mingw`
 4. Run build script that corresponds to your platform:
 * Windows x86:
   * `./build_mingw32.sh /path/to/SDL2`
@@ -71,7 +71,7 @@ This is a Makefile project. To build for Windows you'll need something like <a h
 ### Windows (Visual Studio)
 Build and Debug with Microsoft Visual Studio / Visual C++
 
-1. Navigate to `/build/Visual C++`
+1. Navigate to `/build/visual_studio`
 2. Open Solution file (`ChocolateKeen.sln`) in Visual Studio
 3. Restore NuGet dependencies (Project -> Manage NuGet Dependencies > Restore)
 4. Build (Build > Build Solution)

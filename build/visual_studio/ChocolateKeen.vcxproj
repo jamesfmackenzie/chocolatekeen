@@ -99,17 +99,17 @@
     <ClCompile Include="..\..\src\cvorticons3.c" />
     <ClCompile Include="..\..\src\cvorticons3_engine.c" />
     <ClCompile Include="..\..\src\cvorticons3_memdata.c" />
-    <ClCompile Include="..\..\src\cvorticons_engine.c" />
+    <ClCompile Include="..\..\src\engine\cvorticons_engine.c" />
     <ClCompile Include="..\..\src\cvorticons_gfx.c" />
-    <ClCompile Include="..\..\src\cvorticons_gui.c" />
-    <ClCompile Include="..\..\src\cvorticons_input.c" />
+    <ClCompile Include="..\..\src\ui\cvorticons_gui.c" />
+    <ClCompile Include="..\..\src\input\cvorticons_input.c" />
     <ClCompile Include="..\..\src\cvorticons_memdata.c" />
-    <ClCompile Include="..\..\src\decompression\cgenius\fileio\compression\CRLE.c" />
-    <ClCompile Include="..\..\src\decompression\cgenius\fileio\compression\Cunlzexe.c" />
-    <ClCompile Include="..\..\src\decompression\cgenius\fileio\lz.c" />
+    <ClCompile Include="..\..\src\third_party\cgenius\fileio\compression\CRLE.c" />
+    <ClCompile Include="..\..\src\third_party\cgenius\fileio\compression\Cunlzexe.c" />
+    <ClCompile Include="..\..\src\third_party\cgenius\fileio\lz.c" />
     <ClCompile Include="..\..\src\decompression\imageRLE.c" />
-    <ClCompile Include="..\..\src\platform_input_windows.c" />
-    <ClCompile Include="..\..\src\platform_sleep_native.c" />
+    <ClCompile Include="..\..\src\platform\input_windows.c" />
+    <ClCompile Include="..\..\src\platform\sleep_native.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\packages.config" />
@@ -124,12 +124,12 @@
     <ClInclude Include="..\..\src\cvorticons3.h" />
     <ClInclude Include="..\..\src\cvorticons_gfx.h" />
     <ClInclude Include="..\..\src\cvorticons_input.h" />
-    <ClInclude Include="..\..\src\decompression\cgenius\fileio\compression\CRLE.h" />
-    <ClInclude Include="..\..\src\decompression\cgenius\fileio\compression\Cunlzexe.h" />
-    <ClInclude Include="..\..\src\decompression\cgenius\fileio\lz.h" />
-    <ClInclude Include="..\..\src\decompression\cgenius\fileio\TypeDefinitions.h" />
+    <ClInclude Include="..\..\src\third_party\cgenius\fileio\compression\CRLE.h" />
+    <ClInclude Include="..\..\src\third_party\cgenius\fileio\compression\Cunlzexe.h" />
+    <ClInclude Include="..\..\src\third_party\cgenius\fileio\lz.h" />
+    <ClInclude Include="..\..\src\third_party\cgenius\fileio\TypeDefinitions.h" />
     <ClInclude Include="..\..\src\decompression\imageRLE.h" />
-    <ClInclude Include="..\..\src\platform.h" />
+    <ClInclude Include="..\..\src\platform\platform.h" />
     <ClInclude Include="..\..\windows\include\gl\glext.h" />
   </ItemGroup>
   <ItemGroup>

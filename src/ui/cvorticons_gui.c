@@ -5,7 +5,7 @@
 // FIXME: Why do we need this here??? (For "unnecessary" SDL 2.0 check)
 // Actually cvorticons.h includes that anyway...
 #include "SDL.h"
-#include "platform.h"
+#include "platform/platform.h"
 
 struct GUI_Menu_Item_Struct {
 	int x, y, text_y, width, height, choiceMaxPixWidth;

@@ -11,7 +11,7 @@
 #include "cvorticons1.h"
 #include "cvorticons2.h"
 #include "cvorticons3.h"
-#include "decompression/CGenius/fileio/compression/CRLE.h"
+#include "third_party/cgenius/fileio/compression/CRLE.h"
 
 #include "cvorticons_episode_macros.h"
 

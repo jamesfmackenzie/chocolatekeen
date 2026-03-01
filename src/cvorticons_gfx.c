@@ -5,7 +5,7 @@
 #include "cvorticons2.h"
 #include "cvorticons3.h"
 #include "decompression/imageRLE.h"
-#include "decompression/CGenius/fileio/lz.h"
+#include "third_party/cgenius/fileio/lz.h"
 #include "../rsrc/chocolate-keen_icon.h"
 
 #ifdef _CHOCOLATE_KEEN_ENABLE_OPENGL_

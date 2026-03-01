@@ -6,11 +6,11 @@
 
 #include "../rsrc/chocolate-keen_vga_fonts.h"
 #include "cvorticons.h"
-#include "platform.h"
+#include "platform/platform.h"
 #include "cvorticons1.h"
 #include "cvorticons2.h"
 #include "cvorticons3.h"
-#include "decompression/CGenius/fileio/compression/Cunlzexe.h"
+#include "third_party/cgenius/fileio/compression/Cunlzexe.h"
 
 #ifdef _CHOCOLATE_KEEN_ENABLE_OPENGL_
 #include "SDL_opengl.h"

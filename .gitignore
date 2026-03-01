@@ -43,42 +43,45 @@ chocolate-keen
 *.opendb
 packages/
 .user
-/build/Visual C++/ChocolateKeen.vcxproj.user
-/build/Visual C++/bin
-/build/Visual C++/obj
+/build/visual_studio/ChocolateKeen.vcxproj.user
+/build/visual_studio/bin
+/build/visual_studio/obj
 
-# Commander Keen config files
-Releases/Windows-x64/chocolate-keen.cfg
-Releases/Windows-x64/CTLPANEL.CK1
-Releases/Windows-x64/SCORES.CK1
-Releases/Windows-x64/chocolate-keen.cfg
-Releases/Windows-x64/CTLPANEL.CK1
-Releases/Windows-x64/SCORES.CK1
-Releases/Windows-x86/chocolate-keen.cfg
-Releases/Windows-x86/CTLPANEL.CK1
-Releases/Windows-x86/SCORES.CK1
-Releases/Windows-x86/chocolate-keen.cfg
-Releases/Windows-x86/CTLPANEL.CK1
-Releases/Windows-x86/SCORES.CK1
-Releases/Linux/chocolate-keen.cfg
-Releases/Linux/CTLPANEL.CK1
-Releases/Linux/SCORES.CK1
-Releases/Linux/chocolate-keen.cfg
-Releases/Linux/CTLPANEL.CK1
-Releases/Linux/SCORES.CK1
+# Release package runtime files
+releases/linux/chocolate-keen.cfg
+releases/linux/CTLPANEL.CK1
+releases/linux/SCORES.CK1
+releases/linux/GAMEDATA/
+releases/windows-x64/chocolate-keen.cfg
+releases/windows-x64/CTLPANEL.CK1
+releases/windows-x64/SCORES.CK1
+releases/windows-x64/GAMEDATA/
+releases/windows-x86/chocolate-keen.cfg
+releases/windows-x86/CTLPANEL.CK1
+releases/windows-x86/SCORES.CK1
+releases/windows-x86/GAMEDATA/
 
-# GAMEDATA
-Releases/Linux/GAMEDATA
-Releases/Windows-x64/GAMEDATA
-Releases/Windows-x86/GAMEDATA
+# Local build output
+build/linux/obj/
+build/linux/GAMEDATA/
+build/linux/chocolate-keen
+build/linux/chocolate-keen.cfg
 
-# build output
-build/mingw32/GAMEDATA
-build/mingw32/obj
-build/mingw32/SDL2.dll
-build/mingw-w64/GAMEDATA
-build/mingw-w64/obj
-build/mingw-w64/SDL2.dll
+build/mingw/obj/
+build/mingw/GAMEDATA/
+build/mingw/SDL2.dll
+build/mingw/chocolate-keen*.exe
+build/mingw/chocolate-keen*.cfg
+build/mingw/*.CK1
+build/mingw/*.CK2
+build/mingw/*.CK3
+
+build/emscripten/obj/
+build/emscripten/chocolate-keen*.html
+build/emscripten/chocolate-keen*.js
+build/emscripten/chocolate-keen*.wasm
+build/emscripten/chocolate-keen*.data
+build/emscripten/data.binary
 
 # WebAssembly output
 chocolate-keen.data

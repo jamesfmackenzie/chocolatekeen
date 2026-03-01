@@ -128,13 +128,19 @@ $(EXE_PATH): $(OBJECTS)
 $(OBJ)/chocolate-keen_icon.o: $(RSRC)/chocolate-keen.rc
 	$(WINDRES) $< -O coff -o $@
 
-$(OBJ)/lz.o: $(SRC)/decompression/CGenius/fileio/lz.c
+$(OBJ)/lz.o: $(SRC)/third_party/cgenius/fileio/lz.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/CRLE.o: $(SRC)/decompression/CGenius/fileio/compression/CRLE.c
+$(OBJ)/CRLE.o: $(SRC)/third_party/cgenius/fileio/compression/CRLE.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/Cunlzexe.o: $(SRC)/decompression/CGenius/fileio/compression/Cunlzexe.c
+$(OBJ)/Cunlzexe.o: $(SRC)/third_party/cgenius/fileio/compression/Cunlzexe.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/imageRLE.o: $(SRC)/decompression/imageRLE.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/cvorticons_engine.o: $(SRC)/engine/cvorticons_engine.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/platform_sleep_native.o: $(SRC)/platform/sleep_native.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/platform_input_stub.o: $(SRC)/platform/input_stub.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/%.o: $(SRC)/%.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@

@@ -170,11 +170,11 @@ $(OBJ)/cvorticons_enemies.o: $(SRC)/game/enemies.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/cvorticons_episode_constants.o: $(SRC)/game/episode_constants.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_memdata.o: $(SRC)/render/cvorticons_memdata.c
+$(OBJ)/cvorticons_memdata.o: $(SRC)/render/memdata.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/cvorticons_engine.o: $(SRC)/engine/cvorticons_engine.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_gfx.o: $(SRC)/render/cvorticons_gfx.c
+$(OBJ)/cvorticons_gfx.o: $(SRC)/render/gfx.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/cvorticons_input.o: $(SRC)/input/cvorticons_input.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@

@@ -1,18 +1,4 @@
-DEBUG=0
-BUILDASCPP=0
-BINPREFIX=
-CC=gcc
-
-STRIPBIN=$(BINPREFIX)strip
-WINDRES=windres
-SDLCONFIG=sdl2-config
-SRC=../../src
-RSRC=../../rsrc
-OBJ=obj
-
-USE_OPENGL=1
-
-SINGLE_EPISODE=0
+include ../common_base.mk
 
 PLATFORM_OBJECTS=$(OBJ)/platform_sleep_native.o \
 	$(OBJ)/platform_input_stub.o

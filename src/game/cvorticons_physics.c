@@ -11,7 +11,7 @@
 #include "episodes/cvorticons3.h"
 #include "third_party/cgenius/fileio/compression/CRLE.h"
 
-#include "cvorticons_episode_macros.h"
+#include "episodes/cvorticons_episode_macros.h"
 
 void CVort_body_border_flash(Body_T *border) {
     border->variant += g_game.sprite_sync;

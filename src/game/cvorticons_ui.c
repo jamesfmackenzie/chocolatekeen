@@ -11,7 +11,7 @@
 #include "episodes/cvorticons3.h"
 #include "third_party/cgenius/fileio/compression/CRLE.h"
 
-#include "cvorticons_episode_macros.h"
+#include "episodes/cvorticons_episode_macros.h"
 
 void CVort_draw_keyname(int16_t key) {
     key &= 0x7F;

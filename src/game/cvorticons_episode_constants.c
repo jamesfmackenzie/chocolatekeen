@@ -2,7 +2,7 @@
 #include "episodes/cvorticons1.h"
 #include "episodes/cvorticons2.h"
 #include "episodes/cvorticons3.h"
-#include "cvorticons_episode_macros.h"
+#include "episodes/cvorticons_episode_macros.h"
 
 const EpisodeConstants_T ep_constants[GAMEVER_TOTALAMOUNT] = {
 

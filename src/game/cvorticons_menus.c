@@ -11,7 +11,7 @@
 #include "episodes/cvorticons3.h"
 #include "third_party/cgenius/fileio/compression/CRLE.h"
 
-#include "cvorticons_episode_macros.h"
+#include "episodes/cvorticons_episode_macros.h"
 
 void CVort_demo_toggle_reset_player_partial_state_before();
 void CVort_demo_toggle_reset_player_partial_state_after();

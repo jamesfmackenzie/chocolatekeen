@@ -14,6 +14,10 @@
 
 #include "episodes/episode_macros.h"
 
+static void CVort_private_format_ctrlpanel_path(void) {
+    snprintf(g_game.string_buf, sizeof(g_game.string_buf), "CTLPANEL.%s", game_ext);
+}
+
 void CVort_draw_keyname(int16_t key) {
     key &= 0x7F;
     if (key == 1) {
@@ -192,7 +196,7 @@ void CVort_handle_redef_keys() {
 }
 
 void CVort_init_ctrls() {
-    snprintf(g_game.string_buf, sizeof(g_game.string_buf), "CTLPANEL.%s", game_ext);
+    CVort_private_format_ctrlpanel_path();
     FILE *fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "rb");
     if (fp) {
         bool loadOk = true;
@@ -241,7 +245,7 @@ void CVort_init_ctrls() {
 }
 
 void CVort_save_ctrls() {
-    snprintf(g_game.string_buf, sizeof(g_game.string_buf), "CTLPANEL.%s", game_ext);
+    CVort_private_format_ctrlpanel_path();
     FILE *fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "wb");
     CK_IO_RETURN_IF_OPEN_FAIL_FOR_WRITE(fp, g_game.string_buf);
     bool saveOk = true;

@@ -30,6 +30,8 @@ OBJECTS=$(OBJ)/cvorticons.o \
 	$(OBJ)/CRLE.o \
 	$(OBJ)/Cunlzexe.o \
 	$(OBJ)/imageRLE.o \
+	$(OBJ)/platform_sleep_emscripten.o \
+	$(OBJ)/platform_input_stub.o \
 	$(OBJ)/chocolate-keen.o
 
 ifeq ($(SINGLE_EPISODE),$(filter $(SINGLE_EPISODE),0 1))

@@ -1,13 +1,7 @@
 #include "SDL.h"
-#ifdef __EMSCRIPTEN__
-#include <emscripten.h>
-#endif
-
-#ifdef __WIN32__
-#include "windows.h" // For LoadKeyboardLayout
-#endif
 
 #include "cvorticons.h"
+#include "platform.h"
 
 // Practically used as a deadzone for analog axes
 #define CHOCOLATE_KEEN_EVENT_HANDLING_THRESHOLD 16384
@@ -1273,10 +1267,7 @@ void CVort_engine_setDefaultInputMappings(void) {
 void CVort_engine_setupInputMappings(void) {
     int loopVar;
 
-#ifdef __WIN32__
-    // Force US English keyboard layout
-    LoadKeyboardLayout("00000409", KLF_ACTIVATE | KLF_SETFORPROCESS);
-#endif
+    CK_PlatformPrepareInput();
 
     // Clear all first
     memset(&engine_inputMappings, 0, sizeof(engine_inputMappings));
@@ -1457,11 +1448,7 @@ MappedInputEvent_T *CVort_engine_recordNewInputMapping(EmulatedInput_T emuInput,
 			CVort_engine_updateActualDisplay();
 			engine_lastDisplayUpdateTime = SDL_GetTicks();
 		}
-#ifdef __EMSCRIPTEN__
-		emscripten_sleep(1);
-#else
-		SDL_Delay(1);
-#endif
+        CK_PlatformSleepMs(1);
 	}
 	if (doWait) // Timed out
 		return NULL;

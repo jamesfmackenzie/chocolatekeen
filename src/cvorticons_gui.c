@@ -5,9 +5,7 @@
 // FIXME: Why do we need this here??? (For "unnecessary" SDL 2.0 check)
 // Actually cvorticons.h includes that anyway...
 #include "SDL.h"
-#ifdef __EMSCRIPTEN__
-#include <emscripten.h>
-#endif
+#include "platform.h"
 
 struct GUI_Menu_Item_Struct {
 	int x, y, text_y, width, height, choiceMaxPixWidth;
@@ -3213,11 +3211,7 @@ void CVort_gui_runLoop(void) {
 			CVort_engine_updateActualDisplay();
 			engine_lastDisplayUpdateTime = SDL_GetTicks();
 		}
-#ifdef __EMSCRIPTEN__
-		emscripten_sleep(1);
-#else
-		SDL_Delay(1);
-#endif
+        CK_PlatformSleepMs(1);
 	}
 }
 
@@ -3506,10 +3500,6 @@ void CVort_gui_mapper_runLoop(void) {
 			CVort_engine_updateActualDisplay();
 			engine_lastDisplayUpdateTime = SDL_GetTicks();
 		}
-#ifdef __EMSCRIPTEN__
-		emscripten_sleep(1);
-#else
-		SDL_Delay(1);
-#endif
+        CK_PlatformSleepMs(1);
 	} while (guiMapperLoopRunningStatus);
 }

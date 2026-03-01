@@ -1,14 +1,12 @@
 #include <stdio.h>
 #include "SDL.h"
 #include "SDL_endian.h"
-#ifdef __EMSCRIPTEN__
-#include <emscripten.h>
-#endif
 
 /* TODO: Currently unused */
 
 #include "../rsrc/chocolate-keen_vga_fonts.h"
 #include "cvorticons.h"
+#include "platform.h"
 #include "cvorticons1.h"
 #include "cvorticons2.h"
 #include "cvorticons3.h"
@@ -380,11 +378,7 @@ void CVort_engine_displayCommandLineHelp() {
         //engine_shortSleep();
         // But let's use this:
         CVort_engine_updateActualDisplay();
-#ifdef __EMSCRIPTEN__
-		emscripten_sleep(1);
-#else
-		SDL_Delay(1);
-#endif
+        CK_PlatformSleepMs(1);
     } while (1);
     // We should NEVER reach this stage... so not calling CVort_engine_shutdownSDL().
 }
@@ -611,11 +605,7 @@ void CVort_engine_loadKeen(gameversion_T gameVer) {
 			//engine_shortSleep();
 			// But let's use this:
 			CVort_engine_updateActualDisplay();
-#ifdef __EMSCRIPTEN__
-		emscripten_sleep(1);
-#else
-		SDL_Delay(1);
-#endif
+            CK_PlatformSleepMs(1);
 		} while (1);
 		// We should NEVER reach this stage...
 	}
@@ -818,11 +808,7 @@ void CVort_engine_handleQuit() {
         //engine_shortSleep();
         // But let's use this:
         CVort_engine_updateActualDisplay();
-#ifdef __EMSCRIPTEN__
-		emscripten_sleep(1);
-#else
-		SDL_Delay(1);
-#endif
+        CK_PlatformSleepMs(1);
     } while (1);
 }
 
@@ -966,11 +952,7 @@ void CVort_engine_doWaitInterval(void) {
         CVort_engine_updateActualDisplay();
         engine_lastDisplayUpdateTime = SDL_GetTicks();
     } else { // Maybe we have waited for (host, real) VSync anyway?
-#ifdef __EMSCRIPTEN__
-		emscripten_sleep(1);
-#else
-		SDL_Delay(1);
-#endif
+        CK_PlatformSleepMs(1);
     }
 }
 
@@ -983,11 +965,7 @@ void CVort_engine_shortSleep(void) {
         CVort_engine_updateActualDisplay();
         engine_lastDisplayUpdateTime = SDL_GetTicks();
     }
-#ifdef __EMSCRIPTEN__
-		emscripten_sleep(1);
-#else
-		SDL_Delay(1);
-#endif
+            CK_PlatformSleepMs(1);
     CVort_engine_updateInputStatus();
     engine_doResetMomentToDelay = true;
 }

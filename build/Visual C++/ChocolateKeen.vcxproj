@@ -108,6 +108,8 @@
     <ClCompile Include="..\..\src\decompression\cgenius\fileio\compression\Cunlzexe.c" />
     <ClCompile Include="..\..\src\decompression\cgenius\fileio\lz.c" />
     <ClCompile Include="..\..\src\decompression\imageRLE.c" />
+    <ClCompile Include="..\..\src\platform_input_windows.c" />
+    <ClCompile Include="..\..\src\platform_sleep_native.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\packages.config" />
@@ -127,6 +129,7 @@
     <ClInclude Include="..\..\src\decompression\cgenius\fileio\lz.h" />
     <ClInclude Include="..\..\src\decompression\cgenius\fileio\TypeDefinitions.h" />
     <ClInclude Include="..\..\src\decompression\imageRLE.h" />
+    <ClInclude Include="..\..\src\platform.h" />
     <ClInclude Include="..\..\windows\include\gl\glext.h" />
   </ItemGroup>
   <ItemGroup>

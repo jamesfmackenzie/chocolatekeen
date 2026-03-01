@@ -44,8 +44,12 @@ void CVort_save_demo(int16_t demo_number) {
     FILE *fp;
     snprintf(g_game.string_buf, sizeof(g_game.string_buf), "DEMO%d.%s", demo_number, game_ext);
     fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "wb");
-    fwrite(demo_actions_including_level_num, demo_action_ptr-demo_actions_including_level_num, 1, fp);
+    if (!fp)
+        return;
+    bool saveOk = true;
+    CK_IO_EXPECT(saveOk, fwrite(demo_actions_including_level_num, demo_action_ptr-demo_actions_including_level_num, 1, fp), 1);
     fclose(fp);
+    CK_IO_WARN_ON_WRITE_FAIL(saveOk, g_game.string_buf);
     g_game.demo_status = DEMO_OFF;
 }
 
@@ -617,18 +621,20 @@ void CVort_save_game() {
     fp = CVort_engine_cross_rw_misc_fopen(path, "wb");
     if (!fp) // FIXME: And what if it fails...
         return;
-    CVort_engine_cross_fwriteInt16LE(keen_gp.stuff, 9, fp);
-    CVort_engine_cross_fwriteInt16LE(keen_gp.levels, 16, fp);
-    CVort_engine_cross_fwriteInt16LE(&keen_gp.lives, 1, fp);
-    CVort_engine_cross_fwriteInt16LE(&keen_gp.ammo, 1, fp);
-    CVort_engine_cross_fwriteInt32LE(&keen_gp.score, 1, fp);
-    CVort_engine_cross_fwriteInt32LE(&keen_gp.mapX, 1, fp);
-    CVort_engine_cross_fwriteInt32LE(&keen_gp.mapY, 1, fp);
-    CVort_engine_cross_fwriteInt32LE(&keen_gp.screenX, 1, fp);
-    CVort_engine_cross_fwriteInt32LE(&keen_gp.screenY, 1, fp);
-    CVort_engine_cross_fwriteInt16LE(keen_gp.targets, 8, fp);
-    CVort_engine_cross_fwriteInt16LE(&keen_gp.unknown, 1, fp);
+    bool saveOk = true;
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(keen_gp.stuff, 9, fp), 9);
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(keen_gp.levels, 16, fp), 16);
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(&keen_gp.lives, 1, fp), 1);
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(&keen_gp.ammo, 1, fp), 1);
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt32LE(&keen_gp.score, 1, fp), 1);
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt32LE(&keen_gp.mapX, 1, fp), 1);
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt32LE(&keen_gp.mapY, 1, fp), 1);
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt32LE(&keen_gp.screenX, 1, fp), 1);
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt32LE(&keen_gp.screenY, 1, fp), 1);
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(keen_gp.targets, 8, fp), 8);
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(&keen_gp.unknown, 1, fp), 1);
     fclose(fp);
+    CK_IO_WARN_ON_WRITE_FAIL(saveOk, path);
 
     CVort_draw_box_opening_main(0x1D, 3);
     CVort_draw_string("You can continue this game\n");

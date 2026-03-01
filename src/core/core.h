@@ -1,10 +1,10 @@
 #ifndef _CHOCOLATE_KEEN_VORTICONS_
 #define _CHOCOLATE_KEEN_VORTICONS_
 
-#include "core/cvorticons_constants.h"
-#include "core/cvorticons_types.h"
+#include "core/constants.h"
+#include "core/types.h"
 #include "game/sprites.h"
 #include "render/opengl.h"
-#include "core/cvorticons_globals.h"
+#include "core/globals.h"
 
 #endif

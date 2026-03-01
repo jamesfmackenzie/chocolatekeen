@@ -1,6 +1,6 @@
 #include "SDL.h"
 
-#include "core/cvorticons.h"
+#include "core/core.h"
 #include "platform/platform.h"
 
 // Practically used as a deadzone for analog axes

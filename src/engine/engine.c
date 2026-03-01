@@ -5,7 +5,7 @@
 /* TODO: Currently unused */
 
 #include "../rsrc/chocolate-keen_vga_fonts.h"
-#include "core/cvorticons.h"
+#include "core/core.h"
 #include "platform/platform.h"
 #include "episodes/cvorticons1.h"
 #include "episodes/cvorticons2.h"

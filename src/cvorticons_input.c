@@ -1963,14 +1963,14 @@ void CVort_engine_handleEvent(const MappedInputEvent_T *pMappedEvent, int32_t ac
             dosScanCode = engine_emulatedKeysTable[pMappedEvent->value].dosScanCode;
             if ((action >= CHOCOLATE_KEEN_EVENT_HANDLING_THRESHOLD &&
                 pMappedEvent->modMask == (pMappedEvent->modMask & engine_inputMappings.currEmuInputStatus.modifiersMask))) {
-                key_scane = dosScanCode | 0x80;
-                key_map[dosScanCode] = 1;
+                g_input.key_scane = dosScanCode | 0x80;
+                g_input.key_map[dosScanCode] = 1;
 
                 engine_lastScanCode = dosScanCode;
                 engine_lastKeyTime = SDL_GetTicks();
                 engine_isBeforeKeyDelay = true;
             } else {
-                key_map[dosScanCode] = 0;
+                g_input.key_map[dosScanCode] = 0;
                 if (dosScanCode == engine_lastScanCode)
                     engine_lastScanCode = 0;
             }
@@ -2255,15 +2255,15 @@ void CVort_engine_updateInputStatus() {
         if (engine_isBeforeKeyDelay) {
             if ((SDL_GetTicks() - engine_lastKeyTime) >= 500) {
                 engine_lastKeyTime = SDL_GetTicks();
-                key_scane = engine_lastScanCode | 0x80;
-                key_map[engine_lastScanCode] = 1;
+                g_input.key_scane = engine_lastScanCode | 0x80;
+                g_input.key_map[engine_lastScanCode] = 1;
                 engine_isBeforeKeyDelay = false;
             }
         } else if ((SDL_GetTicks() - engine_lastKeyTime)*3 >= 100) {
             // Since it's immediate...
             //engine_lastKeyTime = SDL_GetTicks();
-            key_scane = engine_lastScanCode | 0x80;
-            key_map[engine_lastScanCode] = 1;
+            g_input.key_scane = engine_lastScanCode | 0x80;
+            g_input.key_map[engine_lastScanCode] = 1;
         }
     }
 }

@@ -133,14 +133,14 @@ void CVort_handle_redef_keys() {
     for (int16_t counter = 0; counter < 8; counter++) {
         cursorX = 0x1A;
         cursorY = counter + 7;
-        CVort_draw_keyname(sc_dir[counter]);
+        CVort_draw_keyname(g_input.sc_dir[counter]);
     }
     cursorX = 0x1A;
     cursorY = 0xF;
-    CVort_draw_keyname(sc_but1);
+    CVort_draw_keyname(g_input.sc_but1);
     cursorX = 0x1A;
     cursorY = 0x10;
-    CVort_draw_keyname(sc_but2);
+    CVort_draw_keyname(g_input.sc_but2);
     //engine_updateActualDisplay();
     do {
         cursorX = box_x_pos;
@@ -158,7 +158,7 @@ void CVort_handle_redef_keys() {
             checkedKey = -1;
             do {
                 checkedKey++;
-                if (key_map[checkedKey])
+                if (g_input.key_map[checkedKey])
                     break;
                 if (checkedKey == 0x79) {
                     checkedKey = -1;
@@ -172,11 +172,11 @@ void CVort_handle_redef_keys() {
             CVort_clear_keys();
             CVort_draw_string("\r                  ");
             if (shiftedAnswer < 8)
-                sc_dir[shiftedAnswer] = checkedKey;
+                g_input.sc_dir[shiftedAnswer] = checkedKey;
             if (shiftedAnswer == 8)
-                sc_but1 = checkedKey;
+                g_input.sc_but1 = checkedKey;
             if (shiftedAnswer == 9)
-                sc_but2 = checkedKey;
+                g_input.sc_but2 = checkedKey;
 
             cursorY = shiftedAnswer + 7;
             cursorX = 0x1A;
@@ -187,84 +187,84 @@ void CVort_handle_redef_keys() {
             lastAnswer = 0x30;
         }
     } while ((lastAnswer >= 0x30) && (lastAnswer <= 0x39));
-    ctrl_type[1] = 0;
+    g_input.ctrl_type[1] = 0;
 }
 
 void CVort_init_ctrls() {
-    snprintf(string_buf, sizeof(string_buf), "CTLPANEL.%s", game_ext);
-    FILE *fp = CVort_engine_cross_rw_misc_fopen(string_buf, "rb");
+    snprintf(g_game.string_buf, sizeof(g_game.string_buf), "CTLPANEL.%s", game_ext);
+    FILE *fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "rb");
     if (fp) {
-        CVort_engine_cross_freadInt16LE(&want_sound, 1, fp);
-        CVort_engine_cross_freadInt16LE(ctrl_type, 3, fp);
-        CVort_engine_cross_freadInt16LE(joystick_ctrl[0], 1, fp);
-        CVort_engine_cross_freadInt16LE(joystick_ctrl[0] + 1, 1, fp);
-        CVort_engine_cross_freadInt16LE(joystick_ctrl[0] + 2, 1, fp);
-        CVort_engine_cross_freadInt16LE(joystick_ctrl[2], 1, fp);
-        CVort_engine_cross_freadInt16LE(joystick_ctrl[2] + 1, 1, fp);
-        CVort_engine_cross_freadInt16LE(joystick_ctrl[2] + 2, 1, fp);
-        CVort_engine_cross_freadInt16LE(joystick_ctrl[1], 1, fp);
-        CVort_engine_cross_freadInt16LE(joystick_ctrl[1] + 1, 1, fp);
-        CVort_engine_cross_freadInt16LE(joystick_ctrl[1] + 2, 1, fp);
-        CVort_engine_cross_freadInt16LE(joystick_ctrl[3], 1, fp);
-        CVort_engine_cross_freadInt16LE(joystick_ctrl[3] + 1, 1, fp);
-        CVort_engine_cross_freadInt16LE(joystick_ctrl[3] + 2, 1, fp);
-        CVort_engine_cross_freadInt16LE(&mouse_ctrl_1, 1, fp);
-        CVort_engine_cross_freadInt8LE(sc_dir, 8, fp);
-        CVort_engine_cross_freadInt8LE(&sc_but1, 1, fp);
-        CVort_engine_cross_freadInt8LE(&sc_but2, 1, fp);
+        CVort_engine_cross_freadInt16LE(&g_game.want_sound, 1, fp);
+        CVort_engine_cross_freadInt16LE(g_input.ctrl_type, 3, fp);
+        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[0], 1, fp);
+        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[0] + 1, 1, fp);
+        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[0] + 2, 1, fp);
+        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[2], 1, fp);
+        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[2] + 1, 1, fp);
+        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[2] + 2, 1, fp);
+        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[1], 1, fp);
+        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[1] + 1, 1, fp);
+        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[1] + 2, 1, fp);
+        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[3], 1, fp);
+        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[3] + 1, 1, fp);
+        CVort_engine_cross_freadInt16LE(g_input.joystick_ctrl[3] + 2, 1, fp);
+        CVort_engine_cross_freadInt16LE(&g_input.mouse_ctrl_1, 1, fp);
+        CVort_engine_cross_freadInt8LE(g_input.sc_dir, 8, fp);
+        CVort_engine_cross_freadInt8LE(&g_input.sc_but1, 1, fp);
+        CVort_engine_cross_freadInt8LE(&g_input.sc_but2, 1, fp);
         fclose(fp);
     } else {
-        want_sound = 1;
-        ctrl_type[1] = 0;
-        ctrl_type[2] = 2;
-        joystick_ctrl[0][1] = joystick_ctrl[0][2] = joystick_ctrl[2][1] = joystick_ctrl[2][2] = 20;
-        joystick_ctrl[1][1] = joystick_ctrl[1][2] = joystick_ctrl[3][1] = joystick_ctrl[3][2] = 60;
-        mouse_ctrl_1 = 5;
+        g_game.want_sound = 1;
+        g_input.ctrl_type[1] = 0;
+        g_input.ctrl_type[2] = 2;
+        g_input.joystick_ctrl[0][1] = g_input.joystick_ctrl[0][2] = g_input.joystick_ctrl[2][1] = g_input.joystick_ctrl[2][2] = 20;
+        g_input.joystick_ctrl[1][1] = g_input.joystick_ctrl[1][2] = g_input.joystick_ctrl[3][1] = g_input.joystick_ctrl[3][2] = 60;
+        g_input.mouse_ctrl_1 = 5;
 
-        sc_dir[0] = 0x48;
-        sc_dir[1] = 0x49;
-        sc_dir[2] = 0x4D;
-        sc_dir[3] = 0x51;
-        sc_dir[4] = 0x50;
-        sc_dir[5] = 0x4F;
-        sc_dir[6] = 0x4B;
-        sc_dir[7] = 0x47;
-        sc_but1 = 0x1D;
-        sc_but2 = 0x38;
+        g_input.sc_dir[0] = 0x48;
+        g_input.sc_dir[1] = 0x49;
+        g_input.sc_dir[2] = 0x4D;
+        g_input.sc_dir[3] = 0x51;
+        g_input.sc_dir[4] = 0x50;
+        g_input.sc_dir[5] = 0x4F;
+        g_input.sc_dir[6] = 0x4B;
+        g_input.sc_dir[7] = 0x47;
+        g_input.sc_but1 = 0x1D;
+        g_input.sc_but2 = 0x38;
     }
 }
 
 void CVort_save_ctrls() {
-    snprintf(string_buf, sizeof(string_buf), "CTLPANEL.%s", game_ext);
-    FILE *fp = CVort_engine_cross_rw_misc_fopen(string_buf, "wb");
+    snprintf(g_game.string_buf, sizeof(g_game.string_buf), "CTLPANEL.%s", game_ext);
+    FILE *fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "wb");
     if (!fp)
         return;
-    CVort_engine_cross_fwriteInt16LE(&want_sound, 1, fp);
-    CVort_engine_cross_fwriteInt16LE(ctrl_type, 3, fp);
-    CVort_engine_cross_fwriteInt16LE(joystick_ctrl[0], 1, fp);
-    CVort_engine_cross_fwriteInt16LE(joystick_ctrl[0] + 1, 1, fp);
-    CVort_engine_cross_fwriteInt16LE(joystick_ctrl[0] + 2, 1, fp);
-    CVort_engine_cross_fwriteInt16LE(joystick_ctrl[2], 1, fp);
-    CVort_engine_cross_fwriteInt16LE(joystick_ctrl[2] + 1, 1, fp);
-    CVort_engine_cross_fwriteInt16LE(joystick_ctrl[2] + 2, 1, fp);
-    CVort_engine_cross_fwriteInt16LE(joystick_ctrl[1], 1, fp);
-    CVort_engine_cross_fwriteInt16LE(joystick_ctrl[1] + 1, 1, fp);
-    CVort_engine_cross_fwriteInt16LE(joystick_ctrl[1] + 2, 1, fp);
-    CVort_engine_cross_fwriteInt16LE(joystick_ctrl[3], 1, fp);
-    CVort_engine_cross_fwriteInt16LE(joystick_ctrl[3] + 1, 1, fp);
-    CVort_engine_cross_fwriteInt16LE(joystick_ctrl[3] + 2, 1, fp);
-    CVort_engine_cross_fwriteInt16LE(&mouse_ctrl_1, 1, fp);
-    CVort_engine_cross_fwriteInt8LE(sc_dir, 8, fp);
-    CVort_engine_cross_fwriteInt8LE(&sc_but1, 1, fp);
-    CVort_engine_cross_fwriteInt8LE(&sc_but2, 1, fp);
+    CVort_engine_cross_fwriteInt16LE(&g_game.want_sound, 1, fp);
+    CVort_engine_cross_fwriteInt16LE(g_input.ctrl_type, 3, fp);
+    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[0], 1, fp);
+    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[0] + 1, 1, fp);
+    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[0] + 2, 1, fp);
+    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[2], 1, fp);
+    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[2] + 1, 1, fp);
+    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[2] + 2, 1, fp);
+    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[1], 1, fp);
+    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[1] + 1, 1, fp);
+    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[1] + 2, 1, fp);
+    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[3], 1, fp);
+    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[3] + 1, 1, fp);
+    CVort_engine_cross_fwriteInt16LE(g_input.joystick_ctrl[3] + 2, 1, fp);
+    CVort_engine_cross_fwriteInt16LE(&g_input.mouse_ctrl_1, 1, fp);
+    CVort_engine_cross_fwriteInt8LE(g_input.sc_dir, 8, fp);
+    CVort_engine_cross_fwriteInt8LE(&g_input.sc_but1, 1, fp);
+    CVort_engine_cross_fwriteInt8LE(&g_input.sc_but2, 1, fp);
     fclose(fp);
 }
 
 GameInput_T CVort_handle_ctrl(uint16_t input_type) {
     GameInput_T input_ret;
     //CVort_engine_updateInputStatus();
-    if ((demo_status == DEMO_OFF) || (demo_status == DEMO_RECORD)) {
-        switch (ctrl_type[input_type]) {
+    if ((g_game.demo_status == DEMO_OFF) || (g_game.demo_status == DEMO_RECORD)) {
+        switch (g_input.ctrl_type[input_type]) {
             case CONTROL_KEYB:
                 input_ret = CVort_engine_getKeybCtrlState();
                 break;
@@ -280,7 +280,7 @@ GameInput_T CVort_handle_ctrl(uint16_t input_type) {
             default:
                 break;
         }
-        if (demo_status == DEMO_RECORD) {
+        if (g_game.demo_status == DEMO_RECORD) {
             if (engine_arguments.extras.vorticonsDemoModeToggle && (demo_action_ptr == demo_after_last_byte_char_offset)) {
                 CVort_chg_vid_and_error("Demo buffer overflow");
             }
@@ -289,7 +289,7 @@ GameInput_T CVort_handle_ctrl(uint16_t input_type) {
         }
     } else {
         if (engine_arguments.extras.vorticonsDemoModeToggle && (demo_action_ptr == end_of_demo_ptr)) {
-            quit_to_title = 2; // SPECIAL VALUE (HALT BY DEMO, *NOT* PLAYER)
+            g_game.quit_to_title = 2; // SPECIAL VALUE (HALT BY DEMO, *NOT* PLAYER)
 
             // FIXME: On a second thought that's malformed
             // behavior (what is input_ret??)... Oh well
@@ -306,21 +306,21 @@ GameInput_T CVort_handle_ctrl(uint16_t input_type) {
 uint16_t CVort_translate_key(uint16_t type) {
     //CVort_engine_updateInputStatus();
     if (type) {
-        if (!(key_scane & 0x80))
+        if (!(g_input.key_scane & 0x80))
             return 0;
-        uint8_t returnHigh = key_scane & 0x7f;
-        key_code = exeFields.trans_map[returnHigh];
-        if (key_code)
-            return (key_code | (returnHigh << 8));
+        uint8_t returnHigh = g_input.key_scane & 0x7f;
+        g_input.key_code = exeFields.trans_map[returnHigh];
+        if (g_input.key_code)
+            return (g_input.key_code | (returnHigh << 8));
         return 0;
     }
     do {
-        if (key_scane & 0x80) // Should be ((int8_t)key_scane < 0) or so?
+        if (g_input.key_scane & 0x80) // Should be ((int8_t)g_input.key_scane < 0) or so?
         {
-            key_scane &= 0x7f;
-            if (exeFields.trans_map[key_scane]) {
-                key_code = exeFields.trans_map[key_scane];
-                return (key_code | (key_scane << 8));
+            g_input.key_scane &= 0x7f;
+            if (exeFields.trans_map[g_input.key_scane]) {
+                g_input.key_code = exeFields.trans_map[g_input.key_scane];
+                return (g_input.key_code | (g_input.key_scane << 8));
             }
         }
         // Rather than a busy loop, we wait for a new event here.
@@ -451,13 +451,13 @@ void CVort_draw_string(const char *str) {
 }
 
 void CVort_draw_number_word(uint16_t value) {
-    snprintf(string_buf, sizeof(string_buf), "%" PRIu16, value);
-    CVort_draw_string(string_buf);
+    snprintf(g_game.string_buf, sizeof(g_game.string_buf), "%" PRIu16, value);
+    CVort_draw_string(g_game.string_buf);
 }
 
 void CVort_draw_number_dword(uint32_t value) {
-    snprintf(string_buf, sizeof(string_buf), "%" PRIu32, value);
-    CVort_draw_string(string_buf);
+    snprintf(g_game.string_buf, sizeof(g_game.string_buf), "%" PRIu32, value);
+    CVort_draw_string(g_game.string_buf);
 }
 
 void CVort_draw_stringz(const char *str) {
@@ -515,13 +515,13 @@ void CVort_fade_out() {
 // Custom levels for vanilla Keen1 with light switches are possible, though.
 
 void CVort_lights_on() {
-    lights = 1;
+    g_game.lights = 1;
     CVort_engine_delay(1);
     CVort_engine_setPaletteAndBorderColor(exeFields.palettes[3]);
 }
 
 void CVort_lights_out() {
-    lights = 0;
+    g_game.lights = 0;
     CVort_engine_delay(1);
     CVort_engine_setPaletteAndBorderColor(exeFields.palettes[1]);
 }
@@ -536,19 +536,19 @@ void CVort_toggle_switch() {
             CVort_engine_syncDrawing();
             scrollX = origScrollX - ((CVort_calc_jump_height(0x40) - 0x20) << 8);
             scrollY = origScrollY - ((CVort_calc_jump_height(0x40) - 0x20) << 8);
-            CVort_engine_drawSpriteAt(temp_sprite.posX, temp_sprite.posY, temp_sprite.frame);
+            CVort_engine_drawSpriteAt(g_entities.temp_sprite.posX, g_entities.temp_sprite.posY, g_entities.temp_sprite.frame);
             CVort_engine_drawScreen();
         }
         CVort_draw_box_opening_main(5, 1);
         CVort_draw_string("Oops.");
         //engine_updateActualDisplay();
         CVort_engine_delay(100);
-        level_finished = LEVEL_END_TANTALUS;
+        g_game.level_finished = LEVEL_END_TANTALUS;
         return;
     }
     switch (map_data_tiles[keen_tileY * map_width_T + keen_tileX]) {
         case 0x10F:
-            if (lights)
+            if (g_game.lights)
                 CVort_lights_out();
             else
                 CVort_lights_on();
@@ -565,32 +565,32 @@ void CVort_toggle_switch() {
     int16_t var_A = CVort_engine_signExtend8To16(var_2 & 0xFF);
     int16_t var_6 = keen_tileX + var_A;
     int16_t var_8 = keen_tileY + CVort_engine_signExtend8To16((var_2 >> 8) & 0xFF);
-    // Going over the bodies
-    for (loopVar = 0; loopVar < num_bodies; loopVar++) {
-        if (!bodies[loopVar].type_)
+    // Going over the g_entities.bodies
+    for (loopVar = 0; loopVar < g_entities.num_bodies; loopVar++) {
+        if (!g_entities.bodies[loopVar].type_)
             continue;
-        if (bodies[loopVar].tile_x != var_6)
+        if (g_entities.bodies[loopVar].tile_x != var_6)
             continue;
-        if (bodies[loopVar].tile_y == var_8)
+        if (g_entities.bodies[loopVar].tile_y == var_8)
             break;
     }
-    if (loopVar < num_bodies) {
-        if (bodies[loopVar].think_ptr == &CVort_body_bridge_retract)
-            (bodies[loopVar].think_ptr = &CVort_body_bridge_extend);
+    if (loopVar < g_entities.num_bodies) {
+        if (g_entities.bodies[loopVar].think_ptr == &CVort_body_bridge_retract)
+            (g_entities.bodies[loopVar].think_ptr = &CVort_body_bridge_extend);
         else
-            (bodies[loopVar].think_ptr = &CVort_body_bridge_retract);
+            (g_entities.bodies[loopVar].think_ptr = &CVort_body_bridge_retract);
         return;
     }
     int16_t bodyIndex = CVort_add_body();
-    bodies[bodyIndex].type_ = 2;
-    bodies[bodyIndex].think_ptr = &CVort_body_bridge_extend;
-    bodies[bodyIndex].tile_x = var_6;
-    bodies[bodyIndex].tile_y = var_8;
-    bodies[bodyIndex].variant = 0;
+    g_entities.bodies[bodyIndex].type_ = 2;
+    g_entities.bodies[bodyIndex].think_ptr = &CVort_body_bridge_extend;
+    g_entities.bodies[bodyIndex].tile_x = var_6;
+    g_entities.bodies[bodyIndex].tile_y = var_8;
+    g_entities.bodies[bodyIndex].variant = 0;
     if (TILEINFO_LEdge[map_data_tiles[var_8 * map_width_T + var_6 + 1]])
-        bodies[bodyIndex].field_C = -1;
+        g_entities.bodies[bodyIndex].field_C = -1;
     else
-        bodies[bodyIndex].field_C = 1;
-    bodies[bodyIndex].field_E = map_data_tiles[var_8 * map_width_T + var_6];
-    bodies[bodyIndex].field_10 = 0;
+        g_entities.bodies[bodyIndex].field_C = 1;
+    g_entities.bodies[bodyIndex].field_E = map_data_tiles[var_8 * map_width_T + var_6];
+    g_entities.bodies[bodyIndex].field_10 = 0;
 }

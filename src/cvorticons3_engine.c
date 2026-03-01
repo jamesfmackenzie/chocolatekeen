@@ -74,16 +74,16 @@ void CVort3_engine_processEXE() {
 
     textbox_offs_x = 0x13;
     textbox_offs_y = 0xB;
-    reshow_scroll_up = 1;
+    g_game.reshow_scroll_up = 1;
     sound_limiter = 0;
-    sound_disabled = 0;
+    g_game.sound_disabled = 0;
 
     // TODO? These are apparently not done on vanilla Keen directly,
     // but maybe indirectly they are...
     // They are located in the BSS, so they are set to zero by default
-    // god_mode = 0;
-    // memset(sprites, 0, sizeof(sprites));
-    // memset(bodies, 0, sizeof(bodies));
+    // g_game.god_mode = 0;
+    // memset(g_entities.sprites, 0, sizeof(g_entities.sprites));
+    // memset(g_entities.bodies, 0, sizeof(g_entities.bodies));
 
     // TODO: We can always fill more values...
 }

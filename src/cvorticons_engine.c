@@ -375,7 +375,7 @@ void CVort_engine_displayCommandLineHelp() {
             CVort_engine_shutdownSDL();
             return;
         }
-        // We cannot use this here - key_map is not ready!
+        // We cannot use this here - g_input.key_map is not ready!
         // Furthermore, we are waiting for SDL events directly.
         //engine_shortSleep();
         // But let's use this:
@@ -606,7 +606,7 @@ void CVort_engine_loadKeen(gameversion_T gameVer) {
 				CVort_engine_shutdownSDL();
 				exit(0);
 			}
-			// We cannot use this here - key_map is not ready!
+			// We cannot use this here - g_input.key_map is not ready!
 			// Furthermore, we are waiting for SDL events directly.
 			//engine_shortSleep();
 			// But let's use this:
@@ -1003,8 +1003,8 @@ void CVort_engine_loadSounds(void) {
     uint8_t *soundDataPtr;
 
     if (engine_gameVersion == GAMEVER_KEEN1) {
-        snprintf(string_buf, sizeof(string_buf), "SOUNDS.%s", game_ext);
-        FILE *fp = CVort_engine_cross_ro_data_fopen(string_buf);
+        snprintf(g_game.string_buf, sizeof(g_game.string_buf), "SOUNDS.%s", game_ext);
+        FILE *fp = CVort_engine_cross_ro_data_fopen(g_game.string_buf);
         // TODO: What if we fail to load the file?
         if (fp) {
             len = CVort_filelength(fp);
@@ -1097,7 +1097,7 @@ void CVort_engine_sndCallback(void *unused, uint8_t *stream, int len) {
     if (amount > len)
         amount = len;
 
-    if (want_sound & 0xFF) { // As done on Vanilla Keen...sort of
+    if (g_game.want_sound & 0xFF) { // As done on Vanilla Keen...sort of
         memcpy(stream, (uint8_t *) sndChunks[currSoundPlaying].chunk + engine_currSoundLocation, amount);
     }
     engine_currSoundLocation += amount;
@@ -1112,7 +1112,7 @@ void CVort_engine_setCurSound(uint16_t sound) {
     // the header are skipped. Since we have already taken care of that...
     sound--;
 
-    if (!sound_disabled && ((engine_currSoundPlaying < 0) || (sndPriorities[sound] >= sound_limiter))) {
+    if (!g_game.sound_disabled && ((engine_currSoundPlaying < 0) || (sndPriorities[sound] >= sound_limiter))) {
         SDL_PauseAudio(1);
         engine_currSoundPlaying = sound;
         sound_limiter = sndPriorities[sound];
@@ -1124,21 +1124,21 @@ void CVort_engine_setCurSound(uint16_t sound) {
 void CVort_engine_saveCurSound() {
     if (engine_arguments.disableSoundSystem)
         return;
-    if (!sound_disabled && (SDL_GetAudioStatus() == SDL_AUDIO_PLAYING))
+    if (!g_game.sound_disabled && (SDL_GetAudioStatus() == SDL_AUDIO_PLAYING))
         SDL_PauseAudio(1);
 }
 
 void CVort_engine_restoreCurSound() {
     if (engine_arguments.disableSoundSystem)
         return;
-    if (!sound_disabled && (SDL_GetAudioStatus() == SDL_AUDIO_PAUSED))
+    if (!g_game.sound_disabled && (SDL_GetAudioStatus() == SDL_AUDIO_PAUSED))
         SDL_PauseAudio(0);
 }
 
 void CVort_engine_finishCurSound() {
     if (engine_arguments.disableSoundSystem)
         return;
-    if (!sound_disabled)
+    if (!g_game.sound_disabled)
         while (engine_currSoundPlaying >= 0) {
             CVort_engine_shortSleep();
             //CVort_engine_updateActualDisplay();
@@ -1172,23 +1172,23 @@ JoystickPoll_T CVort_engine_pollJoystick(int16_t joystickNum) {
 GameInput_T CVort_engine_getKeybCtrlState() {
     GameInput_T result;
     int16_t horiz = 0, vert = 0;
-    if (key_map[sc_dir[0]])
+    if (g_input.key_map[g_input.sc_dir[0]])
         vert = -1;
-    if (key_map[sc_dir[2]])
+    if (g_input.key_map[g_input.sc_dir[2]])
         horiz = 1;
-    if (key_map[sc_dir[4]])
+    if (g_input.key_map[g_input.sc_dir[4]])
         vert = 1;
-    if (key_map[sc_dir[6]])
+    if (g_input.key_map[g_input.sc_dir[6]])
         horiz = -1;
-    if (key_map[sc_dir[1]]) {
+    if (g_input.key_map[g_input.sc_dir[1]]) {
         vert = -1;
         horiz = 1;
     }
-    if (key_map[sc_dir[7]])
+    if (g_input.key_map[g_input.sc_dir[7]])
         vert = horiz = -1;
-    if (key_map[sc_dir[3]])
+    if (g_input.key_map[g_input.sc_dir[3]])
         vert = horiz = 1;
-    if (key_map[sc_dir[5]]) {
+    if (g_input.key_map[g_input.sc_dir[5]]) {
         vert = 1;
         horiz = -1;
     }
@@ -1213,8 +1213,8 @@ GameInput_T CVort_engine_getKeybCtrlState() {
             break;
         default: break;
     }
-    result.but1jump = key_map[sc_but1];
-    result.but2pogo = key_map[sc_but2];
+    result.but1jump = g_input.key_map[g_input.sc_but1];
+    result.but2pogo = g_input.key_map[g_input.sc_but2];
     return result;
 }
 
@@ -1246,20 +1246,20 @@ GameInput_T CVort_engine_getMouseCtrl() {
     /* We are next handling cursor position (for the motion).
     Note that for determining motion, the horizontal range is
     re-scaled so 320 units represent the screen's width.   */
-    if ((engine_inputMappings.currEmuInputStatus.mouseColumn - ENGINE_EGA_GFX_WIDTH) / 2 > mouse_ctrl_1) {
+    if ((engine_inputMappings.currEmuInputStatus.mouseColumn - ENGINE_EGA_GFX_WIDTH) / 2 > g_input.mouse_ctrl_1) {
         horiz = 1;
-        engine_inputMappings.currEmuInputStatus.mouseColumn -= (mouse_ctrl_1 << 1);
-    } else if ((engine_inputMappings.currEmuInputStatus.mouseColumn - ENGINE_EGA_GFX_WIDTH) / 2 < -mouse_ctrl_1) {
+        engine_inputMappings.currEmuInputStatus.mouseColumn -= (g_input.mouse_ctrl_1 << 1);
+    } else if ((engine_inputMappings.currEmuInputStatus.mouseColumn - ENGINE_EGA_GFX_WIDTH) / 2 < -g_input.mouse_ctrl_1) {
         horiz = -1;
-        engine_inputMappings.currEmuInputStatus.mouseColumn += (mouse_ctrl_1 << 1);
+        engine_inputMappings.currEmuInputStatus.mouseColumn += (g_input.mouse_ctrl_1 << 1);
     }
     /* On the other hand, the vertical range's units are kept intact. */
-    if (engine_inputMappings.currEmuInputStatus.mouseRow - ENGINE_EGA_GFX_HEIGHT/2 > mouse_ctrl_1) {
+    if (engine_inputMappings.currEmuInputStatus.mouseRow - ENGINE_EGA_GFX_HEIGHT/2 > g_input.mouse_ctrl_1) {
         vert = 1;
-        engine_inputMappings.currEmuInputStatus.mouseRow -= mouse_ctrl_1;
-    } else if (engine_inputMappings.currEmuInputStatus.mouseRow - ENGINE_EGA_GFX_HEIGHT/2 < -mouse_ctrl_1) {
+        engine_inputMappings.currEmuInputStatus.mouseRow -= g_input.mouse_ctrl_1;
+    } else if (engine_inputMappings.currEmuInputStatus.mouseRow - ENGINE_EGA_GFX_HEIGHT/2 < -g_input.mouse_ctrl_1) {
         vert = -1;
-        engine_inputMappings.currEmuInputStatus.mouseRow += mouse_ctrl_1;
+        engine_inputMappings.currEmuInputStatus.mouseRow += g_input.mouse_ctrl_1;
     }
     /* Finally we extract motion info (same as engine_getKeybCtrlState) */
     switch (vert * 3 + horiz + 4) {
@@ -1293,16 +1293,16 @@ GameInput_T CVort_engine_getJoystickCtrl(int16_t joy_id) {
     memset(&result, 0, sizeof (result));
     JoystickPoll_T currJoystickPoll = CVort_engine_pollJoystick(joy_id);
     if ((currJoystickPoll.xPoll > 500) || (currJoystickPoll.yPoll > 500)) {
-        currJoystickPoll.xPoll = joystick_ctrl[0][joy_id] + 1;
-        currJoystickPoll.yPoll = joystick_ctrl[2][joy_id] + 1;
+        currJoystickPoll.xPoll = g_input.joystick_ctrl[0][joy_id] + 1;
+        currJoystickPoll.yPoll = g_input.joystick_ctrl[2][joy_id] + 1;
     }
-    if (joystick_ctrl[1][joy_id] < currJoystickPoll.xPoll)
+    if (g_input.joystick_ctrl[1][joy_id] < currJoystickPoll.xPoll)
         horiz = 1;
-    else if (joystick_ctrl[0][joy_id] > currJoystickPoll.xPoll)
+    else if (g_input.joystick_ctrl[0][joy_id] > currJoystickPoll.xPoll)
         horiz = -1;
-    if (joystick_ctrl[3][joy_id] < currJoystickPoll.yPoll)
+    if (g_input.joystick_ctrl[3][joy_id] < currJoystickPoll.yPoll)
         vert = 1;
-    else if (joystick_ctrl[2][joy_id] > currJoystickPoll.yPoll)
+    else if (g_input.joystick_ctrl[2][joy_id] > currJoystickPoll.yPoll)
         vert = -1;
     switch (vert * 3 + horiz + 4) {
         case 0: result.direction = 7;

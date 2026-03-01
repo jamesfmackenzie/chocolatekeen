@@ -167,29 +167,20 @@
     /************************************
     Vanilla Keen variables; Well, mostly.
      ************************************/
+    // Grouped state structs
+    GameState_T g_game;
+    EntityManager_T g_entities;
+    InputState_T g_input;
+
     // Initialized Variables
-    uint8_t key_map[128]; // All zeros
     uint16_t jump_height_table[18];
     uint16_t spritejump_1, spritejump_2;
 
     char game_ext[4];
     //const uint32_t pitAltCounter;
 
-    // BSS 
+    // BSS
     uint32_t ticks_sync;
-    uint16_t sprite_sync;
-    int16_t god_mode, keen_invincible;
-    int16_t level_finished;
-    // TODO: Using this in "modern" code is uncommon today...
-    char string_buf[0x50];
-
-    int16_t joy_detect;
-    int16_t pass_keys_to_bios;
-    //uint16_t pass_keys_to_bios;
-    uint16_t key_code, key_scane;
-
-    uint16_t sound_disabled;
-    int16_t rnd;
     uint16_t tiledraws_c, bmpdraws_c, spritedraws_c;
     // Same for bmpdraws and more
     SpriteDraw_T spritedraws[0x1f4];
@@ -198,13 +189,6 @@
     uint16_t screentiles[0x258];
     // TODO: bmpdraws_i (bmpdraws_p) doesn't seem to actually be used...
     int bmpdraws_i, tiledraws_i, screentiles_i, spritedraws_i;
-
-    uint16_t want_sound;
-
-    int16_t mouse_ctrl_1;
-    // Original reference names to the four joystick arrays:
-    // word_2B2BA, word_2B2C0, word_2B2C6, word_2B2CC
-    int16_t joystick_ctrl[4][3];
 
     uint16_t *TILEINFO_Anim;
     int16_t *TILEINFO_Type;
@@ -226,7 +210,6 @@
 
     uint8_t demo_actions_including_level_num[5001];
     uint8_t *demo_action_ptr, *end_of_demo_ptr, *demo_after_last_byte_char_offset = demo_actions_including_level_num + sizeof(demo_actions_including_level_num);
-    int16_t demo_status;
 
     int16_t map_data[0x10000 / 2], *map_data_tiles, *map_data_sprites;
     int16_t map_width_T, map_height_T, map_width_B;
@@ -244,47 +227,11 @@
 
     int16_t keen_tileX, keen_tileY;
 
-    Sprite_T sprites[0x50], temp_sprite;
-    Body_T bodies[0x10];
-
-    GameInput_T input_new, input_old;
-
-    int16_t num_sprites, num_bodies;
-
-    int16_t spark_counter;
-
-    uint16_t quit_to_title;
-
-    int16_t wmap_sprite_on;
-
-    int32_t extra_life_pts;
-
-    MaskedSpriteEntry_T temp_MSE;
-
-    uint16_t anim_speed;
-
-    uint16_t ctrl_type[3];
-    uint8_t sc_dir[8], sc_but1, sc_but2;
-
-    uint16_t lights;
-
     uint8_t *previews_txt, *story_text, *help_text, *end_text;
 
     HighScoresTable_T high_scores_table;
     Sprite_T keen_map[2];
     GameProfile_T keen_gp;
-
-    uint16_t on_world_map;
-    uint16_t resuming_saved_game;
-    uint16_t current_level;
-
-    uint16_t reshow_scroll_up;
-
-    uint16_t wmap_col;
-
-    int16_t keen_facing;
-
-    uint16_t apogee_bmp_height, intro_complete;
 
     uint32_t keen_wmap_x_pos, keen_wmap_y_pos;
     uint32_t wmap_scrollX, wmap_scrollY;
@@ -296,8 +243,6 @@
     uint8_t *text_ptr;
 
     int16_t text_viewer_buffer[0x190], *text_viewer_buffer_ptr;
-
-    int16_t keen_switch;
 
     uint16_t messie_mounted, messie_frame, messie_time_to_climb, messie_move_tics;
     uint16_t messie_x_T, messie_y_T;

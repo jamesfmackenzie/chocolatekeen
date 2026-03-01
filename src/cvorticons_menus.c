@@ -17,30 +17,30 @@ void CVort_demo_toggle_reset_player_partial_state_before();
 void CVort_demo_toggle_reset_player_partial_state_after();
 
 void CVort_record_demo(int16_t demo_number) {
-    demo_actions_including_level_num[0] = current_level;
+    demo_actions_including_level_num[0] = g_game.current_level;
     demo_action_ptr = 1 + demo_actions_including_level_num;
-    demo_status = DEMO_RECORD;
+    g_game.demo_status = DEMO_RECORD;
 }
 
 void CVort_load_demo(int16_t demo_number) {
     FILE *fp;
-    snprintf(string_buf, sizeof(string_buf), "DEMO%d.%s", demo_number, game_ext);
-    fp = CVort_engine_cross_rw_misc_fopen(string_buf, "rb");
+    snprintf(g_game.string_buf, sizeof(g_game.string_buf), "DEMO%d.%s", demo_number, game_ext);
+    fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "rb");
     uint32_t filesize = CVort_filelength(fp);
     fread(demo_actions_including_level_num, filesize, 1, fp);
     fclose(fp);
-    current_level = demo_actions_including_level_num[0];
+    g_game.current_level = demo_actions_including_level_num[0];
     demo_action_ptr = 1 + demo_actions_including_level_num;
-    demo_status = DEMO_PLAY;
+    g_game.demo_status = DEMO_PLAY;
 }
 
 void CVort_save_demo(int16_t demo_number) {
     FILE *fp;
-    snprintf(string_buf, sizeof(string_buf), "DEMO%d.%s", demo_number, game_ext);
-    fp = CVort_engine_cross_rw_misc_fopen(string_buf, "wb");
+    snprintf(g_game.string_buf, sizeof(g_game.string_buf), "DEMO%d.%s", demo_number, game_ext);
+    fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "wb");
     fwrite(demo_actions_including_level_num, demo_action_ptr-demo_actions_including_level_num, 1, fp);
     fclose(fp);
-    demo_status = DEMO_OFF;
+    g_game.demo_status = DEMO_OFF;
 }
 
 void CVort_do_intro_and_menu() {
@@ -49,7 +49,7 @@ void CVort_do_intro_and_menu() {
     GameInput_T currInput;
     bool doHalt;
     FILE *fp;
-    resuming_saved_game = 0;
+    g_game.resuming_saved_game = 0;
     keen_gp.lives = 4;
     // ACTUALLY: Vanilla Keen 2 sets the ammo to 0, then stuff[3]
     // (pogo stick) to 1 and finally the ammo to 3 again!
@@ -69,11 +69,11 @@ void CVort_do_intro_and_menu() {
     // scrollup
     while (1) {
         engine_currPage = 0;
-        anim_speed = 3;
+        g_game.anim_speed = 3;
         CVort_engine_clearOverlay();
         CVort_load_level_data(90);
         // Show Apogee logo
-        if (reshow_scroll_up) // Uncomment this to replay scroll up upon demo restart
+        if (g_game.reshow_scroll_up) // Uncomment this to replay scroll up upon demo restart
         {
             CVort_load_level_data(90); // FIXME: Again???
             scrollX = 0x68000;
@@ -86,7 +86,7 @@ void CVort_do_intro_and_menu() {
             introCurrScreen = 4;
             CVort_scroll_up_logo();
             CVort_fade_out();
-            reshow_scroll_up = 0; // Uncomment this line to replay scroll up
+            g_game.reshow_scroll_up = 0; // Uncomment this line to replay scroll up
         }
         // Fade into menu
         //introTickCounter = 0xC0;
@@ -108,27 +108,27 @@ void CVort_do_intro_and_menu() {
                 if (CVort_handle_global_keys()) {
                     CVort_do_draw_mural();
                 }
-                introTickCounter -= sprite_sync;
+                introTickCounter -= g_game.sprite_sync;
                 if (introTickCounter <= 0) {
                     for (; introCurrScreen < 10; introCurrScreen++) {
-                        snprintf(string_buf, sizeof(string_buf), "DEMO%d.%s", introCurrScreen, game_ext);
-                        fp = CVort_engine_cross_rw_misc_fopen(string_buf, "rb");
+                        snprintf(g_game.string_buf, sizeof(g_game.string_buf), "DEMO%d.%s", introCurrScreen, game_ext);
+                        fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "rb");
                         if (!fp) {
                             continue;
                         }
                         end_of_demo_ptr = demo_actions_including_level_num + CVort_filelength(fp);
                         fclose(fp);
                         CVort_load_demo(introCurrScreen);
-                        quit_to_title = 0;
-                        rnd = 0;
+                        g_game.quit_to_title = 0;
+                        g_game.rnd = 0;
                         CVort_setup_jump_heights(0);
-                        memset(&input_old, 0, sizeof(input_old));
+                        memset(&g_input.input_old, 0, sizeof(g_input.input_old));
                         CVort_demo_toggle_reset_player_partial_state_before();
-                        CVort_draw_level(current_level);
-                        demo_status = DEMO_OFF;
+                        CVort_draw_level(g_game.current_level);
+                        g_game.demo_status = DEMO_OFF;
                         CVort_demo_toggle_reset_player_partial_state_after();
                         // 1 - player halt. 2 - Demo halt (may also be 0).
-                        if (quit_to_title == 1) {
+                        if (g_game.quit_to_title == 1) {
                             break;
                         }
                     }
@@ -143,7 +143,7 @@ void CVort_do_intro_and_menu() {
                     CVort_do_draw_mural();
                     CVort_fade_in();
                     // PLAYER halt? (NOT demo, i.e. 2.)
-                    if (quit_to_title == 1) {
+                    if (g_game.quit_to_title == 1) {
                         break;
                     }
                     continue;
@@ -164,7 +164,7 @@ void CVort_do_intro_and_menu() {
                             break;
                         default: break;
                     }
-                introTickCounter -= sprite_sync;
+                introTickCounter -= g_game.sprite_sync;
                 if (introTickCounter <= 0) {
                     CVort_fade_out();
                     switch (introCurrScreen) {
@@ -210,10 +210,10 @@ void CVort_do_intro_and_menu() {
                     }
                 }
             }
-            if (CVort_translate_key(1) || currInput.but1jump || currInput.but2pogo || intro_complete)
+            if (CVort_translate_key(1) || currInput.but1jump || currInput.but2pogo || g_game.intro_complete)
                 break;
         }
-        intro_complete = 0;
+        g_game.intro_complete = 0;
         if ((scrollX >> 16) || ((scrollX & 0xFFFF) != 0x2000))
             CVort_fade_out();
         //if (CVort_draw_title(introTickCounter))
@@ -333,9 +333,9 @@ loc_192F8:
         CVort_engine_delay(7);
 select1:
     var_6 = CVort_translate_key(1)&0xFF;
-    if (var_6 && ctrl_type[1])
+    if (var_6 && g_input.ctrl_type[1])
         input.but1jump = 1;
-    if (((var_6 == 0x20) || (var_6 == 0xD)) && (!ctrl_type[1]))
+    if (((var_6 == 0x20) || (var_6 == 0xD)) && (!g_input.ctrl_type[1]))
         input.but1jump = 1;
     if (CVort_handle_global_keys()) {
         CVort_do_start_menu();
@@ -411,7 +411,7 @@ void CVort_draw_menu() {
     CVort_draw_string("   Restart Demo\n\n");
     CVort_draw_string("Use the ");
 
-    switch (ctrl_type[1]) {
+    switch (g_input.ctrl_type[1]) {
         case 0:
             CVort_draw_string("arrows");
             break;
@@ -565,7 +565,7 @@ void CVort_save_game() {
     int8_t inputChar, confirmChar;
     // FIXME: Quite hackish but... more true to the original?
     snprintf(path, sizeof(path), "SAVED?.%s", game_ext);
-    if (!on_world_map) {
+    if (!g_game.on_world_map) {
         CVort_draw_box_opening_main(0x16, 3);
         CVort_draw_string("You can SAVE the game\n");
         CVort_draw_string("ONLY on the World Map!\n");
@@ -681,7 +681,7 @@ uint16_t CVort_private_continue_game() {
             CVort_engine_cross_freadInt16LE(keen_gp.targets, 8, fp);
             CVort_engine_cross_freadInt16LE(&keen_gp.unknown, 1, fp);
             fclose(fp);
-            resuming_saved_game = 1;
+            g_game.resuming_saved_game = 1;
             return 1;
         } else {
             fclose(fp);
@@ -701,14 +701,14 @@ uint16_t CVort_demo_toggle_prepare_to_record() {
 	if (!CVort_get_string_input(demostr, 2)) {
 		return 0;
 	}
-	current_level = atoi(demostr);
-	CVort_record_demo(current_level);
-	rnd = 0;
+	g_game.current_level = atoi(demostr);
+	CVort_record_demo(g_game.current_level);
+	g_game.rnd = 0;
 	CVort_setup_jump_heights(0);
-	memset(&input_old, 0, sizeof(input_old));
+	memset(&g_input.input_old, 0, sizeof(g_input.input_old));
 	CVort_demo_toggle_reset_player_partial_state_before();
-	quit_to_title = 0;
-	CVort_draw_level(current_level);
+	g_game.quit_to_title = 0;
+	CVort_draw_level(g_game.current_level);
 	CVort_fade_in();
 	CVort_clear_keys();
 	CVort_draw_box_opening_main(0x17, 1);
@@ -717,7 +717,7 @@ uint16_t CVort_demo_toggle_prepare_to_record() {
 	if ((inputChar >= '0') && (inputChar <= '9')) {
 		CVort_save_demo(inputChar - '0');
 	}
-	demo_status = DEMO_OFF;
+	g_game.demo_status = DEMO_OFF;
 	CVort_fade_out();
 	// HACK to force fade_in to the menu
 	scrollX = 0x1000;
@@ -729,17 +729,17 @@ uint16_t CVort_demo_toggle_prepare_to_record() {
 
 void CVort_demo_toggle_reset_player_partial_state_before() {
 	keen_gp.score = 0;
-	extra_life_pts = 0;
+	g_game.extra_life_pts = 0;
 	/* When a certain sprite is added to the level, like a creature,
 	 * it is checked if the player is located somewhere. Problem is
 	 * that the player may have not yet been founded...
 	 */
-	sprites[0].posX = 0;
-	sprites[0].posY = 0;
+	g_entities.sprites[0].posX = 0;
+	g_entities.sprites[0].posY = 0;
 }
 
 void CVort_demo_toggle_reset_player_partial_state_after() {
-	resuming_saved_game = 0;
+	g_game.resuming_saved_game = 0;
 	CVort_load_level_data(90);
 	keen_gp.lives = 4;
 	if (engine_gameVersion == GAMEVER_KEEN1) {
@@ -799,7 +799,7 @@ void CVort_draw_text_viewer_border() {
     for (uint16_t loopChar = 5; loopChar < 0x2B; loopChar++)
         CVort_engine_drawChar(loopChar, (text_viewer_bottom + 2) << 3, 2);
     CVort_draw_string_sel(1, 5, text_viewer_bottom + 1, "       ESC to Exit /   to Read      ");
-    CVort_text_viewer_bkgrd(apogee_bmp_height, text_viewer_top_pos + 1, text_ptr, text_viewer_buffer, text_viewer_height);
+    CVort_text_viewer_bkgrd(g_game.apogee_bmp_height, text_viewer_top_pos + 1, text_ptr, text_viewer_buffer, text_viewer_height);
 }
 
 
@@ -808,7 +808,7 @@ void CVort_do_text_viewer_short(uint8_t *text, uint16_t top_line_offset, uint16_
 
     int height =  bottom_line_offset - top_line_offset - 1;
     uint16_t tp = CVort_draw_text_page(text, text_viewer_buffer, 0x26, 0xC8);
-    apogee_bmp_height = 5;
+    g_game.apogee_bmp_height = 5;
     text_viewer_top_pos = top_line_offset;
     text_ptr = text;
     text_viewer_buffer_ptr = text_viewer_buffer;
@@ -824,7 +824,7 @@ void CVort_do_text_viewer(uint8_t *text, uint16_t top_line_offset, uint16_t bott
     int16_t height = bottom_line_offset - top_line_offset - 1;
     uint16_t tp = CVort_draw_text_page(text, text_viewer_buffer, 0x26, 0xC8);
     GameInput_T in;
-    apogee_bmp_height = 5;
+    g_game.apogee_bmp_height = 5;
     text_viewer_top_pos = top_line_offset;
     text_ptr = text;
     text_viewer_buffer_ptr = text_viewer_buffer;
@@ -839,7 +839,7 @@ void CVort_do_text_viewer(uint8_t *text, uint16_t top_line_offset, uint16_t bott
     // Scroll
     do {
         in = CVort_handle_ctrl(1);
-        if (key_map[0x48] || (in.direction == 0)) // Up
+        if (g_input.key_map[0x48] || (in.direction == 0)) // Up
         {
             if (currRow > 0) {
                 currRow--;
@@ -850,7 +850,7 @@ void CVort_do_text_viewer(uint8_t *text, uint16_t top_line_offset, uint16_t bott
             }
             else // No busy loop, corrupted graphics... or a (timing related) hang!
               CVort_engine_shortSleep();
-        } else if (key_map[0x50] || (in.direction == 4)) // Down
+        } else if (g_input.key_map[0x50] || (in.direction == 4)) // Down
         {
             if ((tp - height >= currRow) && (0xC8 - height >= currRow)) {
                 currRow++;
@@ -865,7 +865,7 @@ void CVort_do_text_viewer(uint8_t *text, uint16_t top_line_offset, uint16_t bott
             CVort_engine_shortSleep();
             //engine_updateActualDisplay();
         }
-        if (key_map[0x49]) // Page Up
+        if (g_input.key_map[0x49]) // Page Up
         {
             if (currRow - height + 1 <= 0)
                 currRow = 0;
@@ -875,9 +875,9 @@ void CVort_do_text_viewer(uint8_t *text, uint16_t top_line_offset, uint16_t bott
             do {
                 CVort_engine_shortSleep();
                 //engine_updateActualDisplay();
-            } while (key_map[0x49]);
+            } while (g_input.key_map[0x49]);
         }
-        if (key_map[0x51]) // Page Down
+        if (g_input.key_map[0x51]) // Page Down
         {
             if (currRow + (height << 1) >= tp)
                 currRow = tp - height + 1;
@@ -888,9 +888,9 @@ void CVort_do_text_viewer(uint8_t *text, uint16_t top_line_offset, uint16_t bott
             do {
                 CVort_engine_shortSleep();
                 //engine_updateActualDisplay();
-            } while (key_map[0x51]);
+            } while (g_input.key_map[0x51]);
         }
-    } while (!(key_map[1] || in.but1jump || in.but2pogo));
+    } while (!(g_input.key_map[1] || in.but1jump || in.but2pogo));
 
     CVort_waitForNoGameButtonPress(&in);
     CVort_clear_keys();
@@ -898,18 +898,18 @@ void CVort_do_text_viewer(uint8_t *text, uint16_t top_line_offset, uint16_t bott
 
 void CVort_draw_apogee() {
     if (engine_gameVersion == GAMEVER_KEEN1) {
-        CVort_engine_drawBitmap(0x10, apogee_bmp_height, CVort1_bmp_apogee);
+        CVort_engine_drawBitmap(0x10, g_game.apogee_bmp_height, CVort1_bmp_apogee);
     } else if (engine_gameVersion == GAMEVER_KEEN2) {
-        CVort_engine_drawBitmap(0x10, apogee_bmp_height, CVort2_bmp_apogee);
+        CVort_engine_drawBitmap(0x10, g_game.apogee_bmp_height, CVort2_bmp_apogee);
     } else if (engine_gameVersion == GAMEVER_KEEN3) {
-        CVort_engine_drawBitmap(0x10, apogee_bmp_height, CVort3_bmp_apogee);
+        CVort_engine_drawBitmap(0x10, g_game.apogee_bmp_height, CVort3_bmp_apogee);
     }
 }
 
 void CVort_show_logo_text() {
-    CVort_engine_drawBitmap(0x16, apogee_bmp_height - 0xa, engine_gameVersion == GAMEVER_KEEN1? CVort1_bmp_an : engine_gameVersion == GAMEVER_KEEN2? CVort2_bmp_an : CVort3_bmp_an ); // An
-    CVort_engine_drawBitmap(0x10, apogee_bmp_height, engine_gameVersion == GAMEVER_KEEN1? CVort1_bmp_apogee : engine_gameVersion == GAMEVER_KEEN2? CVort2_bmp_apogee : CVort3_bmp_apogee ); // Apogee
-    CVort_engine_drawBitmap(0x12, apogee_bmp_height + 0x20, engine_gameVersion == GAMEVER_KEEN1? CVort1_bmp_present : engine_gameVersion == GAMEVER_KEEN2? CVort2_bmp_present : CVort3_bmp_present ); // presentation
+    CVort_engine_drawBitmap(0x16, g_game.apogee_bmp_height - 0xa, engine_gameVersion == GAMEVER_KEEN1? CVort1_bmp_an : engine_gameVersion == GAMEVER_KEEN2? CVort2_bmp_an : CVort3_bmp_an ); // An
+    CVort_engine_drawBitmap(0x10, g_game.apogee_bmp_height, engine_gameVersion == GAMEVER_KEEN1? CVort1_bmp_apogee : engine_gameVersion == GAMEVER_KEEN2? CVort2_bmp_apogee : CVort3_bmp_apogee ); // Apogee
+    CVort_engine_drawBitmap(0x12, g_game.apogee_bmp_height + 0x20, engine_gameVersion == GAMEVER_KEEN1? CVort1_bmp_present : engine_gameVersion == GAMEVER_KEEN2? CVort2_bmp_present : CVort3_bmp_present ); // presentation
     CVort_engine_drawBitmap(0x15, 0x63, engine_gameVersion == GAMEVER_KEEN1? CVort1_bmp_ofan : engine_gameVersion == GAMEVER_KEEN2? CVort2_bmp_ofan : CVort3_bmp_ofan ); // of an
     CVort_engine_drawBitmap(0x13, 0x72,engine_gameVersion == GAMEVER_KEEN1? CVort1_bmp_idsoft : engine_gameVersion == GAMEVER_KEEN2? CVort2_bmp_idsoft : CVort3_bmp_idsoft ); // ID Software
     CVort_engine_drawBitmap(0x13, 0x9f, engine_gameVersion == GAMEVER_KEEN1? CVort1_bmp_product : engine_gameVersion == GAMEVER_KEEN2? CVort2_bmp_product : CVort3_bmp_product ); // production
@@ -921,11 +921,11 @@ void CVort_scroll_up_logo() {
     uint16_t bmpHeight = 200, apogee = 0, currState = 0;
     CVort_engine_clearOverlay();
     CVort_clear_keys();
-    intro_complete = 0;
+    g_game.intro_complete = 0;
     GameInput_T currInput;
     for (uint16_t timeLeft = 300; timeLeft > 0; timeLeft--) {
         CVort_engine_syncDrawing();
-        apogee_bmp_height = bmpHeight;
+        g_game.apogee_bmp_height = bmpHeight;
         CVort_engine_drawScreen();
         switch (currState) {
             case 0: // No logo is shown, yet
@@ -948,7 +948,7 @@ void CVort_scroll_up_logo() {
         }
         currInput = CVort_handle_ctrl(1);
         if (currInput.but1jump || currInput.but2pogo || CVort_translate_key(1)) {
-            intro_complete = 1;
+            g_game.intro_complete = 1;
             break;
         }
     }

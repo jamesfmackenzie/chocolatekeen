@@ -41,8 +41,8 @@ void CVort_engine_decompGraphics()
 	/******************************
 	First part: Load the EGA header
 	******************************/
-	snprintf(string_buf, sizeof(string_buf), "EGAHEAD.%s", game_ext);
-	FILE *fp = CVort_engine_cross_ro_data_fopen(string_buf);
+	snprintf(g_game.string_buf, sizeof(g_game.string_buf), "EGAHEAD.%s", game_ext);
+	FILE *fp = CVort_engine_cross_ro_data_fopen(g_game.string_buf);
 	// TODO: What if we fail to load the file?
 	if (!fp)
 		return;
@@ -111,9 +111,9 @@ void CVort_engine_decompGraphics()
 	Second part: Load EGALATCH, uncompress if required and then 
 	convert to single-byte format (instead of 4-plane structures).
 	*************************************************************/
-	snprintf(string_buf, sizeof(string_buf), "EGALATCH.%s", game_ext);
+	snprintf(g_game.string_buf, sizeof(g_game.string_buf), "EGALATCH.%s", game_ext);
 	// TODO: What if we fail to load the file?
-	fp = CVort_engine_cross_ro_data_fopen(string_buf);
+	fp = CVort_engine_cross_ro_data_fopen(g_game.string_buf);
 	if (!fp)
 		return;
 	uint8_t *egaLatchData = (uint8_t *)malloc(engine_egaHeadGeneral.latchPlaneSize*4);
@@ -244,9 +244,9 @@ void CVort_engine_decompGraphics()
 	Third part: Load EGASPRIT, uncompress if required and then 
 	convert to single-byte format (instead of 5-plane structures).
 	*************************************************************/
-	snprintf(string_buf, sizeof(string_buf), "EGASPRIT.%s", game_ext);
+	snprintf(g_game.string_buf, sizeof(g_game.string_buf), "EGASPRIT.%s", game_ext);
 	// TODO: What if we fail to load the file?
-	fp = CVort_engine_cross_ro_data_fopen(string_buf);
+	fp = CVort_engine_cross_ro_data_fopen(g_game.string_buf);
 	if (!fp)
 		return;
 	uint8_t *egaSpriteData = (uint8_t *)malloc(engine_egaHeadGeneral.sprPlaneSize*5);
@@ -256,7 +256,7 @@ void CVort_engine_decompGraphics()
 	else
 		fread(egaSpriteData, engine_egaHeadGeneral.sprPlaneSize*5, 1, fp);
 	fclose(fp);
-	// Load sprites in our format.
+	// Load g_entities.sprites in our format.
 	// Do NOT make 4 copies of each sprite, though.
 	engine_egaSpriteData = (uint8_t *)malloc(spriteTotalPixelCount);
 	engine_egaSprites = (uint8_t **)malloc(engine_egaHeadGeneral.spriteNum*sizeof(uint8_t *));
@@ -3025,7 +3025,7 @@ uint16_t CVort_engine_drawSpriteAt(int32_t posX, int32_t posY, uint16_t frame)
 		return 0;
 	// getMSE
 	sdraw_scopy = (sdraw_xbyte&7)/2+(frame<<2);
-	temp_MSE = engine_maskedSpriteEntry[sdraw_scopy];
+	g_entities.temp_MSE = engine_maskedSpriteEntry[sdraw_scopy];
 
 	sdraw_xbyte = (sdraw_xbyte+0x20)/8-4;
 	tileX1 = sdraw_xbyte/2;
@@ -3033,7 +3033,7 @@ uint16_t CVort_engine_drawSpriteAt(int32_t posX, int32_t posY, uint16_t frame)
 		return 0;
 	if (tileX1 < 0)
 		tileX1 = 0;
-	tileX2 = (sdraw_xbyte+temp_MSE.width-1)/2;
+	tileX2 = (sdraw_xbyte+g_entities.temp_MSE.width-1)/2;
 	if (tileX2 < 0)
 		return 0;
 	if (tileX2 > ENGINE_SPRITE_CLIP_MAX_X)
@@ -3043,7 +3043,7 @@ uint16_t CVort_engine_drawSpriteAt(int32_t posX, int32_t posY, uint16_t frame)
 		return 0;
 	if (tileY1 < 0)
 		tileY1 = 0;
-	tileY2 = (sdraw_yrow+temp_MSE.height-1)/0x10;
+	tileY2 = (sdraw_yrow+g_entities.temp_MSE.height-1)/0x10;
 	if (tileY2 < 0)
 		return 0;
 	if (tileY2 > ENGINE_SPRITE_CLIP_MAX_Y2) // And yet, here we have 0xD as a bound.
@@ -3103,7 +3103,7 @@ uint16_t CVort_engine_drawTileAt(int32_t posX, int32_t posY, uint16_t tilenum)
 		return 0;
 	if (tileX1 < 0)
 		tileX1 = 0;
-	tileX2 = (sdraw_xbyte+temp_MSE.width-1)/2;
+	tileX2 = (sdraw_xbyte+g_entities.temp_MSE.width-1)/2;
 	if (tileX2 < 0)
 		return 0;
 	if (tileX2 > ENGINE_SPRITE_CLIP_MAX_X2)
@@ -3113,7 +3113,7 @@ uint16_t CVort_engine_drawTileAt(int32_t posX, int32_t posY, uint16_t tilenum)
 		return 0;
 	if (tileY1 < 0)
 		tileY1 = 0;
-	tileY2 = (sdraw_yrow+temp_MSE.height-1)/0x10;
+	tileY2 = (sdraw_yrow+g_entities.temp_MSE.height-1)/0x10;
 	if (tileY2 < 0)
 		return 0;
 	if (tileY2 > ENGINE_SPRITE_CLIP_MAX_Y2) // ...and here.
@@ -3160,13 +3160,13 @@ void CVort_engine_syncDrawing() {
         CVort_engine_delayInGameTicks(ticks_sync, 6);
         // Should be non-negative, in fact ~6. For demos this is FORCED to 6.
 	if (engine_arguments.extras.vorticonsDemoModeToggle) {
-		sprite_sync = 6;
+		g_game.sprite_sync = 6;
 		ticks_sync += 6;
 		CVort_private_engine_setTicks(ticks_sync);
 	} else {
-	sprite_sync = (CVort_private_engine_getTicks()&0xFFFF)-(ticks_sync&0xFFFF);
-		if (sprite_sync > 15)
-			sprite_sync = 15;
+	g_game.sprite_sync = (CVort_private_engine_getTicks()&0xFFFF)-(ticks_sync&0xFFFF);
+		if (g_game.sprite_sync > 15)
+			g_game.sprite_sync = 15;
 		ticks_sync = CVort_private_engine_getTicks();
 	}
 }
@@ -3184,10 +3184,10 @@ void CVort_engine_doDrawing()
 {
 	CVort_engine_egaPageFlip();
 	//do_drawing_0 = 0;
-	anim_plane_i = (((CVort_private_engine_getTicks() & 65535) >> anim_speed) & 6) >> 1;
+	anim_plane_i = (((CVort_private_engine_getTicks() & 65535) >> g_game.anim_speed) & 6) >> 1;
 	if ((anim_plane_i < 0) || (anim_plane_i >= 4))
 		assert(false);
-	//anim_plane_i = (((CVort_private_engine_getTicks() & 65535) >> (anim_speed & 255)) & 6) >> 1;
+	//anim_plane_i = (((CVort_private_engine_getTicks() & 65535) >> (g_game.anim_speed & 255)) & 6) >> 1;
 	CVort_engine_adaptiveTileRefresh((((map_width_B * ((scrollY & 16777215) >> 12)) & 65535) >> 1) + ((scrollX & 16777215) >> 12));
 	//CVort_engine_adaptiveTileRefresh(((map_width_B * ((scrollY & 16777215) >> 12)) & 65535) + (((scrollX & 16777215) >> 12) << 1));
 	uint32_t origDstPage = engine_dstPage;

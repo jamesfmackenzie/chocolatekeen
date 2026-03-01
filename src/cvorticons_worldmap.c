@@ -44,7 +44,7 @@ void CVort_draw_worldmap(void) {
 
     }
 
-    if (!resuming_saved_game) {
+    if (!g_game.resuming_saved_game) {
         CVort_place_keen_on_worldmap(&keen_gp.mapX, &keen_gp.mapY);
         // 32-bit additions (instead of two 16-bit ones with carry bit involved)
         keen_gp.screenX = keen_gp.mapX + 0xFFFF7000;
@@ -55,14 +55,14 @@ void CVort_draw_worldmap(void) {
     wmap_scrollY = keen_gp.screenY;
     keen_wmap_x_pos = keen_gp.mapX;
     keen_wmap_y_pos = keen_gp.mapY;
-    wmap_col = 0x8000;
-    extra_life_pts = (keen_gp.score / 20000)*20000;
-    quit_to_title = 0;
+    g_game.wmap_col = 0x8000;
+    g_game.extra_life_pts = (keen_gp.score / 20000)*20000;
+    g_game.quit_to_title = 0;
     engine_currPage = 0;
-    anim_speed = 3;
+    g_game.anim_speed = 3;
     do // World map loop
     {
-        keen_sp = sprites;
+        keen_sp = g_entities.sprites;
         keen_sp->delX = keen_sp->delY = keen_sp->velX = keen_sp->velY = 0;
         if (engine_gameVersion == GAMEVER_KEEN1)
           keen_sp->frame = 0x24;//spr_mapkeend1;
@@ -70,7 +70,7 @@ void CVort_draw_worldmap(void) {
           keen_sp->frame = 0x24;//spr_mapkeend1;
         else if (engine_gameVersion == GAMEVER_KEEN3)
           keen_sp->frame = CVort3_spr_mapkeend1;//spr_mapkeend1;
-        wmap_sprite_on = 0;
+        g_game.wmap_sprite_on = 0;
         CVort_load_level_data(80);
         CVort_mark_cities_done();
 
@@ -132,7 +132,7 @@ void CVort_draw_worldmap(void) {
         }
         CVort_clear_keys();
         CVort_engine_clearOverlay();
-        on_world_map = 1;
+        g_game.on_world_map = 1;
 
         do // Actual map loop
         {
@@ -153,22 +153,22 @@ void CVort_draw_worldmap(void) {
             wmap_scrollX = scrollX;
             wmap_scrollY = scrollY;
             CVort_handle_global_keys();
-            if (key_map[0x39])
+            if (g_input.key_map[0x39])
                 CVort_ptr_show_pause_menu();
-            if (quit_to_title) {
+            if (g_game.quit_to_title) {
                 CVort_game_over();
                 return;
             }
             y_coord++;  // This probably was not ycoord, but some new stack variable that was mistakenly not initialized
-        } while (!wmap_sprite_on);
+        } while (!g_game.wmap_sprite_on);
 
-        on_world_map = 0;
-        /* The original code takes wmap_sprite_on, a 16-bit value,
+        g_game.on_world_map = 0;
+        /* The original code takes g_game.wmap_sprite_on, a 16-bit value,
         shifts by 1 bit to the left and then uses this to access
-        element number wmap_sprite_on in the array.
+        element number g_game.wmap_sprite_on in the array.
         With the G-O-D cheat it is easy to enter a place where 0x8000
         is added to the level number (in unsigned form). For instance,
-        without the cheat wmap_sprite_on may be 7 for some level, but
+        without the cheat g_game.wmap_sprite_on may be 7 for some level, but
         once you try to access the same level from a neighboring tile
         it can really become 0x8007.
         The left shift by 1 practically means there is no difference
@@ -176,11 +176,11 @@ void CVort_draw_worldmap(void) {
 
         How? Well, we remove the most significant bit,
         or "and" with 0x7FFF.                                       */
-        if (!keen_gp.levels[(wmap_sprite_on & 0x7FFF) - 1]) {
+        if (!keen_gp.levels[(g_game.wmap_sprite_on & 0x7FFF) - 1]) {
             CVort_engine_setCurSound(3);
-            level_return_code = CVort_draw_level(wmap_sprite_on & 0xFF);
-            if (quit_to_title) {
-                quit_to_title = 0;
+            level_return_code = CVort_draw_level(g_game.wmap_sprite_on & 0xFF);
+            if (g_game.quit_to_title) {
+                g_game.quit_to_title = 0;
                 CVort_game_over();
                 return;
             }
@@ -189,7 +189,7 @@ void CVort_draw_worldmap(void) {
                     keen_gp.lives--;
                     continue; // Skip to the very end of the loop
                 case LEVEL_END_EXIT:
-                    keen_gp.levels[(wmap_sprite_on & 0x7FFF) - 1] = 1;
+                    keen_gp.levels[(g_game.wmap_sprite_on & 0x7FFF) - 1] = 1;
                     break;
 #if CHOCOLATE_KEEN_IS_EPISODE1_ENABLED
                 case LEVEL_END_SECRET:
@@ -228,7 +228,7 @@ void CVort_draw_worldmap(void) {
                     return;
                 }
             } else {
-                if ((wmap_sprite_on & 0xFF) == 16) {
+                if ((g_game.wmap_sprite_on & 0xFF) == 16) {
                     CVort_ptr_draw_win();
                     CVort_game_over();
                     return;
@@ -443,14 +443,14 @@ void CVort_game_over() {
     CVort_do_scores();
     CVort_fade_in();
     int16_t timeLeft = 2400;
-    on_world_map = 0;
+    g_game.on_world_map = 0;
     do {
         CVort_engine_syncDrawing();
         CVort_engine_drawScreen();
         input = CVort_handle_ctrl(1);
         if (CVort_handle_global_keys())
             CVort_do_scores();
-        timeLeft -= sprite_sync;
+        timeLeft -= g_game.sprite_sync;
         if (input.but1jump || input.but2pogo || CVort_translate_key(1))
             break;
     } while (!(input.but1jump || input.but2pogo || CVort_translate_key(1))
@@ -485,10 +485,10 @@ void CVort_place_keen_on_worldmap(uint32_t *posX, uint32_t *posY) {
 }
 
 int16_t CVort_check_world_map_col(Sprite_T *sprite) {
-    if (god_mode)
+    if (g_game.god_mode)
         return 0;
-    sprite->delX += sprite->velX*sprite_sync;
-    sprite->delY += sprite->velY*sprite_sync;
+    sprite->delX += sprite->velX*g_game.sprite_sync;
+    sprite->delY += sprite->velY*g_game.sprite_sync;
     keen_map[0] = *sprite;
     int16_t blocking = 0;
     int16_t x1_T, x2_T, y1_T, y2_T;
@@ -507,7 +507,7 @@ int16_t CVort_check_world_map_col(Sprite_T *sprite) {
             y2_T = keen_map[0].boxY2 / 0x1000;
             for (x = x1_T; x <= x2_T; x++) {
                 if (!TILEINFO_UEdge[map_data_tiles[y2_T * map_width_T + x]]) {
-                    if (!(map_data_sprites[y2_T * map_width_T + x] & wmap_col))
+                    if (!(map_data_sprites[y2_T * map_width_T + x] & g_game.wmap_col))
                         continue;
                 }
                 sprite->velY = 0;
@@ -525,7 +525,7 @@ int16_t CVort_check_world_map_col(Sprite_T *sprite) {
             y1_T = keen_map[0].boxY1 / 0x1000;
             for (x = x1_T; x <= x2_T; x++) {
                 if (!TILEINFO_DEdge[map_data_tiles[y1_T * map_width_T + x]]) {
-                    if (!(map_data_sprites[y1_T * map_width_T + x] & wmap_col))
+                    if (!(map_data_sprites[y1_T * map_width_T + x] & g_game.wmap_col))
                         continue;
                 }
                 sprite->velY = 0;
@@ -551,7 +551,7 @@ int16_t CVort_check_world_map_col(Sprite_T *sprite) {
             x2_T = keen_map[0].boxX2 / 0x1000;
             for (y = y1_T; y <= y2_T; y++) {
                 if (!TILEINFO_LEdge[map_data_tiles[y * map_width_T + x2_T]]) {
-                    if (!(map_data_sprites[y * map_width_T + x2_T] & wmap_col))
+                    if (!(map_data_sprites[y * map_width_T + x2_T] & g_game.wmap_col))
                         continue;
                 }
                 sprite->velX = 0;
@@ -569,7 +569,7 @@ int16_t CVort_check_world_map_col(Sprite_T *sprite) {
             x1_T = keen_map[0].boxX1 / 0x1000;
             for (y = y1_T; y <= y2_T; y++) {
                 if (!TILEINFO_REdge[map_data_tiles[y * map_width_T + x1_T]]) {
-                    if (!(map_data_sprites[y * map_width_T + x1_T] & wmap_col))
+                    if (!(map_data_sprites[y * map_width_T + x1_T] & g_game.wmap_col))
                         continue;
                 }
                 sprite->velX = 0;
@@ -608,9 +608,9 @@ void CVort_move_worldmap(GameInput_T input, Sprite_T *spritedraw) {
                     continue;
                 sprite_x = x;
                 sprite_y = y;
-                wmap_sprite_on = map_data_sprites[y * map_width_T + x];
-                if (wmap_sprite_on == 0xFF)
-                    wmap_sprite_on = 0;
+                g_game.wmap_sprite_on = map_data_sprites[y * map_width_T + x];
+                if (g_game.wmap_sprite_on == 0xFF)
+                    g_game.wmap_sprite_on = 0;
             }
     }
     spritedraw->delX = spritedraw->delY = 0;
@@ -698,9 +698,9 @@ void CVort_move_worldmap(GameInput_T input, Sprite_T *spritedraw) {
         s++;
     } else
         fr = 0;
-    wmap_col = 0x8000;
-    if (key_map[0xF] && key_map[0x2A])
-        wmap_col = 0;
+    g_game.wmap_col = 0x8000;
+    if (g_input.key_map[0xF] && g_input.key_map[0x2A])
+        g_game.wmap_col = 0;
     csd = CVort_check_world_map_col(spritedraw);
     spritedraw->posX += spritedraw->delX;
     spritedraw->posY += spritedraw->delY;
@@ -831,12 +831,12 @@ scroll_tiles:
         }
     }
 
-    if (!wmap_sprite_on)
+    if (!g_game.wmap_sprite_on)
         return;
 
     if (engine_gameVersion == GAMEVER_KEEN1 || engine_gameVersion == GAMEVER_KEEN3) {
-        if (CVort_ptr_worldmap_sprites(wmap_sprite_on, spritedraw, sprite_x, sprite_y))
-            wmap_sprite_on = 0;
+        if (CVort_ptr_worldmap_sprites(g_game.wmap_sprite_on, spritedraw, sprite_x, sprite_y))
+            g_game.wmap_sprite_on = 0;
     }
 
 }

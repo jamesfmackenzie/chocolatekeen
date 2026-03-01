@@ -62,19 +62,19 @@ void CVort_start_cheating() {
 
 void CVort_handle_cheat_keys() {
     //CVort_engine_updateInputStatus();
-    if (key_map[0x2E] && key_map[0x14] && key_map[0x39])
+    if (g_input.key_map[0x2E] && g_input.key_map[0x14] && g_input.key_map[0x39])
         CVort_start_cheating();
-    if (key_map[0x22] && key_map[0x18] && key_map[0x20]) {
+    if (g_input.key_map[0x22] && g_input.key_map[0x18] && g_input.key_map[0x20]) {
         CVort_clear_keys();
         CVort_draw_box_opening_main(0x14, 1);
-        god_mode ^= 1;
-        if (god_mode)
+        g_game.god_mode ^= 1;
+        if (g_game.god_mode)
             CVort_draw_string("God mode enabled");
         else
             CVort_draw_string("God mode disabled");
         CVort_read_char_with_echo();
         CVort_engine_clearOverlay();
-    } else if (key_map[0x39]) {
+    } else if (g_input.key_map[0x39]) {
         CVort_engine_saveCurSound();
         CVort_ptr_show_pause_menu();
         CVort_engine_restoreCurSound();
@@ -95,16 +95,16 @@ void CVort_main() {
 
     if (CVort_engine_isJoystickInUse()) {
         CVort_engine_puts("Joystick detected");
-        joy_detect = 1; // Actually never used on vanilla Keen...
+        g_input.joy_detect = 1; // Actually never used on vanilla Keen...
     } else {
         CVort_engine_puts("Joystick not detected");
-        joy_detect = 0;
+        g_input.joy_detect = 0;
     }
     // If we pass keystrokes to BIOS or not, it doesn't matter us.
     // But we simulate the message anyway... "cheating" though.
-    pass_keys_to_bios = 1;
+    g_input.pass_keys_to_bios = 1;
     if (!engine_arguments.passKeysToBios) {
-        pass_keys_to_bios = 0;
+        g_input.pass_keys_to_bios = 0;
         CVort_engine_puts("Keystrokes will not be passed to bios");
     }
 
@@ -195,16 +195,16 @@ void CVort_main() {
     // By default, keyboard input is FORCED on startup
     switch (engine_arguments.extras.initialEmulatedInputDevice) {
     case EMU_INITIAL_INPUT_KEYBOARD: // The one picked in vanilla Keen 1-3
-        ctrl_type[1] = 0;
+        g_input.ctrl_type[1] = 0;
         break;
     case EMU_INITIAL_INPUT_MOUSE:
-        ctrl_type[1] = 1;
+        g_input.ctrl_type[1] = 1;
         break;
     case EMU_INITIAL_INPUT_JOY1:
-        ctrl_type[1] = 2;
+        g_input.ctrl_type[1] = 2;
         break;
     case EMU_INITIAL_INPUT_JOY2:
-        ctrl_type[1] = 3;
+        g_input.ctrl_type[1] = 3;
         break;
     default: ; // EMU_INITIAL_INPUT_LAST
     }
@@ -212,7 +212,7 @@ void CVort_main() {
     // We don't need to allocate memory for level data; It's done
     // statically: An array of 10000h bytes in the stack.
     textbox_offs_x = 0x17;
-    anim_speed = 7;
+    g_game.anim_speed = 7;
     CVort_ptr_engine_setTicksSync(0);
     CVort_ptr_engine_setTicks(0);
     CVort_main_loop();
@@ -220,25 +220,25 @@ void CVort_main() {
 
 int16_t CVort_add_sprite() {
     int16_t spriteNum;
-    for (spriteNum = 1; sprites[spriteNum].type_ && (spriteNum < num_sprites); spriteNum++);
-    if (spriteNum >= num_sprites)
-        num_sprites++;
-    memset(&sprites[spriteNum], 0, sizeof (sprites[spriteNum]));
-    sprites[spriteNum].think = &CVort_default_think;
-    sprites[spriteNum].contact = &CVort_default_contact;
-    sprites[spriteNum].active = 1;
+    for (spriteNum = 1; g_entities.sprites[spriteNum].type_ && (spriteNum < g_entities.num_sprites); spriteNum++);
+    if (spriteNum >= g_entities.num_sprites)
+        g_entities.num_sprites++;
+    memset(&g_entities.sprites[spriteNum], 0, sizeof (g_entities.sprites[spriteNum]));
+    g_entities.sprites[spriteNum].think = &CVort_default_think;
+    g_entities.sprites[spriteNum].contact = &CVort_default_contact;
+    g_entities.sprites[spriteNum].active = 1;
     return spriteNum;
 }
 
 int16_t CVort_add_body() {
     int16_t bodyNum;
-    for (bodyNum = 0; bodies[bodyNum].type_ && (bodyNum < num_bodies); bodyNum++);
-    if (bodyNum >= num_bodies)
-        num_bodies++;
-    memset(&bodies[bodyNum], 0, sizeof (bodies[bodyNum]));
+    for (bodyNum = 0; g_entities.bodies[bodyNum].type_ && (bodyNum < g_entities.num_bodies); bodyNum++);
+    if (bodyNum >= g_entities.num_bodies)
+        g_entities.num_bodies++;
+    memset(&g_entities.bodies[bodyNum], 0, sizeof (g_entities.bodies[bodyNum]));
     // FIXME: The casting is potentially DANGEROUS, but the default_think
-    // function is also used for sprites...
-    bodies[bodyNum].think_ptr = (BodyThinkFunction_T)(&CVort_default_think);
+    // function is also used for g_entities.sprites...
+    g_entities.bodies[bodyNum].think_ptr = (BodyThinkFunction_T)(&CVort_default_think);
     return bodyNum;
 }
 
@@ -285,7 +285,7 @@ void CVort_main_loop() {
         CVort_process_text_file(previews_txt);
     }
 
-    on_world_map = 0;
+    g_game.on_world_map = 0;
     CVort_load_high_scores_table();
     CVort_fade_out();
     while (true) {
@@ -295,22 +295,22 @@ void CVort_main_loop() {
 }
 
 void CVort_update_sprite_hitbox(void) {
-    //update_sprite_hitbox_wmap(&temp_sprite)?
-    int16_t tempNum = (temp_sprite.frame << 2) + (temp_sprite.posX >> 9) % 4;
-    temp_MSE = engine_maskedSpriteEntry[tempNum];
-    temp_sprite.boxX1 = temp_sprite.posX + temp_MSE.hitbox_l;
-    temp_sprite.boxX2 = temp_sprite.posX + temp_MSE.hitbox_r;
-    temp_sprite.boxY1 = temp_sprite.posY + temp_MSE.hitbox_u;
-    temp_sprite.boxY2 = temp_sprite.posY + temp_MSE.hitbox_b;
+    //update_sprite_hitbox_wmap(&g_entities.temp_sprite)?
+    int16_t tempNum = (g_entities.temp_sprite.frame << 2) + (g_entities.temp_sprite.posX >> 9) % 4;
+    g_entities.temp_MSE = engine_maskedSpriteEntry[tempNum];
+    g_entities.temp_sprite.boxX1 = g_entities.temp_sprite.posX + g_entities.temp_MSE.hitbox_l;
+    g_entities.temp_sprite.boxX2 = g_entities.temp_sprite.posX + g_entities.temp_MSE.hitbox_r;
+    g_entities.temp_sprite.boxY1 = g_entities.temp_sprite.posY + g_entities.temp_MSE.hitbox_u;
+    g_entities.temp_sprite.boxY2 = g_entities.temp_sprite.posY + g_entities.temp_MSE.hitbox_b;
 }
 
 void CVort_update_sprite_hitbox_wmap(Sprite_T *sprite) {
     int16_t tempNum = (sprite->frame << 2) + (sprite->posX >> 9) % 4;
-    temp_MSE = engine_maskedSpriteEntry[tempNum];
-    sprite->boxX1 = sprite->posX + temp_MSE.hitbox_l;
-    sprite->boxX2 = sprite->posX + temp_MSE.hitbox_r;
-    sprite->boxY1 = sprite->posY + temp_MSE.hitbox_u;
-    sprite->boxY2 = sprite->posY + temp_MSE.hitbox_b;
+    g_entities.temp_MSE = engine_maskedSpriteEntry[tempNum];
+    sprite->boxX1 = sprite->posX + g_entities.temp_MSE.hitbox_l;
+    sprite->boxX2 = sprite->posX + g_entities.temp_MSE.hitbox_r;
+    sprite->boxY1 = sprite->posY + g_entities.temp_MSE.hitbox_u;
+    sprite->boxY2 = sprite->posY + g_entities.temp_MSE.hitbox_b;
 }
 
 /* Given a GameInput_T structure input, simulates a vanilla Keen do-while busy
@@ -338,7 +338,7 @@ int16_t CVort_handle_global_keys() {
 
     uint32_t saved_tickcount = CVort_ptr_engine_getTicks();
 
-    int16_t filteredKeyScan = key_scane & 0x7F;
+    int16_t filteredKeyScan = g_input.key_scane & 0x7F;
     switch (filteredKeyScan) {
         case 0x3D:
             CVort_engine_saveCurSound();
@@ -375,10 +375,10 @@ int16_t CVort_handle_global_keys() {
             CVort_draw_string("Sound (Y/N)?");
             switch (CVort_engine_toupper(CVort_read_char_with_echo()) & 0xFF) {
                 case 0x4E: // 'N'
-                    want_sound = 0;
+                    g_game.want_sound = 0;
                     break;
                 case 0x59: // 'Y'
-                    want_sound = 1;
+                    g_game.want_sound = 1;
                     break;
                 default:;
             }
@@ -396,15 +396,15 @@ int16_t CVort_handle_global_keys() {
 
 void CVort_add_score(int16_t points) {
     keen_gp.score += points;
-    if (keen_gp.score - extra_life_pts < 20000)
+    if (keen_gp.score - g_game.extra_life_pts < 20000)
         return;
     CVort_engine_setCurSound(0x1C);
-    extra_life_pts = (keen_gp.score / 20000)*20000;
+    g_game.extra_life_pts = (keen_gp.score / 20000)*20000;
     keen_gp.lives++;
 }
 
 void CVort_load_level_data(uint16_t levelnum) {
-    current_level = levelnum;
+    g_game.current_level = levelnum;
     char filename[16];
     snprintf(filename, sizeof(filename), "%s%02" PRIu16 ".%s", "LEVEL", levelnum, game_ext);
     FILE *fp = CVort_engine_cross_ro_data_fopen(filename);
@@ -449,7 +449,7 @@ void CVort_load_level_data(uint16_t levelnum) {
 
 void CVort_handle_quit() {
     CVort_clear_keys();
-    if (current_level == 90) {
+    if (g_game.current_level == 90) {
         CVort_draw_box_opening_main(0xC, 1);
         CVort_draw_string("Quit (Y/N)?");
         if (CVort_engine_toupper(CVort_read_char_with_echo()) != 'Y')
@@ -466,7 +466,7 @@ void CVort_handle_quit() {
             CVort_chg_vid_and_error("");
             break;
         case 'T':
-            quit_to_title = 1;
+            g_game.quit_to_title = 1;
             break;
         default:
             break;
@@ -497,25 +497,25 @@ So, to summarize, what is done is as follows:
  * in to the exe
  */
 void CVort_clear_keys() {
-    key_code = key_scane = 0;
-    memset(key_map, 0, 0x80);
+    g_input.key_code = g_input.key_scane = 0;
+    memset(g_input.key_map, 0, 0x80);
 }
 
-// TODO: The original code simply sets rnd to the amount of hundredths of
+// TODO: The original code simply sets g_game.rnd to the amount of hundredths of
 // seconds in the current time.
 // For now we use the seconds elapsed...
 
 void CVort_init_rnd(bool doRand) {
     if (doRand)
-        rnd = time(NULL) & 0xFF;
+        g_game.rnd = time(NULL) & 0xFF;
     else
-        rnd = 0;
+        g_game.rnd = 0;
 }
 
 int16_t CVort_get_random() {
-    rnd++;
-    rnd &= 0xFF;
-    return (int16_t)(exeFields.rnd_vals[rnd]);
+    g_game.rnd++;
+    g_game.rnd &= 0xFF;
+    return (int16_t)(exeFields.rnd_vals[g_game.rnd]);
 }
 
 uint32_t CVort_filelength(FILE *fp) {
@@ -606,26 +606,26 @@ void CVort_chg_vid_and_error(const char *msg) {
 }
 
 static void CVort_level_init(void) {
-    sprites[0].type_ = 1;
-    sprites[0].think = &CVort_think_keen_ground;
-    sprites[0].contact = CVort_ptr_contact_keen; // NOT &CVort_ptr_contact_keen
-    sprites[0].velX = sprites[0].velY = 0;
-    sprites[0].frame = 4;
-    sprites[0].active = 1;
-    num_sprites = 1;
-    num_bodies = 0;
-    keen_facing = 1;
-    level_finished = god_mode = keen_invincible = 0;
+    g_entities.sprites[0].type_ = 1;
+    g_entities.sprites[0].think = &CVort_think_keen_ground;
+    g_entities.sprites[0].contact = CVort_ptr_contact_keen; // NOT &CVort_ptr_contact_keen
+    g_entities.sprites[0].velX = g_entities.sprites[0].velY = 0;
+    g_entities.sprites[0].frame = 4;
+    g_entities.sprites[0].active = 1;
+    g_entities.num_sprites = 1;
+    g_entities.num_bodies = 0;
+    g_game.keen_facing = 1;
+    g_game.level_finished = g_game.god_mode = g_game.keen_invincible = 0;
     if (!engine_arguments.extras.vorticonsDemoModeToggle) {
-        sprite_sync = 0;
+        g_game.sprite_sync = 0;
         CVort_ptr_engine_setTicksSync(0);
         CVort_ptr_engine_setTicks(0);
     }
 }
 
 static void CVort_level_setup_camera(void) {
-    scrollX = sprites[0].posX + 0xFFFF6000;
-    scrollY = sprites[0].posY + 0xFFFFB000;
+    scrollX = g_entities.sprites[0].posX + 0xFFFF6000;
+    scrollY = g_entities.sprites[0].posY + 0xFFFFB000;
     // Some scrolling stuff...
     if (scrollX < scrollX_min)
         scrollX = scrollX_min;
@@ -640,7 +640,7 @@ static void CVort_level_setup_camera(void) {
 static void CVort_level_init_screen(void) {
     CVort_engine_syncDrawing();
     CVort_fade_out();
-    lights = 1;
+    g_game.lights = 1;
     CVort_engine_clearOverlay();
     CVort_engine_drawScreen();
     CVort_engine_drawScreen();
@@ -651,39 +651,39 @@ static void CVort_level_init_screen(void) {
 
 static void CVort_run_sprite_think(void) {
     CVort_update_sprite_hitbox();
-    temp_sprite.delX = temp_sprite.delY = 0;
+    g_entities.temp_sprite.delX = g_entities.temp_sprite.delY = 0;
     /* GUESSED(?!) EXPLANATION (while using C++ with classes):
      * 1. The "think" function can only operate on some object
      * of class CVorticons, thus the first mention of *this.
-     * 2. It is also stored in temp_sprite, a member of such
+     * 2. It is also stored in g_entities.temp_sprite, a member of such
      * a specific object again. Hence, the second mention.
      * 3. Finally the function should be prefixed with
      * an asterisk (*).
      */
-    (temp_sprite.think)();
-    //((*this).*(*this).temp_sprite.think)();
-    temp_sprite.posX += temp_sprite.delX;
-    temp_sprite.posY += temp_sprite.delY;
+    (g_entities.temp_sprite.think)();
+    //((*this).*(*this).g_entities.temp_sprite.think)();
+    g_entities.temp_sprite.posX += g_entities.temp_sprite.delX;
+    g_entities.temp_sprite.posY += g_entities.temp_sprite.delY;
     CVort_update_sprite_hitbox();
 }
 
 static void CVort_level_update_sprites(void) {
     int16_t var_4, var_6, sprite_counter;
-    // Apply sprites behaviors if relevant
-    for (sprite_counter = 0; sprite_counter < num_sprites; sprite_counter++) {
-        if (!sprites[sprite_counter].type_)
+    // Apply g_entities.sprites behaviors if relevant
+    for (sprite_counter = 0; sprite_counter < g_entities.num_sprites; sprite_counter++) {
+        if (!g_entities.sprites[sprite_counter].type_)
             continue;
-        temp_sprite = sprites[sprite_counter];
-        if (!temp_sprite.active) {
-            var_4 = temp_sprite.posX >> 12;
-            var_6 = temp_sprite.posY >> 12;
+        g_entities.temp_sprite = g_entities.sprites[sprite_counter];
+        if (!g_entities.temp_sprite.active) {
+            var_4 = g_entities.temp_sprite.posX >> 12;
+            var_6 = g_entities.temp_sprite.posY >> 12;
             if ((scrollX_T - ENGINE_SPRITE_MARGIN_MIN < var_4) && (scrollY_T - ENGINE_SPRITE_MARGIN_MIN < var_6) && (scrollX_T + ENGINE_VIEWPORT_WIDTH_TILES > var_4) && (scrollY_T + ENGINE_VIEWPORT_HEIGHT_TILES > var_6)) {
-                temp_sprite.active = 1;
+                g_entities.temp_sprite.active = 1;
 #if CHOCOLATE_KEEN_IS_EPISODE1_ENABLED
                 if (engine_gameVersion == GAMEVER_KEEN1) {
-                    if (temp_sprite.think == &CVort1_think_yorp_stunned) {
-                        temp_sprite.think = &CVort1_think_yorp_look;
-                        temp_sprite.time = 0;
+                    if (g_entities.temp_sprite.think == &CVort1_think_yorp_stunned) {
+                        g_entities.temp_sprite.think = &CVort1_think_yorp_look;
+                        g_entities.temp_sprite.time = 0;
                     }
                 }
 #endif
@@ -692,12 +692,12 @@ static void CVort_level_update_sprites(void) {
 #endif
 #if CHOCOLATE_KEEN_IS_EPISODE3_ENABLED
                   if (engine_gameVersion == GAMEVER_KEEN3) {
-                    if (temp_sprite.think == &CVort3_think_foob_run) {
-                        temp_sprite.think = &CVort3_think_foob_walk;
-                        if (temp_sprite.posX > sprites[0].posX) {
-                            temp_sprite.velX = 50;
+                    if (g_entities.temp_sprite.think == &CVort3_think_foob_run) {
+                        g_entities.temp_sprite.think = &CVort3_think_foob_walk;
+                        if (g_entities.temp_sprite.posX > g_entities.sprites[0].posX) {
+                            g_entities.temp_sprite.velX = 50;
                         } else {
-                            temp_sprite.velX = -50;
+                            g_entities.temp_sprite.velX = -50;
                         }
                     }
                 }
@@ -706,56 +706,56 @@ static void CVort_level_update_sprites(void) {
             }
         } else if (!sprite_counter
         // Platforms always move
-        || ((engine_gameVersion == GAMEVER_KEEN2) && (temp_sprite.type_ == CVort2_obj_platform))
-        || ((engine_gameVersion == GAMEVER_KEEN3) && (temp_sprite.type_ == 10))
+        || ((engine_gameVersion == GAMEVER_KEEN2) && (g_entities.temp_sprite.type_ == CVort2_obj_platform))
+        || ((engine_gameVersion == GAMEVER_KEEN3) && (g_entities.temp_sprite.type_ == 10))
         || !CVort_sprite_active_screen() ) {
             CVort_run_sprite_think();
         }
-        sprites[sprite_counter] = temp_sprite;
+        g_entities.sprites[sprite_counter] = g_entities.temp_sprite;
     }
 }
 
 static void CVort_level_detect_collisions(void) {
     int16_t sprite_counter, var_A;
     // Seems like collision code
-    for (sprite_counter = 0; sprite_counter < num_sprites; sprite_counter++) {
-        if (!sprites[sprite_counter].type_ || !sprites[sprite_counter].active)
+    for (sprite_counter = 0; sprite_counter < g_entities.num_sprites; sprite_counter++) {
+        if (!g_entities.sprites[sprite_counter].type_ || !g_entities.sprites[sprite_counter].active)
             continue;
-        for (var_A = sprite_counter + 1; var_A < num_sprites; var_A++) {
-            if (!sprites[var_A].type_ || !sprites[var_A].active)
+        for (var_A = sprite_counter + 1; var_A < g_entities.num_sprites; var_A++) {
+            if (!g_entities.sprites[var_A].type_ || !g_entities.sprites[var_A].active)
                 continue;
-            if (!CVort_detect_sprite_col(&sprites[sprite_counter], &sprites[var_A]))
+            if (!CVort_detect_sprite_col(&g_entities.sprites[sprite_counter], &g_entities.sprites[var_A]))
                 continue;
-            //*this.*(sprites[sprite_counter].contact)(&sprites[sprite_counter], &sprites[var_A]);
-            //*this.*(sprites[var_A].contact)(&sprites[var_A], &sprites[sprite_counter]);
-            (sprites[sprite_counter].contact)(&sprites[sprite_counter], &sprites[var_A]);
-            (sprites[var_A].contact)(&sprites[var_A], &sprites[sprite_counter]);
-            //((*this).*(*this).sprites[sprite_counter].contact)(&sprites[sprite_counter], &sprites[var_A]);
-            //((*this).*(*this).sprites[var_A].contact)(&sprites[var_A], &sprites[sprite_counter]);
+            //*this.*(g_entities.sprites[sprite_counter].contact)(&g_entities.sprites[sprite_counter], &g_entities.sprites[var_A]);
+            //*this.*(g_entities.sprites[var_A].contact)(&g_entities.sprites[var_A], &g_entities.sprites[sprite_counter]);
+            (g_entities.sprites[sprite_counter].contact)(&g_entities.sprites[sprite_counter], &g_entities.sprites[var_A]);
+            (g_entities.sprites[var_A].contact)(&g_entities.sprites[var_A], &g_entities.sprites[sprite_counter]);
+            //((*this).*(*this).g_entities.sprites[sprite_counter].contact)(&g_entities.sprites[sprite_counter], &g_entities.sprites[var_A]);
+            //((*this).*(*this).g_entities.sprites[var_A].contact)(&g_entities.sprites[var_A], &g_entities.sprites[sprite_counter]);
         }
     }
 }
 
 static void CVort_level_draw_sprites(void) {
     int16_t sprite_counter;
-    // Remember to draw sprites; Here, we scan in REVERSED order.
-    for (sprite_counter = num_sprites - 1; sprite_counter >= 0; sprite_counter--)
-        if (sprites[sprite_counter].type_ && sprites[sprite_counter].active)
-            CVort_engine_drawSpriteAt(sprites[sprite_counter].posX, sprites[sprite_counter].posY, sprites[sprite_counter].frame);
+    // Remember to draw g_entities.sprites; Here, we scan in REVERSED order.
+    for (sprite_counter = g_entities.num_sprites - 1; sprite_counter >= 0; sprite_counter--)
+        if (g_entities.sprites[sprite_counter].type_ && g_entities.sprites[sprite_counter].active)
+            CVort_engine_drawSpriteAt(g_entities.sprites[sprite_counter].posX, g_entities.sprites[sprite_counter].posY, g_entities.sprites[sprite_counter].frame);
 }
 
 #if CHOCOLATE_KEEN_IS_EPISODE3_ENABLED
 static void CVort_level_draw_invincibility(void) {
     if (engine_gameVersion == GAMEVER_KEEN3) {
-        if (keen_invincible || god_mode) {
-            if (keen_invincible > 250) {
-                CVort_engine_drawSpriteAt(sprites[0].posX - 0x800, sprites[0].posY - 0x800, ((CVort_ptr_engine_getTicks() >> 4) & 1) + 0x3D);
+        if (g_game.keen_invincible || g_game.god_mode) {
+            if (g_game.keen_invincible > 250) {
+                CVort_engine_drawSpriteAt(g_entities.sprites[0].posX - 0x800, g_entities.sprites[0].posY - 0x800, ((CVort_ptr_engine_getTicks() >> 4) & 1) + 0x3D);
             } else if ((CVort_ptr_engine_getTicks() >> 4) & 1) {
-                CVort_engine_drawSpriteAt(sprites[0].posX - 0x800, sprites[0].posY - 0x800, ((CVort_ptr_engine_getTicks() >> 5) & 1) + 0x3D);
+                CVort_engine_drawSpriteAt(g_entities.sprites[0].posX - 0x800, g_entities.sprites[0].posY - 0x800, ((CVort_ptr_engine_getTicks() >> 5) & 1) + 0x3D);
             }
-            keen_invincible -= sprite_sync;
-            if (keen_invincible < 0) {
-                keen_invincible = 0;
+            g_game.keen_invincible -= g_game.sprite_sync;
+            if (g_game.keen_invincible < 0) {
+                g_game.keen_invincible = 0;
             }
         }
     }
@@ -765,10 +765,10 @@ static void CVort_level_draw_invincibility(void) {
 static void CVort_level_update_bodies(void) {
     int16_t sprite_counter;
     // Now call body "think" functions
-    for (sprite_counter = 0; sprite_counter < num_bodies; sprite_counter++)
-        if (bodies[sprite_counter].type_)
-            (bodies[sprite_counter].think_ptr)(&bodies[sprite_counter]);
-            //((*this).*(*this).bodies[sprite_counter].think_ptr)(&bodies[sprite_counter]);
+    for (sprite_counter = 0; sprite_counter < g_entities.num_bodies; sprite_counter++)
+        if (g_entities.bodies[sprite_counter].type_)
+            (g_entities.bodies[sprite_counter].think_ptr)(&g_entities.bodies[sprite_counter]);
+            //((*this).*(*this).g_entities.bodies[sprite_counter].think_ptr)(&g_entities.bodies[sprite_counter]);
 }
 
 static void CVort_level_handle_death(uint16_t levelnum) {
@@ -836,7 +836,7 @@ uint16_t CVort_draw_level(uint16_t levelnum) {
     uint32_t frame_counter_start_time = SDL_GetTicks();
 
     if (engine_arguments.extras.vorticonsDemoModeToggle) {
-        sprite_sync = 15;
+        g_game.sprite_sync = 15;
         CVort_ptr_engine_setTicksSync(0);
         CVort_ptr_engine_setTicks(0);
         // FIXME? We use goto... but that just seems too simple...
@@ -850,7 +850,7 @@ uint16_t CVort_draw_level(uint16_t levelnum) {
         *********************************************/
         CVort_engine_syncDrawing();
 right_after_drawing_sync:
-        input_new = CVort_handle_ctrl(1);
+        g_input.input_new = CVort_handle_ctrl(1);
         CVort_level_update_sprites();
         CVort_do_scrolling();
         CVort_level_detect_collisions();
@@ -864,7 +864,7 @@ right_after_drawing_sync:
         CVort_level_update_bodies();
         // Alright, let's update what is to be seen!
         CVort_engine_drawScreen();
-        input_old = input_new;
+        g_input.input_old = g_input.input_new;
 #if CHOCOLATE_KEEN_IS_EPISODE3_ENABLED
         if (engine_gameVersion == GAMEVER_KEEN3) {
             if (about_to_encounter_mortimer && (levelnum == 16)) {
@@ -877,19 +877,19 @@ right_after_drawing_sync:
         CVort_handle_cheat_keys();
         if (CVort_handle_global_keys())
             CVort_ptr_engine_setTicksSync(CVort_ptr_engine_getTicks());
-        if (quit_to_title)
+        if (g_game.quit_to_title)
             return 0;
-    } while ((level_finished == LEVEL_END_DIE) && (sprites[0].type_));
+    } while ((g_game.level_finished == LEVEL_END_DIE) && (g_entities.sprites[0].type_));
 
     CVort_engine_finishCurSound();
     CVort_fade_out();
     for (int16_t i = 0; i < 4; i++)
         keen_gp.stuff[i + 5] = 0; // Set unused "stuff" vals to 0
-    if (level_finished != LEVEL_END_DIE)
-        return level_finished;
+    if (g_game.level_finished != LEVEL_END_DIE)
+        return g_game.level_finished;
 
     CVort_level_handle_death(levelnum);
-    return level_finished;
+    return g_game.level_finished;
 }
 
 void CVort_calibrate_joystick(int16_t joy_id) {
@@ -920,7 +920,7 @@ void CVort_calibrate_joystick(int16_t joy_id) {
         topLeftPollInput = CVort_engine_pollJoystick(joy_id);
         currInput = CVort_engine_getJoystickCtrl(joy_id);
         //CVort_engine_updateInputStatus();
-        if (key_map[1]) // ESC pressed
+        if (g_input.key_map[1]) // ESC pressed
         {
             CVort_clear_keys();
             return;
@@ -947,7 +947,7 @@ void CVort_calibrate_joystick(int16_t joy_id) {
         bottomRightPollInput = CVort_engine_pollJoystick(joy_id);
         currInput = CVort_engine_getJoystickCtrl(joy_id);
         CVort_engine_updateInputStatus();
-        if (key_map[1]) // ESC pressed
+        if (g_input.key_map[1]) // ESC pressed
         {
             CVort_clear_keys();
             return;
@@ -962,10 +962,10 @@ void CVort_calibrate_joystick(int16_t joy_id) {
 
     int16_t var_A = (bottomRightPollInput.xPoll - topLeftPollInput.xPoll) / 4;
     int16_t var_C = (bottomRightPollInput.yPoll - topLeftPollInput.yPoll) / 4;
-    joystick_ctrl[0][joy_id] = topLeftPollInput.xPoll + var_A;
-    joystick_ctrl[1][joy_id] = bottomRightPollInput.xPoll - var_A;
-    joystick_ctrl[2][joy_id] = topLeftPollInput.yPoll + var_C;
-    joystick_ctrl[3][joy_id] = bottomRightPollInput.yPoll - var_C;
-    ctrl_type[1] = 2;
+    g_input.joystick_ctrl[0][joy_id] = topLeftPollInput.xPoll + var_A;
+    g_input.joystick_ctrl[1][joy_id] = bottomRightPollInput.xPoll - var_A;
+    g_input.joystick_ctrl[2][joy_id] = topLeftPollInput.yPoll + var_C;
+    g_input.joystick_ctrl[3][joy_id] = bottomRightPollInput.yPoll - var_C;
+    g_input.ctrl_type[1] = 2;
     CVort_clear_keys();
 }

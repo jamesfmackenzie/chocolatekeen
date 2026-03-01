@@ -7,6 +7,51 @@
 #include "cvorticons_opengl.h"
 #include "cvorticons_input.h"
 
+/* ---------------------------------------------------------------
+ * Grouped global state structs (Step 6 refactor)
+ * --------------------------------------------------------------- */
+typedef struct {
+    int16_t god_mode, keen_invincible;
+    int16_t level_finished;
+    uint16_t current_level;
+    uint16_t on_world_map, resuming_saved_game;
+    uint16_t quit_to_title;
+    int16_t keen_facing;
+    uint16_t sprite_sync;
+    int16_t rnd;
+    uint16_t sound_disabled, want_sound;
+    int32_t extra_life_pts;
+    int16_t spark_counter;
+    int16_t wmap_sprite_on;
+    uint16_t reshow_scroll_up, wmap_col;
+    uint16_t apogee_bmp_height, intro_complete;
+    uint16_t anim_speed;
+    uint16_t lights;
+    int16_t demo_status;
+    int16_t keen_switch;
+    char string_buf[0x50];
+} GameState_T;
+
+typedef struct {
+    Sprite_T sprites[0x50];
+    Sprite_T temp_sprite;
+    Body_T bodies[0x10];
+    int16_t num_sprites, num_bodies;
+    MaskedSpriteEntry_T temp_MSE;
+} EntityManager_T;
+
+typedef struct {
+    uint8_t key_map[128];
+    uint16_t key_code, key_scane;
+    int16_t joy_detect;
+    int16_t pass_keys_to_bios;
+    int16_t mouse_ctrl_1;
+    int16_t joystick_ctrl[4][3];
+    uint16_t ctrl_type[3];
+    uint8_t sc_dir[8], sc_but1, sc_but2;
+    GameInput_T input_new, input_old;
+} InputState_T;
+
 //class CVorticons {
 //public:
     //void CVorticonsConst(gameversion_T ver) { engine_gameVersion = ver; }
@@ -477,8 +522,12 @@
     /************************************
     Vanilla Keen variables; Well, mostly.
      ************************************/
+    // Grouped state structs
+    extern GameState_T g_game;
+    extern EntityManager_T g_entities;
+    extern InputState_T g_input;
+
     // Initialized Variables
-    extern uint8_t key_map[128]; // All zeros
     extern uint16_t jump_height_table[18];
     extern uint16_t spritejump_1, spritejump_2;
 
@@ -487,19 +536,6 @@
 
     // BSS
     extern uint32_t ticks_sync;
-    extern uint16_t sprite_sync;
-    extern int16_t god_mode, keen_invincible;
-    extern int16_t level_finished;
-    // TODO: Using this in "modern" code is uncommon today...
-    extern char string_buf[0x50];
-
-    extern int16_t joy_detect;
-    extern int16_t pass_keys_to_bios;
-    //uint16_t pass_keys_to_bios;
-    extern uint16_t key_code, key_scane;
-
-    extern uint16_t sound_disabled;
-    extern int16_t rnd;
     extern uint16_t tiledraws_c, bmpdraws_c, spritedraws_c;
     // Same for bmpdraws and more
     extern SpriteDraw_T spritedraws[0x1f4];
@@ -508,13 +544,6 @@
     extern uint16_t screentiles[0x258];
     // TODO: bmpdraws_i (bmpdraws_p) doesn't seem to actually be used...
     extern int bmpdraws_i, tiledraws_i, screentiles_i, spritedraws_i;
-
-    extern uint16_t want_sound;
-
-    extern int16_t mouse_ctrl_1;
-    // Original reference names to the four joystick arrays:
-    // word_2B2BA, word_2B2C0, word_2B2C6, word_2B2CC
-    extern int16_t joystick_ctrl[4][3];
 
     extern uint16_t *TILEINFO_Anim;
     extern int16_t *TILEINFO_Type;
@@ -536,7 +565,6 @@
 
     extern uint8_t demo_actions_including_level_num[5001];
     extern uint8_t *demo_action_ptr, *end_of_demo_ptr, *demo_after_last_byte_char_offset;
-    extern int16_t demo_status;
 
     extern int16_t map_data[0x10000 / 2], *map_data_tiles, *map_data_sprites;
     extern int16_t map_width_T, map_height_T, map_width_B;
@@ -554,47 +582,11 @@
 
     extern int16_t keen_tileX, keen_tileY;
 
-    extern Sprite_T sprites[0x50], temp_sprite;
-    extern Body_T bodies[0x10];
-
-    extern GameInput_T input_new, input_old;
-
-    extern int16_t num_sprites, num_bodies;
-
-    extern int16_t spark_counter;
-
-    extern uint16_t quit_to_title;
-
-    extern int16_t wmap_sprite_on;
-
-    extern int32_t extra_life_pts;
-
-    extern MaskedSpriteEntry_T temp_MSE;
-
-    extern uint16_t anim_speed;
-
-    extern uint16_t ctrl_type[3];
-    extern uint8_t sc_dir[8], sc_but1, sc_but2;
-
-    extern uint16_t lights;
-
     extern uint8_t *previews_txt, *story_text, *help_text, *end_text;
 
     extern HighScoresTable_T high_scores_table;
     extern Sprite_T keen_map[2];
     extern GameProfile_T keen_gp;
-
-    extern uint16_t on_world_map;
-    extern uint16_t resuming_saved_game;
-    extern uint16_t current_level;
-
-    extern uint16_t reshow_scroll_up;
-
-    extern uint16_t wmap_col;
-
-    extern int16_t keen_facing;
-
-    extern uint16_t apogee_bmp_height, intro_complete;
 
     extern uint32_t keen_wmap_x_pos, keen_wmap_y_pos;
     extern uint32_t wmap_scrollX, wmap_scrollY;
@@ -606,8 +598,6 @@
     extern uint8_t *text_ptr;
 
     extern int16_t text_viewer_buffer[0x190], *text_viewer_buffer_ptr;
-
-    extern int16_t keen_switch;
 
     extern uint16_t messie_mounted, messie_frame, messie_time_to_climb, messie_move_tics;
     extern uint16_t messie_x_T, messie_y_T;

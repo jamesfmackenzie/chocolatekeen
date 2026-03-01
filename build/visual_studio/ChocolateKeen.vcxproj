@@ -89,7 +89,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\app\chocolate-keen.c" />
-    <ClCompile Include="..\..\src\game\cvorticons.c" />
+    <ClCompile Include="..\..\src\game\gameplay.c" />
     <ClCompile Include="..\..\src\episodes\cvorticons1.c" />
     <ClCompile Include="..\..\src\episodes\cvorticons1_engine.c" />
     <ClCompile Include="..\..\src\episodes\cvorticons1_memdata.c" />

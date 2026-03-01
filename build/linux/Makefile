@@ -138,7 +138,7 @@ $(OBJ)/imageRLE.o: $(SRC)/decompression/imageRLE.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/chocolate-keen.o: $(SRC)/app/chocolate-keen.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons.o: $(SRC)/game/cvorticons.c
+$(OBJ)/cvorticons.o: $(SRC)/game/gameplay.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/cvorticons1.o: $(SRC)/episodes/cvorticons1.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
@@ -158,17 +158,17 @@ $(OBJ)/cvorticons3_memdata.o: $(SRC)/episodes/cvorticons3_memdata.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/cvorticons3_engine.o: $(SRC)/episodes/cvorticons3_engine.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_worldmap.o: $(SRC)/game/cvorticons_worldmap.c
+$(OBJ)/cvorticons_worldmap.o: $(SRC)/game/worldmap.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_menus.o: $(SRC)/game/cvorticons_menus.c
+$(OBJ)/cvorticons_menus.o: $(SRC)/game/menus.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_ui.o: $(SRC)/game/cvorticons_ui.c
+$(OBJ)/cvorticons_ui.o: $(SRC)/game/ui.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_physics.o: $(SRC)/game/cvorticons_physics.c
+$(OBJ)/cvorticons_physics.o: $(SRC)/game/physics.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_enemies.o: $(SRC)/game/cvorticons_enemies.c
+$(OBJ)/cvorticons_enemies.o: $(SRC)/game/enemies.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
-$(OBJ)/cvorticons_episode_constants.o: $(SRC)/game/cvorticons_episode_constants.c
+$(OBJ)/cvorticons_episode_constants.o: $(SRC)/game/episode_constants.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/cvorticons_memdata.o: $(SRC)/render/cvorticons_memdata.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@

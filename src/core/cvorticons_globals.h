@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include "core/cvorticons_types.h"
-#include "game/cvorticons_sprites.h"
+#include "game/sprites.h"
 #include "render/cvorticons_opengl.h"
 #include "input/cvorticons_input.h"
 

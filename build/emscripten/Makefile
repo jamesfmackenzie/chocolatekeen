@@ -140,7 +140,11 @@ $(OBJ)/cvorticons_physics.o: $(SRC)/game/cvorticons_physics.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/cvorticons_enemies.o: $(SRC)/game/cvorticons_enemies.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/cvorticons_memdata.o: $(SRC)/render/cvorticons_memdata.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/cvorticons_engine.o: $(SRC)/engine/cvorticons_engine.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/cvorticons_gfx.o: $(SRC)/render/cvorticons_gfx.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/cvorticons_input.o: $(SRC)/input/cvorticons_input.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@

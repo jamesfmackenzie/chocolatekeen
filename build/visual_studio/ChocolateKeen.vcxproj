@@ -100,10 +100,10 @@
     <ClCompile Include="..\..\src\cvorticons3_engine.c" />
     <ClCompile Include="..\..\src\cvorticons3_memdata.c" />
     <ClCompile Include="..\..\src\engine\cvorticons_engine.c" />
-    <ClCompile Include="..\..\src\cvorticons_gfx.c" />
+    <ClCompile Include="..\..\src\render\cvorticons_gfx.c" />
     <ClCompile Include="..\..\src\ui\cvorticons_gui.c" />
     <ClCompile Include="..\..\src\input\cvorticons_input.c" />
-    <ClCompile Include="..\..\src\cvorticons_memdata.c" />
+    <ClCompile Include="..\..\src\render\cvorticons_memdata.c" />
     <ClCompile Include="..\..\src\third_party\cgenius\fileio\compression\CRLE.c" />
     <ClCompile Include="..\..\src\third_party\cgenius\fileio\compression\Cunlzexe.c" />
     <ClCompile Include="..\..\src\third_party\cgenius\fileio\lz.c" />

@@ -6,15 +6,13 @@
 #endif
 #include <inttypes.h>
 #include "core/core.h"
+#include "core/io_helpers.h"
 #include "episodes/episode1.h"
 #include "episodes/episode2.h"
 #include "episodes/episode3.h"
 #include "third_party/cgenius/fileio/compression/CRLE.h"
 
 #include "episodes/episode_macros.h"
-
-#define CK_IO_EXPECT(ok, expr, expected) \
-    do { (ok) = (ok) && ((expr) == (expected)); } while (0)
 
 void CVort_demo_toggle_reset_player_partial_state_before();
 void CVort_demo_toggle_reset_player_partial_state_after();

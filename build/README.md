@@ -57,3 +57,5 @@ Platform makefiles should follow this order:
 - Keep profile/toolchain logic inside shared fragments when possible.
 - Prefer adding new shared behavior in fragments rather than duplicating per-platform blocks.
 - If you add a new platform makefile, reuse this fragment structure to avoid drift.
+- Emscripten warning policy lives in `common_profiles.mk` (`EMCC_WARN_CFLAGS`):
+  switch exhaustiveness noise is suppressed, while higher-signal warnings remain enabled.

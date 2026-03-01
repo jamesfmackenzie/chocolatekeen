@@ -1,4 +1,4 @@
-#include "platform.h"
+#include "platform/platform.h"
 
 void CK_PlatformPrepareInput(void) {
 }

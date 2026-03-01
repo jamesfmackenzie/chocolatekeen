@@ -8,7 +8,7 @@
 #include <inttypes.h>
 
 #include "core/cvorticons.h"
-#include "cvorticons3.h"
+#include "episodes/cvorticons3.h"
 
 /******************************************************************************
 WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING

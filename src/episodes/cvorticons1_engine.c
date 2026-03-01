@@ -1,4 +1,4 @@
-#include "cvorticons1.h"
+#include "episodes/cvorticons1.h"
 
 void CVort1_engine_processEXE() {
     /**********************************************************

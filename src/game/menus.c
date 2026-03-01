@@ -18,6 +18,76 @@
 void CVort_demo_toggle_reset_player_partial_state_before();
 void CVort_demo_toggle_reset_player_partial_state_after();
 
+static bool CVort_private_read_saved_game_payload(FILE *fp) {
+    bool loadOk = true;
+    CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(keen_gp.stuff, 9, fp), 9);
+    CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(keen_gp.levels, 16, fp), 16);
+    CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(&keen_gp.lives, 1, fp), 1);
+    CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(&keen_gp.ammo, 1, fp), 1);
+    CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt32LE(&keen_gp.score, 1, fp), 1);
+    CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt32LE(&keen_gp.mapX, 1, fp), 1);
+    CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt32LE(&keen_gp.mapY, 1, fp), 1);
+    CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt32LE(&keen_gp.screenX, 1, fp), 1);
+    CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt32LE(&keen_gp.screenY, 1, fp), 1);
+    CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(keen_gp.targets, 8, fp), 8);
+    CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(&keen_gp.unknown, 1, fp), 1);
+    return loadOk;
+}
+
+static bool CVort_private_write_saved_game_payload(FILE *fp) {
+    bool saveOk = true;
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(keen_gp.stuff, 9, fp), 9);
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(keen_gp.levels, 16, fp), 16);
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(&keen_gp.lives, 1, fp), 1);
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(&keen_gp.ammo, 1, fp), 1);
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt32LE(&keen_gp.score, 1, fp), 1);
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt32LE(&keen_gp.mapX, 1, fp), 1);
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt32LE(&keen_gp.mapY, 1, fp), 1);
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt32LE(&keen_gp.screenX, 1, fp), 1);
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt32LE(&keen_gp.screenY, 1, fp), 1);
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(keen_gp.targets, 8, fp), 8);
+    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(&keen_gp.unknown, 1, fp), 1);
+    return saveOk;
+}
+
+static bool CVort_private_read_high_scores_table(FILE *fp) {
+    bool loadOk = true;
+    int entryCounter, partCounter;
+    for (entryCounter = 0; entryCounter < 7; entryCounter++)
+        CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt32LE(high_scores_table.scores + entryCounter, 1, fp), 1);
+    for (partCounter = 0; partCounter < 4; partCounter++)
+        for (entryCounter = 0; entryCounter < 7; entryCounter++)
+            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(&high_scores_table.parts[entryCounter][partCounter], 1, fp), 1);
+    for (entryCounter = 0; entryCounter < 7; entryCounter++)
+        CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(high_scores_table.targets + entryCounter, 1, fp), 1);
+    for (entryCounter = 0; entryCounter < 7; entryCounter++)
+        CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(high_scores_table.unknown + entryCounter, 1, fp), 1);
+    for (entryCounter = 0; entryCounter < 7; entryCounter++) {
+        if (fread(high_scores_table.names[entryCounter], sizeof(high_scores_table.names[entryCounter]), 1, fp) != 1) {
+            loadOk = false;
+            break;
+        }
+    }
+    return loadOk;
+}
+
+static bool CVort_private_write_high_scores_table(FILE *fp) {
+    bool saveOk = true;
+    int entryCounter, partCounter;
+    for (entryCounter = 0; entryCounter < 7; entryCounter++)
+        CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt32LE(high_scores_table.scores + entryCounter, 1, fp), 1);
+    for (partCounter = 0; partCounter < 4; partCounter++)
+        for (entryCounter = 0; entryCounter < 7; entryCounter++)
+            CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(&high_scores_table.parts[entryCounter][partCounter], 1, fp), 1);
+    for (entryCounter = 0; entryCounter < 7; entryCounter++)
+        CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(high_scores_table.targets + entryCounter, 1, fp), 1);
+    for (entryCounter = 0; entryCounter < 7; entryCounter++)
+        CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(high_scores_table.unknown + entryCounter, 1, fp), 1);
+    for (entryCounter = 0; entryCounter < 7; entryCounter++)
+        CK_IO_EXPECT(saveOk, fwrite(high_scores_table.names[entryCounter], sizeof(high_scores_table.names[entryCounter]), 1, fp), 1);
+    return saveOk;
+}
+
 void CVort_record_demo(int16_t demo_number) {
     demo_actions_including_level_num[0] = g_game.current_level;
     demo_action_ptr = 1 + demo_actions_including_level_num;
@@ -624,18 +694,7 @@ void CVort_save_game() {
 
     fp = CVort_engine_cross_rw_misc_fopen(path, "wb");
     CK_IO_RETURN_IF_OPEN_FAIL_FOR_WRITE(fp, path);
-    bool saveOk = true;
-    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(keen_gp.stuff, 9, fp), 9);
-    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(keen_gp.levels, 16, fp), 16);
-    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(&keen_gp.lives, 1, fp), 1);
-    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(&keen_gp.ammo, 1, fp), 1);
-    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt32LE(&keen_gp.score, 1, fp), 1);
-    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt32LE(&keen_gp.mapX, 1, fp), 1);
-    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt32LE(&keen_gp.mapY, 1, fp), 1);
-    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt32LE(&keen_gp.screenX, 1, fp), 1);
-    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt32LE(&keen_gp.screenY, 1, fp), 1);
-    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(keen_gp.targets, 8, fp), 8);
-    CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(&keen_gp.unknown, 1, fp), 1);
+    bool saveOk = CVort_private_write_saved_game_payload(fp);
     fclose(fp);
     CK_IO_WARN_ON_WRITE_FAIL(saveOk, path);
 
@@ -684,18 +743,7 @@ uint16_t CVort_private_continue_game() {
             continue;
         }
         if (CVort_filelength(fp) == 92) {
-            bool loadOk = true;
-            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(keen_gp.stuff, 9, fp), 9);
-            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(keen_gp.levels, 16, fp), 16);
-            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(&keen_gp.lives, 1, fp), 1);
-            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(&keen_gp.ammo, 1, fp), 1);
-            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt32LE(&keen_gp.score, 1, fp), 1);
-            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt32LE(&keen_gp.mapX, 1, fp), 1);
-            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt32LE(&keen_gp.mapY, 1, fp), 1);
-            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt32LE(&keen_gp.screenX, 1, fp), 1);
-            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt32LE(&keen_gp.screenY, 1, fp), 1);
-            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(keen_gp.targets, 8, fp), 8);
-            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(&keen_gp.unknown, 1, fp), 1);
+            bool loadOk = CVort_private_read_saved_game_payload(fp);
             fclose(fp);
             if (!loadOk)
                 continue;
@@ -1150,22 +1198,7 @@ void CVort_load_high_scores_table() {
 
     FILE *fp = CVort_engine_cross_rw_misc_fopen(path, "rb");
     if (fp) {
-        bool loadOk = true;
-        for (entryCounter = 0; entryCounter < 7; entryCounter++)
-            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt32LE(high_scores_table.scores + entryCounter, 1, fp), 1);
-        for (partCounter = 0; partCounter < 4; partCounter++)
-            for (entryCounter = 0; entryCounter < 7; entryCounter++)
-                CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(&high_scores_table.parts[entryCounter][partCounter], 1, fp), 1);
-        for (entryCounter = 0; entryCounter < 7; entryCounter++)
-            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(high_scores_table.targets + entryCounter, 1, fp), 1);
-        for (entryCounter = 0; entryCounter < 7; entryCounter++)
-            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(high_scores_table.unknown + entryCounter, 1, fp), 1);
-        for (entryCounter = 0; entryCounter < 7; entryCounter++) {
-            if (fread(high_scores_table.names[entryCounter], sizeof (high_scores_table.names[entryCounter]), 1, fp) != 1) {
-                loadOk = false;
-                break;
-            }
-        }
+        bool loadOk = CVort_private_read_high_scores_table(fp);
         fclose(fp);
         if (loadOk)
             return;
@@ -1192,19 +1225,7 @@ void CVort_save_high_scores_table() {
     FILE *fp = CVort_engine_cross_rw_misc_fopen(path, "wb");
     CK_IO_RETURN_IF_OPEN_FAIL_FOR_WRITE(fp, path);
 
-    bool saveOk = true;
-    int entryCounter, partCounter;
-    for (entryCounter = 0; entryCounter < 7; entryCounter++)
-        CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt32LE(high_scores_table.scores + entryCounter, 1, fp), 1);
-    for (partCounter = 0; partCounter < 4; partCounter++)
-        for (entryCounter = 0; entryCounter < 7; entryCounter++)
-            CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(&high_scores_table.parts[entryCounter][partCounter], 1, fp), 1);
-    for (entryCounter = 0; entryCounter < 7; entryCounter++)
-        CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(high_scores_table.targets + entryCounter, 1, fp), 1);
-    for (entryCounter = 0; entryCounter < 7; entryCounter++)
-        CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(high_scores_table.unknown + entryCounter, 1, fp), 1);
-    for (entryCounter = 0; entryCounter < 7; entryCounter++)
-        CK_IO_EXPECT(saveOk, fwrite(high_scores_table.names[entryCounter], sizeof (high_scores_table.names[entryCounter]), 1, fp), 1);
+    bool saveOk = CVort_private_write_high_scores_table(fp);
     fclose(fp);
     CK_IO_WARN_ON_WRITE_FAIL(saveOk, path);
 }

@@ -55,12 +55,6 @@ $(EXE_PATH): $(OBJECTS)
 
 include ../common_rules.mk
 
-clean:
-	-rm -rf $(OBJ)
-	-rm -rf GAMEDATA
-	-rm -f chocolate-keen.exe
-	-rm -f SDL2.dll
-	-rm -f *.cfg
-	-rm -f *.CK1
-	-rm -f *.CK2
-	-rm -f *.CK3
+CLEAN_DIRS=$(OBJ) GAMEDATA
+CLEAN_FILES=chocolate-keen.exe SDL2.dll *.cfg *.CK1 *.CK2 *.CK3
+include ../common_clean.mk

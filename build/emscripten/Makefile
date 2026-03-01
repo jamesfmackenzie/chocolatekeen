@@ -57,6 +57,6 @@ $(EXE_PATH): $(OBJECTS)
 
 include ../common_rules.mk
 
-clean:
-	-rm -rf $(OBJ)
-	-rm -f chocolate*
+CLEAN_DIRS=$(OBJ)
+CLEAN_FILES=chocolate*
+include ../common_clean.mk

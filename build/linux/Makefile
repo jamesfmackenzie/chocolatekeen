@@ -55,10 +55,9 @@ $(EXE_PATH): $(OBJECTS)
 
 include ../common_rules.mk
 
-clean:
-	-rm -rf $(OBJ)
-	-rm -rf GAMEDATA
-	-rm -f chocolate-keen
+CLEAN_DIRS=$(OBJ) GAMEDATA
+CLEAN_FILES=chocolate-keen
+include ../common_clean.mk
 
 # Run tests
 test:

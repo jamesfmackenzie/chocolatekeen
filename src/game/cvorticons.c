@@ -7,7 +7,7 @@
 #endif
 #include <inttypes.h>
 
-#include "cvorticons.h"
+#include "core/cvorticons.h"
 #include "episodes/cvorticons1.h"
 #include "episodes/cvorticons2.h"
 #include "episodes/cvorticons3.h"

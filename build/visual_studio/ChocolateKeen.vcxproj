@@ -118,7 +118,7 @@
     <ClInclude Include="..\..\rsrc\chocolate-keen_icon.h" />
     <ClInclude Include="..\..\rsrc\chocolate-keen_vga_fonts.h" />
     <ClInclude Include="..\..\src\chocolate-keen_config.h" />
-    <ClInclude Include="..\..\src\cvorticons.h" />
+    <ClInclude Include="..\..\src\core\cvorticons.h" />
     <ClInclude Include="..\..\src\episodes\cvorticons1.h" />
     <ClInclude Include="..\..\src\episodes\cvorticons2.h" />
     <ClInclude Include="..\..\src\episodes\cvorticons3.h" />

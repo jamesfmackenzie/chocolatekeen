@@ -2,7 +2,7 @@
 #define _CHOCOLATE_KEEN_VORTICONS_GLOBALS_
 
 #include <stdio.h>
-#include "cvorticons_types.h"
+#include "core/cvorticons_types.h"
 #include "cvorticons_sprites.h"
 #include "cvorticons_opengl.h"
 #include "input/cvorticons_input.h"

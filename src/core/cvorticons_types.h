@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include "SDL.h"
 #include "chocolate-keen_config.h"
-#include "cvorticons_constants.h"
+#include "core/cvorticons_constants.h"
 #include "render/cvorticons_gfx.h"
 
 #ifdef _CHOCOLATE_KEEN_ENABLE_OPENGL_

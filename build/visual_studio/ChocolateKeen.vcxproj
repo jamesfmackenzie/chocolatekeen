@@ -90,15 +90,15 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\app\chocolate-keen.c" />
     <ClCompile Include="..\..\src\game\gameplay.c" />
-    <ClCompile Include="..\..\src\episodes\cvorticons1.c" />
-    <ClCompile Include="..\..\src\episodes\cvorticons1_engine.c" />
-    <ClCompile Include="..\..\src\episodes\cvorticons1_memdata.c" />
-    <ClCompile Include="..\..\src\episodes\cvorticons2.c" />
-    <ClCompile Include="..\..\src\episodes\cvorticons2_engine.c" />
-    <ClCompile Include="..\..\src\episodes\cvorticons2_memdata.c" />
-    <ClCompile Include="..\..\src\episodes\cvorticons3.c" />
-    <ClCompile Include="..\..\src\episodes\cvorticons3_engine.c" />
-    <ClCompile Include="..\..\src\episodes\cvorticons3_memdata.c" />
+    <ClCompile Include="..\..\src\episodes\episode1.c" />
+    <ClCompile Include="..\..\src\episodes\episode1_engine.c" />
+    <ClCompile Include="..\..\src\episodes\episode1_memdata.c" />
+    <ClCompile Include="..\..\src\episodes\episode2.c" />
+    <ClCompile Include="..\..\src\episodes\episode2_engine.c" />
+    <ClCompile Include="..\..\src\episodes\episode2_memdata.c" />
+    <ClCompile Include="..\..\src\episodes\episode3.c" />
+    <ClCompile Include="..\..\src\episodes\episode3_engine.c" />
+    <ClCompile Include="..\..\src\episodes\episode3_memdata.c" />
     <ClCompile Include="..\..\src\engine\engine.c" />
     <ClCompile Include="..\..\src\render\gfx.c" />
     <ClCompile Include="..\..\src\ui\gui.c" />
@@ -119,9 +119,9 @@
     <ClInclude Include="..\..\rsrc\chocolate-keen_vga_fonts.h" />
     <ClInclude Include="..\..\src\chocolate-keen_config.h" />
     <ClInclude Include="..\..\src\core\cvorticons.h" />
-    <ClInclude Include="..\..\src\episodes\cvorticons1.h" />
-    <ClInclude Include="..\..\src\episodes\cvorticons2.h" />
-    <ClInclude Include="..\..\src\episodes\cvorticons3.h" />
+    <ClInclude Include="..\..\src\episodes\episode1.h" />
+    <ClInclude Include="..\..\src\episodes\episode2.h" />
+    <ClInclude Include="..\..\src\episodes\episode3.h" />
     <ClInclude Include="..\..\src\render\gfx.h" />
     <ClInclude Include="..\..\src\input\input.h" />
     <ClInclude Include="..\..\src\third_party\cgenius\fileio\compression\CRLE.h" />

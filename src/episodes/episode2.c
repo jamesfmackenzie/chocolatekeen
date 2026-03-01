@@ -7,7 +7,7 @@
 #endif
 #include <inttypes.h>
 
-#include "episodes/cvorticons2.h"
+#include "episodes/episode2.h"
 
 /******************************************************************************
 WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING

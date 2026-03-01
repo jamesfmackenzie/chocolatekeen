@@ -7,9 +7,9 @@
 #include "../rsrc/chocolate-keen_vga_fonts.h"
 #include "core/core.h"
 #include "platform/platform.h"
-#include "episodes/cvorticons1.h"
-#include "episodes/cvorticons2.h"
-#include "episodes/cvorticons3.h"
+#include "episodes/episode1.h"
+#include "episodes/episode2.h"
+#include "episodes/episode3.h"
 #include "third_party/cgenius/fileio/compression/Cunlzexe.h"
 
 #ifdef _CHOCOLATE_KEEN_ENABLE_OPENGL_

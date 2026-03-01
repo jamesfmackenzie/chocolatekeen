@@ -3,7 +3,7 @@
 #endif
 #include <inttypes.h>
 
-#include "episodes/cvorticons1.h"
+#include "episodes/episode1.h"
 
 /******************************************************************************
 WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING

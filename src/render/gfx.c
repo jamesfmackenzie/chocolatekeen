@@ -1,9 +1,9 @@
 #include <assert.h>
 #include "SDL.h"
 #include "core/core.h"
-#include "episodes/cvorticons1.h"
-#include "episodes/cvorticons2.h"
-#include "episodes/cvorticons3.h"
+#include "episodes/episode1.h"
+#include "episodes/episode2.h"
+#include "episodes/episode3.h"
 #include "decompression/imageRLE.h"
 #include "third_party/cgenius/fileio/lz.h"
 #include "../rsrc/chocolate-keen_icon.h"

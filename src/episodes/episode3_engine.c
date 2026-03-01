@@ -1,16 +1,16 @@
-#include "episodes/cvorticons2.h"
+#include "episodes/episode3.h"
 
-void CVort2_engine_processEXE() {
+void CVort3_engine_processEXE() {
     /**********************************************************
     Remember that all values are stored in Little-Endian forms!
     **********************************************************/
     size_t loopVar;
 
-    exeFields.trans_map = exeImage + CVort2_TRANS_MAP_OFFSET;
-    exeFields.rnd_vals = exeImage + CVort2_RND_VALS_OFFSET;
+    exeFields.trans_map = exeImage + CVort3_TRANS_MAP_OFFSET;
+    exeFields.rnd_vals = exeImage + CVort3_RND_VALS_OFFSET;
 
     // This is related to the jump table (and actually copied to one)
-    exeFields.fibs_17 = (uint16_t *)(exeImage + CVort2_FIBS17_OFFSET);
+    exeFields.fibs_17 = (uint16_t *)(exeImage + CVort3_FIBS17_OFFSET);
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
     //Swap on Big-Endians platforms
@@ -18,34 +18,26 @@ void CVort2_engine_processEXE() {
         exeFields.fibs_17[loopVar] = SDL_Swap16(exeFields.fibs_17[loopVar]);
     }
 #endif
-    exeFields.points_tbl = (int16_t *)(exeImage + CVort2_POINTS_TABLE_OFFSET);
+    exeFields.points_tbl = (int16_t *)(exeImage + CVort3_POINTS_TABLE_OFFSET);
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
     for (loopVar = 0; loopVar < 5; loopVar++) {
         exeFields.points_tbl[loopVar] = SDL_Swap16(exeFields.points_tbl[loopVar]);
     }
 #endif
     // The following are single-byte arrays, so no swap is required.
-    exeFields.palettes[0] = exeImage + CVort2_PALETTES_OFFSET;
-    exeFields.palettes[1] = exeImage + CVort2_PALETTES_OFFSET + PALETTE_NUM_OF_ENTRIES;
-    exeFields.palettes[2] = exeImage + CVort2_PALETTES_OFFSET + PALETTE_NUM_OF_ENTRIES*2;
-    exeFields.palettes[3] = exeImage + CVort2_PALETTES_OFFSET + PALETTE_NUM_OF_ENTRIES*3;
+    exeFields.palettes[0] = exeImage + CVort3_PALETTES_OFFSET;
+    exeFields.palettes[1] = exeImage + CVort3_PALETTES_OFFSET + PALETTE_NUM_OF_ENTRIES;
+    exeFields.palettes[2] = exeImage + CVort3_PALETTES_OFFSET + PALETTE_NUM_OF_ENTRIES*2;
+    exeFields.palettes[3] = exeImage + CVort3_PALETTES_OFFSET + PALETTE_NUM_OF_ENTRIES*3;
 
-    exeFields.char_map = exeImage + CVort2_CHAR_MAP_OFFSET;
+    // This is Keen 3 specific
+    exeFieldsEp3.palette_camFlash = exeImage + 0x1C072;
 
-    exeFields.uppercase_table = exeImage + CVort2_UPPERCASE_TABLE_OFFSET;
+    exeFields.char_map = exeImage + CVort3_CHAR_MAP_OFFSET;
 
-    exeFields.endScreen = exeImage + CVort2_ANSI_QUIT_SCREEN_OFFSET;
+    exeFields.uppercase_table = exeImage + CVort3_UPPERCASE_TABLE_OFFSET;
 
-    exeFieldsEp2.earth_expl3 = (uint16_t *)(exeImage + 0x19ED6);
-    exeFieldsEp2.earth_explX = (uint16_t *)(exeImage + 0x19F74);
-    exeFieldsEp2.earth_explY = (uint16_t *)(exeImage + 0x19F86);
-    exeFieldsEp2.earth_expl  = (uint16_t *)(exeImage + 0x19F98);
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    // These all consist of one single continous buffer, so we
-    // simply loop over ther four arrays' contents at once (SORT OF A HACK)
-    for (loopVar = 0; loopVar < 118; loopVar++)
-        exeFieldsEp2.earth_expl3[loopVar] = SDL_Swap16(exeFieldsEp2.earth_expl3[loopVar]);
-#endif
+    exeFields.endScreen = exeImage + CVort3_ANSI_QUIT_SCREEN_OFFSET;
 
     // TODO: Maybe we can remove "exeFields" from all things in general?
     // Or do a different thing...
@@ -56,15 +48,15 @@ void CVort2_engine_processEXE() {
     // Get the tileinfo
     // TODO: In some games (e.g., Slordax, Tileinfo is a separate file
     // Add support for TILEINFO.XXX
-    TILEINFO_Anim = (uint16_t *) (exeImage + CVort2_TILEINFO_OFFSET);
-    TILEINFO_Type = (int16_t *) (exeImage + CVort2_TILEINFO_OFFSET) + CVort2_TILENUM;
-    TILEINFO_UEdge = (int16_t *) (exeImage + CVort2_TILEINFO_OFFSET) + CVort2_TILENUM * 2;
-    TILEINFO_REdge = (int16_t *) (exeImage + CVort2_TILEINFO_OFFSET) + CVort2_TILENUM * 3;
-    TILEINFO_DEdge = (int16_t *) (exeImage + CVort2_TILEINFO_OFFSET) + CVort2_TILENUM * 4;
-    TILEINFO_LEdge = (int16_t *) (exeImage + CVort2_TILEINFO_OFFSET) + CVort2_TILENUM * 5;
+    TILEINFO_Anim = (uint16_t *) (exeImage + CVort3_TILEINFO_OFFSET);
+    TILEINFO_Type = (int16_t *) (exeImage + CVort3_TILEINFO_OFFSET) + CVort3_TILENUM;
+    TILEINFO_UEdge = (int16_t *) (exeImage + CVort3_TILEINFO_OFFSET) + CVort3_TILENUM * 2;
+    TILEINFO_REdge = (int16_t *) (exeImage + CVort3_TILEINFO_OFFSET) + CVort3_TILENUM * 3;
+    TILEINFO_DEdge = (int16_t *) (exeImage + CVort3_TILEINFO_OFFSET) + CVort3_TILENUM * 4;
+    TILEINFO_LEdge = (int16_t *) (exeImage + CVort3_TILEINFO_OFFSET) + CVort3_TILENUM * 5;
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
     // Byte swap again...
-    for (loopVar = 0; loopVar < CVort2_TILENUM; loopVar++) {
+    for (loopVar = 0; loopVar < TILENUM; loopVar++) {
         TILEINFO_Anim[loopVar] = SDL_Swap16(TILEINFO_Anim[loopVar]);
         TILEINFO_Type[loopVar] = SDL_Swap16(TILEINFO_Type[loopVar]);
         TILEINFO_UEdge[loopVar] = SDL_Swap16(TILEINFO_UEdge[loopVar]);

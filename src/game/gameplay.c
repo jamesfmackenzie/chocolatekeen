@@ -8,9 +8,9 @@
 #include <inttypes.h>
 
 #include "core/core.h"
-#include "episodes/cvorticons1.h"
-#include "episodes/cvorticons2.h"
-#include "episodes/cvorticons3.h"
+#include "episodes/episode1.h"
+#include "episodes/episode2.h"
+#include "episodes/episode3.h"
 #include "third_party/cgenius/fileio/compression/CRLE.h"
 
 #include "episodes/episode_macros.h"

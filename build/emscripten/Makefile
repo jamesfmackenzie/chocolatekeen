@@ -3,12 +3,6 @@ BUILDASCPP=0
 BINPREFIX=
 CC=gcc
 
-ifeq ($(BUILDASCPP), 1)
-	CXX=$(BINPREFIX)g++
-else
-	CXX=$(BINPREFIX)$(CC)
-endif
-
 STRIPBIN=$(BINPREFIX)strip
 WINDRES=windres
 SDLCONFIG=sdl2-config
@@ -26,14 +20,7 @@ PLATFORM_OBJECTS=$(OBJ)/platform_sleep_emscripten.o \
 include ../common_objects.mk
 
 OBJECTS=$(COMMON_OBJECTS) $(EPISODE_OBJECTS) $(PLATFORM_OBJECTS)
-
-INTCXXFLAGS=
-
-ifeq ($(DEBUG),1)
-	INTCXXFLAGS+= -g -DCHOCOLATE_KEEN_CONFIG_DEBUG
-else
-	INTCXXFLAGS+= -O2
-endif
+include ../common_flags.mk
 
 ifeq ($(CC), emcc)
 	INTCXXFLAGS+= -I$(SRC) -s USE_SDL=2
@@ -41,40 +28,6 @@ ifeq ($(CC), emcc)
 else
 	INTCXXFLAGS+= -I$(SRC) `$(SDLCONFIG) --cflags`
 	INTLDFLAGS=`$(SDLCONFIG) --libs`
-endif
-
-ifeq ($(BUILDASCPP), 0)
-	INTCXXFLAGS+= -std=c99
-endif
-
-ifeq ($(SINGLE_EPISODE),0)
-	INTCXXFLAGS+= -DCHOCOLATE_KEEN_IS_EPISODE1_ENABLED -DCHOCOLATE_KEEN_IS_EPISODE2_ENABLED -DCHOCOLATE_KEEN_IS_EPISODE3_ENABLED
-else
-	INTCXXFLAGS+= -DCHOCOLATE_KEEN_CONFIG_SPECIFIC_EPISODE=$(SINGLE_EPISODE) -DCHOCOLATE_KEEN_IS_EPISODE$(SINGLE_EPISODE)_ENABLED
-endif
-
-ifeq ($(USE_OPENGL), 1)
-	INTCXXFLAGS+= -D_CHOCOLATE_KEEN_ENABLE_OPENGL_
-#	ifeq ($(PLATFORM), WINDOWS)
-#		INTLDFLAGS+= -lopengl32
-#	else
-#		INTLDFLAGS+= -lGL
-#	endif
-endif
-
-ifeq ($(PLATFORM), WINDOWS)
-	OBJECTS+= $(OBJ)/chocolate-keen_icon.o
-	EXT=.exe
-endif
-
-ifeq ($(CC), emcc)
-	EXT=.html
-endif
-
-ifeq ($(SINGLE_EPISODE),0)
-	EXE_PATH=chocolate-keen$(EXT)
-else
-	EXE_PATH=chocolate-keen$(SINGLE_EPISODE)$(EXT)
 endif
 
 .PHONY: all game clean veryclean

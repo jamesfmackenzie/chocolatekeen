@@ -119,11 +119,11 @@
     <ClInclude Include="..\..\rsrc\chocolate-keen_vga_fonts.h" />
     <ClInclude Include="..\..\src\chocolate-keen_config.h" />
     <ClInclude Include="..\..\src\cvorticons.h" />
-    <ClInclude Include="..\..\src\cvorticons1.h" />
-    <ClInclude Include="..\..\src\cvorticons2.h" />
-    <ClInclude Include="..\..\src\cvorticons3.h" />
-    <ClInclude Include="..\..\src\cvorticons_gfx.h" />
-    <ClInclude Include="..\..\src\cvorticons_input.h" />
+    <ClInclude Include="..\..\src\episodes\cvorticons1.h" />
+    <ClInclude Include="..\..\src\episodes\cvorticons2.h" />
+    <ClInclude Include="..\..\src\episodes\cvorticons3.h" />
+    <ClInclude Include="..\..\src\render\cvorticons_gfx.h" />
+    <ClInclude Include="..\..\src\input\cvorticons_input.h" />
     <ClInclude Include="..\..\src\third_party\cgenius\fileio\compression\CRLE.h" />
     <ClInclude Include="..\..\src\third_party\cgenius\fileio\compression\Cunlzexe.h" />
     <ClInclude Include="..\..\src\third_party\cgenius\fileio\lz.h" />

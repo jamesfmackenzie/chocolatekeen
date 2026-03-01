@@ -6,7 +6,7 @@
 #include "SDL.h"
 #include "chocolate-keen_config.h"
 #include "cvorticons_constants.h"
-#include "cvorticons_gfx.h"
+#include "render/cvorticons_gfx.h"
 
 #ifdef _CHOCOLATE_KEEN_ENABLE_OPENGL_
 #ifndef NO_SDL_GLEXT

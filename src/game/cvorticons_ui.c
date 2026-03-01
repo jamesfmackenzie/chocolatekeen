@@ -6,9 +6,9 @@
 #endif
 #include <inttypes.h>
 #include "cvorticons.h"
-#include "cvorticons1.h"
-#include "cvorticons2.h"
-#include "cvorticons3.h"
+#include "episodes/cvorticons1.h"
+#include "episodes/cvorticons2.h"
+#include "episodes/cvorticons3.h"
 #include "third_party/cgenius/fileio/compression/CRLE.h"
 
 #include "cvorticons_episode_macros.h"

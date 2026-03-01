@@ -1,7 +1,7 @@
 #include "cvorticons.h"
-#include "cvorticons1.h"
-#include "cvorticons2.h"
-#include "cvorticons3.h"
+#include "episodes/cvorticons1.h"
+#include "episodes/cvorticons2.h"
+#include "episodes/cvorticons3.h"
 
 int main(int argc, char **argv) {
     EngineArguments_T arguments;

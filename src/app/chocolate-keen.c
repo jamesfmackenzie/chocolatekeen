@@ -1,10 +1,6 @@
-#include "core/globals.h"
-#include "episodes/episode1.h"
-#include "episodes/episode2.h"
-#include "episodes/episode3.h"
+#include "engine/engine_api.h"
 
 int main(int argc, char **argv) {
-    EngineArguments_T arguments;
     if (!CVort_engine_processArguments(argc, argv))
         return 0;
     /* NOTE: Relevant to an earlier C++ variant but is still worthy to mention.

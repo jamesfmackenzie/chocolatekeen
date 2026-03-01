@@ -8,7 +8,8 @@
 #ifndef _CHOCOLATE_KEEN_VORTICONS1_
 #define	_CHOCOLATE_KEEN_VORTICONS1_
 
-#include "core/globals.h"
+#include "core/types.h"
+#include "game/sprites.h"
 
 //#define VORTICONS_KEEN1
 //#define VORTICONS_EPISODE 1

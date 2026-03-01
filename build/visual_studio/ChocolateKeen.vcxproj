@@ -88,17 +88,17 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\chocolate-keen.c" />
+    <ClCompile Include="..\..\src\app\chocolate-keen.c" />
     <ClCompile Include="..\..\src\game\cvorticons.c" />
-    <ClCompile Include="..\..\src\cvorticons1.c" />
-    <ClCompile Include="..\..\src\cvorticons1_engine.c" />
-    <ClCompile Include="..\..\src\cvorticons1_memdata.c" />
-    <ClCompile Include="..\..\src\cvorticons2.c" />
-    <ClCompile Include="..\..\src\cvorticons2_engine.c" />
-    <ClCompile Include="..\..\src\cvorticons2_memdata.c" />
-    <ClCompile Include="..\..\src\cvorticons3.c" />
-    <ClCompile Include="..\..\src\cvorticons3_engine.c" />
-    <ClCompile Include="..\..\src\cvorticons3_memdata.c" />
+    <ClCompile Include="..\..\src\episodes\cvorticons1.c" />
+    <ClCompile Include="..\..\src\episodes\cvorticons1_engine.c" />
+    <ClCompile Include="..\..\src\episodes\cvorticons1_memdata.c" />
+    <ClCompile Include="..\..\src\episodes\cvorticons2.c" />
+    <ClCompile Include="..\..\src\episodes\cvorticons2_engine.c" />
+    <ClCompile Include="..\..\src\episodes\cvorticons2_memdata.c" />
+    <ClCompile Include="..\..\src\episodes\cvorticons3.c" />
+    <ClCompile Include="..\..\src\episodes\cvorticons3_engine.c" />
+    <ClCompile Include="..\..\src\episodes\cvorticons3_memdata.c" />
     <ClCompile Include="..\..\src\engine\cvorticons_engine.c" />
     <ClCompile Include="..\..\src\render\cvorticons_gfx.c" />
     <ClCompile Include="..\..\src\ui\cvorticons_gui.c" />

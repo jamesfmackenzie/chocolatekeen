@@ -136,7 +136,27 @@ $(OBJ)/Cunlzexe.o: $(SRC)/third_party/cgenius/fileio/compression/Cunlzexe.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/imageRLE.o: $(SRC)/decompression/imageRLE.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/chocolate-keen.o: $(SRC)/app/chocolate-keen.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/cvorticons.o: $(SRC)/game/cvorticons.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/cvorticons1.o: $(SRC)/episodes/cvorticons1.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/cvorticons1_memdata.o: $(SRC)/episodes/cvorticons1_memdata.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/cvorticons1_engine.o: $(SRC)/episodes/cvorticons1_engine.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/cvorticons2.o: $(SRC)/episodes/cvorticons2.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/cvorticons2_memdata.o: $(SRC)/episodes/cvorticons2_memdata.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/cvorticons2_engine.o: $(SRC)/episodes/cvorticons2_engine.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/cvorticons3.o: $(SRC)/episodes/cvorticons3.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/cvorticons3_memdata.o: $(SRC)/episodes/cvorticons3_memdata.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/cvorticons3_engine.o: $(SRC)/episodes/cvorticons3_engine.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/cvorticons_worldmap.o: $(SRC)/game/cvorticons_worldmap.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@

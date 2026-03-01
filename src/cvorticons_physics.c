@@ -35,11 +35,11 @@ void CVort_body_bridge_extend(Body_T *bridge) {
         return;
     bridge->variant -= 12;
     int16_t currActualX = bridge->tile_x + bridge->field_10;
-    if (map_data_tiles[bridge->tile_y * map_width_T + currActualX] != bridge->field_E) {
+    if (map_data_tiles[bridge->tile_y * map_width_tile + currActualX] != bridge->field_E) {
         bridge->think_ptr = &CVort_body_nop;
         return;
     }
-    map_data_tiles[bridge->tile_y * map_width_T + currActualX] = 0x10E;
+    map_data_tiles[bridge->tile_y * map_width_tile + currActualX] = 0x10E;
     bridge->field_10 += bridge->field_C;
 }
 
@@ -52,11 +52,11 @@ void CVort_body_bridge_retract(Body_T *bridge) {
     bridge->variant -= 12;
     bridge->field_10 -= bridge->field_C;
     int16_t currActualX = bridge->tile_x + bridge->field_10;
-    if (map_data_tiles[bridge->tile_y * map_width_T + currActualX] != 0x10E) {
+    if (map_data_tiles[bridge->tile_y * map_width_tile + currActualX] != 0x10E) {
         bridge->type_ = 0;
         return;
     }
-    map_data_tiles[bridge->tile_y * map_width_T + currActualX] = bridge->field_E;
+    map_data_tiles[bridge->tile_y * map_width_tile + currActualX] = bridge->field_E;
 }
 
 
@@ -92,7 +92,7 @@ void CVort_think_kill_sprite() {
         if (g_entities.temp_sprite.varB == 1)
             g_entities.temp_sprite.think = &CVort_think_dead_sprite;
     }
-    g_entities.temp_sprite.velX = 0;
+    g_entities.temp_sprite.vel_x = 0;
     CVort_do_fall();
     CVort_compute_sprite_delta();
 }
@@ -114,8 +114,8 @@ void CVort_kill_keen() {
         return;
     g_entities.sprites[0].think = &CVort_think_keen_death;
     g_entities.sprites[0].contact = &CVort_think_contact_nop;
-    g_entities.sprites[0].posY += 0x800;
-    g_entities.sprites[0].time = g_entities.sprites[0].velX = g_entities.sprites[0].velY = 0;
+    g_entities.sprites[0].pos_y += 0x800;
+    g_entities.sprites[0].time = g_entities.sprites[0].vel_x = g_entities.sprites[0].vel_y = 0;
     g_entities.sprites[0].frame = 0x16;
     CVort_engine_setCurSound(8);
 }
@@ -123,8 +123,8 @@ void CVort_kill_keen() {
 void CVort_kill_keen_temp() {
     g_entities.temp_sprite.think = &CVort_think_keen_death;
     g_entities.temp_sprite.contact = &CVort_think_contact_nop;
-    g_entities.temp_sprite.posY += 0x800;
-    g_entities.temp_sprite.time = g_entities.sprites[0].velX = g_entities.sprites[0].velY = g_entities.temp_sprite.velX = 0;
+    g_entities.temp_sprite.pos_y += 0x800;
+    g_entities.temp_sprite.time = g_entities.sprites[0].vel_x = g_entities.sprites[0].vel_y = g_entities.temp_sprite.vel_x = 0;
     g_entities.temp_sprite.frame = 0x16;
     CVort_engine_setCurSound(8);
 }
@@ -135,40 +135,40 @@ void CVort_kill_keen_temp() {
 
 void CVort_move_left_right(int16_t acceleration) {
     for (uint16_t loopVar = 1; loopVar <= g_game.sprite_sync; loopVar++) {
-        g_entities.temp_sprite.velX += acceleration;
-        if (g_entities.temp_sprite.velX > 0x78)
-            g_entities.temp_sprite.velX = 0x78;
-        else if (g_entities.temp_sprite.velX < -0x78)
-            g_entities.temp_sprite.velX = -0x78;
+        g_entities.temp_sprite.vel_x += acceleration;
+        if (g_entities.temp_sprite.vel_x > 0x78)
+            g_entities.temp_sprite.vel_x = 0x78;
+        else if (g_entities.temp_sprite.vel_x < -0x78)
+            g_entities.temp_sprite.vel_x = -0x78;
         if (loopVar != g_game.sprite_sync)
-            g_entities.temp_sprite.delX += g_entities.temp_sprite.velX;
+            g_entities.temp_sprite.del_x += g_entities.temp_sprite.vel_x;
     }
 }
 
 void CVort_pogo_jump(int16_t max_height, int16_t diff) {
     for (uint16_t loopVar = 1; loopVar <= g_game.sprite_sync; loopVar++) {
-        g_entities.temp_sprite.velY += diff;
-        if (g_entities.temp_sprite.velY > max_height)
-            g_entities.temp_sprite.velY = max_height;
-        else if (-max_height > g_entities.temp_sprite.velY)
-            g_entities.temp_sprite.velY = -max_height;
+        g_entities.temp_sprite.vel_y += diff;
+        if (g_entities.temp_sprite.vel_y > max_height)
+            g_entities.temp_sprite.vel_y = max_height;
+        else if (-max_height > g_entities.temp_sprite.vel_y)
+            g_entities.temp_sprite.vel_y = -max_height;
         if (loopVar != g_game.sprite_sync)
-            g_entities.temp_sprite.delY += g_entities.temp_sprite.velY;
+            g_entities.temp_sprite.del_y += g_entities.temp_sprite.vel_y;
     }
 }
 
 void CVort_check_ceiling() {
-    if (scrollX_min + 8 > g_entities.temp_sprite.posX) {
-        g_entities.temp_sprite.velX = g_entities.temp_sprite.delX = 0;
-        g_entities.temp_sprite.posX = scrollX_min + 8;
-    } else if (g_entities.temp_sprite.posX > ceilingX) {
-        g_entities.temp_sprite.velX = g_entities.temp_sprite.delX = 0;
-        g_entities.temp_sprite.posX = ceilingX;
+    if (scroll_x_min + 8 > g_entities.temp_sprite.pos_x) {
+        g_entities.temp_sprite.vel_x = g_entities.temp_sprite.del_x = 0;
+        g_entities.temp_sprite.pos_x = scroll_x_min + 8;
+    } else if (g_entities.temp_sprite.pos_x > ceiling_x) {
+        g_entities.temp_sprite.vel_x = g_entities.temp_sprite.del_x = 0;
+        g_entities.temp_sprite.pos_x = ceiling_x;
     }
-    if (g_entities.temp_sprite.posY < scrollY_min) {
-        g_entities.temp_sprite.velY = g_entities.temp_sprite.delY = 0;
-        g_entities.temp_sprite.posY = scrollY_min;
-    } else if (g_entities.temp_sprite.posY > ceilingY) {
+    if (g_entities.temp_sprite.pos_y < scroll_y_min) {
+        g_entities.temp_sprite.vel_y = g_entities.temp_sprite.del_y = 0;
+        g_entities.temp_sprite.pos_y = scroll_y_min;
+    } else if (g_entities.temp_sprite.pos_y > ceiling_y) {
         CVort_engine_setCurSound(0x1B);
         CVort_engine_finishCurSound();
         CVort_kill_keen_temp();
@@ -193,9 +193,9 @@ void CVort_open_door(int16_t tileX, int16_t tileY) {
     CVort_engine_setCurSound(0x21);
 
     // Determine where the door is located (relatively to Keen)
-    int16_t tileType0 = TILEINFO_Type[map_data_tiles[tileY * map_width_T + tileX]];
+    int16_t tileType0 = TILEINFO_Type[map_data_tiles[tileY * map_width_tile + tileX]];
     // NOTE: tileType1 is never actually used, so there is no need for it...
-    //int16_t tileType1 = TILEINFO_Type[map_data_tiles[(tileY-1)*map_width_T+tileX]];
+    //int16_t tileType1 = TILEINFO_Type[map_data_tiles[(tileY-1)*map_width_tile+tileX]];
     if (tileType0)
         doorHeight = tileY;
     else
@@ -208,123 +208,123 @@ void CVort_open_door(int16_t tileX, int16_t tileY) {
     g_entities.bodies[doorBodyIndex].tile_x = tileX << 12;
     g_entities.bodies[doorBodyIndex].tile_y = doorHeight << 12;
     g_entities.bodies[doorBodyIndex].variant = 0;
-    g_entities.bodies[doorBodyIndex].field_C = map_data_tiles[(doorHeight + 3) * map_width_T + tileX];
-    g_entities.bodies[doorBodyIndex].field_E = map_data_tiles[(doorHeight + 2) * map_width_T + tileX];
-    g_entities.bodies[doorBodyIndex].field_10 = map_data_tiles[doorHeight * map_width_T + tileX];
+    g_entities.bodies[doorBodyIndex].field_C = map_data_tiles[(doorHeight + 3) * map_width_tile + tileX];
+    g_entities.bodies[doorBodyIndex].field_E = map_data_tiles[(doorHeight + 2) * map_width_tile + tileX];
+    g_entities.bodies[doorBodyIndex].field_10 = map_data_tiles[doorHeight * map_width_tile + tileX];
     // FIXME? Looks like if Keen opens the location from an unusual location
     // (the bottom of it?) then it loses a DIFFERENT item, if any.
     // This is, more or less, a direct port of the original, though.
     keen_gp.stuff[3 + tileType0] = 0;
     // Now clear the door tiles (to be replaced with the body)
     if (engine_gameVersion == GAMEVER_KEEN3) {
-        int16_t tileId = map_data_tiles[doorHeight * map_width_T + tileX - 1];
-        map_data_tiles[doorHeight * map_width_T + tileX] = tileId;
-        map_data_tiles[(doorHeight + 1) * map_width_T + tileX] = tileId;
+        int16_t tileId = map_data_tiles[doorHeight * map_width_tile + tileX - 1];
+        map_data_tiles[doorHeight * map_width_tile + tileX] = tileId;
+        map_data_tiles[(doorHeight + 1) * map_width_tile + tileX] = tileId;
     } else {
-        map_data_tiles[doorHeight * map_width_T + tileX] = 0x8F;
-        map_data_tiles[(doorHeight + 1) * map_width_T + tileX] = 0x8F;
+        map_data_tiles[doorHeight * map_width_tile + tileX] = 0x8F;
+        map_data_tiles[(doorHeight + 1) * map_width_tile + tileX] = 0x8F;
     }
 }
 
 void CVort_do_fall() {
     for (uint16_t loopVar = 1; loopVar <= g_game.sprite_sync; loopVar++) {
-        g_entities.temp_sprite.velY += 3;
-        if (g_entities.temp_sprite.velY > 200)
-            g_entities.temp_sprite.velY = 200;
-        else if (g_entities.temp_sprite.velY < -400)
-            g_entities.temp_sprite.velY = -400;
+        g_entities.temp_sprite.vel_y += 3;
+        if (g_entities.temp_sprite.vel_y > 200)
+            g_entities.temp_sprite.vel_y = 200;
+        else if (g_entities.temp_sprite.vel_y < -400)
+            g_entities.temp_sprite.vel_y = -400;
         if (loopVar != g_game.sprite_sync)
-            g_entities.temp_sprite.delY += g_entities.temp_sprite.velY;
+            g_entities.temp_sprite.del_y += g_entities.temp_sprite.vel_y;
     }
 }
 
 int16_t CVort_compute_sprite_delta() {
-    g_entities.temp_sprite.delX += g_entities.temp_sprite.velX*g_game.sprite_sync;
-    g_entities.temp_sprite.delY += g_entities.temp_sprite.velY*g_game.sprite_sync;
+    g_entities.temp_sprite.del_x += g_entities.temp_sprite.vel_x*g_game.sprite_sync;
+    g_entities.temp_sprite.del_y += g_entities.temp_sprite.vel_y*g_game.sprite_sync;
     return CVort_check_ground();
 }
 
 int16_t CVort_check_ground() {
     int16_t result = 0;
-    if (g_entities.temp_sprite.delX > 0xF00)
-        g_entities.temp_sprite.delX = 0xF00;
-    else if (g_entities.temp_sprite.delX < -0xF00)
-        g_entities.temp_sprite.delX = -0xF00;
-    if (g_entities.temp_sprite.delY > 0xF00)
-        g_entities.temp_sprite.delY = 0xF00;
-    else if (g_entities.temp_sprite.delY < -0xF00)
-        g_entities.temp_sprite.delY = -0xF00;
+    if (g_entities.temp_sprite.del_x > 0xF00)
+        g_entities.temp_sprite.del_x = 0xF00;
+    else if (g_entities.temp_sprite.del_x < -0xF00)
+        g_entities.temp_sprite.del_x = -0xF00;
+    if (g_entities.temp_sprite.del_y > 0xF00)
+        g_entities.temp_sprite.del_y = 0xF00;
+    else if (g_entities.temp_sprite.del_y < -0xF00)
+        g_entities.temp_sprite.del_y = -0xF00;
 
     int16_t loopVar, tempNum, var_8, var_A;
 
-    g_entities.temp_sprite.boxY2 += g_entities.temp_sprite.delY;
-    g_entities.temp_sprite.boxY1 += g_entities.temp_sprite.delY;
-    int16_t var_4 = g_entities.temp_sprite.boxX1 >> 12;
-    int16_t var_6 = g_entities.temp_sprite.boxX2 >> 12;
+    g_entities.temp_sprite.box_y2 += g_entities.temp_sprite.del_y;
+    g_entities.temp_sprite.box_y1 += g_entities.temp_sprite.del_y;
+    int16_t var_4 = g_entities.temp_sprite.box_x1 >> 12;
+    int16_t var_6 = g_entities.temp_sprite.box_x2 >> 12;
 
-    if (g_entities.temp_sprite.delY > 0) {
-        if (((g_entities.temp_sprite.boxY2 - g_entities.temp_sprite.delY) >> 12) != (g_entities.temp_sprite.boxY2 >> 12)) {
-            var_A = g_entities.temp_sprite.boxY2 >> 12;
+    if (g_entities.temp_sprite.del_y > 0) {
+        if (((g_entities.temp_sprite.box_y2 - g_entities.temp_sprite.del_y) >> 12) != (g_entities.temp_sprite.box_y2 >> 12)) {
+            var_A = g_entities.temp_sprite.box_y2 >> 12;
             for (loopVar = var_4; loopVar <= var_6; loopVar++) {
-                if (!TILEINFO_UEdge[map_data_tiles[var_A * map_width_T + loopVar]])
+                if (!TILEINFO_UEdge[map_data_tiles[var_A * map_width_tile + loopVar]])
                     continue; // No collision
-                g_entities.temp_sprite.velY = 0;
-                tempNum = (g_entities.temp_sprite.boxY2 + 1) % 0x1000;
-                g_entities.temp_sprite.delY -= tempNum;
-                g_entities.temp_sprite.boxY1 -= tempNum;
-                g_entities.temp_sprite.boxY2 -= tempNum;
+                g_entities.temp_sprite.vel_y = 0;
+                tempNum = (g_entities.temp_sprite.box_y2 + 1) % 0x1000;
+                g_entities.temp_sprite.del_y -= tempNum;
+                g_entities.temp_sprite.box_y1 -= tempNum;
+                g_entities.temp_sprite.box_y2 -= tempNum;
                 result = 2;
                 break;
             }
         }
-    } else if (g_entities.temp_sprite.delY < 0) {
-        if (((g_entities.temp_sprite.boxY1 - g_entities.temp_sprite.delY) >> 12) != (g_entities.temp_sprite.boxY1 >> 12)) {
-            var_8 = g_entities.temp_sprite.boxY1 >> 12;
+    } else if (g_entities.temp_sprite.del_y < 0) {
+        if (((g_entities.temp_sprite.box_y1 - g_entities.temp_sprite.del_y) >> 12) != (g_entities.temp_sprite.box_y1 >> 12)) {
+            var_8 = g_entities.temp_sprite.box_y1 >> 12;
             for (loopVar = var_4; loopVar <= var_6; loopVar++) {
-                if (!TILEINFO_DEdge[map_data_tiles[var_8 * map_width_T + loopVar]])
+                if (!TILEINFO_DEdge[map_data_tiles[var_8 * map_width_tile + loopVar]])
                     continue; // No collision
-                g_entities.temp_sprite.velY = 0;
-                tempNum = 0x1000 - g_entities.temp_sprite.boxY1 % 0x1000;
-                g_entities.temp_sprite.delY += tempNum;
-                g_entities.temp_sprite.boxY1 += tempNum;
-                g_entities.temp_sprite.boxY2 += tempNum;
+                g_entities.temp_sprite.vel_y = 0;
+                tempNum = 0x1000 - g_entities.temp_sprite.box_y1 % 0x1000;
+                g_entities.temp_sprite.del_y += tempNum;
+                g_entities.temp_sprite.box_y1 += tempNum;
+                g_entities.temp_sprite.box_y2 += tempNum;
                 result = 8;
                 break;
             }
         }
     }
 
-    g_entities.temp_sprite.boxX1 += g_entities.temp_sprite.delX;
-    g_entities.temp_sprite.boxX2 += g_entities.temp_sprite.delX;
-    var_8 = g_entities.temp_sprite.boxY1 >> 12;
-    var_A = g_entities.temp_sprite.boxY2 >> 12;
+    g_entities.temp_sprite.box_x1 += g_entities.temp_sprite.del_x;
+    g_entities.temp_sprite.box_x2 += g_entities.temp_sprite.del_x;
+    var_8 = g_entities.temp_sprite.box_y1 >> 12;
+    var_A = g_entities.temp_sprite.box_y2 >> 12;
 
-    if (g_entities.temp_sprite.delX > 0) {
-        if (((g_entities.temp_sprite.boxX2 - g_entities.temp_sprite.delX) >> 12) != (g_entities.temp_sprite.boxX2 >> 12)) {
-            var_6 = g_entities.temp_sprite.boxX2 >> 12;
+    if (g_entities.temp_sprite.del_x > 0) {
+        if (((g_entities.temp_sprite.box_x2 - g_entities.temp_sprite.del_x) >> 12) != (g_entities.temp_sprite.box_x2 >> 12)) {
+            var_6 = g_entities.temp_sprite.box_x2 >> 12;
             for (loopVar = var_8; loopVar <= var_A; loopVar++) {
-                if (!TILEINFO_LEdge[map_data_tiles[loopVar * map_width_T + var_6]])
+                if (!TILEINFO_LEdge[map_data_tiles[loopVar * map_width_tile + var_6]])
                     continue;
-                g_entities.temp_sprite.velX = 0;
-                tempNum = (g_entities.temp_sprite.boxX2 + 1) % 0x1000;
-                g_entities.temp_sprite.delX -= tempNum;
-                g_entities.temp_sprite.boxX1 -= tempNum;
-                g_entities.temp_sprite.boxX2 -= tempNum;
+                g_entities.temp_sprite.vel_x = 0;
+                tempNum = (g_entities.temp_sprite.box_x2 + 1) % 0x1000;
+                g_entities.temp_sprite.del_x -= tempNum;
+                g_entities.temp_sprite.box_x1 -= tempNum;
+                g_entities.temp_sprite.box_x2 -= tempNum;
                 result |= 4;
                 break;
             }
         }
-    } else if (g_entities.temp_sprite.delX < 0) {
-        if (((g_entities.temp_sprite.boxX1 - g_entities.temp_sprite.delX) >> 12) != (g_entities.temp_sprite.boxX1 >> 12)) {
-            var_4 = g_entities.temp_sprite.boxX1 >> 12;
+    } else if (g_entities.temp_sprite.del_x < 0) {
+        if (((g_entities.temp_sprite.box_x1 - g_entities.temp_sprite.del_x) >> 12) != (g_entities.temp_sprite.box_x1 >> 12)) {
+            var_4 = g_entities.temp_sprite.box_x1 >> 12;
             for (loopVar = var_8; loopVar <= var_A; loopVar++) {
-                if (!TILEINFO_REdge[map_data_tiles[loopVar * map_width_T + var_4]])
+                if (!TILEINFO_REdge[map_data_tiles[loopVar * map_width_tile + var_4]])
                     continue;
-                g_entities.temp_sprite.velX = 0;
-                tempNum = 0x1000 - g_entities.temp_sprite.boxX1 % 0x1000;
-                g_entities.temp_sprite.delX += tempNum;
-                g_entities.temp_sprite.boxX1 += tempNum;
-                g_entities.temp_sprite.boxX2 += tempNum;
+                g_entities.temp_sprite.vel_x = 0;
+                tempNum = 0x1000 - g_entities.temp_sprite.box_x1 % 0x1000;
+                g_entities.temp_sprite.del_x += tempNum;
+                g_entities.temp_sprite.box_x1 += tempNum;
+                g_entities.temp_sprite.box_x2 += tempNum;
                 result |= 1;
                 break;
             }
@@ -337,59 +337,59 @@ int16_t CVort_check_ground() {
 // Can't find any errors here...
 void CVort_carry_keen(Sprite_T *keen, Sprite_T *carrier)
 {
-    int16_t delX_dif, delY_dif, boxX_dif, boxY_dif;
+    int16_t del_x_dif, del_y_dif, boxX_dif, boxY_dif;
 
     memcpy(&g_entities.temp_sprite, keen, sizeof(Sprite_T));
 
-    if (carrier->posX < g_entities.temp_sprite.posX)
+    if (carrier->pos_x < g_entities.temp_sprite.pos_x)
     {
-        delX_dif = carrier->delX - g_entities.temp_sprite.delX + 2;
-        boxX_dif = (carrier->boxX2&0xFFFF) - (g_entities.temp_sprite.boxX1&0xFFFF) + 1;
+        del_x_dif = carrier->del_x - g_entities.temp_sprite.del_x + 2;
+        boxX_dif = (carrier->box_x2&0xFFFF) - (g_entities.temp_sprite.box_x1&0xFFFF) + 1;
     }
     else
     {
-        delX_dif = g_entities.temp_sprite.delX - carrier->delX + 2;
-        boxX_dif = (g_entities.temp_sprite.boxX2&0xFFFF) - (carrier->boxX1&0xFFFF) + 1;
+        del_x_dif = g_entities.temp_sprite.del_x - carrier->del_x + 2;
+        boxX_dif = (g_entities.temp_sprite.box_x2&0xFFFF) - (carrier->box_x1&0xFFFF) + 1;
     }
 
-    if (carrier->posY < g_entities.temp_sprite.posY)
+    if (carrier->pos_y < g_entities.temp_sprite.pos_y)
     {
-        delY_dif = carrier->delY - g_entities.temp_sprite.delY + 2;
-        boxY_dif = (carrier->boxY2&0xFFFF) - (g_entities.temp_sprite.boxY1&0xFFFF) + 1;
+        del_y_dif = carrier->del_y - g_entities.temp_sprite.del_y + 2;
+        boxY_dif = (carrier->box_y2&0xFFFF) - (g_entities.temp_sprite.box_y1&0xFFFF) + 1;
     }
     else
     {
-        delY_dif = g_entities.temp_sprite.delY - carrier->delY + 2;
-        boxY_dif = (g_entities.temp_sprite.boxY2&0xFFFF) - (carrier->boxY1&0xFFFF) + 1;
+        del_y_dif = g_entities.temp_sprite.del_y - carrier->del_y + 2;
+        boxY_dif = (g_entities.temp_sprite.box_y2&0xFFFF) - (carrier->box_y1&0xFFFF) + 1;
     }
 
-    g_entities.temp_sprite.delY = g_entities.temp_sprite.delX = 0;
+    g_entities.temp_sprite.del_y = g_entities.temp_sprite.del_x = 0;
 
-    if (delY_dif < boxY_dif)
+    if (del_y_dif < boxY_dif)
     {
-        if (carrier->posX > g_entities.temp_sprite.posX)
+        if (carrier->pos_x > g_entities.temp_sprite.pos_x)
         {
-            g_entities.temp_sprite.delX = -boxX_dif;
-            if (carrier->velX < g_entities.temp_sprite.velX)
+            g_entities.temp_sprite.del_x = -boxX_dif;
+            if (carrier->vel_x < g_entities.temp_sprite.vel_x)
             {
-                g_entities.temp_sprite.velX = carrier->velX;
+                g_entities.temp_sprite.vel_x = carrier->vel_x;
             }
         }
         else
         {
-            g_entities.temp_sprite.delX = boxX_dif;
-            if (carrier->velX > g_entities.temp_sprite.velX)
+            g_entities.temp_sprite.del_x = boxX_dif;
+            if (carrier->vel_x > g_entities.temp_sprite.vel_x)
             {
-                g_entities.temp_sprite.velX = carrier->velX;
+                g_entities.temp_sprite.vel_x = carrier->vel_x;
             }
         }
     }
     else
     {
-        if (carrier->posY > g_entities.temp_sprite.posY)
+        if (carrier->pos_y > g_entities.temp_sprite.pos_y)
         {
-            g_entities.temp_sprite.delX = carrier->delX;
-            g_entities.temp_sprite.delY = -boxY_dif-0x80;
+            g_entities.temp_sprite.del_x = carrier->del_x;
+            g_entities.temp_sprite.del_y = -boxY_dif-0x80;
             if (g_entities.temp_sprite.think == &CVort_think_keen_jump_air)
             {
                 g_entities.temp_sprite.think = &CVort_think_keen_ground;
@@ -398,29 +398,29 @@ void CVort_carry_keen(Sprite_T *keen, Sprite_T *carrier)
             {
                 g_entities.temp_sprite.think = &CVort_think_keen_pogo_ground;
                 g_entities.temp_sprite.time = 0;
-                g_entities.temp_sprite.varB = g_entities.temp_sprite.velX;
-                g_entities.temp_sprite.velX = 0;
+                g_entities.temp_sprite.varB = g_entities.temp_sprite.vel_x;
+                g_entities.temp_sprite.vel_x = 0;
             }
 
             g_entities.temp_sprite.varD = 1;
-            if ((g_entities.temp_sprite.velY = carrier->velY) < 0)
+            if ((g_entities.temp_sprite.vel_y = carrier->vel_y) < 0)
             {
-                g_entities.temp_sprite.velY /= 2;
+                g_entities.temp_sprite.vel_y /= 2;
             }
         }
         else
         {
-            g_entities.temp_sprite.delY = boxY_dif;
+            g_entities.temp_sprite.del_y = boxY_dif;
 
             // Don't get "lifted" off platform if it's falling quickly
-            if (carrier->velY > g_entities.temp_sprite.velY)
-                g_entities.temp_sprite.velY = carrier->velY;
+            if (carrier->vel_y > g_entities.temp_sprite.vel_y)
+                g_entities.temp_sprite.vel_y = carrier->vel_y;
         }
     }
 
     CVort_check_ground();
-    g_entities.temp_sprite.posX += g_entities.temp_sprite.delX;
-    g_entities.temp_sprite.posY += g_entities.temp_sprite.delY;
+    g_entities.temp_sprite.pos_x += g_entities.temp_sprite.del_x;
+    g_entities.temp_sprite.pos_y += g_entities.temp_sprite.del_y;
     CVort_update_sprite_hitbox();
     //*keen = g_entities.temp_sprite;
     memcpy(keen, &g_entities.temp_sprite, sizeof(Sprite_T));
@@ -433,18 +433,18 @@ void CVort_carry_keen(Sprite_T *keen, Sprite_T *carrier)
 void CVort_push_keen(Sprite_T *keen, Sprite_T *pusher) {
     memcpy(&g_entities.temp_sprite, keen, sizeof(g_entities.temp_sprite));
 
-    if ((g_entities.temp_sprite.boxX2 + g_entities.temp_sprite.boxX1)/2 < (pusher->boxX2 + pusher->boxX1)/2) {
-        g_entities.temp_sprite.delX = -(g_entities.temp_sprite.boxX2 - pusher->boxX1 + 1);
-        if (g_entities.temp_sprite.delX > 120)
-            g_entities.temp_sprite.delY = 120;
+    if ((g_entities.temp_sprite.box_x2 + g_entities.temp_sprite.box_x1)/2 < (pusher->box_x2 + pusher->box_x1)/2) {
+        g_entities.temp_sprite.del_x = -(g_entities.temp_sprite.box_x2 - pusher->box_x1 + 1);
+        if (g_entities.temp_sprite.del_x > 120)
+            g_entities.temp_sprite.del_y = 120;
     } else {
-        g_entities.temp_sprite.delX = pusher->boxX2 - g_entities.temp_sprite.boxX1 + 1;
-        if (g_entities.temp_sprite.delX < -120)
-            g_entities.temp_sprite.delY = -120;
+        g_entities.temp_sprite.del_x = pusher->box_x2 - g_entities.temp_sprite.box_x1 + 1;
+        if (g_entities.temp_sprite.del_x < -120)
+            g_entities.temp_sprite.del_y = -120;
     }
     CVort_check_ground();
-    g_entities.temp_sprite.posX += g_entities.temp_sprite.delX;
-    g_entities.temp_sprite.posY += g_entities.temp_sprite.delY;
+    g_entities.temp_sprite.pos_x += g_entities.temp_sprite.del_x;
+    g_entities.temp_sprite.pos_y += g_entities.temp_sprite.del_y;
     CVort_update_sprite_hitbox();
     //*keen = g_entities.temp_sprite;
     memcpy(keen, &g_entities.temp_sprite, sizeof(g_entities.temp_sprite));
@@ -455,42 +455,42 @@ void CVort_do_scrolling() {
     if ((g_entities.sprites[0].think == &CVort_think_keen_exit) ||
             (g_entities.sprites[0].think == &CVort_think_keen_death))
         return;
-    int32_t sprPosX = g_entities.sprites[0].posX, sprPosY = g_entities.sprites[0].posY, tempNum;
-    int16_t sprDelX = g_entities.sprites[0].delX, sprDelY = g_entities.sprites[0].delY;
+    int32_t sprPosX = g_entities.sprites[0].pos_x, sprPosY = g_entities.sprites[0].pos_y, tempNum;
+    int16_t sprDelX = g_entities.sprites[0].del_x, sprDelY = g_entities.sprites[0].del_y;
 
     if (sprDelX > 0) // XScrollHi
     {
-        tempNum = sprPosX - scrollX;
+        tempNum = sprPosX - scroll_x;
         if (((tempNum >> 16) > 0) || (!(tempNum >> 16) && ((tempNum & 0xFFFF) > 0xB000))) {
-            scrollX += sprDelX;
-            if (scrollX > scrollX_max)
-                scrollX = scrollX_max;
+            scroll_x += sprDelX;
+            if (scroll_x > scroll_x_max)
+                scroll_x = scroll_x_max;
         }
     } else if (sprDelX < 0) // XScrollLo
     {
-        tempNum = sprPosX - scrollX;
+        tempNum = sprPosX - scroll_x;
         if (((tempNum >> 16) < 0) || (!(tempNum >> 16) && ((tempNum & 0xFFFF) < 0x9000))) {
-            scrollX += sprDelX;
-            if (scrollX < scrollX_min)
-                scrollX = scrollX_min;
+            scroll_x += sprDelX;
+            if (scroll_x < scroll_x_min)
+                scroll_x = scroll_x_min;
         }
     }
 
     if (sprDelY > 0) // YScrollHi
     {
-        tempNum = sprPosY - scrollY;
+        tempNum = sprPosY - scroll_y;
         if (((tempNum >> 16) > 0) || (!(tempNum >> 16) && ((tempNum & 0xFFFF) > 0x7000))) {
-            scrollY += sprDelY;
-            if (scrollY > scrollY_max)
-                scrollY = scrollY_max;
+            scroll_y += sprDelY;
+            if (scroll_y > scroll_y_max)
+                scroll_y = scroll_y_max;
         }
     } else if (sprDelY < 0) // YScrollLo
     {
-        tempNum = sprPosY - scrollY;
+        tempNum = sprPosY - scroll_y;
         if (((tempNum >> 16) < 0) || (!(tempNum >> 16) && ((tempNum & 0xFFFF) < 0x3000))) {
-            scrollY += sprDelY;
-            if (scrollY < scrollY_min)
-                scrollY = scrollY_min;
+            scroll_y += sprDelY;
+            if (scroll_y < scroll_y_min)
+                scroll_y = scroll_y_min;
         }
     }
 }
@@ -498,14 +498,14 @@ void CVort_do_scrolling() {
 // Returns 0 if sprite is to be updated, 1 if not
 
 int16_t CVort_sprite_active_screen() {
-    int16_t scaledX = g_entities.temp_sprite.posX >> 12, scaledY = g_entities.temp_sprite.posY >> 12;
-    if (g_entities.temp_sprite.posY < 0)
-        g_entities.temp_sprite.posY = 0;
-    if ((g_entities.temp_sprite.posX > map_width) || (g_entities.temp_sprite.posX < 0) || (g_entities.temp_sprite.posY > map_height)) {
+    int16_t scaledX = g_entities.temp_sprite.pos_x >> 12, scaledY = g_entities.temp_sprite.pos_y >> 12;
+    if (g_entities.temp_sprite.pos_y < 0)
+        g_entities.temp_sprite.pos_y = 0;
+    if ((g_entities.temp_sprite.pos_x > map_width) || (g_entities.temp_sprite.pos_x < 0) || (g_entities.temp_sprite.pos_y > map_height)) {
         g_entities.temp_sprite.type_ = 0;
         return 1;
     }
-    if ((scrollX_T - ENGINE_VIEWPORT_ACTIVATE_MARGIN_X <= scaledX) && (scrollY_T - ENGINE_VIEWPORT_ACTIVATE_MARGIN_Y <= scaledY) && (scrollX_T + ENGINE_VIEWPORT_ACTIVATE_WIDTH_TILES >= scaledX) && (scrollY_T + ENGINE_VIEWPORT_ACTIVATE_HEIGHT_TILES >= scaledY))
+    if ((scroll_x_tile - ENGINE_VIEWPORT_ACTIVATE_MARGIN_X <= scaledX) && (scroll_y_tile - ENGINE_VIEWPORT_ACTIVATE_MARGIN_Y <= scaledY) && (scroll_x_tile + ENGINE_VIEWPORT_ACTIVATE_WIDTH_TILES >= scaledX) && (scroll_y_tile + ENGINE_VIEWPORT_ACTIVATE_HEIGHT_TILES >= scaledY))
         return 0;
     if (g_entities.temp_sprite.type_ >= OBJONEBEFOREKEENSHOT) {
         g_entities.temp_sprite.type_ = 0;
@@ -518,15 +518,15 @@ int16_t CVort_sprite_active_screen() {
 // Returns 1 if there is a collision, and 0 otherwise
 
 int16_t CVort_detect_sprite_col(Sprite_T *spr_0, Sprite_T *spr_1) {
-    if (!spr_0->boxX1 || !spr_1->boxX1)
+    if (!spr_0->box_x1 || !spr_1->box_x1)
         return 0;
-    if (spr_0->boxX2 < spr_1->boxX1)
+    if (spr_0->box_x2 < spr_1->box_x1)
         return 0;
-    if (spr_0->boxY2 < spr_1->boxY1)
+    if (spr_0->box_y2 < spr_1->box_y1)
         return 0;
-    if (spr_0->boxX1 > spr_1->boxX2)
+    if (spr_0->box_x1 > spr_1->box_x2)
         return 0;
-    if (spr_0->boxY1 > spr_1->boxY2)
+    if (spr_0->box_y1 > spr_1->box_y2)
         return 0;
     return 1;
 }
@@ -537,15 +537,15 @@ void CVort_keen_bgtile_col() {
     if (g_entities.sprites[0].think == &CVort_think_keen_death)
         return;
     g_game.keen_switch = 0;
-    int16_t tileleft = g_entities.sprites[0].boxX1 >> 12;
-    int16_t tileright = g_entities.sprites[0].boxX2 >> 12;
-    int16_t tiletop = g_entities.sprites[0].boxY1 >> 12;
-    int16_t tilebottom = g_entities.sprites[0].boxY2 >> 12;
+    int16_t tileleft = g_entities.sprites[0].box_x1 >> 12;
+    int16_t tileright = g_entities.sprites[0].box_x2 >> 12;
+    int16_t tiletop = g_entities.sprites[0].box_y1 >> 12;
+    int16_t tilebottom = g_entities.sprites[0].box_y2 >> 12;
     int16_t currTilePos, currTileType;
 
     for (int16_t currX = tileleft, currY; currX <= tileright; currX++)
         for (currY = tiletop; currY <= tilebottom; currY++) {
-            currTilePos = currY * map_width_T + currX;
+            currTilePos = currY * map_width_tile + currX;
             currTileType = TILEINFO_Type[map_data_tiles[currTilePos]];
             if (!currTileType)
                 continue;
@@ -559,10 +559,10 @@ void CVort_keen_bgtile_col() {
                 case 5:
                     if (keen_gp.stuff[3 + currTileType])
                         CVort_open_door(currX, currY);
-                    else if (g_entities.sprites[0].delX > 0)
-                        g_entities.sprites[0].posX &= 0xFFFFF000;
+                    else if (g_entities.sprites[0].del_x > 0)
+                        g_entities.sprites[0].pos_x &= 0xFFFFF000;
                     else
-                        g_entities.sprites[0].posX = (g_entities.sprites[0].posX + 0x1000)&0xFFFFF000;
+                        g_entities.sprites[0].pos_x = (g_entities.sprites[0].pos_x + 0x1000)&0xFFFFF000;
                     break;
                 case 6: // Some item that add points
                 case 7:

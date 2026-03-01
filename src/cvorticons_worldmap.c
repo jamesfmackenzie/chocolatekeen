@@ -25,15 +25,15 @@ void CVort_draw_worldmap(void) {
 
     if (engine_gameVersion == GAMEVER_KEEN3)
     {
-        for (var4 = 0; var4 < map_height_T; var4++)
+        for (var4 = 0; var4 < map_height_tile; var4++)
         {
-            if (map_data_sprites[(map_width_T*var4)+map_width_T/2] == 0x2000)
+            if (map_data_sprites[(map_width_tile*var4)+map_width_tile/2] == 0x2000)
             {
                 messie_mounted = messie_time_to_climb = 0;
-                messie_x_T = map_width_T/2;
+                messie_x_T = map_width_tile/2;
                 messie_y_T = var4;
-                messie_delX = -0x200;
-                messie_delY = 0;
+                messie_del_x = -0x200;
+                messie_del_y = 0;
                 messie_xpos = messie_x_T << 12;
                 messie_ypos = messie_y_T << 12;
                 messie_frame = CVort3_spr_messield1;
@@ -51,8 +51,8 @@ void CVort_draw_worldmap(void) {
         keen_gp.screenY = keen_gp.mapY + 0xFFFFD000;
         keen_gp.score = 0;
     }
-    wmap_scrollX = keen_gp.screenX;
-    wmap_scrollY = keen_gp.screenY;
+    wmap_scroll_x = keen_gp.screenX;
+    wmap_scroll_y = keen_gp.screenY;
     keen_wmap_x_pos = keen_gp.mapX;
     keen_wmap_y_pos = keen_gp.mapY;
     g_game.wmap_col = 0x8000;
@@ -63,7 +63,7 @@ void CVort_draw_worldmap(void) {
     do // World map loop
     {
         keen_sp = g_entities.sprites;
-        keen_sp->delX = keen_sp->delY = keen_sp->velX = keen_sp->velY = 0;
+        keen_sp->del_x = keen_sp->del_y = keen_sp->vel_x = keen_sp->vel_y = 0;
         if (engine_gameVersion == GAMEVER_KEEN1)
           keen_sp->frame = 0x24;//spr_mapkeend1;
         else if (engine_gameVersion == GAMEVER_KEEN2)
@@ -83,36 +83,36 @@ void CVort_draw_worldmap(void) {
             {
                 // 1x1 sized entry
                 if (wmaplevels[count_i].type_ == 0) {
-                    map_data_sprites[y_coord * map_width_T + x_coord] = 0;
+                    map_data_sprites[y_coord * map_width_tile + x_coord] = 0;
                     if (engine_gameVersion == GAMEVER_KEEN3) {
-                        map_data_tiles[y_coord * map_width_T + x_coord] = 0x38;
+                        map_data_tiles[y_coord * map_width_tile + x_coord] = 0x38;
                     } else {
-                        map_data_tiles[y_coord * map_width_T + x_coord] = 0x4D;
+                        map_data_tiles[y_coord * map_width_tile + x_coord] = 0x4D;
                     }
                 }// 2x2 sized entry
                 else if (wmaplevels[count_i].type_ == 1) {
-                    map_data_sprites[y_coord * map_width_T + x_coord] = 0;
-                    map_data_sprites[y_coord * map_width_T + x_coord + 1] = 0;
-                    map_data_sprites[(y_coord + 1) * map_width_T + x_coord] = 0;
-                    map_data_sprites[(y_coord + 1) * map_width_T + x_coord + 1] = 0;
+                    map_data_sprites[y_coord * map_width_tile + x_coord] = 0;
+                    map_data_sprites[y_coord * map_width_tile + x_coord + 1] = 0;
+                    map_data_sprites[(y_coord + 1) * map_width_tile + x_coord] = 0;
+                    map_data_sprites[(y_coord + 1) * map_width_tile + x_coord + 1] = 0;
                     if (engine_gameVersion == GAMEVER_KEEN3) {
-                        map_data_tiles[y_coord * map_width_T + x_coord] = 0x34;
-                        map_data_tiles[y_coord * map_width_T + x_coord + 1] = 0x35;
-                        map_data_tiles[(y_coord + 1) * map_width_T + x_coord] = 0x36;
-                        map_data_tiles[(y_coord + 1) * map_width_T + x_coord + 1] = 0x37;
+                        map_data_tiles[y_coord * map_width_tile + x_coord] = 0x34;
+                        map_data_tiles[y_coord * map_width_tile + x_coord + 1] = 0x35;
+                        map_data_tiles[(y_coord + 1) * map_width_tile + x_coord] = 0x36;
+                        map_data_tiles[(y_coord + 1) * map_width_tile + x_coord + 1] = 0x37;
                     } else {
-                        map_data_tiles[y_coord * map_width_T + x_coord] = 0x4E;
-                        map_data_tiles[y_coord * map_width_T + x_coord + 1] = 0x4F;
-                        map_data_tiles[(y_coord + 1) * map_width_T + x_coord] = 0x50;
-                        map_data_tiles[(y_coord + 1) * map_width_T + x_coord + 1] = 0x51;
+                        map_data_tiles[y_coord * map_width_tile + x_coord] = 0x4E;
+                        map_data_tiles[y_coord * map_width_tile + x_coord + 1] = 0x4F;
+                        map_data_tiles[(y_coord + 1) * map_width_tile + x_coord] = 0x50;
+                        map_data_tiles[(y_coord + 1) * map_width_tile + x_coord + 1] = 0x51;
                     }
                 }
             }
         }
-        keen_sp->posX = keen_wmap_x_pos;
-        keen_sp->posY = keen_wmap_y_pos;
-        scrollX = wmap_scrollX;
-        scrollY = wmap_scrollY;
+        keen_sp->pos_x = keen_wmap_x_pos;
+        keen_sp->pos_y = keen_wmap_y_pos;
+        scroll_x = wmap_scroll_x;
+        scroll_y = wmap_scroll_y;
         CVort_engine_syncDrawing();
         CVort_engine_drawScreen();
         CVort_engine_drawScreen();
@@ -148,10 +148,10 @@ void CVort_draw_worldmap(void) {
 
             CVort_engine_drawScreen();
             CVort_handle_cheat_keys();
-            keen_wmap_x_pos = keen_sp->posX;
-            keen_wmap_y_pos = keen_sp->posY;
-            wmap_scrollX = scrollX;
-            wmap_scrollY = scrollY;
+            keen_wmap_x_pos = keen_sp->pos_x;
+            keen_wmap_y_pos = keen_sp->pos_y;
+            wmap_scroll_x = scroll_x;
+            wmap_scroll_y = scroll_y;
             CVort_handle_global_keys();
             if (g_input.key_map[0x39])
                 CVort_ptr_show_pause_menu();
@@ -258,9 +258,9 @@ void CVort_mark_cities_done() {
         for (singleLoopVar = 0; singleLoopVar < 0x10; singleLoopVar++)
             teleporters[singleLoopVar].isOnSnow = 0;
     }
-    for (int16_t posY = 0, posX; posY < map_height_T; posY++)
-        for (posX = 0; posX < map_width_T; posX++) {
-            mapEntry = map_data_sprites[posY * map_width_T + posX]&0x7FFF;
+    for (int16_t pos_y = 0, pos_x; pos_y < map_height_tile; pos_y++)
+        for (pos_x = 0; pos_x < map_width_tile; pos_x++) {
+            mapEntry = map_data_sprites[pos_y * map_width_tile + pos_x]&0x7FFF;
 
             if (engine_gameVersion == GAMEVER_KEEN3)
             {
@@ -269,8 +269,8 @@ void CVort_mark_cities_done() {
                 {
                     teleIndex = (mapEntry&0xF0)/16;
                     teleporters[teleIndex].isOnSnow = mapEntry&0xF; // Record the target tele
-                    teleporters[teleIndex].destX = posX;
-                    teleporters[teleIndex].destY = posY;
+                    teleporters[teleIndex].destX = pos_x;
+                    teleporters[teleIndex].destY = pos_y;
                 }
             }
             /* TODO? For mapEntry>0x10 this results in erroneous
@@ -287,13 +287,13 @@ void CVort_mark_cities_done() {
             if ((mapEntry <= 0) || (mapEntry > 0x10) || wmaplevels[mapEntry - 1].tx)
                 //if ((mapEntry <= 0) || (mapEntry >= 0x100) || wmaplevels[mapEntry-1].tx)
                 continue;
-            wmaplevels[mapEntry - 1].tx = posX;
-            wmaplevels[mapEntry - 1].ty = posY;
+            wmaplevels[mapEntry - 1].tx = pos_x;
+            wmaplevels[mapEntry - 1].ty = pos_y;
             wmaplevels[mapEntry - 1].type_ = 0;
 
-            if (mapEntry != (map_data_sprites[posY * map_width_T + posX + 1]&0x7FFF))
+            if (mapEntry != (map_data_sprites[pos_y * map_width_tile + pos_x + 1]&0x7FFF))
                 continue;
-            posX++;
+            pos_x++;
             wmaplevels[mapEntry - 1].type_ = 1;
         }
 }
@@ -326,8 +326,8 @@ void CVort_game_over() {
             scoreEntry = loopVar + 1;
             break;
         }
-    scrollX &= 0xFFFFF000;
-    scrollY &= 0xFFFFF000;
+    scroll_x &= 0xFFFFF000;
+    scroll_y &= 0xFFFFF000;
     CVort_engine_clearOverlay();
     CVort_engine_syncDrawing();
     CVort_engine_drawScreen();
@@ -471,15 +471,15 @@ void CVort_show_keens_left() {
     CVort_engine_setCurSound(0x29);
 }
 
-void CVort_place_keen_on_worldmap(uint32_t *posX, uint32_t *posY) {
+void CVort_place_keen_on_worldmap(uint32_t *pos_x, uint32_t *pos_y) {
     int16_t mapEntry;
-    for (int16_t currY = 0, currX; currY < map_height_T; currY++)
-        for (currX = 0; currX < map_width_T; currX++) {
-            mapEntry = map_data_sprites[currY * map_width_T + currX];
+    for (int16_t currY = 0, currX; currY < map_height_tile; currY++)
+        for (currX = 0; currX < map_width_tile; currX++) {
+            mapEntry = map_data_sprites[currY * map_width_tile + currX];
             if (mapEntry != 0xFF)
                 continue;
-            *posX = ((int32_t)(currX)) << 12;
-            *posY = ((int32_t)(currY)) << 12;
+            *pos_x = ((int32_t)(currX)) << 12;
+            *pos_y = ((int32_t)(currY)) << 12;
             return;
         }
 }
@@ -487,52 +487,52 @@ void CVort_place_keen_on_worldmap(uint32_t *posX, uint32_t *posY) {
 int16_t CVort_check_world_map_col(Sprite_T *sprite) {
     if (g_game.god_mode)
         return 0;
-    sprite->delX += sprite->velX*g_game.sprite_sync;
-    sprite->delY += sprite->velY*g_game.sprite_sync;
+    sprite->del_x += sprite->vel_x*g_game.sprite_sync;
+    sprite->del_y += sprite->vel_y*g_game.sprite_sync;
     keen_map[0] = *sprite;
     int16_t blocking = 0;
-    int16_t x1_T, x2_T, y1_T, y2_T;
+    int16_t x1_tile, x2_tile, y1_tile, y2_tile;
 
     // First we check the vertical move, if any
-    keen_map[0].boxY2 += keen_map[0].delY;
-    keen_map[0].boxY1 += keen_map[0].delY;
-    x1_T = keen_map[0].boxX1 / 0x1000;
-    x2_T = keen_map[0].boxX2 / 0x1000;
+    keen_map[0].box_y2 += keen_map[0].del_y;
+    keen_map[0].box_y1 += keen_map[0].del_y;
+    x1_tile = keen_map[0].box_x1 / 0x1000;
+    x2_tile = keen_map[0].box_x2 / 0x1000;
 
     int16_t tempNum, x, y;
 
-    if (keen_map[0].delY > 0) // Down
+    if (keen_map[0].del_y > 0) // Down
     {
-        if (keen_map[0].boxY2 / 0x1000 != (keen_map[0].boxY2 - keen_map[0].delY) / 0x1000) {
-            y2_T = keen_map[0].boxY2 / 0x1000;
-            for (x = x1_T; x <= x2_T; x++) {
-                if (!TILEINFO_UEdge[map_data_tiles[y2_T * map_width_T + x]]) {
-                    if (!(map_data_sprites[y2_T * map_width_T + x] & g_game.wmap_col))
+        if (keen_map[0].box_y2 / 0x1000 != (keen_map[0].box_y2 - keen_map[0].del_y) / 0x1000) {
+            y2_tile = keen_map[0].box_y2 / 0x1000;
+            for (x = x1_tile; x <= x2_tile; x++) {
+                if (!TILEINFO_UEdge[map_data_tiles[y2_tile * map_width_tile + x]]) {
+                    if (!(map_data_sprites[y2_tile * map_width_tile + x] & g_game.wmap_col))
                         continue;
                 }
-                sprite->velY = 0;
-                tempNum = (keen_map[0].boxY2 + 1) % 0x1000;
-                sprite->delY -= tempNum;
-                keen_map[0].boxY1 -= tempNum;
-                keen_map[0].boxY2 -= tempNum;
+                sprite->vel_y = 0;
+                tempNum = (keen_map[0].box_y2 + 1) % 0x1000;
+                sprite->del_y -= tempNum;
+                keen_map[0].box_y1 -= tempNum;
+                keen_map[0].box_y2 -= tempNum;
                 blocking = 1;
                 break;
             }
         }
-    } else if (keen_map[0].delY < 0) // Up
+    } else if (keen_map[0].del_y < 0) // Up
     {
-        if (keen_map[0].boxY1 / 0x1000 != (keen_map[0].boxY1 - keen_map[0].delY) / 0x1000) {
-            y1_T = keen_map[0].boxY1 / 0x1000;
-            for (x = x1_T; x <= x2_T; x++) {
-                if (!TILEINFO_DEdge[map_data_tiles[y1_T * map_width_T + x]]) {
-                    if (!(map_data_sprites[y1_T * map_width_T + x] & g_game.wmap_col))
+        if (keen_map[0].box_y1 / 0x1000 != (keen_map[0].box_y1 - keen_map[0].del_y) / 0x1000) {
+            y1_tile = keen_map[0].box_y1 / 0x1000;
+            for (x = x1_tile; x <= x2_tile; x++) {
+                if (!TILEINFO_DEdge[map_data_tiles[y1_tile * map_width_tile + x]]) {
+                    if (!(map_data_sprites[y1_tile * map_width_tile + x] & g_game.wmap_col))
                         continue;
                 }
-                sprite->velY = 0;
-                tempNum = 0x1000 - keen_map[0].boxY1 % 0x1000;
-                sprite->delY += tempNum;
-                keen_map[0].boxY1 += tempNum;
-                keen_map[0].boxY2 += tempNum;
+                sprite->vel_y = 0;
+                tempNum = 0x1000 - keen_map[0].box_y1 % 0x1000;
+                sprite->del_y += tempNum;
+                keen_map[0].box_y1 += tempNum;
+                keen_map[0].box_y2 += tempNum;
                 blocking = 1;
                 break;
             }
@@ -540,43 +540,43 @@ int16_t CVort_check_world_map_col(Sprite_T *sprite) {
     }
 
     // Now horizontal
-    keen_map[0].boxX1 += keen_map[0].delX;
-    keen_map[0].boxX2 += keen_map[0].delX;
-    y1_T = keen_map[0].boxY1 / 0x1000;
-    y2_T = keen_map[0].boxY2 / 0x1000;
+    keen_map[0].box_x1 += keen_map[0].del_x;
+    keen_map[0].box_x2 += keen_map[0].del_x;
+    y1_tile = keen_map[0].box_y1 / 0x1000;
+    y2_tile = keen_map[0].box_y2 / 0x1000;
 
-    if (keen_map[0].delX > 0) // Right
+    if (keen_map[0].del_x > 0) // Right
     {
-        if (keen_map[0].boxX2 / 0x1000 != (keen_map[0].boxX2 - keen_map[0].delX) / 0x1000) {
-            x2_T = keen_map[0].boxX2 / 0x1000;
-            for (y = y1_T; y <= y2_T; y++) {
-                if (!TILEINFO_LEdge[map_data_tiles[y * map_width_T + x2_T]]) {
-                    if (!(map_data_sprites[y * map_width_T + x2_T] & g_game.wmap_col))
+        if (keen_map[0].box_x2 / 0x1000 != (keen_map[0].box_x2 - keen_map[0].del_x) / 0x1000) {
+            x2_tile = keen_map[0].box_x2 / 0x1000;
+            for (y = y1_tile; y <= y2_tile; y++) {
+                if (!TILEINFO_LEdge[map_data_tiles[y * map_width_tile + x2_tile]]) {
+                    if (!(map_data_sprites[y * map_width_tile + x2_tile] & g_game.wmap_col))
                         continue;
                 }
-                sprite->velX = 0;
-                tempNum = (keen_map[0].boxX2 + 1) % 0x1000;
-                sprite->delX -= tempNum;
-                keen_map[0].boxX1 -= tempNum;
-                keen_map[0].boxX2 -= tempNum;
+                sprite->vel_x = 0;
+                tempNum = (keen_map[0].box_x2 + 1) % 0x1000;
+                sprite->del_x -= tempNum;
+                keen_map[0].box_x1 -= tempNum;
+                keen_map[0].box_x2 -= tempNum;
                 blocking = 1;
                 break;
             }
         }
-    } else if (keen_map[0].delX < 0) // Left
+    } else if (keen_map[0].del_x < 0) // Left
     {
-        if (keen_map[0].boxX1 / 0x1000 != (keen_map[0].boxX1 - keen_map[0].delX) / 0x1000) {
-            x1_T = keen_map[0].boxX1 / 0x1000;
-            for (y = y1_T; y <= y2_T; y++) {
-                if (!TILEINFO_REdge[map_data_tiles[y * map_width_T + x1_T]]) {
-                    if (!(map_data_sprites[y * map_width_T + x1_T] & g_game.wmap_col))
+        if (keen_map[0].box_x1 / 0x1000 != (keen_map[0].box_x1 - keen_map[0].del_x) / 0x1000) {
+            x1_tile = keen_map[0].box_x1 / 0x1000;
+            for (y = y1_tile; y <= y2_tile; y++) {
+                if (!TILEINFO_REdge[map_data_tiles[y * map_width_tile + x1_tile]]) {
+                    if (!(map_data_sprites[y * map_width_tile + x1_tile] & g_game.wmap_col))
                         continue;
                 }
-                sprite->velX = 0;
-                tempNum = 0x1000 - keen_map[0].boxX1 % 0x1000;
-                sprite->delX += tempNum;
-                keen_map[0].boxX1 += tempNum;
-                keen_map[0].boxX2 += tempNum;
+                sprite->vel_x = 0;
+                tempNum = 0x1000 - keen_map[0].box_x1 % 0x1000;
+                sprite->del_x += tempNum;
+                keen_map[0].box_x1 += tempNum;
+                keen_map[0].box_x2 += tempNum;
                 blocking |= 1; // THIS is how it's done in vanilla code here...
                 break;
             }
@@ -598,25 +598,25 @@ void CVort_move_worldmap(GameInput_T input, Sprite_T *spritedraw) {
 
     CVort_update_sprite_hitbox_wmap(spritedraw);
     if (input.but1jump || input.but2pogo) {
-        x1 = spritedraw->boxX1 / 0x1000;
-        x2 = spritedraw->boxX2 / 0x1000;
-        y1 = spritedraw->boxY1 / 0x1000;
-        y2 = spritedraw->boxY2 / 0x1000;
+        x1 = spritedraw->box_x1 / 0x1000;
+        x2 = spritedraw->box_x2 / 0x1000;
+        y1 = spritedraw->box_y1 / 0x1000;
+        y2 = spritedraw->box_y2 / 0x1000;
         for (x = x1; x <= x2; x++)
             for (y = y1; y <= y2; y++) {
-                if (!map_data_sprites[y * map_width_T + x])
+                if (!map_data_sprites[y * map_width_tile + x])
                     continue;
                 sprite_x = x;
                 sprite_y = y;
-                g_game.wmap_sprite_on = map_data_sprites[y * map_width_T + x];
+                g_game.wmap_sprite_on = map_data_sprites[y * map_width_tile + x];
                 if (g_game.wmap_sprite_on == 0xFF)
                     g_game.wmap_sprite_on = 0;
             }
     }
-    spritedraw->delX = spritedraw->delY = 0;
+    spritedraw->del_x = spritedraw->del_y = 0;
     switch (input.direction) {
         case 7:
-            spritedraw->delX = spritedraw->delY = -0x400;
+            spritedraw->del_x = spritedraw->del_y = -0x400;
             if (engine_gameVersion == GAMEVER_KEEN1)
               spritedraw->frame = 0x2C;
             if (engine_gameVersion == GAMEVER_KEEN2)
@@ -625,7 +625,7 @@ void CVort_move_worldmap(GameInput_T input, Sprite_T *spritedraw) {
               spritedraw->frame = CVort3_spr_mapkeenu1;
             break;
         case 0:
-            spritedraw->delY = -0x400;
+            spritedraw->del_y = -0x400;
             if (engine_gameVersion == GAMEVER_KEEN1)
               spritedraw->frame = 0x2C;
             if (engine_gameVersion == GAMEVER_KEEN2)
@@ -634,8 +634,8 @@ void CVort_move_worldmap(GameInput_T input, Sprite_T *spritedraw) {
               spritedraw->frame = CVort3_spr_mapkeenu1;
             break;
         case 1:
-            spritedraw->delY = -0x400;
-            spritedraw->delX = 0x400;
+            spritedraw->del_y = -0x400;
+            spritedraw->del_x = 0x400;
             if (engine_gameVersion == GAMEVER_KEEN1)
               spritedraw->frame = 0x2C;
             if (engine_gameVersion == GAMEVER_KEEN2)
@@ -644,7 +644,7 @@ void CVort_move_worldmap(GameInput_T input, Sprite_T *spritedraw) {
               spritedraw->frame = CVort3_spr_mapkeenu1;
             break;
         case 2:
-            spritedraw->delX = 0x400;
+            spritedraw->del_x = 0x400;
             if (engine_gameVersion == GAMEVER_KEEN1)
               spritedraw->frame = 0x20;
             if (engine_gameVersion == GAMEVER_KEEN2)
@@ -653,7 +653,7 @@ void CVort_move_worldmap(GameInput_T input, Sprite_T *spritedraw) {
               spritedraw->frame = CVort3_spr_mapkeenr1;
             break;
         case 3:
-            spritedraw->delY = spritedraw->delX = 0x400;
+            spritedraw->del_y = spritedraw->del_x = 0x400;
             if (engine_gameVersion == GAMEVER_KEEN1)
               spritedraw->frame = 0x24;
             if (engine_gameVersion == GAMEVER_KEEN2)
@@ -662,7 +662,7 @@ void CVort_move_worldmap(GameInput_T input, Sprite_T *spritedraw) {
               spritedraw->frame = CVort3_spr_mapkeend1;
             break;
         case 4:
-            spritedraw->delY = 0x400;
+            spritedraw->del_y = 0x400;
             if (engine_gameVersion == GAMEVER_KEEN1)
               spritedraw->frame = 0x24;
             if (engine_gameVersion == GAMEVER_KEEN2)
@@ -671,8 +671,8 @@ void CVort_move_worldmap(GameInput_T input, Sprite_T *spritedraw) {
               spritedraw->frame = CVort3_spr_mapkeend1;
             break;
         case 5:
-            spritedraw->delY = 0x400;
-            spritedraw->delX = -0x400;
+            spritedraw->del_y = 0x400;
+            spritedraw->del_x = -0x400;
             if (engine_gameVersion == GAMEVER_KEEN1)
               spritedraw->frame = 0x24;
             if (engine_gameVersion == GAMEVER_KEEN2)
@@ -681,7 +681,7 @@ void CVort_move_worldmap(GameInput_T input, Sprite_T *spritedraw) {
               spritedraw->frame = CVort3_spr_mapkeend1;
             break;
         case 6:
-            spritedraw->delX = -0x400;
+            spritedraw->del_x = -0x400;
             if (engine_gameVersion == GAMEVER_KEEN1)
               spritedraw->frame = 0x28;
             if (engine_gameVersion == GAMEVER_KEEN2)
@@ -693,7 +693,7 @@ void CVort_move_worldmap(GameInput_T input, Sprite_T *spritedraw) {
             break;
     }
     s = 0;
-    if (spritedraw->delX | spritedraw->delY) {
+    if (spritedraw->del_x | spritedraw->del_y) {
         fr = ((CVort_ptr_engine_getTicks()&0xFFFF) >> 4)&3;
         s++;
     } else
@@ -702,8 +702,8 @@ void CVort_move_worldmap(GameInput_T input, Sprite_T *spritedraw) {
     if (g_input.key_map[0xF] && g_input.key_map[0x2A])
         g_game.wmap_col = 0;
     csd = CVort_check_world_map_col(spritedraw);
-    spritedraw->posX += spritedraw->delX;
-    spritedraw->posY += spritedraw->delY;
+    spritedraw->pos_x += spritedraw->del_x;
+    spritedraw->pos_y += spritedraw->del_y;
 
     if (s && !(((CVort_ptr_engine_getTicks()&0xFFFF) >> 3)&3)) {
         if (csd)
@@ -719,9 +719,9 @@ void CVort_move_worldmap(GameInput_T input, Sprite_T *spritedraw) {
     int32_t tempDiff;
 
 scroll_x:
-    if (spritedraw->delX <= 0)
+    if (spritedraw->del_x <= 0)
         goto scroll_x_lo;
-    tempDiff = spritedraw->posX - scrollX;
+    tempDiff = spritedraw->pos_x - scroll_x;
     if ((tempDiff >> 16) < 0)
         goto scroll_x_lo;
     if ((tempDiff >> 16) > 0)
@@ -729,20 +729,20 @@ scroll_x:
     if ((tempDiff & 0xFFFF) <= 0xB000)
         goto scroll_x_lo;
 scroll_x_hi_fix:
-    scrollX += spritedraw->delX;
-    if ((scrollX >> 16) < (scrollX_max >> 16))
+    scroll_x += spritedraw->del_x;
+    if ((scroll_x >> 16) < (scroll_x_max >> 16))
         goto scroll_y;
-    if ((scrollX >> 16) > (scrollX_max >> 16))
+    if ((scroll_x >> 16) > (scroll_x_max >> 16))
         goto scroll_x_hi_fix_limit;
-    if ((scrollX & 0xFFFF) <= (scrollX_max & 0xFFFF))
+    if ((scroll_x & 0xFFFF) <= (scroll_x_max & 0xFFFF))
         goto scroll_y;
 scroll_x_hi_fix_limit:
-    scrollX = scrollX_max;
+    scroll_x = scroll_x_max;
     goto scroll_y;
 scroll_x_lo:
-    if (spritedraw->delX >= 0)
+    if (spritedraw->del_x >= 0)
         goto scroll_y;
-    tempDiff = spritedraw->posX - scrollX;
+    tempDiff = spritedraw->pos_x - scroll_x;
     if ((tempDiff >> 16) > 0)
         goto scroll_y;
     if ((tempDiff >> 16) < 0)
@@ -750,20 +750,20 @@ scroll_x_lo:
     if ((tempDiff & 0xFFFF) >= 0x9000)
         goto scroll_y;
 scroll_x_lo_fix:
-    scrollX += spritedraw->delX;
-    if ((scrollX >> 16) > (scrollX_min >> 16))
+    scroll_x += spritedraw->del_x;
+    if ((scroll_x >> 16) > (scroll_x_min >> 16))
         goto scroll_y;
-    if ((scrollX >> 16) < (scrollX_min >> 16))
+    if ((scroll_x >> 16) < (scroll_x_min >> 16))
         goto scroll_x_lo_fix_limit;
-    if ((scrollX & 0xFFFF) >= (scrollX_min & 0xFFFF))
+    if ((scroll_x & 0xFFFF) >= (scroll_x_min & 0xFFFF))
         goto scroll_y;
 scroll_x_lo_fix_limit:
-    scrollX = scrollX_min;
+    scroll_x = scroll_x_min;
 
 scroll_y:
-    if (spritedraw->delY <= 0)
+    if (spritedraw->del_y <= 0)
         goto scroll_y_lo;
-    tempDiff = spritedraw->posY - scrollY;
+    tempDiff = spritedraw->pos_y - scroll_y;
     if ((tempDiff >> 16) < 0)
         goto scroll_y_lo;
     if ((tempDiff >> 16) > 0)
@@ -771,20 +771,20 @@ scroll_y:
     if ((tempDiff & 0xFFFF) <= 0x7000)
         goto scroll_y_lo;
 scroll_y_hi_fix:
-    scrollY += spritedraw->delY;
-    if ((scrollY >> 16) < (scrollY_max >> 16))
+    scroll_y += spritedraw->del_y;
+    if ((scroll_y >> 16) < (scroll_y_max >> 16))
         goto scroll_tiles;
-    if ((scrollY >> 16) > (scrollY_max >> 16))
+    if ((scroll_y >> 16) > (scroll_y_max >> 16))
         goto scroll_y_hi_fix_limit;
-    if ((scrollY & 0xFFFF) <= (scrollY_max & 0xFFFF))
+    if ((scroll_y & 0xFFFF) <= (scroll_y_max & 0xFFFF))
         goto scroll_tiles;
 scroll_y_hi_fix_limit:
-    scrollY = scrollY_max;
+    scroll_y = scroll_y_max;
     goto scroll_tiles;
 scroll_y_lo:
-    if (spritedraw->delY >= 0)
+    if (spritedraw->del_y >= 0)
         goto scroll_tiles;
-    tempDiff = spritedraw->posY - scrollY;
+    tempDiff = spritedraw->pos_y - scroll_y;
     if ((tempDiff >> 16) > 0)
         goto scroll_tiles;
     if ((tempDiff >> 16) < 0)
@@ -792,20 +792,20 @@ scroll_y_lo:
     if ((tempDiff & 0xFFFF) >= 0x3000)
         goto scroll_tiles;
 scroll_y_lo_fix:
-    scrollY += spritedraw->delY;
-    if ((scrollY >> 16) > (scrollY_min >> 16))
+    scroll_y += spritedraw->del_y;
+    if ((scroll_y >> 16) > (scroll_y_min >> 16))
         goto scroll_tiles;
-    if ((scrollY >> 16) < (scrollY_min >> 16))
+    if ((scroll_y >> 16) < (scroll_y_min >> 16))
         goto scroll_y_lo_fix_limit;
-    if ((scrollY & 0xFFFF) >= (scrollY_min & 0xFFFF))
+    if ((scroll_y & 0xFFFF) >= (scroll_y_min & 0xFFFF))
         goto scroll_tiles;
 scroll_y_lo_fix_limit:
-    scrollY = scrollY_min;
+    scroll_y = scroll_y_min;
 
 scroll_tiles:
-    scrollX_T = scrollX >> 12;
-    scrollY_T = scrollY >> 12;
-    CVort_engine_drawSpriteAt(spritedraw->posX, spritedraw->posY, spritedraw->frame + fr);
+    scroll_x_tile = scroll_x >> 12;
+    scroll_y_tile = scroll_y >> 12;
+    CVort_engine_drawSpriteAt(spritedraw->pos_x, spritedraw->pos_y, spritedraw->frame + fr);
 
     if (engine_gameVersion == GAMEVER_KEEN3) {
         uint16_t messieW, messieH;
@@ -817,7 +817,7 @@ scroll_tiles:
             {
                 messieW = engine_maskedSpriteEntry[CVort3_spr_messield1*4].width;
                 messieH = engine_maskedSpriteEntry[CVort3_spr_messield1*4].height;
-                if (spritedraw->posX >= messie_xpos && spritedraw->posX <= messie_xpos + (messieW<<3<<8) && spritedraw->posY >= messie_ypos && spritedraw->posY <= messie_ypos + (messieH<<8))
+                if (spritedraw->pos_x >= messie_xpos && spritedraw->pos_x <= messie_xpos + (messieW<<3<<8) && spritedraw->pos_y >= messie_ypos && spritedraw->pos_y <= messie_ypos + (messieH<<8))
                 {
                     CVort_engine_setCurSound(CVort3_snd_crystal);
                     messie_mounted++;

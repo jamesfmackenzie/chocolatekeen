@@ -98,9 +98,9 @@ void CVort3_show_pause_menu() {
 void CVort3_init_level(uint16_t levelnum) {
     int16_t currSprite;
     CVort_load_level_data(levelnum);
-    for (int16_t currY = 0, currX; currY < map_height_T; currY++)
-        for (currX = 0; currX < map_width_T; currX++) {
-            currSprite = map_data_sprites[currY * map_width_T + currX];
+    for (int16_t currY = 0, currX; currY < map_height_tile; currY++)
+        for (currX = 0; currX < map_width_tile; currX++) {
+            currSprite = map_data_sprites[currY * map_width_tile + currX];
 
             switch (currSprite) {
                 case 1:
@@ -176,8 +176,8 @@ void CVort3_init_level(uint16_t levelnum) {
                     break;
 
                 case 0xFF:
-                    g_entities.sprites[0].posX = currX << 12;
-                    g_entities.sprites[0].posY = (currY << 12) + 0x800;
+                    g_entities.sprites[0].pos_x = currX << 12;
+                    g_entities.sprites[0].pos_y = (currY << 12) + 0x800;
                     break;
                 default:
                     break;
@@ -190,12 +190,12 @@ void CVort3_add_sprite_vortimom(int16_t tileX, int16_t tileY) {
 
     sprIndex = CVort_add_sprite();
     g_entities.sprites[sprIndex].type_ = CVort3_obj_vortimom;
-    g_entities.sprites[sprIndex].posX = tileX << 12;
-    g_entities.sprites[sprIndex].posY = tileY << 12;
+    g_entities.sprites[sprIndex].pos_x = tileX << 12;
+    g_entities.sprites[sprIndex].pos_y = tileY << 12;
     g_entities.sprites[sprIndex].think = &CVort3_think_vortimom_walk;
     g_entities.sprites[sprIndex].contact = &CVort3_contact_vortimom;
     g_entities.sprites[sprIndex].health = 5;
-    g_entities.sprites[sprIndex].velX = (g_entities.sprites[sprIndex].posX > g_entities.sprites[0].posX) ? -50 : 50;
+    g_entities.sprites[sprIndex].vel_x = (g_entities.sprites[sprIndex].pos_x > g_entities.sprites[0].pos_x) ? -50 : 50;
     g_entities.sprites[sprIndex].frame = CVort3_spr_momleft1;
 }
 
@@ -204,12 +204,12 @@ void CVort3_add_sprite_meep(int16_t tileX, int16_t tileY) {
 
     sprIndex = CVort_add_sprite();
     g_entities.sprites[sprIndex].type_ = CVort3_obj_meep;
-    g_entities.sprites[sprIndex].posX = tileX << 12;
-    g_entities.sprites[sprIndex].posY = (tileY << 12) + 0x800;
+    g_entities.sprites[sprIndex].pos_x = tileX << 12;
+    g_entities.sprites[sprIndex].pos_y = (tileY << 12) + 0x800;
     g_entities.sprites[sprIndex].think = &CVort3_think_meep_walk;
     g_entities.sprites[sprIndex].contact = &CVort3_contact_meep;
     g_entities.sprites[sprIndex].health = 1;
-    g_entities.sprites[sprIndex].velX = (g_entities.sprites[sprIndex].posX > g_entities.sprites[0].posX) ? -65 : 65;
+    g_entities.sprites[sprIndex].vel_x = (g_entities.sprites[sprIndex].pos_x > g_entities.sprites[0].pos_x) ? -65 : 65;
     g_entities.sprites[sprIndex].frame = CVort3_spr_meepl1;
 }
 
@@ -218,12 +218,12 @@ void CVort3_add_sprite_vortininja(int16_t tileX, int16_t tileY) {
 
     sprIndex = CVort_add_sprite();
     g_entities.sprites[sprIndex].type_ = CVort3_obj_vortininja;
-    g_entities.sprites[sprIndex].posX = tileX << 12;
-    g_entities.sprites[sprIndex].posY = tileY << 12;
+    g_entities.sprites[sprIndex].pos_x = tileX << 12;
+    g_entities.sprites[sprIndex].pos_y = tileY << 12;
     g_entities.sprites[sprIndex].think = &CVort3_think_vortininja_stand;
     g_entities.sprites[sprIndex].contact = &CVort3_contact_vortininja;
     g_entities.sprites[sprIndex].health = 3; // In practice, 4 shots are needed to end one
-    g_entities.sprites[sprIndex].velX = (g_entities.sprites[sprIndex].posX > g_entities.sprites[0].posX) ? -1 : 1;
+    g_entities.sprites[sprIndex].vel_x = (g_entities.sprites[sprIndex].pos_x > g_entities.sprites[0].pos_x) ? -1 : 1;
     g_entities.sprites[sprIndex].frame = CVort3_spr_ninjal1;
 }
 
@@ -232,12 +232,12 @@ void CVort3_add_sprite_foob(int16_t tileX, int16_t tileY) {
 
     sprIndex = CVort_add_sprite();
     g_entities.sprites[sprIndex].type_ = CVort3_obj_foob;
-    g_entities.sprites[sprIndex].posX = tileX << 12;
-    g_entities.sprites[sprIndex].posY = tileY << 12;
+    g_entities.sprites[sprIndex].pos_x = tileX << 12;
+    g_entities.sprites[sprIndex].pos_y = tileY << 12;
     g_entities.sprites[sprIndex].think = &CVort3_think_foob_walk;
     g_entities.sprites[sprIndex].contact = &CVort3_contact_foob;
     g_entities.sprites[sprIndex].health = 1;
-    g_entities.sprites[sprIndex].velX = (g_entities.sprites[sprIndex].posX > g_entities.sprites[0].posX) ? -50 : 50;
+    g_entities.sprites[sprIndex].vel_x = (g_entities.sprites[sprIndex].pos_x > g_entities.sprites[0].pos_x) ? -50 : 50;
     g_entities.sprites[sprIndex].frame = CVort3_spr_foobl1;
 }
 
@@ -246,13 +246,13 @@ void CVort3_add_sprite_ball(int16_t tileX, int16_t tileY) {
 
     sprIndex = CVort_add_sprite();
     g_entities.sprites[sprIndex].type_ = CVort3_obj_ball;
-    g_entities.sprites[sprIndex].posX = tileX << 12;
-    g_entities.sprites[sprIndex].posY = tileY << 12;
+    g_entities.sprites[sprIndex].pos_x = tileX << 12;
+    g_entities.sprites[sprIndex].pos_y = tileY << 12;
     g_entities.sprites[sprIndex].think = &CVort3_think_ball;
     g_entities.sprites[sprIndex].contact = &CVort_think_contact_nop;
     g_entities.sprites[sprIndex].health = 1;
-    g_entities.sprites[sprIndex].velX = (g_entities.sprites[sprIndex].posX > g_entities.sprites[0].posX) ? -400 : 400;
-    g_entities.sprites[sprIndex].velY = (g_entities.sprites[sprIndex].posY > g_entities.sprites[0].posY) ? -400 : 400;
+    g_entities.sprites[sprIndex].vel_x = (g_entities.sprites[sprIndex].pos_x > g_entities.sprites[0].pos_x) ? -400 : 400;
+    g_entities.sprites[sprIndex].vel_y = (g_entities.sprites[sprIndex].pos_y > g_entities.sprites[0].pos_y) ? -400 : 400;
     g_entities.sprites[sprIndex].frame = CVort3_spr_ball;
 }
 
@@ -261,13 +261,13 @@ void CVort3_add_sprite_jack(int16_t tileX, int16_t tileY) {
 
     sprIndex = CVort_add_sprite();
     g_entities.sprites[sprIndex].type_ = CVort3_obj_jack;
-    g_entities.sprites[sprIndex].posX = tileX << 12;
-    g_entities.sprites[sprIndex].posY = tileY << 12;
+    g_entities.sprites[sprIndex].pos_x = tileX << 12;
+    g_entities.sprites[sprIndex].pos_y = tileY << 12;
     g_entities.sprites[sprIndex].think = &CVort3_think_jack;
     g_entities.sprites[sprIndex].contact = &CVort_think_contact_nop;
     g_entities.sprites[sprIndex].health = 1;
-    g_entities.sprites[sprIndex].velX = (g_entities.sprites[sprIndex].posX > g_entities.sprites[0].posX) ? -400 : 400;
-    g_entities.sprites[sprIndex].velY = (g_entities.sprites[sprIndex].posY > g_entities.sprites[0].posY) ? -400 : 400;
+    g_entities.sprites[sprIndex].vel_x = (g_entities.sprites[sprIndex].pos_x > g_entities.sprites[0].pos_x) ? -400 : 400;
+    g_entities.sprites[sprIndex].vel_y = (g_entities.sprites[sprIndex].pos_y > g_entities.sprites[0].pos_y) ? -400 : 400;
     g_entities.sprites[sprIndex].frame = CVort3_spr_jack1;
 }
 
@@ -276,12 +276,12 @@ void CVort3_add_sprite_platform_h(int16_t tileX, int16_t tileY) {
 
     sprIndex = CVort_add_sprite();
     g_entities.sprites[sprIndex].type_ = CVort3_obj_platform;
-    g_entities.sprites[sprIndex].posX = tileX << 12;
-    g_entities.sprites[sprIndex].posY = (tileY << 12) - 0x400;
+    g_entities.sprites[sprIndex].pos_x = tileX << 12;
+    g_entities.sprites[sprIndex].pos_y = (tileY << 12) - 0x400;
     g_entities.sprites[sprIndex].think = &CVort3_think_platform_move;
     g_entities.sprites[sprIndex].contact = &CVort_think_contact_nop;
     g_entities.sprites[sprIndex].frame = CVort3_spr_platform1;
-    g_entities.sprites[sprIndex].velX = 75;
+    g_entities.sprites[sprIndex].vel_x = 75;
 }
 
 void CVort3_add_sprite_platform_v(int16_t tileX, int16_t tileY) {
@@ -289,12 +289,12 @@ void CVort3_add_sprite_platform_v(int16_t tileX, int16_t tileY) {
 
     sprIndex = CVort_add_sprite();
     g_entities.sprites[sprIndex].type_ = CVort3_obj_platform;
-    g_entities.sprites[sprIndex].posX = tileX << 12;
-    g_entities.sprites[sprIndex].posY = tileY << 12;
+    g_entities.sprites[sprIndex].pos_x = tileX << 12;
+    g_entities.sprites[sprIndex].pos_y = tileY << 12;
     g_entities.sprites[sprIndex].think = &CVort3_think_platform_move;
     g_entities.sprites[sprIndex].contact = &CVort_think_contact_nop;
     g_entities.sprites[sprIndex].frame = CVort3_spr_platform1;
-    g_entities.sprites[sprIndex].velY = 75;
+    g_entities.sprites[sprIndex].vel_y = 75;
 }
 
 void CVort3_add_sprite_spark(int16_t tileX, int16_t tileY) {
@@ -302,8 +302,8 @@ void CVort3_add_sprite_spark(int16_t tileX, int16_t tileY) {
 
     sprIndex = CVort_add_sprite();
     g_entities.sprites[sprIndex].type_ = CVort3_obj_spark;
-    g_entities.sprites[sprIndex].posX = tileX << 12;
-    g_entities.sprites[sprIndex].posY = tileY << 12;
+    g_entities.sprites[sprIndex].pos_x = tileX << 12;
+    g_entities.sprites[sprIndex].pos_y = tileY << 12;
     g_entities.sprites[sprIndex].think = &CVort3_think_spark;
     g_entities.sprites[sprIndex].contact = &CVort3_contact_spark;
     g_entities.sprites[sprIndex].frame = CVort3_spr_spark1;
@@ -314,8 +314,8 @@ void CVort3_add_sprite_heart(int16_t tileX, int16_t tileY) {
 
     sprIndex = CVort_add_sprite();
     g_entities.sprites[sprIndex].type_ = CVort3_obj_heart;
-    g_entities.sprites[sprIndex].posX = tileX << 12;
-    g_entities.sprites[sprIndex].posY = tileY << 12;
+    g_entities.sprites[sprIndex].pos_x = tileX << 12;
+    g_entities.sprites[sprIndex].pos_y = tileY << 12;
     g_entities.sprites[sprIndex].think = &CVort3_think_heart;
     g_entities.sprites[sprIndex].contact = &CVort3_contact_heart;
     // Yes, that is an unnoticeable vanilla bug apparently!
@@ -379,8 +379,8 @@ void CVort3_contact_keen(Sprite_T *keen, Sprite_T *contacted) {
                 return;
 
             keen->think = &CVort_think_keen_stunned;
-            keen->velX = contacted->velX;
-            keen->velY = contacted->velY;
+            keen->vel_x = contacted->vel_x;
+            keen->vel_y = contacted->vel_y;
             keen->time = 400;
             break;
 
@@ -402,16 +402,16 @@ void CVort3_think_vortimom_walk() {
     int32_t currPosY;
     uint16_t blocking;
 
-    if (g_entities.temp_sprite.velX > 0) {
+    if (g_entities.temp_sprite.vel_x > 0) {
         g_entities.temp_sprite.frame = CVort3_spr_momright1;
     } else {
         g_entities.temp_sprite.frame = CVort3_spr_momleft1;
     }
     g_entities.temp_sprite.frame += (CVort_ptr_engine_getTicks() >> 4) & 1;
-    currPosY = g_entities.temp_sprite.posY;
+    currPosY = g_entities.temp_sprite.pos_y;
     if (CVort_get_random() < g_game.sprite_sync) {
-        g_entities.temp_sprite.varC = -g_entities.temp_sprite.velX;
-        g_entities.temp_sprite.velX = 0;
+        g_entities.temp_sprite.varC = -g_entities.temp_sprite.vel_x;
+        g_entities.temp_sprite.vel_x = 0;
         g_entities.temp_sprite.varB = 0;
         g_entities.temp_sprite.time = 0;
         g_entities.temp_sprite.think = &CVort3_think_vortimom_shoot;
@@ -420,15 +420,15 @@ void CVort3_think_vortimom_walk() {
     blocking = CVort_compute_sprite_delta();
 
     if (!(blocking & 2)) {
-        g_entities.temp_sprite.posY = currPosY;
-        g_entities.temp_sprite.velX = -g_entities.temp_sprite.velX;
-        g_entities.temp_sprite.posX += (g_entities.temp_sprite.velX << 1);
+        g_entities.temp_sprite.pos_y = currPosY;
+        g_entities.temp_sprite.vel_x = -g_entities.temp_sprite.vel_x;
+        g_entities.temp_sprite.pos_x += (g_entities.temp_sprite.vel_x << 1);
     }
     if (blocking & 4) {
-        g_entities.temp_sprite.velX = -50;
+        g_entities.temp_sprite.vel_x = -50;
     }
     if (blocking & 1) {
-        g_entities.temp_sprite.velX = 50;
+        g_entities.temp_sprite.vel_x = 50;
     }
 }
 
@@ -446,34 +446,34 @@ void CVort3_think_vortimom_shoot() {
         g_entities.temp_sprite.varB = 1;
         CVort_engine_setCurSound(0x26);
         if (g_entities.temp_sprite.varC < 0) {
-            CVort3_add_vortimomshot(g_entities.temp_sprite.posX, g_entities.temp_sprite.posY - 0x100, -150);
+            CVort3_add_vortimomshot(g_entities.temp_sprite.pos_x, g_entities.temp_sprite.pos_y - 0x100, -150);
         } else {
-            CVort3_add_vortimomshot(g_entities.temp_sprite.posX, g_entities.temp_sprite.posY - 0x100, 150);
+            CVort3_add_vortimomshot(g_entities.temp_sprite.pos_x, g_entities.temp_sprite.pos_y - 0x100, 150);
         }
     }
     if (g_entities.temp_sprite.time <= 50) {
         return;
     }
-    g_entities.temp_sprite.velX = g_entities.temp_sprite.varC;
+    g_entities.temp_sprite.vel_x = g_entities.temp_sprite.varC;
     g_entities.temp_sprite.think = &CVort3_think_vortimom_walk;
 }
 
-void CVort3_add_vortimomshot(int32_t posX, int32_t posY, int16_t velocity) {
+void CVort3_add_vortimomshot(int32_t pos_x, int32_t pos_y, int16_t velocity) {
     uint16_t sprIndex;
 
     sprIndex = CVort_add_sprite();
     g_entities.sprites[sprIndex].type_ = CVort3_obj_enemyshot;
-    g_entities.sprites[sprIndex].posX = posX;
-    g_entities.sprites[sprIndex].posY = posY + 0xD00;
+    g_entities.sprites[sprIndex].pos_x = pos_x;
+    g_entities.sprites[sprIndex].pos_y = pos_y + 0xD00;
     g_entities.sprites[sprIndex].think = &CVort3_think_vortimomshot;
-    g_entities.sprites[sprIndex].velX = velocity;
+    g_entities.sprites[sprIndex].vel_x = velocity;
     g_entities.sprites[sprIndex].contact = &CVort3_contact_vortimomshot;
 
     // TODO: Complete!
     if (velocity >= 0) {
         // Yes, initially time == frame!
         g_entities.sprites[sprIndex].time = g_entities.sprites[sprIndex].frame = CVort3_spr_momfirer1;
-        if (!TILEINFO_REdge[map_data_tiles[((posY >> 12) + 1) * map_width_T + (posX >> 12) + 1]])
+        if (!TILEINFO_REdge[map_data_tiles[((pos_y >> 12) + 1) * map_width_tile + (pos_x >> 12) + 1]])
             return;
         CVort_engine_setCurSound(0x25);
         g_entities.sprites[sprIndex].type_ = CVort3_obj_zapzot;
@@ -487,7 +487,7 @@ void CVort3_add_vortimomshot(int32_t posX, int32_t posY, int16_t velocity) {
     } else {
         // Again, initially time == frame!
         g_entities.sprites[sprIndex].time = g_entities.sprites[sprIndex].frame = CVort3_spr_momfirel1;
-        if (!TILEINFO_LEdge[map_data_tiles[((posY >> 12) + 1) * map_width_T + (posX >> 12)]])
+        if (!TILEINFO_LEdge[map_data_tiles[((pos_y >> 12) + 1) * map_width_tile + (pos_x >> 12)]])
             return;
         CVort_engine_setCurSound(0x25);
         g_entities.sprites[sprIndex].type_ = CVort3_obj_zapzot;
@@ -550,15 +550,15 @@ void CVort3_contact_vortimom(Sprite_T *vortimom, Sprite_T *contacted) {
 void CVort3_think_meep_walk() {
     uint16_t blocking;
 
-    if (g_entities.temp_sprite.velX > 0) {
+    if (g_entities.temp_sprite.vel_x > 0) {
         g_entities.temp_sprite.frame = CVort3_spr_meepr1;
     } else {
         g_entities.temp_sprite.frame = CVort3_spr_meepl1;
     }
     g_entities.temp_sprite.frame += ((CVort_ptr_engine_getTicks() >> 4) & 1);
     if (CVort_get_random() < g_game.sprite_sync) {
-        g_entities.temp_sprite.varC = g_entities.temp_sprite.velX; 
-        g_entities.temp_sprite.velX = 0;
+        g_entities.temp_sprite.varC = g_entities.temp_sprite.vel_x; 
+        g_entities.temp_sprite.vel_x = 0;
         g_entities.temp_sprite.varB = 0;
         g_entities.temp_sprite.time = 0;
         g_entities.temp_sprite.think = &CVort3_think_meep_shoot;
@@ -567,17 +567,17 @@ void CVort3_think_meep_walk() {
     blocking = CVort_compute_sprite_delta();
     // Do NOT fix! (An apparent vanilla bug)
     if (!(blocking & 2)) {
-        g_entities.temp_sprite.varC = g_entities.temp_sprite.velX; 
-        g_entities.temp_sprite.velX = 0;
+        g_entities.temp_sprite.varC = g_entities.temp_sprite.vel_x; 
+        g_entities.temp_sprite.vel_x = 0;
         g_entities.temp_sprite.varB = 0;
         g_entities.temp_sprite.time = 0;
         g_entities.temp_sprite.think = &CVort3_think_meep_shoot;
     }
     if (blocking & 4) {
-        g_entities.temp_sprite.velX = -65;
+        g_entities.temp_sprite.vel_x = -65;
     }
     if (blocking & 1) {
-        g_entities.temp_sprite.velX = 65;
+        g_entities.temp_sprite.vel_x = 65;
     }
 }
 
@@ -596,23 +596,23 @@ void CVort3_think_meep_shoot() {
         CVort_engine_setCurSound(0x2B);
         shotIndex = CVort_add_sprite();
         if (g_entities.temp_sprite.varC < 0) {
-            g_entities.sprites[shotIndex].posX = g_entities.temp_sprite.posX;
+            g_entities.sprites[shotIndex].pos_x = g_entities.temp_sprite.pos_x;
             // Yes, again time should be the same as the frame here!
             g_entities.sprites[shotIndex].time = g_entities.sprites[shotIndex].frame = CVort3_spr_meepwavel1;
-            g_entities.sprites[shotIndex].velX = -200;
+            g_entities.sprites[shotIndex].vel_x = -200;
         } else {
-            g_entities.sprites[shotIndex].posX = g_entities.temp_sprite.posX + 0x1000;
-            g_entities.sprites[shotIndex].velX = 200;
+            g_entities.sprites[shotIndex].pos_x = g_entities.temp_sprite.pos_x + 0x1000;
+            g_entities.sprites[shotIndex].vel_x = 200;
             g_entities.sprites[shotIndex].time = g_entities.sprites[shotIndex].frame = CVort3_spr_meepwaver1;
         }
-        g_entities.sprites[shotIndex].posY = g_entities.temp_sprite.posY + 0x400;
+        g_entities.sprites[shotIndex].pos_y = g_entities.temp_sprite.pos_y + 0x400;
         g_entities.sprites[shotIndex].think = &CVort3_think_meepshot;
         g_entities.sprites[shotIndex].contact = &CVort_think_contact_nop;
         g_entities.sprites[shotIndex].type_ = CVort3_obj_meepshot;
     }
     if (g_entities.temp_sprite.time <= 80)
         return;
-    g_entities.temp_sprite.velX = g_entities.temp_sprite.varC;
+    g_entities.temp_sprite.vel_x = g_entities.temp_sprite.varC;
     g_entities.temp_sprite.think = &CVort3_think_meep_walk;
 }
 
@@ -633,32 +633,32 @@ void CVort3_contact_meep(Sprite_T *meep, Sprite_T *contacted) {
 
 void CVort3_think_meepshot() {
     g_entities.temp_sprite.frame = g_entities.temp_sprite.time + ((CVort_ptr_engine_getTicks() >> 3) & 1);
-    g_entities.temp_sprite.delX = g_entities.temp_sprite.velX * g_game.sprite_sync;
+    g_entities.temp_sprite.del_x = g_entities.temp_sprite.vel_x * g_game.sprite_sync;
 }
 
 void CVort3_think_vortininja_stand() {
     int32_t yPosDiff;
-    if (g_entities.temp_sprite.posX < g_entities.sprites[0].posX) {
-        g_entities.temp_sprite.velX = 250;
+    if (g_entities.temp_sprite.pos_x < g_entities.sprites[0].pos_x) {
+        g_entities.temp_sprite.vel_x = 250;
         g_entities.temp_sprite.frame = CVort3_spr_ninjar1;
     } else {
-        g_entities.temp_sprite.velX = -250;
+        g_entities.temp_sprite.vel_x = -250;
         g_entities.temp_sprite.frame = CVort3_spr_ninjal1;
     }
     g_entities.temp_sprite.frame += (CVort_ptr_engine_getTicks() >> 5) & 1;
-    yPosDiff = g_entities.sprites[0].posY - g_entities.temp_sprite.posY;
+    yPosDiff = g_entities.sprites[0].pos_y - g_entities.temp_sprite.pos_y;
     if ((yPosDiff > 20480) || (yPosDiff < -20480)) {
         return;
     }
     if (CVort_get_random() >= g_game.sprite_sync * 3) {
         return;
     }
-   g_entities.temp_sprite.velY = -CVort_calc_jump_height(350);
+   g_entities.temp_sprite.vel_y = -CVort_calc_jump_height(350);
    g_entities.temp_sprite.think = &CVort3_think_vortininja_jump;
 }
 
 void CVort3_think_vortininja_jump() {
-    if (g_entities.temp_sprite.velX > 0) {
+    if (g_entities.temp_sprite.vel_x > 0) {
         g_entities.temp_sprite.frame = CVort3_spr_ninjajumpr;
     } else {
         g_entities.temp_sprite.frame = CVort3_spr_ninjajumpl;
@@ -686,19 +686,19 @@ void CVort3_contact_vortininja(Sprite_T *vortininja, Sprite_T *contacted) {
 }
 
 void CVort3_think_foob_walk() {
-    int16_t currTileX, currTileY, blocking;
-    if (g_entities.temp_sprite.velX > 0) {
+    int16_t curr_tile_x, curr_tile_y, blocking;
+    if (g_entities.temp_sprite.vel_x > 0) {
         g_entities.temp_sprite.frame = CVort3_spr_foobr1;
     } else {
         g_entities.temp_sprite.frame = CVort3_spr_foobl1;
     }
     g_entities.temp_sprite.frame += ((CVort_ptr_engine_getTicks() >> 5) & 1);
-    currTileX = g_entities.temp_sprite.posX >> 12;
-    currTileY = g_entities.temp_sprite.posY >> 12;
-    if ((currTileX > scrollX_T) && (currTileY > scrollY_T)
-        && (scrollX_T + ENGINE_VIEWPORT_MAX_Y_TILE > currTileX)) {
+    curr_tile_x = g_entities.temp_sprite.pos_x >> 12;
+    curr_tile_y = g_entities.temp_sprite.pos_y >> 12;
+    if ((curr_tile_x > scroll_x_tile) && (curr_tile_y > scroll_y_tile)
+        && (scroll_x_tile + ENGINE_VIEWPORT_MAX_Y_TILE > curr_tile_x)) {
         int16_t currRand = (CVort_get_random() < (g_game.sprite_sync << 1)) ? 1 : 0,
-                secondQuery = (scrollY_T + ENGINE_VIEWPORT_HEIGHT_TILES > currTileY) ? 1 : 0;
+                secondQuery = (scroll_y_tile + ENGINE_VIEWPORT_HEIGHT_TILES > curr_tile_y) ? 1 : 0;
         if (currRand & secondQuery) {
             g_entities.temp_sprite.time = 0;
             g_entities.temp_sprite.think = &CVort3_think_foob_scared;
@@ -709,16 +709,16 @@ void CVort3_think_foob_walk() {
     blocking = CVort_compute_sprite_delta();
     // Do NOT fix! (An apparent vanilla bug)
     if (blocking & 4) {
-        g_entities.temp_sprite.velX = -50;
+        g_entities.temp_sprite.vel_x = -50;
     }
     if (blocking & 1) {
-        g_entities.temp_sprite.velX = 50;
+        g_entities.temp_sprite.vel_x = 50;
     }
 }
 
 void CVort3_think_foob_run() {
     int16_t blocking;
-    if (g_entities.temp_sprite.velX > 0) {
+    if (g_entities.temp_sprite.vel_x > 0) {
         g_entities.temp_sprite.frame = CVort3_spr_foobr1;
     } else {
         g_entities.temp_sprite.frame = CVort3_spr_foobl1;
@@ -728,10 +728,10 @@ void CVort3_think_foob_run() {
     blocking = CVort_compute_sprite_delta();
     // The foob is now "chasing" into a wall
     if (blocking & 1) {
-        g_entities.temp_sprite.velX = -1;
+        g_entities.temp_sprite.vel_x = -1;
     }
     if (blocking & 4) {
-        g_entities.temp_sprite.velX = 1;
+        g_entities.temp_sprite.vel_x = 1;
     }
 }
 
@@ -740,10 +740,10 @@ void CVort3_think_foob_scared() {
     g_entities.temp_sprite.time += g_game.sprite_sync;
     if (g_entities.temp_sprite.time <= 24)
         return;
-    if (g_entities.temp_sprite.posX > g_entities.sprites[0].posX) {
-        g_entities.temp_sprite.velX = 250;
+    if (g_entities.temp_sprite.pos_x > g_entities.sprites[0].pos_x) {
+        g_entities.temp_sprite.vel_x = 250;
     } else {
-        g_entities.temp_sprite.velX = -250;
+        g_entities.temp_sprite.vel_x = -250;
     }
     g_entities.temp_sprite.think = &CVort3_think_foob_run;
 }
@@ -766,32 +766,32 @@ void CVort3_think_jack() {
     g_entities.temp_sprite.frame = ((CVort_ptr_engine_getTicks() >> 3) & 3) + CVort3_spr_jack1;
     blocking = CVort_compute_sprite_delta();
     if (blocking & 4) {
-        g_entities.temp_sprite.velX = -400;
+        g_entities.temp_sprite.vel_x = -400;
     }
     if (blocking & 1) {
-        g_entities.temp_sprite.velX = 400;
+        g_entities.temp_sprite.vel_x = 400;
     }
     if (blocking & 2) {
-        g_entities.temp_sprite.velY = -400;
+        g_entities.temp_sprite.vel_y = -400;
     }
     if (blocking & 8) {
-        g_entities.temp_sprite.velY = 400;
+        g_entities.temp_sprite.vel_y = 400;
     }
 }
 
 void CVort3_think_ball() {
     int16_t blocking = CVort_compute_sprite_delta();
     if (blocking & 4) {
-        g_entities.temp_sprite.velX = -400;
+        g_entities.temp_sprite.vel_x = -400;
     }
     if (blocking & 1) {
-        g_entities.temp_sprite.velX = 400;
+        g_entities.temp_sprite.vel_x = 400;
     }
     if (blocking & 2) {
-        g_entities.temp_sprite.velY = -400;
+        g_entities.temp_sprite.vel_y = -400;
     }
     if (blocking & 8) {
-        g_entities.temp_sprite.velY = 400;
+        g_entities.temp_sprite.vel_y = 400;
     }
 }
 
@@ -808,23 +808,23 @@ void CVort3_think_platform_move() {
         } else /*if (blocking & 4)*/ {
             g_entities.temp_sprite.varB = -75;
         }
-        g_entities.temp_sprite.velX = g_entities.temp_sprite.varC = g_entities.temp_sprite.time = 0;
+        g_entities.temp_sprite.vel_x = g_entities.temp_sprite.varC = g_entities.temp_sprite.time = 0;
         g_entities.temp_sprite.think = &CVort3_think_platform_turn;
     }
     if (blocking & 8) {
         g_entities.temp_sprite.varC = 75;
-        g_entities.temp_sprite.velY = g_entities.temp_sprite.varB = g_entities.temp_sprite.time = 0;
+        g_entities.temp_sprite.vel_y = g_entities.temp_sprite.varB = g_entities.temp_sprite.time = 0;
         g_entities.temp_sprite.think = &CVort3_think_platform_turn;
     } else if (blocking & 2) {
-        g_entities.temp_sprite.velY = -75; // A quick bump
+        g_entities.temp_sprite.vel_y = -75; // A quick bump
     }
 }
 
 void CVort3_think_platform_turn() {
 
     if ((g_entities.temp_sprite.time += g_game.sprite_sync) > 75) {
-        g_entities.temp_sprite.velX = g_entities.temp_sprite.varB;
-        g_entities.temp_sprite.velY = g_entities.temp_sprite.varC;
+        g_entities.temp_sprite.vel_x = g_entities.temp_sprite.varB;
+        g_entities.temp_sprite.vel_y = g_entities.temp_sprite.varC;
         g_entities.temp_sprite.think = &CVort3_think_platform_move;
     }
 }
@@ -856,9 +856,9 @@ void CVort3_think_enemygun_right(Body_T * enemygun) {
 
     sprIndex = CVort_add_sprite();
     g_entities.sprites[sprIndex].frame = CVort3_spr_tankshot;
-    g_entities.sprites[sprIndex].velX = 400;
-    g_entities.sprites[sprIndex].posX = enemygun->tile_x;
-    g_entities.sprites[sprIndex].posY = enemygun->tile_y + 0x300;
+    g_entities.sprites[sprIndex].vel_x = 400;
+    g_entities.sprites[sprIndex].pos_x = enemygun->tile_x;
+    g_entities.sprites[sprIndex].pos_y = enemygun->tile_y + 0x300;
     g_entities.sprites[sprIndex].think = &CVort3_think_enemyshot;
     g_entities.sprites[sprIndex].contact = &CVort_think_contact_nop;
     g_entities.sprites[sprIndex].type_ = CVort3_obj_enemyshot;
@@ -876,9 +876,9 @@ void CVort3_think_enemygun_down(Body_T * enemygun) {
 
     sprIndex = CVort_add_sprite();
     g_entities.sprites[sprIndex].frame = CVort3_spr_tankshotv;
-    g_entities.sprites[sprIndex].velY = 400;
-    g_entities.sprites[sprIndex].posX = enemygun->tile_x + 0x400;
-    g_entities.sprites[sprIndex].posY = enemygun->tile_y;
+    g_entities.sprites[sprIndex].vel_y = 400;
+    g_entities.sprites[sprIndex].pos_x = enemygun->tile_x + 0x400;
+    g_entities.sprites[sprIndex].pos_y = enemygun->tile_y;
     g_entities.sprites[sprIndex].think = &CVort3_think_enemyshot;
     g_entities.sprites[sprIndex].contact = &CVort_think_contact_nop;
     g_entities.sprites[sprIndex].type_ = CVort3_obj_enemyshot;
@@ -948,8 +948,8 @@ void CVort3_destory_mangling_tile(int16_t tileX, int16_t tileY, int16_t tileId) 
     spriteIndex = CVort_add_sprite();
     g_entities.sprites[spriteIndex].think = &CVort_think_zapzot;
     g_entities.sprites[spriteIndex].type_ = CVort3_obj_dead; // Yeah, NOT CVort3_obj_zapzot
-    g_entities.sprites[spriteIndex].posX = tileX << 12;
-    g_entities.sprites[spriteIndex].posY = tileY << 12;
+    g_entities.sprites[spriteIndex].pos_x = tileX << 12;
+    g_entities.sprites[spriteIndex].pos_y = tileY << 12;
     g_entities.sprites[spriteIndex].time = 0;
     g_entities.sprites[spriteIndex].contact = &CVort_think_contact_nop;
     if (CVort_get_random() > 0x80) {
@@ -957,7 +957,7 @@ void CVort3_destory_mangling_tile(int16_t tileX, int16_t tileY, int16_t tileId) 
     } else {
         g_entities.sprites[spriteIndex].frame = CVort3_spr_shotsplashl;
     }
-    map_data_tiles[tileY * map_width_T + tileX] = tileId;
+    map_data_tiles[tileY * map_width_tile + tileX] = tileId;
 }
 
 void CVort3_think_mangling_arm_destruct(Body_T* body) {
@@ -970,15 +970,15 @@ void CVort3_think_mangling_arm_destruct(Body_T* body) {
         body->type_ = 0;
         return;
     }
-    int16_t currTileY = body->tile_y & 0xFF, currTileX;
-    for (currTileX = 5; currTileX <= 7; currTileX++) {
-        if (map_data_tiles[currTileY * map_width_T + currTileX] != 0xA9) {
-            CVort3_destory_mangling_tile(currTileX, currTileY, 0xA9);
+    int16_t curr_tile_y = body->tile_y & 0xFF, curr_tile_x;
+    for (curr_tile_x = 5; curr_tile_x <= 7; curr_tile_x++) {
+        if (map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x] != 0xA9) {
+            CVort3_destory_mangling_tile(curr_tile_x, curr_tile_y, 0xA9);
         }
     }
-    for (currTileX = 17; currTileX <= 19; currTileX++) {
-        if (map_data_tiles[currTileY * map_width_T + currTileX] != 0xA9) {
-            CVort3_destory_mangling_tile(currTileX, currTileY, 0xA9);
+    for (curr_tile_x = 17; curr_tile_x <= 19; curr_tile_x++) {
+        if (map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x] != 0xA9) {
+            CVort3_destory_mangling_tile(curr_tile_x, curr_tile_y, 0xA9);
         }
     }
 }
@@ -997,10 +997,10 @@ void CVort3_think_mangling_destruct(Body_T* body) {
     if (body->tile_y >= 19)
         return;
 
-    int16_t currTileY = body->tile_y & 0xFF, currTileX;
-    for (currTileX = 8; currTileX <= 16; currTileX++) {
-        if (map_data_tiles[currTileY * map_width_T + currTileX] != 0xA9) {
-            CVort3_destory_mangling_tile(currTileX, currTileY, 0xA9);
+    int16_t curr_tile_y = body->tile_y & 0xFF, curr_tile_x;
+    for (curr_tile_x = 8; curr_tile_x <= 16; curr_tile_x++) {
+        if (map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x] != 0xA9) {
+            CVort3_destory_mangling_tile(curr_tile_x, curr_tile_y, 0xA9);
         }
     }
 }
@@ -1008,96 +1008,96 @@ void CVort3_think_mangling_destruct(Body_T* body) {
 void CVort3_think_mangling_arm(Body_T *arm) {
     // WARNING: Each of the body's tile fields 32-bit long,
     // while we store truncated 16-bit forms of them!
-    int16_t currTileX = arm->tile_x & 0xFFFF, currTileY = arm->tile_y & 0xFFFF;
+    int16_t curr_tile_x = arm->tile_x & 0xFFFF, curr_tile_y = arm->tile_y & 0xFFFF;
     arm->field_C += g_game.sprite_sync;
     if (arm->field_C < arm->field_E) {
         return;
     }
     arm->field_C -= arm->field_E;
-    map_data_tiles[currTileY * map_width_T + currTileX] = 0xA9;
-    map_data_tiles[currTileY * map_width_T + currTileX - 1] = 0xA9;
-    map_data_tiles[(currTileY + 1) * map_width_T + currTileX - 1] = 0xA9;
-    map_data_tiles[(currTileY + 2) * map_width_T + currTileX - 1] = 0xA9;
-    map_data_tiles[currTileY * map_width_T + currTileX + 1] = 0xA9;
-    map_data_tiles[(currTileY + 1) * map_width_T + currTileX + 1] = 0xA9;
-    map_data_tiles[(currTileY + 2) * map_width_T + currTileX + 1] = 0xA9;
+    map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x] = 0xA9;
+    map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x - 1] = 0xA9;
+    map_data_tiles[(curr_tile_y + 1) * map_width_tile + curr_tile_x - 1] = 0xA9;
+    map_data_tiles[(curr_tile_y + 2) * map_width_tile + curr_tile_x - 1] = 0xA9;
+    map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x + 1] = 0xA9;
+    map_data_tiles[(curr_tile_y + 1) * map_width_tile + curr_tile_x + 1] = 0xA9;
+    map_data_tiles[(curr_tile_y + 2) * map_width_tile + curr_tile_x + 1] = 0xA9;
 
     if (arm->variant == -1) {
-        if (map_data_tiles[(currTileY - 1) * map_width_T + currTileX] != 0x255) {
+        if (map_data_tiles[(curr_tile_y - 1) * map_width_tile + curr_tile_x] != 0x255) {
             arm->variant = 1;
             arm->field_E = 15;
         } else {
-            currTileY--;
+            curr_tile_y--;
             arm->tile_y--;
         }
     } else {
-        if (map_data_tiles[(currTileY + 3) * map_width_T + currTileX] == 0x1D7) {
+        if (map_data_tiles[(curr_tile_y + 3) * map_width_tile + curr_tile_x] == 0x1D7) {
             arm->variant = -1;
             arm->field_E = 40;
         } else {
-            map_data_tiles[currTileY * map_width_T + currTileX] = 0x255;
-            currTileY++;
+            map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x] = 0x255;
+            curr_tile_y++;
             arm->tile_y++;
         }
     }
-    map_data_tiles[currTileY * map_width_T + currTileX] = 0x255;
-    map_data_tiles[currTileY * map_width_T + currTileX - 1] = 0x26A;
-    map_data_tiles[(currTileY + 1) * map_width_T + currTileX - 1] = 0x26C;
-    map_data_tiles[(currTileY + 2) * map_width_T + currTileX - 1] = 0x26B;
-    map_data_tiles[currTileY * map_width_T + currTileX + 1] = 0x26A;
-    map_data_tiles[(currTileY + 1) * map_width_T + currTileX + 1] = 0x26C;
-    map_data_tiles[(currTileY + 2) * map_width_T + currTileX + 1] = 0x26B;
+    map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x] = 0x255;
+    map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x - 1] = 0x26A;
+    map_data_tiles[(curr_tile_y + 1) * map_width_tile + curr_tile_x - 1] = 0x26C;
+    map_data_tiles[(curr_tile_y + 2) * map_width_tile + curr_tile_x - 1] = 0x26B;
+    map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x + 1] = 0x26A;
+    map_data_tiles[(curr_tile_y + 1) * map_width_tile + curr_tile_x + 1] = 0x26C;
+    map_data_tiles[(curr_tile_y + 2) * map_width_tile + curr_tile_x + 1] = 0x26B;
 }
 
 void CVort3_think_mangling_leg_moving(Body_T *leg) {
     // WARNING: Each of the body's tile fields 32-bit long,
     // while we store truncated 16-bit forms of them!
-    int16_t currTileX = leg->tile_x & 0xFFFF, currTileY = leg->tile_y & 0xFFFF;
+    int16_t curr_tile_x = leg->tile_x & 0xFFFF, curr_tile_y = leg->tile_y & 0xFFFF;
     leg->field_C += g_game.sprite_sync;
     if (leg->field_C < 35) {
         return;
     }
     leg->field_C -= 35;
-    map_data_tiles[currTileY * map_width_T + currTileX] = 0xA9;
+    map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x] = 0xA9;
 
     if (leg->field_E == -1) {
-        map_data_tiles[currTileY * map_width_T + currTileX - 1] = 0xA9;
-        map_data_tiles[currTileY * map_width_T + currTileX - 2] = 0xA9;
-        map_data_tiles[currTileY * map_width_T + currTileX - 3] = 0xA9;
+        map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x - 1] = 0xA9;
+        map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x - 2] = 0xA9;
+        map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x - 3] = 0xA9;
     } else {
-        map_data_tiles[currTileY * map_width_T + currTileX + 1] = 0xA9;
-        map_data_tiles[currTileY * map_width_T + currTileX + 2] = 0xA9;
-        map_data_tiles[currTileY * map_width_T + currTileX + 3] = 0xA9;
+        map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x + 1] = 0xA9;
+        map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x + 2] = 0xA9;
+        map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x + 3] = 0xA9;
     }
     if (leg->variant == -1) {
-        if (map_data_tiles[(currTileY - 1) * map_width_T + currTileX] != 0x255) {
+        if (map_data_tiles[(curr_tile_y - 1) * map_width_tile + curr_tile_x] != 0x255) {
             leg->variant = 1;
         } else {
-            currTileY--;
+            curr_tile_y--;
             leg->tile_y--;
         }
     } else {
-        if (map_data_tiles[(currTileY + 1) * map_width_T + currTileX] == 0x1AE) {
+        if (map_data_tiles[(curr_tile_y + 1) * map_width_tile + curr_tile_x] == 0x1AE) {
             leg->variant = -1;
             CVort_engine_setCurSound(0x2D);
             leg->think_ptr = &CVort3_think_mangling_leg_awaiting;
             leg->field_C = 0;
         } else {
-            map_data_tiles[currTileY * map_width_T + currTileX] = 0x255;
-            currTileY++;
+            map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x] = 0x255;
+            curr_tile_y++;
             leg->tile_y++;
         }
     }
     if (leg->field_E == -1) {
-        map_data_tiles[currTileY * map_width_T + currTileX] = 0x26E;
-        map_data_tiles[currTileY * map_width_T + currTileX - 1] = 0x26F;
-        map_data_tiles[currTileY * map_width_T + currTileX - 2] = 0x26F;
-        map_data_tiles[currTileY * map_width_T + currTileX - 3] = 0x26D;
+        map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x] = 0x26E;
+        map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x - 1] = 0x26F;
+        map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x - 2] = 0x26F;
+        map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x - 3] = 0x26D;
     } else {
-        map_data_tiles[currTileY * map_width_T + currTileX] = 0x26D;
-        map_data_tiles[currTileY * map_width_T + currTileX + 1] = 0x26F;
-        map_data_tiles[currTileY * map_width_T + currTileX + 2] = 0x26F;
-        map_data_tiles[currTileY * map_width_T + currTileX + 3] = 0x26E;
+        map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x] = 0x26D;
+        map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x + 1] = 0x26F;
+        map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x + 2] = 0x26F;
+        map_data_tiles[curr_tile_y * map_width_tile + curr_tile_x + 3] = 0x26E;
     }
 }
 
@@ -1335,7 +1335,7 @@ void CVort3_blink_camera_flash() {
 
 void CVort3_draw_win() {
     CVort_load_level_data(81);
-    scrollX = scrollY = 0x2000;
+    scroll_x = scroll_y = 0x2000;
     CVort_engine_syncDrawing();
     CVort_engine_clearOverlay();
     CVort_engine_drawSpriteAt(0xE000, 0x6000, 0x43);
@@ -1368,47 +1368,47 @@ void CVort3_draw_win() {
     CVort3_draw_string_win("\"Thank you!\"\n");
     CVort_engine_delay(120);
 
-    map_data_tiles[5 * map_width_T + 0x13] = 0x3A;
+    map_data_tiles[5 * map_width_tile + 0x13] = 0x3A;
     CVort_engine_drawScreen();
     CVort3_blink_camera_flash();
-    map_data_tiles[5 * map_width_T + 0x13] = 0x48;
+    map_data_tiles[5 * map_width_tile + 0x13] = 0x48;
     CVort_engine_drawScreen();
     CVort_engine_delay(20);
-    map_data_tiles[(map_width_T << 3) + 3] = 0x3C;
+    map_data_tiles[(map_width_tile << 3) + 3] = 0x3C;
     CVort_engine_drawScreen();
     CVort3_blink_camera_flash();
-    map_data_tiles[(map_width_T << 3) + 3] = 0x3D;
+    map_data_tiles[(map_width_tile << 3) + 3] = 0x3D;
     CVort_engine_drawScreen();
     CVort_engine_delay(10);
-    map_data_tiles[(map_width_T << 3) + 5] = 0x3C;
+    map_data_tiles[(map_width_tile << 3) + 5] = 0x3C;
     CVort_engine_drawScreen();
     CVort3_blink_camera_flash();
-    map_data_tiles[(map_width_T << 3) + 5] = 0x3D;
+    map_data_tiles[(map_width_tile << 3) + 5] = 0x3D;
     CVort_engine_drawScreen();
     CVort_engine_delay(5);
-    map_data_tiles[5 * map_width_T + 0x14] = 0x3A;
+    map_data_tiles[5 * map_width_tile + 0x14] = 0x3A;
     CVort_engine_drawScreen();
     CVort3_blink_camera_flash();
-    map_data_tiles[5 * map_width_T + 0x14] = 0x48;
+    map_data_tiles[5 * map_width_tile + 0x14] = 0x48;
     CVort_engine_drawScreen();
     CVort_engine_delay(10);
-    map_data_tiles[(map_width_T << 3) + 8] = 0x3C;
+    map_data_tiles[(map_width_tile << 3) + 8] = 0x3C;
     CVort_engine_drawScreen();
     CVort3_blink_camera_flash();
-    map_data_tiles[(map_width_T << 3) + 8] = 0x3D;
+    map_data_tiles[(map_width_tile << 3) + 8] = 0x3D;
     CVort_engine_drawScreen();
     CVort_engine_delay(15);
 
     CVort_engine_delay(120);
     CVort_fade_out();
-    scrollX &= 0x0FFFF000;
+    scroll_x &= 0x0FFFF000;
     CVort_engine_drawScreen();
     // FIXME? This is a LOWERCASE file name!!! (which IS the vanilla way...)
     CVort_engine_showImageFile("finale.ck3");
     //
     CVort_fade_in();
     CVort_load_level_data(81);
-    scrollX = scrollY = 0x2000;
+    scroll_x = scroll_y = 0x2000;
     CVort_engine_delay(400);
     CVort_draw_box2(18, 20, 29, 24);
     CVort3_draw_string_win("The End...\n For now!\n");
@@ -1416,7 +1416,7 @@ void CVort3_draw_win() {
     CVort_draw_string("    ");
     CVort_clear_keys();
     CVort_read_char_with_echo();
-    scrollX &= 0xFFFFF000;
+    scroll_x &= 0xFFFFF000;
     CVort_engine_clearOverlay();
     CVort_engine_drawScreen();
     CVort_engine_drawScreen();
@@ -1468,13 +1468,13 @@ void CVort3_show_ordering(uint16_t isTimed) {
 
         // Draw Keen
         if (foobTicker == 0 || foobTicker > 10) {
-            CVort_engine_drawSpriteAt(scrollX + 0x800, scrollY + 0xB000, CVort3_spr_keenwalkr1);
+            CVort_engine_drawSpriteAt(scroll_x + 0x800, scroll_y + 0xB000, CVort3_spr_keenwalkr1);
 
         } else {
             if (foobVelX > 0) {
-                CVort_engine_drawSpriteAt(scrollX + 0x800, scrollY + 0xB000, CVort3_spr_keenwalkr1);
+                CVort_engine_drawSpriteAt(scroll_x + 0x800, scroll_y + 0xB000, CVort3_spr_keenwalkr1);
             } else {
-                CVort_engine_drawSpriteAt(scrollX + 0x800, scrollY + 0xB000, CVort3_spr_keenshootr);
+                CVort_engine_drawSpriteAt(scroll_x + 0x800, scroll_y + 0xB000, CVort3_spr_keenshootr);
             }
         }
 
@@ -1490,10 +1490,10 @@ void CVort3_show_ordering(uint16_t isTimed) {
         if (foobTicker) {
             foobX += foobVelX;
             if (foobVelX > 0) {
-                CVort_engine_drawSpriteAt(scrollX + foobX, scrollY + 0xB800, 0x5F + (foobFrame & 2) / 2);
+                CVort_engine_drawSpriteAt(scroll_x + foobX, scroll_y + 0xB800, 0x5F + (foobFrame & 2) / 2);
 
             } else {
-                CVort_engine_drawSpriteAt(scrollX + foobX, scrollY + 0xB800, 0x5D + (foobFrame & 2) / 2);
+                CVort_engine_drawSpriteAt(scroll_x + foobX, scroll_y + 0xB800, 0x5D + (foobFrame & 2) / 2);
             }
 
             if (!--foobTicker) {
@@ -1504,13 +1504,13 @@ void CVort3_show_ordering(uint16_t isTimed) {
                     // Draw Foob freakout
                     CVort_engine_setCurSound(0x22);
                     CVort_engine_syncDrawing();
-                    CVort_engine_drawSpriteAt(scrollX + 0x800, scrollY + 0xB000, 0x14);
-                    CVort_engine_drawSpriteAt(scrollX + foobX, scrollY + 0xB800, 0x61);
+                    CVort_engine_drawSpriteAt(scroll_x + 0x800, scroll_y + 0xB000, 0x14);
+                    CVort_engine_drawSpriteAt(scroll_x + foobX, scroll_y + 0xB800, 0x61);
                     CVort_engine_drawScreen();
                     CVort_engine_drawScreen();
                     CVort_engine_syncDrawing();
-                    CVort_engine_drawSpriteAt(scrollX + 0x800, scrollY + 0xB000, 0x14);
-                    CVort_engine_drawSpriteAt(scrollX + foobX, scrollY + 0xB800, 0x62);
+                    CVort_engine_drawSpriteAt(scroll_x + 0x800, scroll_y + 0xB000, 0x14);
+                    CVort_engine_drawSpriteAt(scroll_x + foobX, scroll_y + 0xB800, 0x62);
                     CVort_engine_drawScreen();
                     CVort_engine_drawScreen();
 
@@ -1557,11 +1557,11 @@ void CVort3_draw_ordering_info() {
 }
 
 void CVort3_do_ordering() {
-    scrollX = 0x16000;
-    scrollY = 0x2000;
+    scroll_x = 0x16000;
+    scroll_y = 0x2000;
     // TODO: Is this a long shift left indeed?
-    scrollX_T = scrollX >> 12;
-    scrollY_T = scrollY >> 12;
+    scroll_x_tile = scroll_x >> 12;
+    scroll_y_tile = scroll_y >> 12;
     CVort_engine_clearOverlay();
     CVort_engine_syncDrawing();
     draw_func = &CVort3_draw_ordering_info;
@@ -1581,8 +1581,8 @@ void CVort3_draw_scores() {
 
     for (uint16_t currEntry = 0; currEntry < 7; currEntry++) {
         // FIXME: Are the correct "long divisions" done here?
-        var_2 = (scrollX / 0x1000) & 0xFFFF;
-        var_4 = (scrollY / 0x1000) & 0xFFFF;
+        var_2 = (scroll_x / 0x1000) & 0xFFFF;
+        var_4 = (scroll_y / 0x1000) & 0xFFFF;
         extra_var = currEntry % 4;
         cursorY = (currEntry << 1) + 8;
 
@@ -1663,7 +1663,7 @@ int16_t CVort3_worldmap_sprites(int16_t map_sprite_standing, Sprite_T* spritedra
         CVort_engine_setCurSound(CVort3_snd_teleport);
 
         for (di = 130; di < 134; di++) {
-            map_data_tiles[map_width_T * teleporters[si].destY + teleporters[si].destX] = di;
+            map_data_tiles[map_width_tile * teleporters[si].destY + teleporters[si].destX] = di;
             CVort_engine_syncDrawing();
 
             // Now we draw the messie while the teleporter is going
@@ -1673,27 +1673,27 @@ int16_t CVort3_worldmap_sprites(int16_t map_sprite_standing, Sprite_T* spritedra
         }
     }
 
-    map_data_tiles[map_width_T * teleporters[si].destY + teleporters[si].destX] = 0x86;
+    map_data_tiles[map_width_tile * teleporters[si].destY + teleporters[si].destX] = 0x86;
 
     si = map_sprite_standing & 0xF; // This is the "dest"
 
     // Move the screen
     if (teleporters[si].destX < 10)
-        scrollX = 0x2000;
+        scroll_x = 0x2000;
     else
-        scrollX = (teleporters[si].destX - 10) << 12;
+        scroll_x = (teleporters[si].destX - 10) << 12;
 
     if (teleporters[si].destY < 6)
-        scrollY = 0x2000;
+        scroll_y = 0x2000;
     else
-        scrollY = (teleporters[si].destY - 6) << 12;
+        scroll_y = (teleporters[si].destY - 6) << 12;
 
     // Now repeat the animation sequence for the destination teleporter
     for (var2 = 0; var2 < 2; var2++) {
         CVort_engine_setCurSound(CVort3_snd_teleport);
 
         for (di = 130; di < 134; di++) {
-            map_data_tiles[map_width_T * teleporters[si].destY + teleporters[si].destX] = di;
+            map_data_tiles[map_width_tile * teleporters[si].destY + teleporters[si].destX] = di;
             CVort_engine_syncDrawing();
 
             // Now we draw the messie while the teleporter is going
@@ -1704,9 +1704,9 @@ int16_t CVort3_worldmap_sprites(int16_t map_sprite_standing, Sprite_T* spritedra
     }
 
     // Finally, replace the destination teleporter tile and put keen there
-    map_data_tiles[map_width_T * teleporters[si].destY + teleporters[si].destX] = 0x86;
-    spritedraw->posX = teleporters[si].destX << 12;
-    spritedraw->posY = teleporters[si].destY << 12;
+    map_data_tiles[map_width_tile * teleporters[si].destY + teleporters[si].destX] = 0x86;
+    spritedraw->pos_x = teleporters[si].destX << 12;
+    spritedraw->pos_y = teleporters[si].destY << 12;
     return 1;
 }
 
@@ -1720,13 +1720,13 @@ void CVort3_do_messie(Sprite_T *keen) {
 
     if (messie_move_tics <= 8)
     {
-        messie_xpos += messie_delX;
-        messie_ypos += messie_delY;
+        messie_xpos += messie_del_x;
+        messie_ypos += messie_del_y;
     }
 
     // Update the messie frame
     for (si = 0; si < 9; si++)
-        if ((uint32_t) (messie_dir_h[si] << 8) == messie_delX && (uint32_t) (messie_dir_v[si] << 8) == messie_delY)
+        if ((uint32_t) (messie_dir_h[si] << 8) == messie_del_x && (uint32_t) (messie_dir_v[si] << 8) == messie_del_y)
             break;
     messie_frame = messie_mounted ? kessie_frames[si] : messie_frames[si];
 
@@ -1740,7 +1740,7 @@ void CVort3_do_messie(Sprite_T *keen) {
         for (si = var2 - 1; var2 + 2 > si; si++) {
             var8 = 0;
             for (di = var4 - 1; var4 + 2 > di; di++) {
-                var6 = map_data_sprites[di * map_width_T + si];
+                var6 = map_data_sprites[di * map_width_tile + si];
 
                 if (var6 != 0x2100 && var6 != 0x2000)
                     continue;
@@ -1752,18 +1752,18 @@ void CVort3_do_messie(Sprite_T *keen) {
                     continue;
 
                 if (si < var2)
-                    messie_delX = -0x200;
+                    messie_del_x = -0x200;
                 else if (si > var2)
-                    messie_delX = 0x200;
+                    messie_del_x = 0x200;
                 else
-                    messie_delX = 0;
+                    messie_del_x = 0;
 
                 if (di < var4)
-                    messie_delY = -0x200;
+                    messie_del_y = -0x200;
                 else if (di > var4)
-                    messie_delY = 0x200;
+                    messie_del_y = 0x200;
                 else
-                    messie_delY = 0;
+                    messie_del_y = 0;
 
                 messie_x_T = var2;
                 messie_y_T = var4;
@@ -1800,32 +1800,32 @@ messieUnmount:
         GameInput_T currInput = CVort_handle_ctrl(1);
 
         // If keen is on a shore tile, unmount the messie if there's controller input
-        if (map_data_sprites[((((messie_ypos / 0x1000) + messie_1_y[currInput.direction]) * map_width_T)&0xFFFF)+(messie_xpos / 0x1000) + messie_1_x[currInput.direction]] == 0x2200) {
+        if (map_data_sprites[((((messie_ypos / 0x1000) + messie_1_y[currInput.direction]) * map_width_tile)&0xFFFF)+(messie_xpos / 0x1000) + messie_1_x[currInput.direction]] == 0x2200) {
             messie_mounted = 0;
-            keen->posX = messie_xpos + (messie_1_x[currInput.direction] << 12);
-            keen->posY = messie_ypos + (messie_1_y[currInput.direction] << 12);
+            keen->pos_x = messie_xpos + (messie_1_x[currInput.direction] << 12);
+            keen->pos_y = messie_ypos + (messie_1_y[currInput.direction] << 12);
             messie_time_to_climb = 30;
         }
 
         // Now move the screen
-        if (messie_delX > 0 && messie_xpos - scrollX > 0xB000) {
-            scrollX += messie_delX;
-            if (scrollX > scrollX_max)
-                scrollX = scrollX_max;
-        } else if (messie_delX < 0 && messie_xpos - scrollX < 0x9000) {
-            scrollX += messie_delX;
-            if (scrollX < scrollX_min)
-                scrollX = scrollX_min;
+        if (messie_del_x > 0 && messie_xpos - scroll_x > 0xB000) {
+            scroll_x += messie_del_x;
+            if (scroll_x > scroll_x_max)
+                scroll_x = scroll_x_max;
+        } else if (messie_del_x < 0 && messie_xpos - scroll_x < 0x9000) {
+            scroll_x += messie_del_x;
+            if (scroll_x < scroll_x_min)
+                scroll_x = scroll_x_min;
         }
 
-        if (messie_delY > 0 && messie_ypos - scrollY > 0x7000) {
-            scrollY += messie_delY;
-            if (scrollY > scrollY_max)
-                scrollY = scrollY_max;
-        } else if (messie_delY < 0 && messie_ypos - scrollY < 0x3000) {
-            scrollY += messie_delY;
-            if (scrollY < scrollY_min)
-                scrollY = scrollY_min;
+        if (messie_del_y > 0 && messie_ypos - scroll_y > 0x7000) {
+            scroll_y += messie_del_y;
+            if (scroll_y > scroll_y_max)
+                scroll_y = scroll_y_max;
+        } else if (messie_del_y < 0 && messie_ypos - scroll_y < 0x3000) {
+            scroll_y += messie_del_y;
+            if (scroll_y < scroll_y_min)
+                scroll_y = scroll_y_min;
         }
     }
 }

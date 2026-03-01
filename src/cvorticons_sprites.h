@@ -6,9 +6,9 @@
 struct SpriteStruct {
     uint16_t type_;
     uint16_t active;
-    int32_t posX, posY;
-    int32_t boxX1, boxY1, boxX2, boxY2;
-    int16_t delX, delY, velX, velY;
+    int32_t pos_x, pos_y;
+    int32_t box_x1, box_y1, box_x2, box_y2;
+    int16_t del_x, del_y, vel_x, vel_y;
     int16_t health;
     uint16_t varA;
     uint16_t frame;

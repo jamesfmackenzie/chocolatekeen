@@ -76,8 +76,8 @@ void CVort_do_intro_and_menu() {
         if (g_game.reshow_scroll_up) // Uncomment this to replay scroll up upon demo restart
         {
             CVort_load_level_data(90); // FIXME: Again???
-            scrollX = 0x68000;
-            scrollY = 0x2000;
+            scroll_x = 0x68000;
+            scroll_y = 0x2000;
             CVort_engine_clearOverlay();
             CVort_engine_syncDrawing();
             CVort_engine_drawScreen();
@@ -92,7 +92,7 @@ void CVort_do_intro_and_menu() {
         //introTickCounter = 0xC0;
         introTickCounter = engine_arguments.extras.vorticonsDemoModeToggle ? 146 : 2400;
         introCurrScreen = 0;
-        scrollX = scrollY = 0x2000;
+        scroll_x = scroll_y = 0x2000;
         CVort_engine_clearOverlay();
         CVort_engine_syncDrawing();
         CVort_do_draw_mural();
@@ -138,7 +138,7 @@ void CVort_do_intro_and_menu() {
                     introTickCounter = 146;
                     CVort_engine_syncDrawing();
                     CVort_engine_drawScreen();
-                    scrollX = scrollY = 0x2000;
+                    scroll_x = scroll_y = 0x2000;
                     CVort_engine_clearOverlay();
                     CVort_do_draw_mural();
                     CVort_fade_in();
@@ -169,14 +169,14 @@ void CVort_do_intro_and_menu() {
                     CVort_fade_out();
                     switch (introCurrScreen) {
                         case 0:
-                            scrollX = 0x3F000;
-                            scrollY = 0x1C00;
+                            scroll_x = 0x3F000;
+                            scroll_y = 0x1C00;
                             CVort_do_about_us();
                             doHalt = false;
                             break;
                         case 1:
-                            scrollX = 0x54000;
-                            scrollY = 0x2000;
+                            scroll_x = 0x54000;
+                            scroll_y = 0x2000;
                             CVort_do_scores();
                             doHalt = false;
                             break;
@@ -202,7 +202,7 @@ void CVort_do_intro_and_menu() {
                         introCurrScreen++;
                         if (introCurrScreen == 4) {
                             introCurrScreen = 0;
-                            scrollX = scrollY = 0x2000;
+                            scroll_x = scroll_y = 0x2000;
                             CVort_engine_clearOverlay();
                             CVort_do_draw_mural();
                         }
@@ -214,7 +214,7 @@ void CVort_do_intro_and_menu() {
                 break;
         }
         g_game.intro_complete = 0;
-        if ((scrollX >> 16) || ((scrollX & 0xFFFF) != 0x2000))
+        if ((scroll_x >> 16) || ((scroll_x & 0xFFFF) != 0x2000))
             CVort_fade_out();
         //if (CVort_draw_title(introTickCounter))
         if (CVort_draw_title())
@@ -235,7 +235,7 @@ uint16_t CVort_draw_title() {
     int16_t loopVar, currCharOffset;
     GameInput_T input;
 loc_19297:
-    if ((scrollX >> 16) || ((scrollX & 0xFFFF) != 0x2000)) {
+    if ((scroll_x >> 16) || ((scroll_x & 0xFFFF) != 0x2000)) {
         CVort_do_start_menu();
         CVort_fade_in();
     } else
@@ -430,7 +430,7 @@ void CVort_draw_menu() {
 }
 
 void CVort_do_start_menu() {
-    scrollX = scrollY = 0x2000;
+    scroll_x = scroll_y = 0x2000;
     CVort_engine_clearOverlay();
     CVort_do_draw_mural();
     draw_func = &CVort_draw_menu;
@@ -455,14 +455,14 @@ void CVort_do_previews() {
     CVort_do_text_viewer(previews_txt, 0, 0x16);
     if (engine_gameVersion == GAMEVER_KEEN2 || engine_gameVersion == GAMEVER_KEEN3) {
 
-        scrollX = 0x54000;
+        scroll_x = 0x54000;
     }
 }
 
 void CVort_show_about_us() {
     GameInput_T input;
-    scrollX = 0x3F000;
-    scrollY = 0x1C00;
+    scroll_x = 0x3F000;
+    scroll_y = 0x1C00;
     CVort_engine_clearOverlay();
     CVort_engine_syncDrawing();
     CVort_do_about_us();
@@ -530,8 +530,8 @@ void CVort_do_about_us() {
 
 
 void CVort_do_scores() {
-    scrollX = 0x54000;
-    scrollY = 0x2000;
+    scroll_x = 0x54000;
+    scroll_y = 0x2000;
     CVort_engine_clearOverlay();
     CVort_engine_syncDrawing();
     draw_func = CVort_ptr_draw_scores; // NOT &CVort_ptr_draw_scores
@@ -603,8 +603,8 @@ void CVort_save_game() {
         break;
     } while (1);
 
-    keen_gp.screenX = wmap_scrollX;
-    keen_gp.screenY = wmap_scrollY;
+    keen_gp.screenX = wmap_scroll_x;
+    keen_gp.screenY = wmap_scroll_y;
     keen_gp.mapX = keen_wmap_x_pos;
     keen_gp.mapY = keen_wmap_y_pos;
 
@@ -720,7 +720,7 @@ uint16_t CVort_demo_toggle_prepare_to_record() {
 	g_game.demo_status = DEMO_OFF;
 	CVort_fade_out();
 	// HACK to force fade_in to the menu
-	scrollX = 0x1000;
+	scroll_x = 0x1000;
 	// Load menu level
 	CVort_load_level_data(90);
 	CVort_demo_toggle_reset_player_partial_state_after();
@@ -734,8 +734,8 @@ void CVort_demo_toggle_reset_player_partial_state_before() {
 	 * it is checked if the player is located somewhere. Problem is
 	 * that the player may have not yet been founded...
 	 */
-	g_entities.sprites[0].posX = 0;
-	g_entities.sprites[0].posY = 0;
+	g_entities.sprites[0].pos_x = 0;
+	g_entities.sprites[0].pos_y = 0;
 }
 
 void CVort_demo_toggle_reset_player_partial_state_after() {
@@ -759,8 +759,8 @@ void CVort_demo_toggle_reset_player_partial_state_after() {
 
 void CVort_do_story() {
     CVort_fade_out();
-    scrollX = 0x2A000;
-    scrollY = 0x2000;
+    scroll_x = 0x2A000;
+    scroll_y = 0x2000;
     CVort_engine_clearOverlay();
     CVort_engine_drawScreen();
     CVort_fade_in();
@@ -769,13 +769,13 @@ void CVort_do_story() {
 }
 
 void CVort_do_help() {
-    int32_t origScrollX = scrollX, origScrollY = scrollY;
+    int32_t origScrollX = scroll_x, origScrollY = scroll_y;
     // Move to some other random place...?
-    scrollX &= 0xFFFFF000;
-    scrollY &= 0xFFFFF000;
+    scroll_x &= 0xFFFFF000;
+    scroll_y &= 0xFFFFF000;
     CVort_do_text_viewer(help_text, 1, 0x14);
-    scrollX = origScrollX;
-    scrollY = origScrollY;
+    scroll_x = origScrollX;
+    scroll_y = origScrollY;
 }
 
 void CVort_draw_string_sel(uint16_t type, uint16_t x_pos, uint16_t y_pos, const char *str) {
@@ -916,8 +916,8 @@ void CVort_show_logo_text() {
 }
 
 void CVort_scroll_up_logo() {
-    scrollX = 0x68000;
-    scrollY = 0x2000;
+    scroll_x = 0x68000;
+    scroll_y = 0x2000;
     uint16_t bmpHeight = 200, apogee = 0, currState = 0;
     CVort_engine_clearOverlay();
     CVort_clear_keys();

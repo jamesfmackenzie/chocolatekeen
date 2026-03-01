@@ -264,7 +264,7 @@
     void CVort1_add_sprite_chain(int16_t tileX, int16_t tileY);
     void CVort1_add_body_cannon(int16_t tileX, int16_t tileY, int16_t variant);
     // Note the various differing formats here!
-    void CVort1_add_sprite_cube(int32_t posX, int32_t posY, int16_t cannon_type);
+    void CVort1_add_sprite_cube(int32_t pos_x, int32_t pos_y, int16_t cannon_type);
 
     void CVort1_think_keen_frozen();
     /*virtual*/ void CVort1_contact_keen(Sprite_T *keen, Sprite_T * contacted);

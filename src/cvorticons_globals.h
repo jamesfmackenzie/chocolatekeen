@@ -193,8 +193,8 @@ typedef struct {
     void CVort_engine_drawTile(uint16_t x, uint16_t y, uint16_t num);
     void CVort_engine_drawBitmap(uint16_t x, uint16_t y, uint16_t num);
 
-    uint16_t CVort_engine_drawSpriteAt(int32_t posX, int32_t posY, uint16_t frame);
-    uint16_t CVort_engine_drawTileAt(int32_t posX, int32_t posY, uint16_t tilenum);
+    uint16_t CVort_engine_drawSpriteAt(int32_t pos_x, int32_t pos_y, uint16_t frame);
+    uint16_t CVort_engine_drawTileAt(int32_t pos_x, int32_t pos_y, uint16_t tilenum);
 
     void CVort_engine_clearOverlay();
     void CVort_engine_syncDrawing();
@@ -285,7 +285,7 @@ typedef struct {
 
     void CVort_game_over();
     void CVort_show_keens_left();
-    void CVort_place_keen_on_worldmap(uint32_t *posX, uint32_t *posY);
+    void CVort_place_keen_on_worldmap(uint32_t *pos_x, uint32_t *pos_y);
     void CVort_do_intro_and_menu();
     uint16_t CVort_draw_title();
     extern uint16_t (*CVort_ptr_continue_game)();
@@ -321,11 +321,11 @@ typedef struct {
 
     extern void (*CVort_ptr_inlevel_message)();
 
-    void CVort_add_sprite_keengun(int32_t posX, int32_t posY);
+    void CVort_add_sprite_keengun(int32_t pos_x, int32_t pos_y);
     void CVort_think_zapzot();
     void CVort_think_keengun();
     void CVort_contact_keengun(Sprite_T *keengun, Sprite_T * contacted);
-    void CVort_add_sprite_tankshot(int32_t posX, int32_t posY, int16_t velX);
+    void CVort_add_sprite_tankshot(int32_t pos_x, int32_t pos_y, int16_t vel_x);
     void CVort_contact_tankshot(Sprite_T *keengun, Sprite_T * contacted);
 
     void CVort_add_sprite_vorticon(int16_t tileX, int16_t tileY);
@@ -562,12 +562,12 @@ typedef struct {
     extern uint8_t *demo_action_ptr, *end_of_demo_ptr, *demo_after_last_byte_char_offset;
 
     extern int16_t map_data[0x10000 / 2], *map_data_tiles, *map_data_sprites;
-    extern int16_t map_width_T, map_height_T, map_width_B;
+    extern int16_t map_width_tile, map_height_tile, map_width_bytes;
     extern uint16_t screen_wrap_single;
     //extern uint16_t screen_wrap;
     extern int32_t map_width, map_height;
-    extern int32_t scrollX, scrollY, scrollX_min, scrollY_min, scrollX_max, scrollY_max, ceilingX, ceilingY;
-    extern int16_t scrollX_T, scrollY_T;
+    extern int32_t scroll_x, scroll_y, scroll_x_min, scroll_y_min, scroll_x_max, scroll_y_max, ceiling_x, ceiling_y;
+    extern int16_t scroll_x_tile, scroll_y_tile;
     extern uint16_t cursorX, cursorX_save, cursorY;
 
     extern uint32_t cursorX_b, cursorY_b; // Cursor position in map units
@@ -584,7 +584,7 @@ typedef struct {
     extern GameProfile_T keen_gp;
 
     extern uint32_t keen_wmap_x_pos, keen_wmap_y_pos;
-    extern uint32_t wmap_scrollX, wmap_scrollY;
+    extern uint32_t wmap_scroll_x, wmap_scroll_y;
     extern Maplevel_T wmaplevels[0x10];
 
     extern DrawFunction_T draw_func;
@@ -596,7 +596,7 @@ typedef struct {
 
     extern uint16_t messie_mounted, messie_frame, messie_time_to_climb, messie_move_tics;
     extern uint16_t messie_x_T, messie_y_T;
-    extern int32_t messie_xpos, messie_ypos, messie_delX, messie_delY;
+    extern int32_t messie_xpos, messie_ypos, messie_del_x, messie_del_y;
 
     extern Teleporter_T teleporters[16];
 

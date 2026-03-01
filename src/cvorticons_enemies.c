@@ -19,8 +19,8 @@ void CVort_add_sprite_vorticon(int16_t tileX, int16_t tileY)
 {
 	int16_t sprIndex = CVort_add_sprite();
 	g_entities.sprites[sprIndex].type_ = OBJVORTICON;
-	g_entities.sprites[sprIndex].posX = tileX<<12;
-	g_entities.sprites[sprIndex].posY = tileY<<12;
+	g_entities.sprites[sprIndex].pos_x = tileX<<12;
+	g_entities.sprites[sprIndex].pos_y = tileY<<12;
 	g_entities.sprites[sprIndex].think = &CVort_think_vorticon_walk;
 	g_entities.sprites[sprIndex].contact = &CVort_contact_vorticon;
 
@@ -32,28 +32,28 @@ void CVort_add_sprite_vorticon(int16_t tileX, int16_t tileY)
 		g_entities.sprites[sprIndex].health = 1;
 	}
 
-	if (g_entities.sprites[sprIndex].posX > g_entities.sprites[0].posX)
-		g_entities.sprites[sprIndex].velX = -90;
+	if (g_entities.sprites[sprIndex].pos_x > g_entities.sprites[0].pos_x)
+		g_entities.sprites[sprIndex].vel_x = -90;
 	else
-		g_entities.sprites[sprIndex].velX = 90;
+		g_entities.sprites[sprIndex].vel_x = 90;
 	g_entities.sprites[sprIndex].frame = VORTFRAME(stand1);
 }
 
-void CVort_add_sprite_tankshot(int32_t posX, int32_t posY, int16_t velX) {
+void CVort_add_sprite_tankshot(int32_t pos_x, int32_t pos_y, int16_t vel_x) {
     int16_t sprIndex = CVort_add_sprite();
     g_entities.sprites[sprIndex].type_ = OBJENEMYSHOT;
-    g_entities.sprites[sprIndex].posX = posX;
+    g_entities.sprites[sprIndex].pos_x = pos_x;
     if (engine_gameVersion == GAMEVER_KEEN1) {
-        g_entities.sprites[sprIndex].posY = posY + 0x500;
+        g_entities.sprites[sprIndex].pos_y = pos_y + 0x500;
     } else if (engine_gameVersion == GAMEVER_KEEN2) {
-        g_entities.sprites[sprIndex].posY = posY + 0x900;
+        g_entities.sprites[sprIndex].pos_y = pos_y + 0x900;
     }
     g_entities.sprites[sprIndex].think = &CVort_think_keengun;
-    g_entities.sprites[sprIndex].velX = velX;
+    g_entities.sprites[sprIndex].vel_x = vel_x;
     g_entities.sprites[sprIndex].contact = &CVort_contact_tankshot;
     g_entities.sprites[sprIndex].frame = SPRTANKSHOT;
-    if (velX >= 0) {
-        if (!TILEINFO_REdge[map_data_tiles[(posX >> 12)+((posY >> 12) + 1) * map_width_T + 1]])
+    if (vel_x >= 0) {
+        if (!TILEINFO_REdge[map_data_tiles[(pos_x >> 12)+((pos_y >> 12) + 1) * map_width_tile + 1]])
             return;
         CVort_engine_setCurSound(SNDSHOTHIT);
         g_entities.sprites[sprIndex].type_ = OBJZAPZOT;
@@ -65,7 +65,7 @@ void CVort_add_sprite_tankshot(int32_t posX, int32_t posY, int16_t velX) {
             g_entities.sprites[sprIndex].frame = SPRSHOTSPLASHR;
         }
     } else {
-        if (!TILEINFO_LEdge[map_data_tiles[((posY >> 12) + 1) * map_width_T + (posX >> 12)]])
+        if (!TILEINFO_LEdge[map_data_tiles[((pos_y >> 12) + 1) * map_width_tile + (pos_x >> 12)]])
             return;
         CVort_engine_setCurSound(SNDSHOTHIT);
         g_entities.sprites[sprIndex].type_ = OBJZAPZOT;
@@ -84,18 +84,18 @@ void CVort_add_sprite_youth(int16_t tileX, int16_t tileY) {
 
     sprIndex = CVort_add_sprite();
     g_entities.sprites[sprIndex].type_ = OBJYOUTH;
-    g_entities.sprites[sprIndex].posX = tileX << 12;
-    g_entities.sprites[sprIndex].posY = tileY << 12;
+    g_entities.sprites[sprIndex].pos_x = tileX << 12;
+    g_entities.sprites[sprIndex].pos_y = tileY << 12;
     g_entities.sprites[sprIndex].think = &CVort_think_youth_walk;
     g_entities.sprites[sprIndex].contact = &CVort_contact_youth;
     g_entities.sprites[sprIndex].health = 1;
-    g_entities.sprites[sprIndex].velX = g_entities.sprites[0].posX > g_entities.sprites[sprIndex].posX? 250 : -250;
+    g_entities.sprites[sprIndex].vel_x = g_entities.sprites[0].pos_x > g_entities.sprites[sprIndex].pos_x? 250 : -250;
     g_entities.sprites[sprIndex].frame = YOUTHFRAME(left1);
 }
 
 void CVort_think_vorticon_walk()
 {
-	if (g_entities.temp_sprite.velX > 0)
+	if (g_entities.temp_sprite.vel_x > 0)
 		g_entities.temp_sprite.frame = VORTFRAME(right1);
 	else
 		g_entities.temp_sprite.frame = VORTFRAME(left1);
@@ -103,29 +103,29 @@ void CVort_think_vorticon_walk()
 	if (CVort_get_random() < (g_game.sprite_sync<<1)
 	    && ((engine_gameVersion == GAMEVER_KEEN1) || g_game.lights))
 	{
-		g_entities.temp_sprite.velY = -CVort_calc_jump_height(300);
+		g_entities.temp_sprite.vel_y = -CVort_calc_jump_height(300);
 		g_entities.temp_sprite.think = &CVort_think_vorticon_jump;
 	}
 	else if (CVort_get_random() < (g_game.sprite_sync<<1))
 	{
-		if (g_entities.temp_sprite.velX == 90)
-			g_entities.temp_sprite.velX = 120;
-		else if (g_entities.temp_sprite.velX > 90)
+		if (g_entities.temp_sprite.vel_x == 90)
+			g_entities.temp_sprite.vel_x = 120;
+		else if (g_entities.temp_sprite.vel_x > 90)
 		{
-			if (g_entities.temp_sprite.velX == 120)
-				g_entities.temp_sprite.velX = 90;
+			if (g_entities.temp_sprite.vel_x == 120)
+				g_entities.temp_sprite.vel_x = 90;
 		}
-		else if (g_entities.temp_sprite.velX == -120)
-			g_entities.temp_sprite.velX = -90;
-		else if (g_entities.temp_sprite.velX == -90)
-			g_entities.temp_sprite.velX = -120;
+		else if (g_entities.temp_sprite.vel_x == -120)
+			g_entities.temp_sprite.vel_x = -90;
+		else if (g_entities.temp_sprite.vel_x == -90)
+			g_entities.temp_sprite.vel_x = -120;
 	}
 	CVort_do_fall();
 	int16_t currDelta = CVort_compute_sprite_delta();
 	if (currDelta & 4)
-		g_entities.temp_sprite.velX = -90;
+		g_entities.temp_sprite.vel_x = -90;
 	if (currDelta & 1)
-		g_entities.temp_sprite.velX = 90;
+		g_entities.temp_sprite.vel_x = 90;
         if ((engine_gameVersion != GAMEVER_KEEN1)
 	    && !(currDelta & 2))
 		g_entities.temp_sprite.think = &CVort_think_vorticon_jump;
@@ -133,7 +133,7 @@ void CVort_think_vorticon_walk()
 
 void CVort_think_vorticon_jump()
 {
-	if (g_entities.temp_sprite.velX > 0)
+	if (g_entities.temp_sprite.vel_x > 0)
 		g_entities.temp_sprite.frame = VORTFRAME(jumpl);
 	else
 		g_entities.temp_sprite.frame = VORTFRAME(jumpr);
@@ -145,21 +145,21 @@ void CVort_think_vorticon_jump()
 		g_entities.temp_sprite.time = 0;
 	}
 	if (currDelta & 4)
-		g_entities.temp_sprite.velX = -90;
+		g_entities.temp_sprite.vel_x = -90;
 	if (currDelta & 1)
-		g_entities.temp_sprite.velX = 90;
+		g_entities.temp_sprite.vel_x = 90;
 }
 
 void CVort_think_vorticon_search()
 {
-	g_entities.temp_sprite.velX = 0;
+	g_entities.temp_sprite.vel_x = 0;
 	g_entities.temp_sprite.frame = ((CVort_ptr_engine_getTicks()>>5)&3)+VORTFRAME(stand1);
 	g_entities.temp_sprite.time += g_game.sprite_sync;
 	if (g_entities.temp_sprite.time >= 80)
 	{
-		g_entities.temp_sprite.velX = 90;
-		if (g_entities.temp_sprite.posX > g_entities.sprites[0].posX)
-			g_entities.temp_sprite.velX = -g_entities.temp_sprite.velX;
+		g_entities.temp_sprite.vel_x = 90;
+		if (g_entities.temp_sprite.pos_x > g_entities.sprites[0].pos_x)
+			g_entities.temp_sprite.vel_x = -g_entities.temp_sprite.vel_x;
 		g_entities.temp_sprite.think = &CVort_think_vorticon_walk;
 	}
 	CVort_do_fall();
@@ -226,11 +226,11 @@ void CVort_think_youth_walk()
 {
     uint16_t blocking;
 
-    g_entities.temp_sprite.frame = g_entities.temp_sprite.velX > 0? YOUTHFRAME(right1) : YOUTHFRAME(left1);
+    g_entities.temp_sprite.frame = g_entities.temp_sprite.vel_x > 0? YOUTHFRAME(right1) : YOUTHFRAME(left1);
     g_entities.temp_sprite.frame += (CVort_ptr_engine_getTicks()>>4)&3;
     if (CVort_get_random()<g_game.sprite_sync*3)
     {
-       g_entities.temp_sprite.velY = -CVort_calc_jump_height(400);
+       g_entities.temp_sprite.vel_y = -CVort_calc_jump_height(400);
        g_entities.temp_sprite.think = &CVort_think_youth_jump;
     }
 
@@ -244,12 +244,12 @@ void CVort_think_youth_walk()
 
     if (blocking & 4)
     {
-        g_entities.temp_sprite.velX = -250;
+        g_entities.temp_sprite.vel_x = -250;
     }
 
     if (blocking & 1)
     {
-        g_entities.temp_sprite.velX = 250;
+        g_entities.temp_sprite.vel_x = 250;
     }
 
 }
@@ -258,7 +258,7 @@ void CVort_think_youth_jump()
 {
     uint16_t blocking;
 
-    g_entities.temp_sprite.frame = g_entities.temp_sprite.velX > 0? YOUTHFRAME(right4) : YOUTHFRAME(left4);
+    g_entities.temp_sprite.frame = g_entities.temp_sprite.vel_x > 0? YOUTHFRAME(right4) : YOUTHFRAME(left4);
 
     CVort_do_fall();
     blocking = CVort_compute_sprite_delta();
@@ -270,12 +270,12 @@ void CVort_think_youth_jump()
 
     if (blocking & 4)
     {
-        g_entities.temp_sprite.velX = -250;
+        g_entities.temp_sprite.vel_x = -250;
     }
 
     if (blocking & 1)
     {
-        g_entities.temp_sprite.velX = 250;
+        g_entities.temp_sprite.vel_x = 250;
     }
 
 }
@@ -293,18 +293,18 @@ void CVort_contact_youth(Sprite_T *youth, Sprite_T *contacted)
 
 }
 
-void CVort_add_sprite_keengun(int32_t posX, int32_t posY) {
+void CVort_add_sprite_keengun(int32_t pos_x, int32_t pos_y) {
     int16_t sprIndex = CVort_add_sprite();
     g_entities.sprites[sprIndex].type_ = OBJKEENSHOT;
-    g_entities.sprites[sprIndex].posX = posX;
-    g_entities.sprites[sprIndex].posY = posY + 0x900;
+    g_entities.sprites[sprIndex].pos_x = pos_x;
+    g_entities.sprites[sprIndex].pos_y = pos_y + 0x900;
     g_entities.sprites[sprIndex].think = &CVort_think_keengun;
-    g_entities.sprites[sprIndex].velY = 0;
+    g_entities.sprites[sprIndex].vel_y = 0;
     g_entities.sprites[sprIndex].contact = &CVort_contact_keengun;
     g_entities.sprites[sprIndex].frame = SPRKEENSHOT;
     if (g_game.keen_facing >= 0) {
-        g_entities.sprites[sprIndex].velX = 400;
-        if (!TILEINFO_REdge[map_data_tiles[(posX >> 12)+((posY >> 12) + 1) * map_width_T + 1]])
+        g_entities.sprites[sprIndex].vel_x = 400;
+        if (!TILEINFO_REdge[map_data_tiles[(pos_x >> 12)+((pos_y >> 12) + 1) * map_width_tile + 1]])
             return;
         CVort_engine_setCurSound(SNDSHOTHIT);
         g_entities.sprites[sprIndex].type_ = OBJZAPZOT;
@@ -316,8 +316,8 @@ void CVort_add_sprite_keengun(int32_t posX, int32_t posY) {
             g_entities.sprites[sprIndex].frame = SPRSHOTSPLASHL;
         }
     } else {
-        g_entities.sprites[sprIndex].velX = -400;
-        if (!TILEINFO_LEdge[map_data_tiles[((posY >> 12) + 1) * map_width_T + (posX >> 12)]])
+        g_entities.sprites[sprIndex].vel_x = -400;
+        if (!TILEINFO_LEdge[map_data_tiles[((pos_y >> 12) + 1) * map_width_tile + (pos_x >> 12)]])
             return;
         CVort_engine_setCurSound(SNDSHOTHIT);
         g_entities.sprites[sprIndex].type_ = OBJZAPZOT;
@@ -336,20 +336,20 @@ void CVort_think_keen_ground() {
     if (g_entities.temp_sprite.varD)
         tile_standingon_type = 1;
     else {
-        map_tile_left = g_entities.temp_sprite.boxX1 >> 12;
-        map_tile_right = g_entities.temp_sprite.boxX2 >> 12;
-        map_tile_standingon = (g_entities.temp_sprite.boxY2 >> 12) + 1;
+        map_tile_left = g_entities.temp_sprite.box_x1 >> 12;
+        map_tile_right = g_entities.temp_sprite.box_x2 >> 12;
+        map_tile_standingon = (g_entities.temp_sprite.box_y2 >> 12) + 1;
         tile_standingon_type = 1;
 
         for (int16_t currX = map_tile_left; currX <= map_tile_right; currX++) {
-            currtile_standingon_type = TILEINFO_UEdge[map_data_tiles[map_tile_standingon * map_width_T + currX]];
+            currtile_standingon_type = TILEINFO_UEdge[map_data_tiles[map_tile_standingon * map_width_tile + currX]];
             if (currtile_standingon_type > 1)
                 tile_standingon_type = currtile_standingon_type;
         }
     }
     if (g_input.input_new.but1jump) {
-        g_entities.temp_sprite.varC = g_entities.temp_sprite.velX;
-        g_entities.temp_sprite.velX = 0;
+        g_entities.temp_sprite.varC = g_entities.temp_sprite.vel_x;
+        g_entities.temp_sprite.vel_x = 0;
         g_entities.temp_sprite.varB = 0;
         g_entities.temp_sprite.time = 0;
         if (g_game.keen_facing >= 0)
@@ -364,43 +364,43 @@ void CVort_think_keen_ground() {
             case 2:
             case 3:
                 CVort_move_left_right(2);
-                if (g_entities.temp_sprite.velX < 0)
+                if (g_entities.temp_sprite.vel_x < 0)
                     g_input.input_new.direction = 8;
                 break;
             case 5:
             case 6:
             case 7:
                 CVort_move_left_right(-2);
-                if (g_entities.temp_sprite.velX > 0)
+                if (g_entities.temp_sprite.vel_x > 0)
                     g_input.input_new.direction = 8;
                 break;
             default:
                 break;
         }
     if ((tile_standingon_type == 1) && (g_input.input_new.direction == 8)) {
-        if (g_entities.temp_sprite.velX > 0) {
+        if (g_entities.temp_sprite.vel_x > 0) {
             CVort_move_left_right(-3);
-            if (g_entities.temp_sprite.velX < 0)
-                g_entities.temp_sprite.velX = 0;
-        } else if (g_entities.temp_sprite.velX < 0) {
+            if (g_entities.temp_sprite.vel_x < 0)
+                g_entities.temp_sprite.vel_x = 0;
+        } else if (g_entities.temp_sprite.vel_x < 0) {
             CVort_move_left_right(3);
-            if (g_entities.temp_sprite.velX > 0)
-                g_entities.temp_sprite.velX = 0;
+            if (g_entities.temp_sprite.vel_x > 0)
+                g_entities.temp_sprite.vel_x = 0;
         }
     }
     if (tile_standingon_type == 3) {
         if (g_game.keen_facing > 0)
-            g_entities.temp_sprite.velX = 180;
+            g_entities.temp_sprite.vel_x = 180;
         else if (g_game.keen_facing < 0)
-            g_entities.temp_sprite.velX = -180;
+            g_entities.temp_sprite.vel_x = -180;
     }
-    if (!g_entities.temp_sprite.velX) {
+    if (!g_entities.temp_sprite.vel_x) {
         if (g_game.keen_facing >= 0)
             g_entities.temp_sprite.frame = 0;
         else
             g_entities.temp_sprite.frame = 4;
     } else {
-        if (g_entities.temp_sprite.velX > 0) {
+        if (g_entities.temp_sprite.vel_x > 0) {
             g_entities.temp_sprite.frame = 0;
             if (tile_standingon_type < 3)
                 g_entities.temp_sprite.frame += (CVort_ptr_engine_getTicks() >> 4)&3;
@@ -410,9 +410,9 @@ void CVort_think_keen_ground() {
             if (tile_standingon_type < 3)
                 g_entities.temp_sprite.frame += (CVort_ptr_engine_getTicks() >> 4)&3;
         }
-        g_game.keen_facing = g_entities.temp_sprite.velX;
+        g_game.keen_facing = g_entities.temp_sprite.vel_x;
     }
-    if (g_entities.temp_sprite.velX && ((CVort_ptr_engine_getTicks() >> 4)&1) && (tile_standingon_type < 3)) {
+    if (g_entities.temp_sprite.vel_x && ((CVort_ptr_engine_getTicks() >> 4)&1) && (tile_standingon_type < 3)) {
         if ((CVort_ptr_engine_getTicks() >> 5)&1)
             CVort_engine_setCurSound(0x1E);
         else
@@ -429,8 +429,8 @@ void CVort_think_keen_ground() {
         return;
     }
     if (g_input.input_new.but1jump) {
-        g_entities.temp_sprite.varC = g_entities.temp_sprite.velX;
-        g_entities.temp_sprite.velX = 0;
+        g_entities.temp_sprite.varC = g_entities.temp_sprite.vel_x;
+        g_entities.temp_sprite.vel_x = 0;
         g_entities.temp_sprite.varB = 0;
         g_entities.temp_sprite.time = 0;
         if (g_game.keen_facing >= 0)
@@ -444,8 +444,8 @@ void CVort_think_keen_ground() {
             CVort_toggle_switch();
         else {
             g_entities.temp_sprite.time = 0;
-            g_entities.temp_sprite.varB = g_entities.temp_sprite.velX;
-            g_entities.temp_sprite.velX = 0;
+            g_entities.temp_sprite.varB = g_entities.temp_sprite.vel_x;
+            g_entities.temp_sprite.vel_x = 0;
             if (keen_gp.stuff[3])
                 g_entities.temp_sprite.think = &CVort_think_keen_pogo_ground;
         }
@@ -453,7 +453,7 @@ void CVort_think_keen_ground() {
     if (g_input.input_new.but1jump && g_input.input_new.but2pogo && // Two-button firing
             !g_input.input_old.but1jump && !g_input.input_old.but2pogo) {
         g_entities.temp_sprite.think = &CVort_think_keen_shoot;
-        g_entities.temp_sprite.delX = 0;
+        g_entities.temp_sprite.del_x = 0;
         g_entities.temp_sprite.varB = 0;
         g_entities.temp_sprite.time = 0;
         //Again???
@@ -492,12 +492,12 @@ void CVort_think_keen_jump_ground() {
         default:
             break;
     }
-    g_entities.temp_sprite.velX = 0;
+    g_entities.temp_sprite.vel_x = 0;
     g_entities.temp_sprite.time += g_game.sprite_sync;
     if (g_entities.temp_sprite.time >= 36) {
         g_entities.temp_sprite.think = &CVort_think_keen_jump_air;
-        g_entities.temp_sprite.velY -= g_entities.temp_sprite.varB;
-        g_entities.temp_sprite.velX = g_entities.temp_sprite.varC;
+        g_entities.temp_sprite.vel_y -= g_entities.temp_sprite.varB;
+        g_entities.temp_sprite.vel_x = g_entities.temp_sprite.varC;
         CVort_engine_setCurSound(6);
     }
     CVort_do_fall();
@@ -507,7 +507,7 @@ void CVort_think_keen_jump_ground() {
     if (g_input.input_new.but1jump && g_input.input_new.but2pogo) // Two-button firing
     {
         g_entities.temp_sprite.think = &CVort_think_keen_shoot;
-        g_entities.temp_sprite.delX = 0;
+        g_entities.temp_sprite.del_x = 0;
         g_entities.temp_sprite.varB = 0;
         g_entities.temp_sprite.time = 0;
         //Again... for another time???
@@ -525,36 +525,36 @@ void CVort_think_keen_jump_air() {
         case 2:
         case 3:
             CVort_move_left_right(2);
-            if (g_entities.temp_sprite.velX < 0)
+            if (g_entities.temp_sprite.vel_x < 0)
                 g_input.input_new.direction = 8;
             break;
         case 5:
         case 6:
         case 7:
             CVort_move_left_right(-2);
-            if (g_entities.temp_sprite.velX > 0)
+            if (g_entities.temp_sprite.vel_x > 0)
                 g_input.input_new.direction = 8;
             break;
         default:
             break;
     }
     if (g_input.input_new.direction == 8) {
-        if (g_entities.temp_sprite.velX > 0) {
+        if (g_entities.temp_sprite.vel_x > 0) {
             CVort_move_left_right(-1);
-            if (g_entities.temp_sprite.velX < 0)
-                g_entities.temp_sprite.velX = 0;
-        } else if (g_entities.temp_sprite.velX < 0) {
+            if (g_entities.temp_sprite.vel_x < 0)
+                g_entities.temp_sprite.vel_x = 0;
+        } else if (g_entities.temp_sprite.vel_x < 0) {
             CVort_move_left_right(1);
-            if (g_entities.temp_sprite.velX > 0)
-                g_entities.temp_sprite.velX = 0;
+            if (g_entities.temp_sprite.vel_x > 0)
+                g_entities.temp_sprite.vel_x = 0;
         }
     }
     if (g_game.keen_facing > 0)
         g_entities.temp_sprite.frame = 0xD;
     else
         g_entities.temp_sprite.frame = 0x13;
-    if (g_entities.temp_sprite.velX)
-        g_game.keen_facing = g_entities.temp_sprite.velX;
+    if (g_entities.temp_sprite.vel_x)
+        g_game.keen_facing = g_entities.temp_sprite.vel_x;
 
     CVort_do_fall();
     int16_t lastDelta = CVort_compute_sprite_delta();
@@ -578,7 +578,7 @@ void CVort_think_keen_jump_air() {
     if (g_input.input_new.but1jump && g_input.input_new.but2pogo && // Two-button firing
             !g_input.input_old.but1jump && !g_input.input_old.but2pogo) {
         g_entities.temp_sprite.think = &CVort_think_keen_shoot;
-        g_entities.temp_sprite.delX = 0;
+        g_entities.temp_sprite.del_x = 0;
         g_entities.temp_sprite.varB = 0;
         g_entities.temp_sprite.time = 0;
         //Yet again...
@@ -596,21 +596,21 @@ void CVort_think_keen_shoot() {
         if (keen_gp.ammo) {
             CVort_engine_setCurSound(0xC);
             keen_gp.ammo--;
-            CVort_add_sprite_keengun(g_entities.temp_sprite.posX, g_entities.temp_sprite.posY);
+            CVort_add_sprite_keengun(g_entities.temp_sprite.pos_x, g_entities.temp_sprite.pos_y);
         } else
             CVort_engine_setCurSound(0x24);
         g_entities.temp_sprite.varB = 1;
     }
     if ((g_entities.temp_sprite.time > 30) && !g_input.input_new.but1jump && !g_input.input_new.but2pogo)
         g_entities.temp_sprite.think = &CVort_think_keen_ground;
-    if (g_entities.temp_sprite.velX > 0) {
+    if (g_entities.temp_sprite.vel_x > 0) {
         CVort_move_left_right(-1);
-        if (g_entities.temp_sprite.velX < 0)
-            g_entities.temp_sprite.velX = 0;
-    } else if (g_entities.temp_sprite.velX < 0) {
+        if (g_entities.temp_sprite.vel_x < 0)
+            g_entities.temp_sprite.vel_x = 0;
+    } else if (g_entities.temp_sprite.vel_x < 0) {
         CVort_move_left_right(1);
-        if (g_entities.temp_sprite.velX > 0)
-            g_entities.temp_sprite.velX = 0;
+        if (g_entities.temp_sprite.vel_x > 0)
+            g_entities.temp_sprite.vel_x = 0;
     }
     CVort_do_fall();
     CVort_compute_sprite_delta();
@@ -624,25 +624,25 @@ void CVort_think_keen_pogo_air() {
         case 2:
         case 3:
             CVort_move_left_right(1);
-            if (g_entities.temp_sprite.velX < 0)
+            if (g_entities.temp_sprite.vel_x < 0)
                 g_input.input_new.direction = 8;
             break;
         case 5:
         case 6:
         case 7:
             CVort_move_left_right(-1);
-            if (g_entities.temp_sprite.velX > 0)
+            if (g_entities.temp_sprite.vel_x > 0)
                 g_input.input_new.direction = 8;
             break;
         default:
             break;
     }
-    if (g_input.input_new.but1jump && (g_entities.temp_sprite.velY < 0))
+    if (g_input.input_new.but1jump && (g_entities.temp_sprite.vel_y < 0))
         CVort_pogo_jump(200, -1);
     if (g_game.god_mode && g_input.input_new.but1jump) // Cheat in effect!
-        g_entities.temp_sprite.velY = -200;
-    if (g_entities.temp_sprite.velX)
-        g_game.keen_facing = g_entities.temp_sprite.velX;
+        g_entities.temp_sprite.vel_y = -200;
+    if (g_entities.temp_sprite.vel_x)
+        g_game.keen_facing = g_entities.temp_sprite.vel_x;
     if (g_game.keen_facing >= 0)
         g_entities.temp_sprite.varA = 0x18;
     else
@@ -655,8 +655,8 @@ void CVort_think_keen_pogo_air() {
     if (currDelta & 2) {
         g_entities.temp_sprite.think = &CVort_think_keen_pogo_ground;
         g_entities.temp_sprite.time = 0;
-        g_entities.temp_sprite.varB = g_entities.temp_sprite.velX;
-        g_entities.temp_sprite.velX = 0;
+        g_entities.temp_sprite.varB = g_entities.temp_sprite.vel_x;
+        g_entities.temp_sprite.vel_x = 0;
     }
     if (currDelta & 8)
         CVort_engine_setCurSound(0x15);
@@ -670,7 +670,7 @@ void CVort_think_keen_pogo_air() {
     if (g_input.input_new.but1jump && g_input.input_new.but2pogo) // Two-button firing
     {
         g_entities.temp_sprite.think = &CVort_think_keen_shoot;
-        g_entities.temp_sprite.delX = 0;
+        g_entities.temp_sprite.del_x = 0;
         g_entities.temp_sprite.varB = 0;
         g_entities.temp_sprite.time = 0;
         //And again...
@@ -685,14 +685,14 @@ void CVort_think_keen_pogo_air() {
 }
 
 void CVort_think_keen_pogo_ground() {
-    g_entities.temp_sprite.delX = g_entities.temp_sprite.velX = 0;
+    g_entities.temp_sprite.del_x = g_entities.temp_sprite.vel_x = 0;
     g_entities.temp_sprite.frame = g_entities.temp_sprite.varA + 1;
     g_entities.temp_sprite.time += g_game.sprite_sync;
     if (g_entities.temp_sprite.time > 22) {
         g_entities.temp_sprite.think = &CVort_think_keen_pogo_air;
         g_entities.temp_sprite.varD = 0;
-        g_entities.temp_sprite.velY -= 200;
-        g_entities.temp_sprite.velX = g_entities.temp_sprite.varB;
+        g_entities.temp_sprite.vel_y -= 200;
+        g_entities.temp_sprite.vel_x = g_entities.temp_sprite.varB;
         CVort_engine_setCurSound(6);
     }
     if (g_input.input_new.but2pogo && !g_input.input_old.but2pogo)
@@ -700,7 +700,7 @@ void CVort_think_keen_pogo_ground() {
     if (g_input.input_new.but1jump && g_input.input_new.but2pogo) // Two-button firing
     {
         g_entities.temp_sprite.think = &CVort_think_keen_shoot;
-        g_entities.temp_sprite.delX = 0;
+        g_entities.temp_sprite.del_x = 0;
         g_entities.temp_sprite.varB = 0;
         g_entities.temp_sprite.time = 0;
         //Aaand again...
@@ -716,9 +716,9 @@ void CVort_think_keen_pogo_ground() {
 
 void CVort_think_keen_exit() {
     int32_t time = g_entities.temp_sprite.time, time2 = g_entities.temp_sprite.varB;
-    g_entities.temp_sprite.delX = g_game.sprite_sync * 60;
+    g_entities.temp_sprite.del_x = g_game.sprite_sync * 60;
     g_entities.temp_sprite.frame = (CVort_ptr_engine_getTicks() >> 4) & 3;
-    g_game.keen_facing = g_entities.temp_sprite.velX;
+    g_game.keen_facing = g_entities.temp_sprite.vel_x;
     // Draw exit door boundry tiles so they effectively hide Keen
     if (engine_gameVersion == GAMEVER_KEEN3) {
         CVort_engine_drawTileAt(time << 12, time2 << 12, 0x101);
@@ -731,7 +731,7 @@ void CVort_think_keen_exit() {
         CVort_engine_drawTileAt((time + 1) << 12, time2 << 12, 0x8F);
         CVort_engine_drawTileAt((time + 1) << 12, (time2 + 1) << 12, 0x8F);
     }
-    if ((time << 12) <= g_entities.temp_sprite.posX) {
+    if ((time << 12) <= g_entities.temp_sprite.pos_x) {
         g_entities.temp_sprite.type_ = 0;
         g_game.level_finished = LEVEL_END_EXIT;
     }
@@ -741,13 +741,13 @@ void CVort_think_keen_death() {
     g_entities.temp_sprite.time += g_game.sprite_sync;
     if (g_entities.temp_sprite.time >= 200) {
         g_entities.temp_sprite.time = -999;
-        g_entities.temp_sprite.velX = CVort_get_random() - 0x80;
-        g_entities.temp_sprite.velY = -0x190;
+        g_entities.temp_sprite.vel_x = CVort_get_random() - 0x80;
+        g_entities.temp_sprite.vel_y = -0x190;
     }
     g_entities.temp_sprite.frame = ((CVort_ptr_engine_getTicks() >> 4)&1) + 0x16;
-    g_entities.temp_sprite.delX = g_entities.temp_sprite.velX * g_game.sprite_sync;
-    g_entities.temp_sprite.delY = g_entities.temp_sprite.velY * g_game.sprite_sync;
-    if (g_entities.temp_sprite.boxY2 < scrollY)
+    g_entities.temp_sprite.del_x = g_entities.temp_sprite.vel_x * g_game.sprite_sync;
+    g_entities.temp_sprite.del_y = g_entities.temp_sprite.vel_y * g_game.sprite_sync;
+    if (g_entities.temp_sprite.box_y2 < scroll_y)
         g_entities.temp_sprite.type_ = 0;
 }
 
@@ -776,20 +776,20 @@ void CVort_think_keen_stunned() {
         }
     }
 
-    if (g_entities.temp_sprite.velX > 0)
+    if (g_entities.temp_sprite.vel_x > 0)
     {
         CVort_move_left_right(-3);
-        if (g_entities.temp_sprite.velX < 0)
+        if (g_entities.temp_sprite.vel_x < 0)
         {
-            g_entities.temp_sprite.velX = 0;
+            g_entities.temp_sprite.vel_x = 0;
         }
     }
-    else if (g_entities.temp_sprite.velX < 0)
+    else if (g_entities.temp_sprite.vel_x < 0)
     {
         CVort_move_left_right(3);
-        if (g_entities.temp_sprite.velX > 0)
+        if (g_entities.temp_sprite.vel_x > 0)
         {
-            g_entities.temp_sprite.velX = 0;
+            g_entities.temp_sprite.vel_x = 0;
         }
     }
 

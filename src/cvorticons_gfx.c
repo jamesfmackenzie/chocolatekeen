@@ -3010,7 +3010,7 @@ void CVort_engine_drawBitmap(uint16_t x, uint16_t y, uint16_t num)
 	engine_isFrameReadyToDisplay = true;
 }
 
-uint16_t CVort_engine_drawSpriteAt(int32_t posX, int32_t posY, uint16_t frame)
+uint16_t CVort_engine_drawSpriteAt(int32_t pos_x, int32_t pos_y, uint16_t frame)
 {
 	int16_t tileX1, tileX2, tileY1, tileY2;
 	int16_t sdraw_xbyte, sdraw_yrow;
@@ -3018,8 +3018,8 @@ uint16_t CVort_engine_drawSpriteAt(int32_t posX, int32_t posY, uint16_t frame)
 	uint16_t tileID;
 	int16_t tileType;
 
-	sdraw_xbyte = posX / 0x100 - ((scrollX / 0x100)&0xFFF0);
-	sdraw_yrow  = posY / 0x100 - ((scrollY / 0x100)&0xFFF0);
+	sdraw_xbyte = pos_x / 0x100 - ((scroll_x / 0x100)&0xFFF0);
+	sdraw_yrow  = pos_y / 0x100 - ((scroll_y / 0x100)&0xFFF0);
 
 	if ((sdraw_xbyte < -0x20) || (sdraw_yrow < -0x20) || (sdraw_xbyte > 0x150) || (sdraw_yrow > 0xC7))
 		return 0;
@@ -3055,7 +3055,7 @@ uint16_t CVort_engine_drawSpriteAt(int32_t posX, int32_t posY, uint16_t frame)
 	for (int16_t currY = tileY1, currX; currY <= tileY2; currY++)
 		for (currX = tileX1; currX <= tileX2; currX++)
 		{
-			tileID = map_data_tiles[(((currY+scrollY_T)*map_width_T)&65535)+(currX+scrollX_T)];
+			tileID = map_data_tiles[(((currY+scroll_y_tile)*map_width_tile)&65535)+(currX+scroll_x_tile)];
 			tileType = TILEINFO_Type[tileID];
 			if (tileType >= 0)
 			{
@@ -3088,12 +3088,12 @@ uint16_t CVort_engine_drawSpriteAt(int32_t posX, int32_t posY, uint16_t frame)
 	return 1;
 }
 
-uint16_t CVort_engine_drawTileAt(int32_t posX, int32_t posY, uint16_t tilenum)
+uint16_t CVort_engine_drawTileAt(int32_t pos_x, int32_t pos_y, uint16_t tilenum)
 {
 	int16_t tileX1, tileX2, tileY1, tileY2;
 	int16_t sdraw_xbyte, sdraw_yrow;
-	sdraw_xbyte = posX / 0x100 - ((scrollX / 0x100)&0xFFF0);
-	sdraw_yrow = posY / 0x100 - ((scrollY / 0x100)&0xFFF0);
+	sdraw_xbyte = pos_x / 0x100 - ((scroll_x / 0x100)&0xFFF0);
+	sdraw_yrow = pos_y / 0x100 - ((scroll_y / 0x100)&0xFFF0);
 	if ((sdraw_xbyte < -0x20) || (sdraw_yrow < -0x20))
 		return 0;
 
@@ -3188,8 +3188,8 @@ void CVort_engine_doDrawing()
 	if ((anim_plane_i < 0) || (anim_plane_i >= 4))
 		assert(false);
 	//anim_plane_i = (((CVort_private_engine_getTicks() & 65535) >> (g_game.anim_speed & 255)) & 6) >> 1;
-	CVort_engine_adaptiveTileRefresh((((map_width_B * ((scrollY & 16777215) >> 12)) & 65535) >> 1) + ((scrollX & 16777215) >> 12));
-	//CVort_engine_adaptiveTileRefresh(((map_width_B * ((scrollY & 16777215) >> 12)) & 65535) + (((scrollX & 16777215) >> 12) << 1));
+	CVort_engine_adaptiveTileRefresh((((map_width_bytes * ((scroll_y & 16777215) >> 12)) & 65535) >> 1) + ((scroll_x & 16777215) >> 12));
+	//CVort_engine_adaptiveTileRefresh(((map_width_bytes * ((scroll_y & 16777215) >> 12)) & 65535) + (((scroll_x & 16777215) >> 12) << 1));
 	uint32_t origDstPage = engine_dstPage;
 	engine_dstPage = engine_currPageStart;
 	uint16_t loopVar, drawCounter;
@@ -3347,10 +3347,10 @@ void CVort_engine_egaPageFlip()
 	engine_currPage ^= 1;
 	engine_currPageStart = 0x18000*engine_currPage;
 
-	engine_egaStart = 0x3020+(0x180*(unsigned)((scrollY >> 8) & 0xF)) + (((scrollX & 0x800) >> 11) << 3) + engine_currPageStart;
+	engine_egaStart = 0x3020+(0x180*(unsigned)((scroll_y >> 8) & 0xF)) + (((scroll_x & 0x800) >> 11) << 3) + engine_currPageStart;
 	engine_dstPage = (engine_egaStart >> 7) << 7;
 
-	pel_panning = (scrollX >> 8) & 7;
+	pel_panning = (scroll_x >> 8) & 7;
 }
 
 /* Gets a value represeting 6 EGA signals determining a color number
@@ -3547,7 +3547,7 @@ void CVort_engine_showImageFile(const char *filename)
 	FILE *fp = CVort_engine_cross_ro_data_fopen(filename);
 	if (!fp) // TODO: What to do, if not this?
 	{
-		scrollX = scrollY = 0;
+		scroll_x = scroll_y = 0;
 		return;
 	}
 	// The original code does read to a part of the map_data structure!!!
@@ -3557,7 +3557,7 @@ void CVort_engine_showImageFile(const char *filename)
 	// NOTE NOTE NOTE: The initial 4-byte value is LITTLE-ENDIAN ordered!!!
 	do_image_file_decomp((uint8_t *)(map_data + 0x4000), (uint8_t *)map_data);
 
-	scrollX = scrollY = 0;
+	scroll_x = scroll_y = 0;
 	CVort_engine_syncDrawing();
 	CVort_engine_drawScreen();
 

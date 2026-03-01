@@ -296,21 +296,21 @@ void CVort_main_loop() {
 
 void CVort_update_sprite_hitbox(void) {
     //update_sprite_hitbox_wmap(&g_entities.temp_sprite)?
-    int16_t tempNum = (g_entities.temp_sprite.frame << 2) + (g_entities.temp_sprite.posX >> 9) % 4;
+    int16_t tempNum = (g_entities.temp_sprite.frame << 2) + (g_entities.temp_sprite.pos_x >> 9) % 4;
     g_entities.temp_MSE = engine_maskedSpriteEntry[tempNum];
-    g_entities.temp_sprite.boxX1 = g_entities.temp_sprite.posX + g_entities.temp_MSE.hitbox_l;
-    g_entities.temp_sprite.boxX2 = g_entities.temp_sprite.posX + g_entities.temp_MSE.hitbox_r;
-    g_entities.temp_sprite.boxY1 = g_entities.temp_sprite.posY + g_entities.temp_MSE.hitbox_u;
-    g_entities.temp_sprite.boxY2 = g_entities.temp_sprite.posY + g_entities.temp_MSE.hitbox_b;
+    g_entities.temp_sprite.box_x1 = g_entities.temp_sprite.pos_x + g_entities.temp_MSE.hitbox_l;
+    g_entities.temp_sprite.box_x2 = g_entities.temp_sprite.pos_x + g_entities.temp_MSE.hitbox_r;
+    g_entities.temp_sprite.box_y1 = g_entities.temp_sprite.pos_y + g_entities.temp_MSE.hitbox_u;
+    g_entities.temp_sprite.box_y2 = g_entities.temp_sprite.pos_y + g_entities.temp_MSE.hitbox_b;
 }
 
 void CVort_update_sprite_hitbox_wmap(Sprite_T *sprite) {
-    int16_t tempNum = (sprite->frame << 2) + (sprite->posX >> 9) % 4;
+    int16_t tempNum = (sprite->frame << 2) + (sprite->pos_x >> 9) % 4;
     g_entities.temp_MSE = engine_maskedSpriteEntry[tempNum];
-    sprite->boxX1 = sprite->posX + g_entities.temp_MSE.hitbox_l;
-    sprite->boxX2 = sprite->posX + g_entities.temp_MSE.hitbox_r;
-    sprite->boxY1 = sprite->posY + g_entities.temp_MSE.hitbox_u;
-    sprite->boxY2 = sprite->posY + g_entities.temp_MSE.hitbox_b;
+    sprite->box_x1 = sprite->pos_x + g_entities.temp_MSE.hitbox_l;
+    sprite->box_x2 = sprite->pos_x + g_entities.temp_MSE.hitbox_r;
+    sprite->box_y1 = sprite->pos_y + g_entities.temp_MSE.hitbox_u;
+    sprite->box_y2 = sprite->pos_y + g_entities.temp_MSE.hitbox_b;
 }
 
 /* Given a GameInput_T structure input, simulates a vanilla Keen do-while busy
@@ -430,21 +430,21 @@ void CVort_load_level_data(uint16_t levelnum) {
     map_data_sprites = map_data + 16 + map_data[7] / 2; // map_data[7] == Plane size
 
     // FIXME: Should we swap map_data[0] and map_data[1] here - and later?
-    map_width_T = map_data[0];
-    map_height_T = map_data[1];
-    map_width_B = map_width_T << 1;
-    //screen_wrap = map_width_B-0x2A; // map width in tiles x2 MINUS tiles displayed on screen x2
-    screen_wrap_single = map_width_T - ENGINE_VIEWPORT_MAX_X_TILE; // map width in tiles MINUS tiles displayed on screen
+    map_width_tile = map_data[0];
+    map_height_tile = map_data[1];
+    map_width_bytes = map_width_tile << 1;
+    //screen_wrap = map_width_bytes-0x2A; // map width in tiles x2 MINUS tiles displayed on screen x2
+    screen_wrap_single = map_width_tile - ENGINE_VIEWPORT_MAX_X_TILE; // map width in tiles MINUS tiles displayed on screen
 
-    scrollX_min = scrollY_min = 0x2000;
+    scroll_x_min = scroll_y_min = 0x2000;
 
     // TODO: Are the shifts done correctly?
-    scrollX_max = (map_data[0] - 0x16) << 12;
+    scroll_x_max = (map_data[0] - 0x16) << 12;
     map_width = (map_data[0] - 2) << 12;
     map_height = map_data[1] << 12;
-    scrollY_max = ((map_data[1] - 0xF) << 12) + 0x800;
-    ceilingX = (map_data[0] - 3) << 12;
-    ceilingY = map_data[1] << 12;
+    scroll_y_max = ((map_data[1] - 0xF) << 12) + 0x800;
+    ceiling_x = (map_data[0] - 3) << 12;
+    ceiling_y = map_data[1] << 12;
 }
 
 void CVort_handle_quit() {
@@ -609,7 +609,7 @@ static void CVort_level_init(void) {
     g_entities.sprites[0].type_ = 1;
     g_entities.sprites[0].think = &CVort_think_keen_ground;
     g_entities.sprites[0].contact = CVort_ptr_contact_keen; // NOT &CVort_ptr_contact_keen
-    g_entities.sprites[0].velX = g_entities.sprites[0].velY = 0;
+    g_entities.sprites[0].vel_x = g_entities.sprites[0].vel_y = 0;
     g_entities.sprites[0].frame = 4;
     g_entities.sprites[0].active = 1;
     g_entities.num_sprites = 1;
@@ -624,17 +624,17 @@ static void CVort_level_init(void) {
 }
 
 static void CVort_level_setup_camera(void) {
-    scrollX = g_entities.sprites[0].posX + 0xFFFF6000;
-    scrollY = g_entities.sprites[0].posY + 0xFFFFB000;
+    scroll_x = g_entities.sprites[0].pos_x + 0xFFFF6000;
+    scroll_y = g_entities.sprites[0].pos_y + 0xFFFFB000;
     // Some scrolling stuff...
-    if (scrollX < scrollX_min)
-        scrollX = scrollX_min;
-    if (scrollY < scrollY_min)
-        scrollY = scrollY_min;
-    if (scrollX > scrollX_max)
-        scrollX = scrollX_max;
-    if (scrollY > scrollY_max)
-        scrollY = scrollY_max;
+    if (scroll_x < scroll_x_min)
+        scroll_x = scroll_x_min;
+    if (scroll_y < scroll_y_min)
+        scroll_y = scroll_y_min;
+    if (scroll_x > scroll_x_max)
+        scroll_x = scroll_x_max;
+    if (scroll_y > scroll_y_max)
+        scroll_y = scroll_y_max;
 }
 
 static void CVort_level_init_screen(void) {
@@ -645,16 +645,16 @@ static void CVort_level_init_screen(void) {
     CVort_engine_drawScreen();
     CVort_engine_drawScreen();
     CVort_fade_in();
-    scrollX_T = scrollX >> 12;
-    scrollY_T = scrollY >> 12;
+    scroll_x_tile = scroll_x >> 12;
+    scroll_y_tile = scroll_y >> 12;
 }
 
 static void CVort_run_sprite_think(void) {
     CVort_update_sprite_hitbox();
-    g_entities.temp_sprite.delX = g_entities.temp_sprite.delY = 0;
+    g_entities.temp_sprite.del_x = g_entities.temp_sprite.del_y = 0;
     (g_entities.temp_sprite.think)();
-    g_entities.temp_sprite.posX += g_entities.temp_sprite.delX;
-    g_entities.temp_sprite.posY += g_entities.temp_sprite.delY;
+    g_entities.temp_sprite.pos_x += g_entities.temp_sprite.del_x;
+    g_entities.temp_sprite.pos_y += g_entities.temp_sprite.del_y;
     CVort_update_sprite_hitbox();
 }
 
@@ -665,9 +665,9 @@ static void CVort_run_sprite_think(void) {
 static void CVort_activate_and_think_sprite(int16_t sprite_counter) {
     int16_t var_4, var_6;
     if (!g_entities.temp_sprite.active) {
-        var_4 = g_entities.temp_sprite.posX >> 12;
-        var_6 = g_entities.temp_sprite.posY >> 12;
-        if ((scrollX_T - ENGINE_SPRITE_MARGIN_MIN < var_4) && (scrollY_T - ENGINE_SPRITE_MARGIN_MIN < var_6) && (scrollX_T + ENGINE_VIEWPORT_WIDTH_TILES > var_4) && (scrollY_T + ENGINE_VIEWPORT_HEIGHT_TILES > var_6)) {
+        var_4 = g_entities.temp_sprite.pos_x >> 12;
+        var_6 = g_entities.temp_sprite.pos_y >> 12;
+        if ((scroll_x_tile - ENGINE_SPRITE_MARGIN_MIN < var_4) && (scroll_y_tile - ENGINE_SPRITE_MARGIN_MIN < var_6) && (scroll_x_tile + ENGINE_VIEWPORT_WIDTH_TILES > var_4) && (scroll_y_tile + ENGINE_VIEWPORT_HEIGHT_TILES > var_6)) {
             g_entities.temp_sprite.active = 1;
 #if CHOCOLATE_KEEN_IS_EPISODE1_ENABLED
             if (engine_gameVersion == GAMEVER_KEEN1) {
@@ -684,10 +684,10 @@ static void CVort_activate_and_think_sprite(int16_t sprite_counter) {
               if (engine_gameVersion == GAMEVER_KEEN3) {
                 if (g_entities.temp_sprite.think == &CVort3_think_foob_run) {
                     g_entities.temp_sprite.think = &CVort3_think_foob_walk;
-                    if (g_entities.temp_sprite.posX > g_entities.sprites[0].posX) {
-                        g_entities.temp_sprite.velX = 50;
+                    if (g_entities.temp_sprite.pos_x > g_entities.sprites[0].pos_x) {
+                        g_entities.temp_sprite.vel_x = 50;
                     } else {
-                        g_entities.temp_sprite.velX = -50;
+                        g_entities.temp_sprite.vel_x = -50;
                     }
                 }
             }
@@ -736,7 +736,7 @@ static void CVort_level_draw_sprites(void) {
     // Remember to draw g_entities.sprites; Here, we scan in REVERSED order.
     for (sprite_counter = g_entities.num_sprites - 1; sprite_counter >= 0; sprite_counter--)
         if (g_entities.sprites[sprite_counter].type_ && g_entities.sprites[sprite_counter].active)
-            CVort_engine_drawSpriteAt(g_entities.sprites[sprite_counter].posX, g_entities.sprites[sprite_counter].posY, g_entities.sprites[sprite_counter].frame);
+            CVort_engine_drawSpriteAt(g_entities.sprites[sprite_counter].pos_x, g_entities.sprites[sprite_counter].pos_y, g_entities.sprites[sprite_counter].frame);
 }
 
 #if CHOCOLATE_KEEN_IS_EPISODE3_ENABLED
@@ -744,9 +744,9 @@ static void CVort_level_draw_invincibility(void) {
     if (engine_gameVersion == GAMEVER_KEEN3) {
         if (g_game.keen_invincible || g_game.god_mode) {
             if (g_game.keen_invincible > 250) {
-                CVort_engine_drawSpriteAt(g_entities.sprites[0].posX - 0x800, g_entities.sprites[0].posY - 0x800, ((CVort_ptr_engine_getTicks() >> 4) & 1) + 0x3D);
+                CVort_engine_drawSpriteAt(g_entities.sprites[0].pos_x - 0x800, g_entities.sprites[0].pos_y - 0x800, ((CVort_ptr_engine_getTicks() >> 4) & 1) + 0x3D);
             } else if ((CVort_ptr_engine_getTicks() >> 4) & 1) {
-                CVort_engine_drawSpriteAt(g_entities.sprites[0].posX - 0x800, g_entities.sprites[0].posY - 0x800, ((CVort_ptr_engine_getTicks() >> 5) & 1) + 0x3D);
+                CVort_engine_drawSpriteAt(g_entities.sprites[0].pos_x - 0x800, g_entities.sprites[0].pos_y - 0x800, ((CVort_ptr_engine_getTicks() >> 5) & 1) + 0x3D);
             }
             g_game.keen_invincible -= g_game.sprite_sync;
             if (g_game.keen_invincible < 0) {
@@ -849,8 +849,8 @@ right_after_drawing_sync:
         CVort_level_update_sprites();
         CVort_do_scrolling();
         CVort_level_detect_collisions();
-        scrollX_T = scrollX >> 12;
-        scrollY_T = scrollY >> 12;
+        scroll_x_tile = scroll_x >> 12;
+        scroll_y_tile = scroll_y >> 12;
         CVort_level_draw_sprites();
 #if CHOCOLATE_KEEN_IS_EPISODE3_ENABLED
         CVort_level_draw_invincibility();

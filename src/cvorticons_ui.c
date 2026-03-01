@@ -530,13 +530,13 @@ void CVort_toggle_switch() {
     int16_t loopVar;
     CVort_engine_setCurSound(0x19);
     // Looks like a tantalus ray has been activated... oops!
-    if (map_data_tiles[(keen_tileY + 5) * map_width_T + keen_tileX + 3] == 0x1DF) {
-        int32_t origScrollX = scrollX, origScrollY = scrollY;
+    if (map_data_tiles[(keen_tileY + 5) * map_width_tile + keen_tileX + 3] == 0x1DF) {
+        int32_t origScrollX = scroll_x, origScrollY = scroll_y;
         for (loopVar = 1; loopVar < 80; loopVar++) {
             CVort_engine_syncDrawing();
-            scrollX = origScrollX - ((CVort_calc_jump_height(0x40) - 0x20) << 8);
-            scrollY = origScrollY - ((CVort_calc_jump_height(0x40) - 0x20) << 8);
-            CVort_engine_drawSpriteAt(g_entities.temp_sprite.posX, g_entities.temp_sprite.posY, g_entities.temp_sprite.frame);
+            scroll_x = origScrollX - ((CVort_calc_jump_height(0x40) - 0x20) << 8);
+            scroll_y = origScrollY - ((CVort_calc_jump_height(0x40) - 0x20) << 8);
+            CVort_engine_drawSpriteAt(g_entities.temp_sprite.pos_x, g_entities.temp_sprite.pos_y, g_entities.temp_sprite.frame);
             CVort_engine_drawScreen();
         }
         CVort_draw_box_opening_main(5, 1);
@@ -546,7 +546,7 @@ void CVort_toggle_switch() {
         g_game.level_finished = LEVEL_END_TANTALUS;
         return;
     }
-    switch (map_data_tiles[keen_tileY * map_width_T + keen_tileX]) {
+    switch (map_data_tiles[keen_tileY * map_width_tile + keen_tileX]) {
         case 0x10F:
             if (g_game.lights)
                 CVort_lights_out();
@@ -554,14 +554,14 @@ void CVort_toggle_switch() {
                 CVort_lights_on();
             return;
         case 0x1E0:
-            map_data_tiles[keen_tileY * map_width_T + keen_tileX] = 0x1ED;
+            map_data_tiles[keen_tileY * map_width_tile + keen_tileX] = 0x1ED;
             break;
         case 0x1ED:
-            map_data_tiles[keen_tileY * map_width_T + keen_tileX] = 0x1E0;
+            map_data_tiles[keen_tileY * map_width_tile + keen_tileX] = 0x1E0;
             break;
         default:;
     }
-    int16_t var_2 = map_data_sprites[keen_tileY * map_width_T + keen_tileX];
+    int16_t var_2 = map_data_sprites[keen_tileY * map_width_tile + keen_tileX];
     int16_t var_A = CVort_engine_signExtend8To16(var_2 & 0xFF);
     int16_t var_6 = keen_tileX + var_A;
     int16_t var_8 = keen_tileY + CVort_engine_signExtend8To16((var_2 >> 8) & 0xFF);
@@ -587,10 +587,10 @@ void CVort_toggle_switch() {
     g_entities.bodies[bodyIndex].tile_x = var_6;
     g_entities.bodies[bodyIndex].tile_y = var_8;
     g_entities.bodies[bodyIndex].variant = 0;
-    if (TILEINFO_LEdge[map_data_tiles[var_8 * map_width_T + var_6 + 1]])
+    if (TILEINFO_LEdge[map_data_tiles[var_8 * map_width_tile + var_6 + 1]])
         g_entities.bodies[bodyIndex].field_C = -1;
     else
         g_entities.bodies[bodyIndex].field_C = 1;
-    g_entities.bodies[bodyIndex].field_E = map_data_tiles[var_8 * map_width_T + var_6];
+    g_entities.bodies[bodyIndex].field_E = map_data_tiles[var_8 * map_width_tile + var_6];
     g_entities.bodies[bodyIndex].field_10 = 0;
 }

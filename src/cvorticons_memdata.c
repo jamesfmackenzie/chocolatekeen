@@ -212,12 +212,12 @@
     uint8_t *demo_action_ptr, *end_of_demo_ptr, *demo_after_last_byte_char_offset = demo_actions_including_level_num + sizeof(demo_actions_including_level_num);
 
     int16_t map_data[0x10000 / 2], *map_data_tiles, *map_data_sprites;
-    int16_t map_width_T, map_height_T, map_width_B;
+    int16_t map_width_tile, map_height_tile, map_width_bytes;
     uint16_t screen_wrap_single;
     //uint16_t screen_wrap;
     int32_t map_width, map_height;
-    int32_t scrollX, scrollY, scrollX_min, scrollY_min, scrollX_max, scrollY_max, ceilingX, ceilingY;
-    int16_t scrollX_T, scrollY_T;
+    int32_t scroll_x, scroll_y, scroll_x_min, scroll_y_min, scroll_x_max, scroll_y_max, ceiling_x, ceiling_y;
+    int16_t scroll_x_tile, scroll_y_tile;
     uint16_t cursorX, cursorX_save, cursorY;
 
     uint32_t cursorX_b, cursorY_b; // Cursor position in map units
@@ -234,7 +234,7 @@
     GameProfile_T keen_gp;
 
     uint32_t keen_wmap_x_pos, keen_wmap_y_pos;
-    uint32_t wmap_scrollX, wmap_scrollY;
+    uint32_t wmap_scroll_x, wmap_scroll_y;
     Maplevel_T wmaplevels[0x10];
 
     DrawFunction_T draw_func;
@@ -246,6 +246,6 @@
 
     uint16_t messie_mounted, messie_frame, messie_time_to_climb, messie_move_tics;
     uint16_t messie_x_T, messie_y_T;
-    int32_t messie_xpos, messie_ypos, messie_delX, messie_delY;
+    int32_t messie_xpos, messie_ypos, messie_del_x, messie_del_y;
 
     Teleporter_T teleporters[16];

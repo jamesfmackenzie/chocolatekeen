@@ -335,7 +335,7 @@
 
     void CVort3_think_vortimom_walk();
     void CVort3_think_vortimom_shoot();
-    void CVort3_add_vortimomshot(int32_t posX, int32_t posY, int16_t velocity);
+    void CVort3_add_vortimomshot(int32_t pos_x, int32_t pos_y, int16_t velocity);
     void CVort3_think_vortimomshot();
     void CVort3_contact_vortimomshot(Sprite_T *shot, Sprite_T *contacted);
     void CVort3_contact_vortimom(Sprite_T *vortimom, Sprite_T *contacted);

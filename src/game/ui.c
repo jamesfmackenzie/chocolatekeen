@@ -264,7 +264,7 @@ void CVort_save_ctrls() {
     CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt8LE(&g_input.sc_but1, 1, fp), 1);
     CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt8LE(&g_input.sc_but2, 1, fp), 1);
     fclose(fp);
-    (void)saveOk;
+    CK_IO_WARN_ON_WRITE_FAIL(saveOk, g_game.string_buf);
 }
 
 GameInput_T CVort_handle_ctrl(uint16_t input_type) {

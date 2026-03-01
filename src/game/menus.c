@@ -1197,5 +1197,5 @@ void CVort_save_high_scores_table() {
     for (entryCounter = 0; entryCounter < 7; entryCounter++)
         CK_IO_EXPECT(saveOk, fwrite(high_scores_table.names[entryCounter], sizeof (high_scores_table.names[entryCounter]), 1, fp), 1);
     fclose(fp);
-    (void)saveOk;
+    CK_IO_WARN_ON_WRITE_FAIL(saveOk, path);
 }

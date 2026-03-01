@@ -21,6 +21,12 @@ USE_OPENGL=1
 SINGLE_EPISODE=0
 
 OBJECTS=$(OBJ)/game_gameplay.o \
+        $(OBJ)/game_worldmap.o \
+        $(OBJ)/game_menus.o \
+        $(OBJ)/game_ui.o \
+        $(OBJ)/game_physics.o \
+        $(OBJ)/game_enemies.o \
+        $(OBJ)/game_episode_constants.o \
         $(OBJ)/render_memdata.o \
         $(OBJ)/engine_engine.o \
         $(OBJ)/render_gfx.o \

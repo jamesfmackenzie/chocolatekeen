@@ -114,7 +114,9 @@ game: $(EXE_PATH)
 
 PRELOAD_FILE=
 ifeq ($(CC), emcc)
+ifneq ($(wildcard data),)
 	PRELOAD_FILES= --preload-file data@/
+endif
 endif
 
 $(EXE_PATH): $(OBJECTS)

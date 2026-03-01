@@ -13,6 +13,9 @@
 
 #include "episodes/episode_macros.h"
 
+#define CK_IO_EXPECT(ok, expr, expected) \
+    do { (ok) = (ok) && ((expr) == (expected)); } while (0)
+
 void CVort_demo_toggle_reset_player_partial_state_before();
 void CVort_demo_toggle_reset_player_partial_state_after();
 
@@ -675,17 +678,17 @@ uint16_t CVort_private_continue_game() {
         }
         if (CVort_filelength(fp) == 92) {
             bool loadOk = true;
-            loadOk = loadOk && (CVort_engine_cross_freadInt16LE(keen_gp.stuff, 9, fp) == 9);
-            loadOk = loadOk && (CVort_engine_cross_freadInt16LE(keen_gp.levels, 16, fp) == 16);
-            loadOk = loadOk && (CVort_engine_cross_freadInt16LE(&keen_gp.lives, 1, fp) == 1);
-            loadOk = loadOk && (CVort_engine_cross_freadInt16LE(&keen_gp.ammo, 1, fp) == 1);
-            loadOk = loadOk && (CVort_engine_cross_freadInt32LE(&keen_gp.score, 1, fp) == 1);
-            loadOk = loadOk && (CVort_engine_cross_freadInt32LE(&keen_gp.mapX, 1, fp) == 1);
-            loadOk = loadOk && (CVort_engine_cross_freadInt32LE(&keen_gp.mapY, 1, fp) == 1);
-            loadOk = loadOk && (CVort_engine_cross_freadInt32LE(&keen_gp.screenX, 1, fp) == 1);
-            loadOk = loadOk && (CVort_engine_cross_freadInt32LE(&keen_gp.screenY, 1, fp) == 1);
-            loadOk = loadOk && (CVort_engine_cross_freadInt16LE(keen_gp.targets, 8, fp) == 8);
-            loadOk = loadOk && (CVort_engine_cross_freadInt16LE(&keen_gp.unknown, 1, fp) == 1);
+            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(keen_gp.stuff, 9, fp), 9);
+            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(keen_gp.levels, 16, fp), 16);
+            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(&keen_gp.lives, 1, fp), 1);
+            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(&keen_gp.ammo, 1, fp), 1);
+            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt32LE(&keen_gp.score, 1, fp), 1);
+            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt32LE(&keen_gp.mapX, 1, fp), 1);
+            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt32LE(&keen_gp.mapY, 1, fp), 1);
+            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt32LE(&keen_gp.screenX, 1, fp), 1);
+            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt32LE(&keen_gp.screenY, 1, fp), 1);
+            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(keen_gp.targets, 8, fp), 8);
+            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(&keen_gp.unknown, 1, fp), 1);
             fclose(fp);
             if (!loadOk)
                 continue;
@@ -1142,14 +1145,14 @@ void CVort_load_high_scores_table() {
     if (fp) {
         bool loadOk = true;
         for (entryCounter = 0; entryCounter < 7; entryCounter++)
-            loadOk = loadOk && (CVort_engine_cross_freadInt32LE(high_scores_table.scores + entryCounter, 1, fp) == 1);
+            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt32LE(high_scores_table.scores + entryCounter, 1, fp), 1);
         for (partCounter = 0; partCounter < 4; partCounter++)
             for (entryCounter = 0; entryCounter < 7; entryCounter++)
-                loadOk = loadOk && (CVort_engine_cross_freadInt16LE(&high_scores_table.parts[entryCounter][partCounter], 1, fp) == 1);
+                CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(&high_scores_table.parts[entryCounter][partCounter], 1, fp), 1);
         for (entryCounter = 0; entryCounter < 7; entryCounter++)
-            loadOk = loadOk && (CVort_engine_cross_freadInt16LE(high_scores_table.targets + entryCounter, 1, fp) == 1);
+            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(high_scores_table.targets + entryCounter, 1, fp), 1);
         for (entryCounter = 0; entryCounter < 7; entryCounter++)
-            loadOk = loadOk && (CVort_engine_cross_freadInt16LE(high_scores_table.unknown + entryCounter, 1, fp) == 1);
+            CK_IO_EXPECT(loadOk, CVort_engine_cross_freadInt16LE(high_scores_table.unknown + entryCounter, 1, fp), 1);
         for (entryCounter = 0; entryCounter < 7; entryCounter++) {
             if (fread(high_scores_table.names[entryCounter], sizeof (high_scores_table.names[entryCounter]), 1, fp) != 1) {
                 loadOk = false;
@@ -1185,16 +1188,16 @@ void CVort_save_high_scores_table() {
     bool saveOk = true;
     int entryCounter, partCounter;
     for (entryCounter = 0; entryCounter < 7; entryCounter++)
-        saveOk = saveOk && (CVort_engine_cross_fwriteInt32LE(high_scores_table.scores + entryCounter, 1, fp) == 1);
+        CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt32LE(high_scores_table.scores + entryCounter, 1, fp), 1);
     for (partCounter = 0; partCounter < 4; partCounter++)
         for (entryCounter = 0; entryCounter < 7; entryCounter++)
-            saveOk = saveOk && (CVort_engine_cross_fwriteInt16LE(&high_scores_table.parts[entryCounter][partCounter], 1, fp) == 1);
+            CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(&high_scores_table.parts[entryCounter][partCounter], 1, fp), 1);
     for (entryCounter = 0; entryCounter < 7; entryCounter++)
-        saveOk = saveOk && (CVort_engine_cross_fwriteInt16LE(high_scores_table.targets + entryCounter, 1, fp) == 1);
+        CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(high_scores_table.targets + entryCounter, 1, fp), 1);
     for (entryCounter = 0; entryCounter < 7; entryCounter++)
-        saveOk = saveOk && (CVort_engine_cross_fwriteInt16LE(high_scores_table.unknown + entryCounter, 1, fp) == 1);
+        CK_IO_EXPECT(saveOk, CVort_engine_cross_fwriteInt16LE(high_scores_table.unknown + entryCounter, 1, fp), 1);
     for (entryCounter = 0; entryCounter < 7; entryCounter++)
-        saveOk = saveOk && (fwrite(high_scores_table.names[entryCounter], sizeof (high_scores_table.names[entryCounter]), 1, fp) == 1);
+        CK_IO_EXPECT(saveOk, fwrite(high_scores_table.names[entryCounter], sizeof (high_scores_table.names[entryCounter]), 1, fp), 1);
     fclose(fp);
     (void)saveOk;
 }

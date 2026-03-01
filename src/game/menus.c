@@ -7,6 +7,7 @@
 #include <inttypes.h>
 #include "core/core.h"
 #include "core/io_helpers.h"
+#include "core/path_helpers.h"
 #include "episodes/episode1.h"
 #include "episodes/episode2.h"
 #include "episodes/episode3.h"
@@ -17,18 +18,6 @@
 void CVort_demo_toggle_reset_player_partial_state_before();
 void CVort_demo_toggle_reset_player_partial_state_after();
 
-static void CVort_private_format_demo_path(int16_t demo_number) {
-    snprintf(g_game.string_buf, sizeof(g_game.string_buf), "DEMO%d.%s", demo_number, game_ext);
-}
-
-static void CVort_private_format_saved_slot_path(char *path, size_t path_size, char slot_char) {
-    snprintf(path, path_size, "SAVED%c.%s", slot_char, game_ext);
-}
-
-static void CVort_private_format_scores_path(char *path, size_t path_size) {
-    snprintf(path, path_size, "SCORES.%s", game_ext);
-}
-
 void CVort_record_demo(int16_t demo_number) {
     demo_actions_including_level_num[0] = g_game.current_level;
     demo_action_ptr = 1 + demo_actions_including_level_num;
@@ -37,7 +26,7 @@ void CVort_record_demo(int16_t demo_number) {
 
 void CVort_load_demo(int16_t demo_number) {
     FILE *fp;
-    CVort_private_format_demo_path(demo_number);
+    CK_Path_FormatDemo(g_game.string_buf, sizeof(g_game.string_buf), demo_number, game_ext);
     fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "rb");
     if (!fp) {
         CK_IO_WARN_ON_OPEN_FAIL_FOR_READ(g_game.string_buf);
@@ -58,7 +47,7 @@ void CVort_load_demo(int16_t demo_number) {
 
 void CVort_save_demo(int16_t demo_number) {
     FILE *fp;
-    CVort_private_format_demo_path(demo_number);
+    CK_Path_FormatDemo(g_game.string_buf, sizeof(g_game.string_buf), demo_number, game_ext);
     fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "wb");
     CK_IO_RETURN_IF_OPEN_FAIL_FOR_WRITE(fp, g_game.string_buf);
     bool saveOk = true;
@@ -136,7 +125,7 @@ void CVort_do_intro_and_menu() {
                 introTickCounter -= g_game.sprite_sync;
                 if (introTickCounter <= 0) {
                     for (; introCurrScreen < 10; introCurrScreen++) {
-                        CVort_private_format_demo_path(introCurrScreen);
+                        CK_Path_FormatDemo(g_game.string_buf, sizeof(g_game.string_buf), introCurrScreen, game_ext);
                         fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "rb");
                         if (!fp) {
                             continue;
@@ -589,7 +578,7 @@ void CVort_save_game() {
     FILE *fp;
     int8_t inputChar, confirmChar;
     // FIXME: Quite hackish but... more true to the original?
-    CVort_private_format_saved_slot_path(path, sizeof(path), '?');
+    CK_Path_FormatSavedSlot(path, sizeof(path), '?', game_ext);
     if (!g_game.on_world_map) {
         CVort_draw_box_opening_main(0x16, 3);
         CVort_draw_string("You can SAVE the game\n");
@@ -609,7 +598,7 @@ void CVort_save_game() {
         if (inputChar == 0x1B)
             return;
         // FIXME: Seems a bit hackish but... well...
-        CVort_private_format_saved_slot_path(path, sizeof(path), inputChar);
+        CK_Path_FormatSavedSlot(path, sizeof(path), inputChar, game_ext);
         // First check if file already exists
         fp = CVort_engine_cross_rw_misc_fopen(path, "rb");
         if (fp) {
@@ -664,7 +653,7 @@ uint16_t CVort_private_continue_game() {
     // FIXME: Again hackish but... same as CVort_save_game()...
     // Possibly a bit less vanilla, but actually works the proper
     // (and vanilla) way!
-    CVort_private_format_saved_slot_path(path, sizeof(path), '?');
+    CK_Path_FormatSavedSlot(path, sizeof(path), '?', game_ext);
     CVort_engine_drawChar(cursorX, cursorY << 3, ' ');
     do {
         CVort_draw_box_opening_main(0x19, 2);
@@ -677,7 +666,7 @@ uint16_t CVort_private_continue_game() {
         if (inputChar == 0x1B)
             return 0;
         // FIXME: Hackish just like in CVort_save_game()...
-        CVort_private_format_saved_slot_path(path, sizeof(path), inputChar);
+        CK_Path_FormatSavedSlot(path, sizeof(path), inputChar, game_ext);
         // FIXME FIXME!!! Vanilla behavior concatenates the file
         // extension ".CK1" until we have a proper answer!!!!!!
         // Or so it seems.
@@ -1155,7 +1144,7 @@ void CVort_load_high_scores_table() {
     // FIXME: This is a wrong way to do it, but...... more vanilla!
     static char default_names[][15] = {"Yorpy", "Gargile", "Zzapp!"};
     char path[14];
-    CVort_private_format_scores_path(path, sizeof(path));
+    CK_Path_FormatScores(path, sizeof(path), game_ext);
 
     int entryCounter, partCounter;
 
@@ -1198,7 +1187,7 @@ void CVort_save_high_scores_table() {
     // FIXME: This is a wrong way to do it, but...... more vanilla!
     // Or rather, vanilla on the *loading* side...
     char path[14];
-    CVort_private_format_scores_path(path, sizeof(path));
+    CK_Path_FormatScores(path, sizeof(path), game_ext);
 
     FILE *fp = CVort_engine_cross_rw_misc_fopen(path, "wb");
     CK_IO_RETURN_IF_OPEN_FAIL_FOR_WRITE(fp, path);

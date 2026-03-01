@@ -7,16 +7,13 @@
 #include <inttypes.h>
 #include "core/core.h"
 #include "core/io_helpers.h"
+#include "core/path_helpers.h"
 #include "episodes/episode1.h"
 #include "episodes/episode2.h"
 #include "episodes/episode3.h"
 #include "third_party/cgenius/fileio/compression/CRLE.h"
 
 #include "episodes/episode_macros.h"
-
-static void CVort_private_format_ctrlpanel_path(void) {
-    snprintf(g_game.string_buf, sizeof(g_game.string_buf), "CTLPANEL.%s", game_ext);
-}
 
 void CVort_draw_keyname(int16_t key) {
     key &= 0x7F;
@@ -196,7 +193,7 @@ void CVort_handle_redef_keys() {
 }
 
 void CVort_init_ctrls() {
-    CVort_private_format_ctrlpanel_path();
+    CK_Path_FormatCtrlPanel(g_game.string_buf, sizeof(g_game.string_buf), game_ext);
     FILE *fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "rb");
     if (fp) {
         bool loadOk = true;
@@ -245,7 +242,7 @@ void CVort_init_ctrls() {
 }
 
 void CVort_save_ctrls() {
-    CVort_private_format_ctrlpanel_path();
+    CK_Path_FormatCtrlPanel(g_game.string_buf, sizeof(g_game.string_buf), game_ext);
     FILE *fp = CVort_engine_cross_rw_misc_fopen(g_game.string_buf, "wb");
     CK_IO_RETURN_IF_OPEN_FAIL_FOR_WRITE(fp, g_game.string_buf);
     bool saveOk = true;

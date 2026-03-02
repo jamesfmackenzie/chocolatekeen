@@ -47,6 +47,8 @@ $(OBJ)/render_memdata.o: $(SRC)/render/memdata.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/engine_engine.o: $(SRC)/engine/engine.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/engine_engine_audio.o: $(SRC)/engine/engine_audio.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/engine_engine_config.o: $(SRC)/engine/engine_config.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/engine_engine_io.o: $(SRC)/engine/engine_io.c

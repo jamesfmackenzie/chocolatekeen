@@ -9,6 +9,7 @@ COMMON_OBJECTS=$(OBJ)/game_gameplay.o \
         $(OBJ)/engine_engine.o \
         $(OBJ)/engine_engine_config.o \
         $(OBJ)/engine_engine_io.o \
+        $(OBJ)/engine_engine_timing.o \
         $(OBJ)/render_gfx.o \
         $(OBJ)/input_input.o \
         $(OBJ)/ui_gui.o \

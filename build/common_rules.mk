@@ -51,6 +51,8 @@ $(OBJ)/engine_engine_config.o: $(SRC)/engine/engine_config.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/engine_engine_io.o: $(SRC)/engine/engine_io.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/engine_engine_timing.o: $(SRC)/engine/engine_timing.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/render_gfx.o: $(SRC)/render/gfx.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/input_input.o: $(SRC)/input/input.c

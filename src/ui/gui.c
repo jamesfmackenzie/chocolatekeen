@@ -6,18 +6,7 @@
 // Actually cvorticons.h includes that anyway...
 #include "SDL.h"
 #include "platform/platform.h"
-
-struct GUI_Menu_Item_Struct {
-	int x, y, text_y, width, height, choiceMaxPixWidth;
-	const char *label;
-	const char **choices;
-	int value, numOfChoices;
-	void (*handler) (struct GUI_Menu_Item_Struct *thisItem); // Called upon activation
-};
-
-typedef struct GUI_Menu_Item_Struct GUI_Menu_Item_T;
-typedef void GUI_Menu_Item_HandlerNonPtr_T (GUI_Menu_Item_T *);
-typedef GUI_Menu_Item_HandlerNonPtr_T *GUI_Menu_Item_Handler_T;
+#include "ui/gui_types.h"
 
 // Function forward declarations
 GUI_Menu_Item_HandlerNonPtr_T
@@ -95,21 +84,6 @@ GUI_Menu_Item_HandlerNonPtr_T
 	//CVort_gui_handler_leaveMapperBindingMenu,
 	CVort_gui_handler_pickMapperBindingModifiers;
 
-struct GUI_Menu_Struct {
-	int title_x, title_y;
-	const char *title;
-	int width;
-	GUI_Menu_Item_T **items;
-	struct GUI_Menu_Struct *backPage, *prevPage, *nextPage;
-	// An alternative for backPage (used in the internal mapper menu)
-	void (*altBackHandler)(void);
-	// Don't draw back button even if there's a back page/handler
-	// (but accept input from a dedicated back button like the Escape key).
-	// Used when there is already a button in the menu for that.
-	bool hideBackButton;
-};
-
-typedef struct GUI_Menu_Struct GUI_Menu_T;
 GUI_Menu_T *guiCurrentMenuPtr;
 GUI_Menu_Item_T **guiCurrentMenuItemSelectionPtr;
 
@@ -613,38 +587,6 @@ Some mapper UI stuff
 #define GUI_MAPPER_TOP_ROW_LEFTMOST_XPOS 48
 // Topmost position of a tile in top row, without any spacing
 #define GUI_MAPPER_TOP_ROW_TOPMOST_YPOS ((GUI_MAPPER_SPACED_TILE_HEIGHT-GUI_MAPPER_TILE_HEIGHT)/2)
-
-struct GUI_Mapper_Tile_Struct;
-
-// To move between tiles in the UI with a keyboard/d-pad
-struct GUI_Mapper_NearTiles_Struct {
-	struct GUI_Mapper_Tile_Struct *left, *right, *up, *down;
-};
-
-typedef struct GUI_Mapper_NearTiles_Struct GUI_Mapper_NearTiles_T;
-
-struct GUI_Mapper_Tile_Struct {
-	int x, y, width, height;
-	const char *topLeftLabel, *midLeftLabel, *botLeftLabel;
-	struct {
-		EmulatedInput_T emulatedInput;
-		int value;
-	} emuEvent;
-	// To move between tiles in the UI with a keyboard/d-pad
-	GUI_Mapper_NearTiles_T nearTiles;
-};
-
-typedef struct GUI_Mapper_Tile_Struct GUI_Mapper_Tile_T;
-
-struct GUI_Mapper_Page_Struct {
-	GUI_Mapper_Tile_T **tiles;
-	/* There is never a "back" mapper page, but it's always possible
-	 * to leave a mapper page and return to the usual launcher UI.
-	 */
-	struct GUI_Mapper_Page_Struct *prevPage, *nextPage;
-};
-
-typedef struct GUI_Mapper_Page_Struct GUI_Mapper_Page_T;
 
 // First declare the tiles, because one may reference the other later
 extern GUI_Mapper_Tile_T

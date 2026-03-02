@@ -47,6 +47,8 @@ $(OBJ)/render_memdata.o: $(SRC)/render/memdata.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/engine_engine.o: $(SRC)/engine/engine.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/engine_engine_io.o: $(SRC)/engine/engine_io.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/render_gfx.o: $(SRC)/render/gfx.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/input_input.o: $(SRC)/input/input.c

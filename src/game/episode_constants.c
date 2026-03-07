@@ -1,3 +1,5 @@
+// episode_constants.c: Implements episode constants for the game subsystem.
+
 #include "core/types.h"
 #include "episodes/episode1.h"
 #include "episodes/episode2.h"

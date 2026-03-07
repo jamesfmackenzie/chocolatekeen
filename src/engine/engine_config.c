@@ -1,3 +1,5 @@
+// engine_config.c: Implements engine config for the engine subsystem.
+
 #include <stdio.h>
 #include <string.h>
 

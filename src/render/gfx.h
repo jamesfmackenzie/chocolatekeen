@@ -1,3 +1,5 @@
+// gfx.h: Declares gfx interfaces for the render subsystem.
+
 #ifndef _CHOCOLATE_KEEN_GFX_
 #define _CHOCOLATE_KEEN_GFX_
 

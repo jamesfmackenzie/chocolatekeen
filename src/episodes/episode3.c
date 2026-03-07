@@ -1,3 +1,5 @@
+// episode3.c: Implements episode3 for the episodes subsystem.
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>

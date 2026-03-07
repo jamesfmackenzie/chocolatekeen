@@ -1,3 +1,5 @@
+// episode_macros.h: Declares episode macros interfaces for the episodes subsystem.
+
 #ifndef _CHOCOLATE_KEEN_EPISODE_MACROS_
 #define _CHOCOLATE_KEEN_EPISODE_MACROS_
 

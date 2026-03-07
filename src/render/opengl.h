@@ -1,3 +1,5 @@
+// opengl.h: Declares opengl interfaces for the render subsystem.
+
 #ifndef _CHOCOLATE_KEEN_VORTICONS_OPENGL_
 #define _CHOCOLATE_KEEN_VORTICONS_OPENGL_
 

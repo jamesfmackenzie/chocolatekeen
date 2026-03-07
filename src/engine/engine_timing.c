@@ -1,3 +1,5 @@
+// engine_timing.c: Implements engine timing for the engine subsystem.
+
 #include "SDL.h"
 
 #include "core/globals.h"

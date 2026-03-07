@@ -1,3 +1,5 @@
+// engine.c: Implements engine for the engine subsystem.
+
 #include <stdio.h>
 #include "SDL.h"
 #include "SDL_endian.h"

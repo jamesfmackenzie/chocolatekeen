@@ -1,3 +1,5 @@
+// engine_io.c: Implements engine io for the engine subsystem.
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>

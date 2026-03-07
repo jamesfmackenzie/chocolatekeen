@@ -1,3 +1,5 @@
+// platform.h: Declares platform interfaces for the platform subsystem.
+
 #ifndef _CHOCOLATE_KEEN_PLATFORM_
 #define _CHOCOLATE_KEEN_PLATFORM_
 

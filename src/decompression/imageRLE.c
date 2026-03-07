@@ -1,3 +1,5 @@
+// imageRLE.c: Implements imageRLE for the decompression subsystem.
+
 #include "SDL.h"
 
 /* Implementation based on info posted here:                   */

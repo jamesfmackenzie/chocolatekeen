@@ -1,3 +1,5 @@
+// episode3.h: Declares episode3 interfaces for the episodes subsystem.
+
 /* 
  * File:   cvorticons3.h 
  * Author: Owen

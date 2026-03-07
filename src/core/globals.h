@@ -1,3 +1,5 @@
+// globals.h: Declares globals interfaces for the core subsystem.
+
 #ifndef _CHOCOLATE_KEEN_VORTICONS_GLOBALS_
 #define _CHOCOLATE_KEEN_VORTICONS_GLOBALS_
 

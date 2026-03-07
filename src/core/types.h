@@ -1,3 +1,5 @@
+// types.h: Declares types interfaces for the core subsystem.
+
 #ifndef _CHOCOLATE_KEEN_VORTICONS_TYPES_
 #define _CHOCOLATE_KEEN_VORTICONS_TYPES_
 

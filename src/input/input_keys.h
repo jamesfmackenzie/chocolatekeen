@@ -1,3 +1,5 @@
+// input_keys.h: Declares input keys interfaces for the input subsystem.
+
 #ifndef _CHOCOLATE_KEEN_INPUT_KEYS_
 #define _CHOCOLATE_KEEN_INPUT_KEYS_
 

@@ -1,3 +1,5 @@
+// memdata.c: Implements memdata for the render subsystem.
+
 #include "chocolate-keen_config.h"
 #include "core/globals.h"
 

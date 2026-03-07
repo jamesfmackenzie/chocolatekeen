@@ -1,3 +1,5 @@
+// engine_loader.c: Implements engine loader for the engine subsystem.
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

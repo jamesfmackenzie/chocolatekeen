@@ -1,3 +1,5 @@
+// gui_loop_common.c: Implements gui loop common for the ui subsystem.
+
 #include "ui/gui_loop_common.h"
 
 #include "core/globals.h"

@@ -1,3 +1,5 @@
+// gui_mapper_nav.c: Implements gui mapper nav for the ui subsystem.
+
 #include "core/globals.h"
 #include "ui/gui_mapper_nav.h"
 #include "ui/gui_types.h"

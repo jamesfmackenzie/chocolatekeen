@@ -1,3 +1,5 @@
+// gui_menu_loop.h: Declares gui menu loop interfaces for the ui subsystem.
+
 #ifndef _CHOCOLATE_KEEN_GUI_MENU_LOOP_H_
 #define _CHOCOLATE_KEEN_GUI_MENU_LOOP_H_
 

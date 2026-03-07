@@ -1,3 +1,5 @@
+// gui_mapper.c: Implements gui mapper for the ui subsystem.
+
 #include "../rsrc/chocolate-keen_vga_fonts.h"
 #include "core/globals.h"
 #include "ui/gui_loop_common.h"

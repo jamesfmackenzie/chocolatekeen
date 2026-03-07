@@ -1,3 +1,5 @@
+// engine_audio.c: Implements engine audio for the engine subsystem.
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

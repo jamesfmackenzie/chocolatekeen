@@ -1,3 +1,5 @@
+// gui_data.c: Implements gui data for the ui subsystem.
+
 #include "core/globals.h"
 #include "ui/gui_data.h"
 #include "ui/gui_handlers.h"

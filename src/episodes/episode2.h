@@ -1,3 +1,5 @@
+// episode2.h: Declares episode2 interfaces for the episodes subsystem.
+
 /* 
  * File:   cvorticons2.h (renamed from chocolate_keen2.h)
  * Author: Owen

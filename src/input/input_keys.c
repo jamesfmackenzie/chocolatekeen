@@ -1,3 +1,5 @@
+// input_keys.c: Implements input keys for the input subsystem.
+
 #include "input/input_keys.h"
 
 // Keep this table in lock-step with EmulatedKeyIndex_T.

@@ -1,3 +1,5 @@
+// constants.h: Declares constants interfaces for the core subsystem.
+
 #ifndef _CHOCOLATE_KEEN_VORTICONS_CONSTANTS_
 #define _CHOCOLATE_KEEN_VORTICONS_CONSTANTS_
 

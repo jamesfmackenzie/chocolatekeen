@@ -1,3 +1,5 @@
+// input_default_mappings.c: Implements input default mappings for the input subsystem.
+
 #include "SDL.h"
 
 #include "input/input_default_mappings.h"

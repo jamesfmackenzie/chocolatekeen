@@ -1,3 +1,5 @@
+// gui_mapper_nav.h: Declares gui mapper nav interfaces for the ui subsystem.
+
 #ifndef _CHOCOLATE_KEEN_GUI_MAPPER_NAV_H_
 #define _CHOCOLATE_KEEN_GUI_MAPPER_NAV_H_
 

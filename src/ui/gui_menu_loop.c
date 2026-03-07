@@ -1,3 +1,5 @@
+// gui_menu_loop.c: Implements gui menu loop for the ui subsystem.
+
 #include <string.h>
 
 #include "../rsrc/chocolate-keen_vga_fonts.h"

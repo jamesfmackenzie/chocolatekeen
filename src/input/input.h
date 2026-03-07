@@ -1,3 +1,5 @@
+// input.h: Declares input interfaces for the input subsystem.
+
 #ifndef _CHOCOLATE_KEEN_VORTICONS_INPUT_
 #define _CHOCOLATE_KEEN_VORTICONS_INPUT_
 

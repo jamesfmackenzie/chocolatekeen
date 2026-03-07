@@ -1,3 +1,5 @@
+// input_names.c: Implements input names for the input subsystem.
+
 #include "input/input_names.h"
 
 const char *const mapperClientJoyButtonNames[] = {

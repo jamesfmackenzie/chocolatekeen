@@ -1,3 +1,5 @@
+// gfx.c: Implements gfx for the render subsystem.
+
 #include <assert.h>
 #include "SDL.h"
 #include "core/globals.h"

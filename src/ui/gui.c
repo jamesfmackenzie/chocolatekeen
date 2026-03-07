@@ -1,3 +1,5 @@
+// gui.c: Implements gui for the ui subsystem.
+
 #include <assert.h>
 
 #include "../rsrc/chocolate-keen_vga_fonts.h"

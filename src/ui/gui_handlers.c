@@ -1,3 +1,5 @@
+// gui_handlers.c: Implements gui handlers for the ui subsystem.
+
 #include <stdlib.h>
 
 #include "core/globals.h"

@@ -1,3 +1,5 @@
+// chocolate-keen_config.h: Declares chocolate-keen config interfaces for the project subsystem.
+
 #ifndef _CHOCOLATE_KEEN_CONFIG_
 #define _CHOCOLATE_KEEN_CONFIG_
 

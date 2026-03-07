@@ -1,3 +1,5 @@
+// episode2_engine.c: Implements episode2 engine for the episodes subsystem.
+
 #include "core/globals.h"
 #include "episodes/episode2.h"
 

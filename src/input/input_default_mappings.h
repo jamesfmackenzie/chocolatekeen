@@ -1,3 +1,5 @@
+// input_default_mappings.h: Declares input default mappings interfaces for the input subsystem.
+
 #ifndef _CHOCOLATE_KEEN_INPUT_DEFAULT_MAPPINGS_
 #define _CHOCOLATE_KEEN_INPUT_DEFAULT_MAPPINGS_
 

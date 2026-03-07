@@ -1,3 +1,5 @@
+// imageRLE.h: Declares imageRLE interfaces for the decompression subsystem.
+
 #ifndef _CHOCOLATE_KEEN_IMAGE_RLE_
 #define _CHOCOLATE_KEEN_IMAGE_RLE_
 

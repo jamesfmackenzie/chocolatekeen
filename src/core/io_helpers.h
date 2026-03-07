@@ -1,3 +1,5 @@
+// io_helpers.h: Declares io helpers interfaces for the core subsystem.
+
 #ifndef CK_IO_HELPERS_H
 #define CK_IO_HELPERS_H
 

@@ -1,3 +1,5 @@
+// gui_handlers.h: Declares gui handlers interfaces for the ui subsystem.
+
 #ifndef _CHOCOLATE_KEEN_GUI_HANDLERS_H_
 #define _CHOCOLATE_KEEN_GUI_HANDLERS_H_
 

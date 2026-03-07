@@ -1,3 +1,5 @@
+// episode1.h: Declares episode1 interfaces for the episodes subsystem.
+
 /* 
  * File:   cvorticons1.h (renamed from chocolate_keen1.h)
  * Author: Owen

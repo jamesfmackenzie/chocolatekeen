@@ -1,3 +1,5 @@
+// gui_runtime.h: Declares gui runtime interfaces for the ui subsystem.
+
 #ifndef _CHOCOLATE_KEEN_GUI_RUNTIME_H_
 #define _CHOCOLATE_KEEN_GUI_RUNTIME_H_
 

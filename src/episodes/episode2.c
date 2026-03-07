@@ -1,3 +1,5 @@
+// episode2.c: Implements episode2 for the episodes subsystem.
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>

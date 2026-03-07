@@ -1,3 +1,5 @@
+// gui_mapper_menu.c: Implements gui mapper menu for the ui subsystem.
+
 #include <stdio.h>
 
 #include "core/globals.h"

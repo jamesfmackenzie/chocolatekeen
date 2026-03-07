@@ -1,3 +1,5 @@
+// ui.c: Implements ui for the game subsystem.
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>

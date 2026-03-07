@@ -1,3 +1,5 @@
+// path_helpers.h: Declares path helpers interfaces for the core subsystem.
+
 #ifndef CK_PATH_HELPERS_H
 #define CK_PATH_HELPERS_H
 

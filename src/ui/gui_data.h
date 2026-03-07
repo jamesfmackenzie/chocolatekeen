@@ -1,3 +1,5 @@
+// gui_data.h: Declares gui data interfaces for the ui subsystem.
+
 #ifndef _CHOCOLATE_KEEN_GUI_DATA_H_
 #define _CHOCOLATE_KEEN_GUI_DATA_H_
 

@@ -1,3 +1,5 @@
+// engine_timing.h: Declares engine timing interfaces for the engine subsystem.
+
 #ifndef _CHOCOLATE_KEEN_ENGINE_TIMING_H_
 #define _CHOCOLATE_KEEN_ENGINE_TIMING_H_
 

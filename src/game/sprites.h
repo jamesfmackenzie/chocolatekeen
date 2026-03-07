@@ -1,3 +1,5 @@
+// sprites.h: Declares sprites interfaces for the game subsystem.
+
 #ifndef _CHOCOLATE_KEEN_VORTICONS_SPRITES_
 #define _CHOCOLATE_KEEN_VORTICONS_SPRITES_
 

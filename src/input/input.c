@@ -1,3 +1,5 @@
+// input.c: Implements input for the input subsystem.
+
 #include "SDL.h"
 
 #include "core/globals.h"

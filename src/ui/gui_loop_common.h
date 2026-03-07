@@ -1,3 +1,5 @@
+// gui_loop_common.h: Declares gui loop common interfaces for the ui subsystem.
+
 #ifndef _CHOCOLATE_KEEN_GUI_LOOP_COMMON_H_
 #define _CHOCOLATE_KEEN_GUI_LOOP_COMMON_H_
 

@@ -1,3 +1,5 @@
+// gui_internal.h: Declares gui internal interfaces for the ui subsystem.
+
 #ifndef _CHOCOLATE_KEEN_GUI_INTERNAL_H_
 #define _CHOCOLATE_KEEN_GUI_INTERNAL_H_
 

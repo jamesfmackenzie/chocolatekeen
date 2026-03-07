@@ -1,3 +1,5 @@
+// input_windows.c: Implements input windows for the platform subsystem.
+
 #include "platform/platform.h"
 
 #include "windows.h"

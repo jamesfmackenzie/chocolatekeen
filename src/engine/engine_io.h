@@ -1,3 +1,5 @@
+// engine_io.h: Declares engine io interfaces for the engine subsystem.
+
 #ifndef _CHOCOLATE_KEEN_ENGINE_IO_H_
 #define _CHOCOLATE_KEEN_ENGINE_IO_H_
 

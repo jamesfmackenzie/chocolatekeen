@@ -1,3 +1,5 @@
+// gui_mapper.h: Declares gui mapper interfaces for the ui subsystem.
+
 #ifndef _CHOCOLATE_KEEN_GUI_MAPPER_H_
 #define _CHOCOLATE_KEEN_GUI_MAPPER_H_
 

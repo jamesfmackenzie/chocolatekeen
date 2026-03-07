@@ -1,3 +1,5 @@
+// chocolate-keen.c: Implements chocolate-keen for the app subsystem.
+
 #include "engine/engine_api.h"
 
 int main(int argc, char **argv) {

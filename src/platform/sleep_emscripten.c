@@ -1,3 +1,5 @@
+// sleep_emscripten.c: Implements sleep emscripten for the platform subsystem.
+
 #include "platform/platform.h"
 
 #include <emscripten.h>

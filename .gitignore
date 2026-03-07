@@ -90,6 +90,12 @@ chocolate-keen.js
 chocolate-keen.js.orig.js
 chocolate-keen.wasm
 data.binary
+docs/chocolate-keen.data
+docs/chocolate-keen.js
+docs/chocolate-keen.wasm
+
+# Release artifacts are published via GitHub Releases, not committed
+releases/**/*.zip
 
 # game config files
 CTLPANEL.CK1

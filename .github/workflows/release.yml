@@ -43,10 +43,7 @@ jobs:
             cp build/linux/chocolate-keen.cfg "$stage_dir/"
           else
             # Fallback so packaging does not depend on repository-local cfg files.
-            cat > "$stage_dir/chocolate-keen.cfg" <<'EOF'
-keyboard=0x0
-fullscreen=1
-EOF
+            printf "keyboard=0x0\nfullscreen=1\n" > "$stage_dir/chocolate-keen.cfg"
           fi
           cp -r data/GAMEDATA/* "$stage_dir/GAMEDATA/"
           (cd dist && zip -r chocolate-keen-Linux.zip chocolate-keen-Linux)
@@ -144,10 +141,7 @@ EOF
             cp build/linux/chocolate-keen.cfg "$stage_dir/"
           else
             # Fallback so packaging does not depend on Linux build outputs.
-            cat > "$stage_dir/chocolate-keen.cfg" <<'EOF'
-keyboard=0x0
-fullscreen=1
-EOF
+            printf "keyboard=0x0\nfullscreen=1\n" > "$stage_dir/chocolate-keen.cfg"
           fi
           cp -r data/GAMEDATA/* "$stage_dir/GAMEDATA/"
           (cd dist && zip -r "${{ matrix.zip_name }}" "${{ matrix.package_dir }}")

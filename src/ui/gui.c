@@ -118,6 +118,7 @@ const char **guiFullScreenModeStrs;
 const char **guiWindowedModeStrs;
 #if SDL_VERSION_ATLEAST(2,0,0)
 const char **guiDisplayNumStrs;
+static void *guiRendererDriversBuffers;
 #endif
 
 // Returns max. amount of characters per resolution entry string
@@ -218,6 +219,37 @@ int CVort_gui_createDisplayNumberBuffers(void) {
 	*displayNumStrs = 0; // End of string list
 	return strLengthUpperBoundWithNull-1;
 }
+
+static void CVort_gui_deleteRendererDriverBuffers(void) {
+	free(guiRendererDriversBuffers);
+	guiRendererDriversBuffers = NULL;
+}
+
+static const char **CVort_gui_createRendererDriverChoices(int numDrivers) {
+	const size_t driverNameMaxLenWithNull = 32;
+	const size_t choicesCount = numDrivers + 2; // "auto", drivers and NULL terminator
+	void *buffers = malloc(choicesCount * sizeof(char *) + (choicesCount - 1) * driverNameMaxLenWithNull);
+	if (!buffers) {
+		return NULL;
+	}
+	guiRendererDriversBuffers = buffers;
+
+	char **rendererDrivers = (char **)buffers;
+	char *rendererDriversData = (char *)((uint8_t *)buffers + choicesCount * sizeof(char *));
+	rendererDrivers[0] = rendererDriversData;
+	snprintf(rendererDriversData, driverNameMaxLenWithNull, "auto");
+	rendererDriversData += driverNameMaxLenWithNull;
+
+	SDL_RendererInfo sdlRendererInfo;
+	for (int driverIndex = 0; driverIndex < numDrivers; driverIndex++) {
+		SDL_GetRenderDriverInfo(driverIndex, &sdlRendererInfo);
+		rendererDrivers[driverIndex + 1] = rendererDriversData;
+		snprintf(rendererDriversData, driverNameMaxLenWithNull, "%s", sdlRendererInfo.name ? sdlRendererInfo.name : "unknown");
+		rendererDriversData += driverNameMaxLenWithNull;
+	}
+	rendererDrivers[numDrivers + 1] = NULL;
+	return (const char **)rendererDrivers;
+}
 #endif
 
 void CVort_gui_deleteScreenResolutionBuffers(void) {
@@ -314,19 +346,22 @@ void CVort_gui_prepareMenuItemsChoiceBuffers(void) {
 
 #if SDL_VERSION_ATLEAST(2,0,0)
 	// SDL renderer driver
-	const char **rendererDrivers = (const char **)malloc((SDL_GetNumRenderDrivers()+2)*sizeof(char *));
-	SDL_RendererInfo sdlRendererInfo;
-	rendererDrivers[0] = "auto";
-	currChoiceIndex = 0;
-	int driverIndex;
-	for (driverIndex = 0; driverIndex < SDL_GetNumRenderDrivers(); driverIndex++) {
-		SDL_GetRenderDriverInfo(driverIndex, &sdlRendererInfo);
-		rendererDrivers[driverIndex+1] = sdlRendererInfo.name;
+	CVort_gui_deleteRendererDriverBuffers();
+	int numDrivers = SDL_GetNumRenderDrivers();
+	if (numDrivers < 0) {
+		numDrivers = 0;
 	}
-	rendererDrivers[driverIndex+1] = 0;
-	// FIXME: Prevent overflow (cap driver name to, say, 10 chars)
+	const char **rendererDrivers = CVort_gui_createRendererDriverChoices(numDrivers);
+	static const char *fallbackRendererDrivers[] = {"auto", NULL};
+	if (!rendererDrivers) {
+		rendererDrivers = fallbackRendererDrivers;
+	}
+	currChoiceIndex = 0;
 	CVort_gui_setChoicesBuffer(&guiMenuItemSDLRendererDriver, rendererDrivers);
-	guiMenuItemSDLRendererDriver.value = engine_arguments.rendererDriverIndex+1;
+	if ((engine_arguments.rendererDriverIndex >= -1) && (engine_arguments.rendererDriverIndex < numDrivers)) {
+		currChoiceIndex = engine_arguments.rendererDriverIndex + 1;
+	}
+	guiMenuItemSDLRendererDriver.value = currChoiceIndex;
 #endif
 
 	// VSync

@@ -142,10 +142,17 @@ void CVort_gui_drawNextButton(bool isMouseSelected) {
 
 void CVort_gui_drawCurrentMenu(void) {
 	// First draw menu title
-	// TODO: Handle new lines?
 	const char *txtPtr = guiCurrentMenuPtr->title;
-	for (int x = guiCurrentMenuPtr->title_x; *txtPtr; txtPtr++, x+=GUI_MENU_ITEM_TEXT_CHAR_WIDTH) {
-		CVort_engine_gui_drawFontChar_ptr(x, guiCurrentMenuPtr->title_y, 8, 14, ega_8x14TextFont+112*(unsigned char)(*txtPtr), 11, 1);
+	int x = guiCurrentMenuPtr->title_x;
+	int y = guiCurrentMenuPtr->title_y;
+	for (; *txtPtr; txtPtr++) {
+		if (*txtPtr == '\n') {
+			x = guiCurrentMenuPtr->title_x;
+			y += GUI_MENU_ITEM_TEXT_CHAR_HEIGHT;
+			continue;
+		}
+		CVort_engine_gui_drawFontChar_ptr(x, y, 8, 14, ega_8x14TextFont+112*(unsigned char)(*txtPtr), 11, 1);
+		x += GUI_MENU_ITEM_TEXT_CHAR_WIDTH;
 	}
 	// Next draw items and item separators
 	GUI_Menu_Item_T **items;

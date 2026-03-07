@@ -198,7 +198,7 @@ void CVort_handle_redef_keys() {
         if ((lastAnswer >= 0x30) && (lastAnswer <= 0x39)) {
             shiftedAnswer = (int16_t) (lastAnswer) - 0x30;
             CVort_engine_drawChar(cursorX, cursorY << 3, lastAnswer);
-            // TODO: Vanilla code does it again!! Do it here, too?
+            // NOTE: Vanilla code does it again!! Do it here, too?
             //shiftedAnswer = lastAnswer-0x30;
             CVort_draw_string("\n\rPress the new key:");
             //engine_updateActualDisplay();
@@ -309,7 +309,7 @@ GameInput_T CVort_handle_ctrl(uint16_t input_type) {
         if (engine_arguments.extras.vorticonsDemoModeToggle && (demo_action_ptr == end_of_demo_ptr)) {
             g_game.quit_to_title = 2; // SPECIAL VALUE (HALT BY DEMO, *NOT* PLAYER)
 
-            // FIXME: On a second thought that's malformed
+            // NOTE: On a second thought that's malformed
             // behavior (what is input_ret??)... Oh well
             return input_ret;
         }

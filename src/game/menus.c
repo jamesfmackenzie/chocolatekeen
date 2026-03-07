@@ -159,7 +159,7 @@ void CVort_do_intro_and_menu() {
         // Show Apogee logo
         if (g_game.reshow_scroll_up) // Uncomment this to replay scroll up upon demo restart
         {
-            CVort_load_level_data(90); // FIXME: Again???
+            CVort_load_level_data(90); // NOTE: Again???
             scroll_x = 0x68000;
             scroll_y = 0x2000;
             CVort_engine_clearOverlay();
@@ -312,7 +312,7 @@ void CVort_do_intro_and_menu() {
 the vanilla code, nothing like page flipping and other tricks is done.
 It should be used wisely so no "selector blanking" artifact is seen, though.
 
-FIXME: What would occur if the host video card syncs to vertical retrace at a
+NOTE: What would occur if the host video card syncs to vertical retrace at a
 rate of less than 70Hz? Well, slowdowns are expected...                       */
 uint16_t CVort_draw_title() {
     uint16_t sel, bg, var_6, var_8;
@@ -426,7 +426,7 @@ select1:
         cursorY = sel + cursorY_b;
     }
     if (!input.but1jump && !input.but2pogo)
-        goto loc_192C0; // FIXME FIXME FIXME FIXME FIXME FIXME GOTO?!!!
+        goto loc_192C0; // NOTE NOTE NOTE NOTE NOTE NOTE GOTO?!!!
 
     CVort_clear_keys();
     CVort_engine_delay(8);
@@ -473,7 +473,7 @@ select1:
             break;
     }
     if ((sel != 7) && !bg)
-        goto loc_19297; // FIXME FIXME FIXME FIXME FIXME FIXME FIXME
+        goto loc_19297; // NOTE NOTE NOTE NOTE NOTE NOTE NOTE
     return bg;
 }
 
@@ -558,7 +558,7 @@ void CVort_show_about_us() {
         if (CVort_handle_global_keys())
             CVort_do_about_us();
         input = CVort_handle_ctrl(1);
-        // TODO: What should be done here (i.e. like in vanilla code)???
+        // NOTE: What should be done here (i.e. like in vanilla code)???
         // For now check for jump or pogo control action.
         // Also check for general keyboard key presses.
         if (input.but1jump || input.but2pogo || CVort_translate_key(1))
@@ -635,7 +635,7 @@ void CVort_show_scores() {
         if (CVort_handle_global_keys())
             CVort_do_scores();
         input = CVort_handle_ctrl(1);
-        // TODO: What should be done here (i.e. like in vanilla code)???
+        // NOTE: What should be done here (i.e. like in vanilla code)???
         // For now check for jump or pogo control action.
         // Also check for general keyboard key presses.
         if (input.but1jump || input.but2pogo || CVort_translate_key(1))
@@ -647,7 +647,7 @@ void CVort_save_game() {
     char path[13];
     FILE *fp;
     int8_t inputChar, confirmChar;
-    // FIXME: Quite hackish but... more true to the original?
+    // NOTE: Quite hackish but... more true to the original?
     CK_Path_FormatSavedSlot(path, sizeof(path), '?', game_ext);
     if (!g_game.on_world_map) {
         CVort_draw_box_opening_main(0x16, 3);
@@ -667,7 +667,7 @@ void CVort_save_game() {
             inputChar = CVort_read_char_with_echo()&0xFF; while (((inputChar < '1') || (inputChar > '9')) && (inputChar != 0x1B));
         if (inputChar == 0x1B)
             return;
-        // FIXME: Seems a bit hackish but... well...
+        // NOTE: Seems a bit hackish but... well...
         CK_Path_FormatSavedSlot(path, sizeof(path), inputChar, game_ext);
         // First check if file already exists
         fp = CVort_engine_cross_rw_misc_fopen(path, "rb");
@@ -709,7 +709,7 @@ uint16_t CVort_private_continue_game() {
     char path[13];
     FILE *fp;
     int8_t inputChar;
-    // FIXME: Again hackish but... same as CVort_save_game()...
+    // NOTE: Again hackish but... same as CVort_save_game()...
     // Possibly a bit less vanilla, but actually works the proper
     // (and vanilla) way!
     CK_Path_FormatSavedSlot(path, sizeof(path), '?', game_ext);
@@ -724,9 +724,9 @@ uint16_t CVort_private_continue_game() {
             inputChar = CVort_read_char_with_echo()&0xFF; while (((inputChar < '1') || (inputChar > '9')) && (inputChar != 0x1B));
         if (inputChar == 0x1B)
             return 0;
-        // FIXME: Hackish just like in CVort_save_game()...
+        // NOTE: Hackish just like in CVort_save_game()...
         CK_Path_FormatSavedSlot(path, sizeof(path), inputChar, game_ext);
-        // FIXME FIXME!!! Vanilla behavior concatenates the file
+        // NOTE NOTE!!! Vanilla behavior concatenates the file
         // extension ".CK1" until we have a proper answer!!!!!!
         // Or so it seems.
         // Wait... no. We can't select, say, an empty saved slot, and
@@ -785,7 +785,7 @@ uint16_t CVort_demo_toggle_prepare_to_record() {
 	}
 	g_game.demo_status = DEMO_OFF;
 	CVort_fade_out();
-	// HACK to force fade_in to the menu
+	// WORKAROUND to force fade_in to the menu
 	scroll_x = 0x1000;
 	// Load menu level
 	CVort_load_level_data(90);
@@ -1063,7 +1063,7 @@ void CVort_wait_for_key() {
 
 void CVort_process_text_file(uint8_t *buffer) {
     // Now process text file.
-    // TODO: Is this the correct way?
+    // NOTE: Is this the correct way?
     uint16_t numOfChars = 0, charCounter = 0;
     while (buffer[numOfChars] != 0x1A)
         numOfChars++;
@@ -1080,7 +1080,7 @@ void CVort_process_text_file(uint8_t *buffer) {
             else {
                 buffer[charCounter] = 0x20;
                 /* Shift portion of the text by one char.
-                TODO? Vanilla code does this but with a total
+                NOTE? Vanilla code does this but with a total
                 of numOfChars-charCounter characters, which
                 implies an ERRONEOUS memory access, one byte
                 after the ending 0x1A character.           */
@@ -1189,7 +1189,7 @@ void CVort_text_viewer_bkgrd(uint16_t box_x_pos, uint16_t box_y_pos, uint8_t *po
 }
 
 void CVort_load_high_scores_table() {
-    // FIXME: This is a wrong way to do it, but...... more vanilla!
+    // NOTE: This is a wrong way to do it, but...... more vanilla!
     static char default_names[][15] = {"Yorpy", "Gargile", "Zzapp!"};
     char path[14];
     CK_Path_FormatScores(path, sizeof(path), game_ext);
@@ -1217,7 +1217,7 @@ void CVort_load_high_scores_table() {
 }
 
 void CVort_save_high_scores_table() {
-    // FIXME: This is a wrong way to do it, but...... more vanilla!
+    // NOTE: This is a wrong way to do it, but...... more vanilla!
     // Or rather, vanilla on the *loading* side...
     char path[14];
     CK_Path_FormatScores(path, sizeof(path), game_ext);

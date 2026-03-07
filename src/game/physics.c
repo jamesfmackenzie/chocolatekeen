@@ -27,7 +27,7 @@ void CVort_body_border_flash(Body_T *border) {
         CVort_engine_setBorderColor(3);
 }
 
-// FIXME? This is not well tested...
+// NOTE? This is not well tested...
 
 void CVort_body_bridge_extend(Body_T *bridge) {
     bridge->variant += g_game.sprite_sync;
@@ -43,7 +43,7 @@ void CVort_body_bridge_extend(Body_T *bridge) {
     bridge->field_10 += bridge->field_C;
 }
 
-// FIXME? This is not well tested...
+// NOTE? This is not well tested...
 
 void CVort_body_bridge_retract(Body_T *bridge) {
     bridge->variant += g_game.sprite_sync;
@@ -60,7 +60,7 @@ void CVort_body_bridge_retract(Body_T *bridge) {
 }
 
 
-// FIXME? This is sorta more vanilla like but not really needed...
+// NOTE? This is sorta more vanilla like but not really needed...
 
 void CVort_contact_nop(Sprite_T *curr, Sprite_T *other) {
 }
@@ -211,7 +211,7 @@ void CVort_open_door(int16_t tileX, int16_t tileY) {
     g_entities.bodies[doorBodyIndex].field_C = map_data_tiles[(doorHeight + 3) * map_width_tile + tileX];
     g_entities.bodies[doorBodyIndex].field_E = map_data_tiles[(doorHeight + 2) * map_width_tile + tileX];
     g_entities.bodies[doorBodyIndex].field_10 = map_data_tiles[doorHeight * map_width_tile + tileX];
-    // FIXME? Looks like if Keen opens the location from an unusual location
+    // NOTE? Looks like if Keen opens the location from an unusual location
     // (the bottom of it?) then it loses a DIFFERENT item, if any.
     // This is, more or less, a direct port of the original, though.
     keen_gp.stuff[3 + tileType0] = 0;

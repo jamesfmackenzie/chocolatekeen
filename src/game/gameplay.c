@@ -119,7 +119,7 @@ void CVort_main() {
     //CVort_clear_keys();
     //CVort_translate_key(0);
 
-    /* FIXME? This is a real hack that forces the display of the above
+    /* NOTE? This is a real hack that forces the display of the above
      * messages for a little bit. Otherwise these are simply not seen on
      * sufficiently fast machines (even if they can be seen with DOSEMU).
      */
@@ -137,7 +137,7 @@ void CVort_main() {
 
     CVort_engine_decompGraphics();
 
-    // TODO: Since tiles are now measured in *BYTE PER PIXEL*,
+    // NOTE: Since tiles are now measured in *BYTE PER PIXEL*,
     // we add multiples of 256 rather than 32. Or that
     // we don't multiple at all(?), since indexes are all that matter now.
     const int scaleConst = 1;
@@ -236,7 +236,7 @@ int16_t CVort_add_body() {
     if (bodyNum >= g_entities.num_bodies)
         g_entities.num_bodies++;
     memset(&g_entities.bodies[bodyNum], 0, sizeof (g_entities.bodies[bodyNum]));
-    // FIXME: The casting is potentially DANGEROUS, but the default_think
+    // NOTE: The casting is potentially DANGEROUS, but the default_think
     // function is also used for g_entities.sprites...
     g_entities.bodies[bodyNum].think_ptr = (BodyThinkFunction_T)(&CVort_default_think);
     return bodyNum;
@@ -266,7 +266,7 @@ void CVort_main_loop() {
 
         if (engine_gameVersion == GAMEVER_KEEN2)
         {
-        // FIXME: Move these to engine exe processing?
+        // NOTE: Move these to engine exe processing?
             help_text = (uint8_t*) exeImage + CVort2_HELP_TEXT_OFFSET;
             story_text = (uint8_t*) exeImage + CVort2_STORY_TEXT_OFFSET;
             end_text = (uint8_t*) exeImage + CVort2_END_TEXT_OFFSET;
@@ -408,7 +408,7 @@ void CVort_load_level_data(uint16_t levelnum) {
     char filename[16];
     snprintf(filename, sizeof(filename), "%s%02" PRIu16 ".%s", "LEVEL", levelnum, game_ext);
     FILE *fp = CVort_engine_cross_ro_data_fopen(filename);
-    /* TODO? We could apply random map generation if file is not found */
+    /* NOTE? We could apply random map generation if file is not found */
     /* (e.g. if Keen enters a "random" map from the worldmap while a   */
     /* cheat code is in use). However, most chances are that it would  */
     /* look vastly different than the one on vanilla Keen.             */
@@ -431,13 +431,13 @@ void CVort_load_level_data(uint16_t levelnum) {
     CRLE_expandSwapped((word*)map_data, compressedMapData, 0xFEFE);
     // We remove the initial DWORD of uncompressed data size
     memmove(map_data, map_data+1, sizeof(map_data)/sizeof(int16_t)-2);
-    // FIXME: Are byteswaps required for the Big-Endian architectures?
+    // NOTE: Are byteswaps required for the Big-Endian architectures?
     // (Apparently not)
 
     map_data_tiles = map_data + 16;
     map_data_sprites = map_data + 16 + map_data[7] / 2; // map_data[7] == Plane size
 
-    // FIXME: Should we swap map_data[0] and map_data[1] here - and later?
+    // NOTE: Should we swap map_data[0] and map_data[1] here - and later?
     map_width_tile = map_data[0];
     map_height_tile = map_data[1];
     map_width_bytes = map_width_tile << 1;
@@ -446,7 +446,7 @@ void CVort_load_level_data(uint16_t levelnum) {
 
     scroll_x_min = scroll_y_min = 0x2000;
 
-    // TODO: Are the shifts done correctly?
+    // NOTE: Are the shifts done correctly?
     scroll_x_max = (map_data[0] - 0x16) << 12;
     map_width = (map_data[0] - 2) << 12;
     map_height = map_data[1] << 12;
@@ -509,7 +509,7 @@ void CVort_clear_keys() {
     memset(g_input.key_map, 0, 0x80);
 }
 
-// TODO: The original code simply sets g_game.rnd to the amount of hundredths of
+// NOTE: The original code simply sets g_game.rnd to the amount of hundredths of
 // seconds in the current time.
 // For now we use the seconds elapsed...
 
@@ -533,7 +533,7 @@ uint32_t CVort_filelength(FILE *fp) {
     return len;
 }
 
-// TODO: This function should not be used, due to endianness issues
+// NOTE: This function should not be used, due to endianness issues
 // which vary from file to file.
 
 // I think "spritejump3" never existed in the first place
@@ -546,7 +546,7 @@ void CVort_setup_jump_heights(uint16_t seed) {
     spritejump_1 = 0x22;
     spritejump_2 = 0xa;
     if (seed) {
-        // TODO the original code does this... it gets current time as:
+        // NOTE the original code does this... it gets current time as:
         // CH = hours, CL = minutes, DH = seconds, DL = 1/100th of sec.
         // Then:
         // jump_height_table[16] = DX
@@ -560,7 +560,7 @@ void CVort_setup_jump_heights(uint16_t seed) {
     CVort_calc_jump_height(0xffff);
 }
 
-// TODO: Make this work as expected...
+// NOTE: Make this work as expected...
 
 int16_t CVort_calc_jump_height(uint16_t max_height) {
     uint16_t loopVar1 = max_height, loopVar2 = 0xFFFF, result;
@@ -576,7 +576,7 @@ int16_t CVort_calc_jump_height(uint16_t max_height) {
         loopVar1 <<= 1;
         loopVar2 >>= 1;
     }
-    // TODO: What should be done here??? This? We add the last carry anyway.
+    // NOTE: What should be done here??? This? We add the last carry anyway.
     result = jump_height_table[(spritejump_1) >> 1] + jump_height_table[(spritejump_2) >> 1] + 1;
     jump_height_table[(spritejump_1) >> 1] = result;
     result += jump_height_table[0];
@@ -842,7 +842,7 @@ uint16_t CVort_draw_level(uint16_t levelnum) {
         g_game.sprite_sync = 15;
         CVort_ptr_engine_setTicksSync(0);
         CVort_ptr_engine_setTicks(0);
-        // FIXME? We use goto... but that just seems too simple...
+        // NOTE? We use goto... but that just seems too simple...
         goto right_after_drawing_sync;
     }
     do {

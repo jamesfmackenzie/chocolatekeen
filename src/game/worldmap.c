@@ -75,7 +75,7 @@ void CVort_draw_worldmap(void) {
         CVort_mark_cities_done();
 
         for (count_i = 0; count_i < 0x10; count_i++) {
-            // FIXME? Original code takes bx=count_i*6 and then
+            // NOTE? Original code takes bx=count_i*6 and then
             // accesses wmaplevels.tx[bx].
             x_coord = wmaplevels[count_i].tx;
             y_coord = wmaplevels[count_i].ty;
@@ -273,7 +273,7 @@ void CVort_mark_cities_done() {
                     teleporters[teleIndex].destY = pos_y;
                 }
             }
-            /* TODO? For mapEntry>0x10 this results in erroneous
+            /* NOTE? For mapEntry>0x10 this results in erroneous
             memory accesses. This shall be avoided! Although,
             the vanilla way does accept 0x10<mapEntry<0x100...
             ...
@@ -713,8 +713,8 @@ void CVort_move_worldmap(GameInput_T input, Sprite_T *spritedraw) {
     }
 
     // Now we set the scrolling viewport
-    //FIXME FIXME FIXME FIXME: Gotos?!!!!!!!
-    //FIXME: Several of optimizations can be applied here, apparently.
+    //NOTE NOTE NOTE NOTE: Gotos?!!!!!!!
+    //NOTE: Several of optimizations can be applied here, apparently.
 
     int32_t tempDiff;
 

@@ -753,7 +753,7 @@ void CVort_think_keen_death() {
 
 void CVort_think_keen_stunned() {
 
-    // TODO: We don't need to handle Keen 1? (Apparently this shared code with think_keen_frozen)
+    // NOTE: We don't need to handle Keen 1? (Apparently this shared code with think_keen_frozen)
     if (engine_gameVersion == GAMEVER_KEEN1) {
         g_entities.temp_sprite.frame = CVort1_spr_keensicle1 + ((CVort_ptr_engine_getTicks()>>5)&1);
     } else if (engine_gameVersion == GAMEVER_KEEN2) {

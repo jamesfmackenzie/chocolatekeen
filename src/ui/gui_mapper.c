@@ -3,6 +3,7 @@
 #include "ui/gui_loop_common.h"
 #include "ui/gui_menu_loop.h"
 #include "ui/gui_mapper.h"
+#include "ui/gui_mapper_nav.h"
 #include "ui/gui_runtime.h"
 
 static GUI_NavButtonsMouseState_T guiCurrentMapperStatus;
@@ -130,46 +131,26 @@ void CVort_gui_mapper_handle_dpad_back(void) {
 
 // FIXME: Unnecessary code duplication
 
-void CVort_gui_mapper_handle_dpad_left(void) {
-	if (!guiCurrentMapperTilePtr) {
-		// FIXME: Pick a different tile
-		for (guiCurrentMapperTilePtr = guiCurrentMapperPagePtr->tiles; (*guiCurrentMapperTilePtr)->emuEvent.emulatedInput == EMULATEDINPUT_NONE; guiCurrentMapperTilePtr++);
-	} else if ((*guiCurrentMapperTilePtr)->nearTiles.left) {
-		guiCurrentMapperTilePtr = &((*guiCurrentMapperTilePtr)->nearTiles.left);
-	}
+static void CVort_gui_mapper_handle_dpad_move(GUI_Mapper_MoveDirection_T direction) {
+	CVort_gui_mapper_moveSelection(guiCurrentMapperPagePtr, &guiCurrentMapperTilePtr, direction);
 	CVort_engine_gui_clearScreen();
 	CVort_gui_mapper_drawCurrentPage();
+}
+
+void CVort_gui_mapper_handle_dpad_left(void) {
+	CVort_gui_mapper_handle_dpad_move(GUI_MAPPER_MOVE_LEFT);
 }
 
 void CVort_gui_mapper_handle_dpad_right(void) {
-	if (!guiCurrentMapperTilePtr) {
-		for (guiCurrentMapperTilePtr = guiCurrentMapperPagePtr->tiles; (*guiCurrentMapperTilePtr)->emuEvent.emulatedInput == EMULATEDINPUT_NONE; guiCurrentMapperTilePtr++);
-	} else if ((*guiCurrentMapperTilePtr)->nearTiles.right) {
-		guiCurrentMapperTilePtr = &((*guiCurrentMapperTilePtr)->nearTiles.right);
-	}
-	CVort_engine_gui_clearScreen();
-	CVort_gui_mapper_drawCurrentPage();
+	CVort_gui_mapper_handle_dpad_move(GUI_MAPPER_MOVE_RIGHT);
 }
 
 void CVort_gui_mapper_handle_dpad_up(void) {
-	if (!guiCurrentMapperTilePtr) {
-		// FIXME: Pick a different tile?
-		for (guiCurrentMapperTilePtr = guiCurrentMapperPagePtr->tiles; (*guiCurrentMapperTilePtr)->emuEvent.emulatedInput == EMULATEDINPUT_NONE; guiCurrentMapperTilePtr++);
-	} else if ((*guiCurrentMapperTilePtr)->nearTiles.up) {
-		guiCurrentMapperTilePtr = &((*guiCurrentMapperTilePtr)->nearTiles.up);
-	}
-	CVort_engine_gui_clearScreen();
-	CVort_gui_mapper_drawCurrentPage();
+	CVort_gui_mapper_handle_dpad_move(GUI_MAPPER_MOVE_UP);
 }
 
 void CVort_gui_mapper_handle_dpad_down(void) {
-	if (!guiCurrentMapperTilePtr) {
-		for (guiCurrentMapperTilePtr = guiCurrentMapperPagePtr->tiles; (*guiCurrentMapperTilePtr)->emuEvent.emulatedInput == EMULATEDINPUT_NONE; guiCurrentMapperTilePtr++);
-	} else if ((*guiCurrentMapperTilePtr)->nearTiles.down) {
-		guiCurrentMapperTilePtr = &((*guiCurrentMapperTilePtr)->nearTiles.down);
-	}
-	CVort_engine_gui_clearScreen();
-	CVort_gui_mapper_drawCurrentPage();
+	CVort_gui_mapper_handle_dpad_move(GUI_MAPPER_MOVE_DOWN);
 }
 
 void CVort_gui_mapper_handle_dpad_activate(void) {

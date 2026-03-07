@@ -103,6 +103,7 @@
     <ClCompile Include="..\..\src\render\gfx.c" />
     <ClCompile Include="..\..\src\ui\gui.c" />
     <ClCompile Include="..\..\src\input\input.c" />
+    <ClCompile Include="..\..\src\input\input_keys.c" />
     <ClCompile Include="..\..\src\input\input_names.c" />
     <ClCompile Include="..\..\src\input\input_default_mappings.c" />
     <ClCompile Include="..\..\src\render\memdata.c" />
@@ -126,6 +127,7 @@
     <ClInclude Include="..\..\src\episodes\episode3.h" />
     <ClInclude Include="..\..\src\render\gfx.h" />
     <ClInclude Include="..\..\src\input\input.h" />
+    <ClInclude Include="..\..\src\input\input_keys.h" />
     <ClInclude Include="..\..\src\input\input_names.h" />
     <ClInclude Include="..\..\src\input\input_default_mappings.h" />
     <ClInclude Include="..\..\src\third_party\cgenius\fileio\compression\CRLE.h" />

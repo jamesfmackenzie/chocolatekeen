@@ -14,6 +14,7 @@ COMMON_OBJECTS=$(OBJ)/game_gameplay.o \
         $(OBJ)/engine_engine_timing.o \
         $(OBJ)/render_gfx.o \
         $(OBJ)/input_input.o \
+        $(OBJ)/input_input_keys.o \
         $(OBJ)/input_input_names.o \
         $(OBJ)/input_input_default_mappings.o \
         $(OBJ)/ui_gui.o \

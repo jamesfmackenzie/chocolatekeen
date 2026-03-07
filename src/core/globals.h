@@ -6,6 +6,7 @@
 #include "game/sprites.h"
 #include "render/opengl.h"
 #include "input/input.h"
+#include "input/input_keys.h"
 
 /* ---------------------------------------------------------------
  * Grouped global state structs (Step 6 refactor)
@@ -457,8 +458,6 @@ typedef struct {
     extern bool engine_forceSpecificEpisode;
 
     extern InputMappingStruct_T engine_inputMappings;
-    extern const EmulatedKey_T engine_emulatedKeysTable[];
-
     extern CVort_engine_screen_T engine_screen;
     // A permenantly constant table of colors
     // in a specific internal format (ARGB or XRGB)

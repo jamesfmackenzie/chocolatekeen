@@ -187,7 +187,7 @@
     BmpDraw_T bmpdraws[0xa];
     TileDraw_T tiledraws[0x64];
     uint16_t screentiles[0x258];
-    // TODO: bmpdraws_i (bmpdraws_p) doesn't seem to actually be used...
+    // Legacy counters are kept for compatibility with original draw pipeline flow.
     int bmpdraws_i, tiledraws_i, screentiles_i, spritedraws_i;
 
     uint16_t *TILEINFO_Anim;

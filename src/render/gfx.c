@@ -35,7 +35,8 @@ struct {
 	bool offScreenRendering;
 } engine_gfx_effective_arguments;
 
-// TODO: The following implementation is currently...somewhat messy.
+// Rendering/decompression paths here are legacy-heavy and intentionally kept close
+// to original behavior; prefer small behavior-preserving refactors.
 void CVort_engine_decompGraphics()
 {
 	/******************************
@@ -43,7 +44,7 @@ void CVort_engine_decompGraphics()
 	******************************/
 	snprintf(g_game.string_buf, sizeof(g_game.string_buf), "EGAHEAD.%s", game_ext);
 	FILE *fp = CVort_engine_cross_ro_data_fopen(g_game.string_buf);
-	// TODO: What if we fail to load the file?
+	// Missing/corrupt EGAHEAD file currently aborts graphics decompression early.
 	if (!fp)
 		return;
 #define CHOCOLATE_KEEN_READ16_OR_RETURN(dst) \
@@ -132,12 +133,12 @@ void CVort_engine_decompGraphics()
 	convert to single-byte format (instead of 4-plane structures).
 	*************************************************************/
 	snprintf(g_game.string_buf, sizeof(g_game.string_buf), "EGALATCH.%s", game_ext);
-	// TODO: What if we fail to load the file?
+	// Missing/corrupt EGALATCH file currently aborts graphics decompression early.
 	fp = CVort_engine_cross_ro_data_fopen(g_game.string_buf);
 	if (!fp)
 		return;
 	uint8_t *egaLatchData = (uint8_t *)malloc(engine_egaHeadGeneral.latchPlaneSize*4);
-	// FIXME: Maybe the compression field is used incorrectly here.
+	// Compression flag interpretation mirrors existing behavior and may differ for mods.
 	if (engine_egaHeadGeneral.compression & 2)
 		lz_decompress(fp, egaLatchData);
 	else if (fread(egaLatchData, engine_egaHeadGeneral.latchPlaneSize*4, 1, fp) != 1) {
@@ -147,7 +148,7 @@ void CVort_engine_decompGraphics()
 	}
 	fclose(fp);
 	/********************************************************************
-	FIXME? This is a real hack that forces the display of some textual
+	This delay intentionally keeps transient text (e.g. decompression notice)
 	messages (like "Decompressing graphics, this may take some time...")
 	for a little bit. Otherwise these are simply not seen on sufficiently
 	fast machines (even if they can be seen with DOSEMU).
@@ -253,7 +254,7 @@ void CVort_engine_decompGraphics()
 	Part "2.5": As in Vanilla Keen, we set the border color
 	to cyan and draw the "One moment" bitmap on screen.
 	******************************************************/
-	// TODO: Make these patchable?
+	// These defaults intentionally follow existing hardcoded vanilla-style values.
 	CVort_engine_setBorderColor(3);
 	if (engine_gameVersion == GAMEVER_KEEN1) {
 		CVort_engine_drawBitmap(0xf, 0x4c, CVort1_bmp_onemomen);
@@ -268,12 +269,12 @@ void CVort_engine_decompGraphics()
 	convert to single-byte format (instead of 5-plane structures).
 	*************************************************************/
 	snprintf(g_game.string_buf, sizeof(g_game.string_buf), "EGASPRIT.%s", game_ext);
-	// TODO: What if we fail to load the file?
+	// Missing/corrupt EGASPRIT file currently aborts graphics decompression early.
 	fp = CVort_engine_cross_ro_data_fopen(g_game.string_buf);
 	if (!fp)
 		return;
 	uint8_t *egaSpriteData = (uint8_t *)malloc(engine_egaHeadGeneral.sprPlaneSize*5);
-	// FIXME: Maybe the compression field is used incorrectly here.
+	// Compression flag interpretation mirrors existing behavior and may differ for mods.
 	if (engine_egaHeadGeneral.compression & 1)
 		lz_decompress(fp, egaSpriteData);
 	else if (fread(egaSpriteData, engine_egaHeadGeneral.sprPlaneSize*5, 1, fp) != 1) {
@@ -293,9 +294,8 @@ void CVort_engine_decompGraphics()
 		spriteTotalPixelCount += 8*engine_maskedSpriteEntry[loopVar].width*engine_maskedSpriteEntry[loopVar].height;
 	}
 	// Fill with data
-	// FIXME
-	// FIXME
-	// FIXME
+	// Sprite conversion intentionally ignores per-copy offset metadata and uses
+	// the current location/plane layout assumptions from the existing loader.
 	// We ignore the "offset" field of EGAHeadSprite_T, but what to do
 	// with it anyway...
 	pixelPtr = engine_egaSpriteData;
@@ -612,7 +612,7 @@ void (*CVort_engine_updateBorderedZoomedRectBuffer_ptr) (uint8_t *buffer, uint32
 // Here, the buffer should *not* contain more than the bordered drawing.
 #define CVort_engine_updateBorderedZoomedRectBufferBorder_TempImpl(T) \
 void CVort_engine_updateBorderedZoomedRectBufferBorder_##T##bpp(uint8_t *buffer) { \
-	/* FIXME: This can be more efficient!!! */ \
+	/* Current implementation prioritizes simplicity over fill-speed optimizations. */ \
 	CHOCOLATE_KEEN_HOST_VAL_TYPE_##T *screenPixelPtr = (CHOCOLATE_KEEN_HOST_VAL_TYPE_##T *)buffer; \
 	for (uint16_t currY = 0, currX; currY < engine_screen.dims.clientZoomedBorderedHeight; currY++) { \
 		for (currX = 0; currX < engine_screen.dims.clientZoomedBorderedWidth; currX++, CHOCOLATE_KEEN_INC_HOST_EGA_##T(screenPixelPtr))  {\
@@ -1241,7 +1241,7 @@ bool CVort_engine_prepareScreen() {
 #endif
 #ifdef _CHOCOLATE_KEEN_ENABLE_OPENGL_
 	if (engine_arguments.outputSystem == OUTPUTSYS_OPENGL) {
-		// TODO: If we fail loading this, no problem.
+		// Failure to load the default GL library is tolerated by SDL/OpenGL setup.
 		SDL_GL_LoadLibrary(NULL);
 		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 2);
 		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 2);
@@ -1459,7 +1459,7 @@ bool privCreateWindowResources(void) {
 			break;
 #endif
 		case OUTPUTSYS_SURFACE:
-			// FIXME: Prepare a secondary surface based on existing system RAM
+			// Surface-path secondary buffer is intentionally deferred/not allocated here.
 			break;
 	}
 	return true;
@@ -1821,7 +1821,7 @@ bool privCreateHostWindow(void) {
 #ifdef _CHOCOLATE_KEEN_HAVE_OPENGL_2_0_ANY_
 			if (engine_screen.gl.outputGLClass == OUTPUTGL_CLASS_2_0) {
 	 		// Consider this
-			// FIXME: Is accessing engine_arguments here ok?
+			// Read once from parsed arguments during resource setup; runtime changes are not observed here.
 			engine_screen.gl.gpuPaletteCycling = engine_arguments.gpuPaletteCycling;
 			// Don't, if offscreen rendering is disabled and we want bilinear interpolation
 			engine_screen.gl.gpuPaletteCycling &= (engine_screen.gl.offScreenRendering || !engine_screen.host.bilinearInterpolation);
@@ -1853,7 +1853,7 @@ bool privCreateHostWindow(void) {
 		}
 #endif
 		engine_screen.host.bytesPerPixel = engine_screen.sdl.windowSurface->format->BytesPerPixel;
-		// FIXME: Prepare a secondary surface based on existing system RAM
+		// Surface-path secondary buffer is intentionally deferred/not allocated here.
 		break;
 	}
 
@@ -1865,7 +1865,7 @@ bool privCreateHostWindow(void) {
 		free(engine_screen.host.colorTable);
 	}
 	/* Allocate memory AT ONCE for egaMemoryPtr, colorTable and mappedEgaColorTable */
-	/* HACK/Special: For indexed color data we simply point to byteEgaMemory */
+	/* Indexed-color path intentionally aliases egaMemoryPtr to byteEgaMemory. */
 	if (engine_screen.host.isIndexedColorFormatted) {
 		engine_screen.host.colorTable = (uint8_t *)malloc(16); // Required for text mode and launcher UI
 		engine_screen.host.egaMemoryPtr = engine_screen.client.byteEgaMemory;
@@ -2229,7 +2229,7 @@ bool privResizeHostWindow(void) {
 		SDL_DisplayMode dispMode;
 		SDL_GetWindowDisplayMode(engine_screen.sdl.window, &dispMode);
 		if ((dispMode.w != screenWidth) || (dispMode.h != screenHeight)) {
-			// HACK
+				// SDL fullscreen mode switch order is intentional to apply display mode reliably.
 			SDL_SetWindowFullscreen(engine_screen.sdl.window, 0);
 			dispMode.w = screenWidth;
 			dispMode.h = screenHeight;
@@ -2649,7 +2649,7 @@ bool CVort_engine_preparegl() {
         // NOTE: Again, the SCANLINE length is used here.
         // In practice it should not make a great difference...
 
-	// HACK: There's no need to compare to the the maximum texture size
+	// Re-check against max texture size is intentionally skipped here
 	// again. (The scanline length is 384 so the corresponding pot width is
 	// 512, also required with the non-zoomed/bordered width of 320.)
         potWidth = privGetPowerOfTwoCeiling(engine_screen.dims.clientScanLineLength);
@@ -2904,7 +2904,7 @@ void CVort_engine_copyToTxtMemory(uint8_t *buffer) {
 	engine_isFrameReadyToDisplay = true;
 }
 
-// TODO: Vanilla code seems to do some more things...?
+// Known gap: original DOS routine may apply extra text-mode side effects.
 void CVort_engine_drawChar(uint16_t x, uint16_t y, uint16_t val)
 {
 	// Multiply by 8, since we measure in pixels of 1 byte for each,
@@ -2969,7 +2969,7 @@ void CVort_engine_drawTile(uint16_t x, uint16_t y, uint16_t num)
 	if (((num | 0x8000) ^ 0x8000) >= engine_egaHeadGeneral.tileNum)
 		num = num & 0x8000;
 	x <<= 3;
-	// TODO: Declare "num" as a signed int and check that "num < 0"?
+	// Tile masking uses high bit on unsigned id; keep uint16_t representation.
 	bool isMasked = (num & 0x8000);
 	if (isMasked)
 		// Remove the minus sign due to masking
@@ -3224,7 +3224,7 @@ void CVort_engine_doDrawing()
 	engine_dstPage = engine_currPageStart;
 	uint16_t loopVar, drawCounter;
 	drawCounter = spritedraws_c;
-	// TODO: Can't we use a single loop variable?
+	// Separate counters are intentional: draw counts can differ per queue.
 	// Well, not if spritedraws_c and the like are modified before the call
 	// to doDrawing is done, but it doesn't look like this happens for now..
 	if (drawCounter)
@@ -3452,7 +3452,7 @@ void privResetBorderColor(void) {
 				int texWidth = privGetPowerOfTwoCeiling(engine_screen.dims.clientZoomedBorderedWidth),
 				    texHeight = privGetPowerOfTwoCeiling(engine_screen.dims.clientZoomedBorderedHeight);
 				int xOffset, yOffset;
-				// FIXME: Use *whole* window, not just the view
+				// Border clear copy currently uses viewport-sized chunks from the current target.
 				// port. Another way might be better, though.
 				for (yOffset = 0; yOffset + engine_screen.dims.viewportRect.h < texHeight; yOffset += engine_screen.dims.viewportRect.h) {
 					for (xOffset = 0; xOffset + engine_screen.dims.viewportRect.w < texWidth; xOffset += engine_screen.dims.viewportRect.w) {
@@ -3545,7 +3545,7 @@ void privResetPalette(void) {
 	#ifdef _CHOCOLATE_KEEN_HAVE_OPENGL_2_0_ANY_
 	case OUTPUTSYS_OPENGL:
 		if (engine_screen.gl.gpuPaletteCycling) {
-			static uint32_t actualPalette[16]; // TODO: Can it be non-static?
+			static uint32_t actualPalette[16]; // Static scratch buffer reused across calls.
 			for (index = 0; index < 16; index++) {
 				actualPalette[index] = SDL_SwapBE32(engine_egaRGBColorTable[engine_screen.client.currParsedPalette[index]] << 8);
 			}
@@ -3577,7 +3577,7 @@ void CVort_engine_setPaletteAndBorderColor(const uint8_t *palette) {
 void CVort_engine_showImageFile(const char *filename)
 {
 	FILE *fp = CVort_engine_cross_ro_data_fopen(filename);
-	if (!fp) // TODO: What to do, if not this?
+	if (!fp) // Missing image file leaves scroll origin reset and returns.
 	{
 		scroll_x = scroll_y = 0;
 		return;

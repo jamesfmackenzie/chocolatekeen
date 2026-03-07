@@ -299,7 +299,7 @@ GUI_Menu_Item_T guiMenuItemMapperResetWarningText = {
 0, 0, 0, 0, 0, 0, "Are you sure you want to do that? Your\ninput mapping setup will be removed!", NULL, 0, 0, NULL
 };
 
-// HACK: We can "borrow" CVort_gui_handler_doNotEnterInputMapper here
+// Reuse shared "cancel" handler from the mapper entrance warning menu.
 GUI_Menu_Item_T guiMenuItemMapperResetCancel = {
 0, 0, 0, 0, 0, 0, "Do not reset current mapping setup", NULL, 0, 0, &CVort_gui_handler_doNotEnterInputMapper
 };
@@ -464,7 +464,7 @@ Some mapper UI stuff
 #define GUI_MAPPER_SPACED_TILE_WIDTH 34
 #define GUI_MAPPER_SPACED_TILE_HEIGHT 34
 // Leftmost position of a tile in top row, without any spacing
-// (near the GUI "back" button, HACK)
+// (near the GUI "back" button; offset chosen to avoid overlap)
 #define GUI_MAPPER_TOP_ROW_LEFTMOST_XPOS 48
 // Topmost position of a tile in top row, without any spacing
 #define GUI_MAPPER_TOP_ROW_TOPMOST_YPOS ((GUI_MAPPER_SPACED_TILE_HEIGHT-GUI_MAPPER_TILE_HEIGHT)/2)
@@ -831,7 +831,7 @@ GUI_Mapper_Tile_T
 	                    {&guiMapperKeyLCtrl, &guiMapperKeySpace, &guiMapperKeyZ, NULL}
 	                   },
 	guiMapperKeySpace = {GUI_MAPPER_TOP_ROW_LEFTMOST_XPOS+4*GUI_MAPPER_SPACED_TILE_WIDTH, GUI_MAPPER_TOP_ROW_TOPMOST_YPOS+5*GUI_MAPPER_SPACED_TILE_HEIGHT,
-	                    4*GUI_MAPPER_TILE_WIDTH/*HACK*/+6, GUI_MAPPER_TILE_HEIGHT,
+	                    4*GUI_MAPPER_TILE_WIDTH/*layout tweak*/+6, GUI_MAPPER_TILE_HEIGHT,
 	                    NULL, NULL, NULL, {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_SPACE},
 	                    {&guiMapperKeyLAlt, NULL, &guiMapperKeyC, NULL}
 	                   },
@@ -998,7 +998,7 @@ GUI_Mapper_Tile_T
 	                     {&guiMapperKeyPeriod, &guiMapperKeyRShift, &guiMapperKeyQuote, &guiMapperKeyRAlt}
 	                    },
 	guiMapperKeyRShift = {GUI_MAPPER_TOP_ROW_LEFTMOST_XPOS+5*GUI_MAPPER_SPACED_TILE_WIDTH, GUI_MAPPER_TOP_ROW_TOPMOST_YPOS+4*GUI_MAPPER_SPACED_TILE_HEIGHT,
-	                     3*GUI_MAPPER_TILE_WIDTH/2+GUI_MAPPER_SPACED_TILE_WIDTH/*HACK*/+1, GUI_MAPPER_TILE_HEIGHT,
+	                     3*GUI_MAPPER_TILE_WIDTH/2+GUI_MAPPER_SPACED_TILE_WIDTH/*layout tweak*/+1, GUI_MAPPER_TILE_HEIGHT,
 	                     NULL, "Shift", NULL, {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_RSHIFT},
 	                     {&guiMapperKeySlash, NULL, &guiMapperKeyEnter, &guiMapperKeyRCtrl}
 	                    },
@@ -1008,7 +1008,7 @@ GUI_Mapper_Tile_T
 	                    NULL, "Alt", NULL, {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_RALT},
 	                    {NULL, &guiMapperKeyRCtrl, &guiMapperKeySlash, NULL}
 	                   },
-	guiMapperKeyRCtrl = {GUI_MAPPER_TOP_ROW_LEFTMOST_XPOS+6*GUI_MAPPER_SPACED_TILE_WIDTH/*HACK*/+1, GUI_MAPPER_TOP_ROW_TOPMOST_YPOS+5*GUI_MAPPER_SPACED_TILE_HEIGHT,
+	guiMapperKeyRCtrl = {GUI_MAPPER_TOP_ROW_LEFTMOST_XPOS+6*GUI_MAPPER_SPACED_TILE_WIDTH/*layout tweak*/+1, GUI_MAPPER_TOP_ROW_TOPMOST_YPOS+5*GUI_MAPPER_SPACED_TILE_HEIGHT,
 	                     3*GUI_MAPPER_TILE_WIDTH/2, GUI_MAPPER_TILE_HEIGHT,
 	                     NULL, "Ctrl", NULL, {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_RCTRL},
 	                     {&guiMapperKeyRAlt, NULL, &guiMapperKeyRShift, NULL}

@@ -101,11 +101,11 @@ void CVort_gui_handler_pickDisplayNumber(GUI_Menu_Item_T *item) {
 	CVort_gui_createScreenResolutionBuffers();
 
 	CVort_gui_setChoicesBuffer(&guiMenuItemFullres, guiFullScreenModeStrs);
-	// HACK? updating resolution choice not just in GUI
+	// Keep engine-side selection aligned with refreshed GUI choices.
 	engine_arguments.fullWidth = engine_arguments.fullHeight = 0;
 	guiMenuItemFullres.value = 0;
 	CVort_gui_setChoicesBuffer(&guiMenuItemWindowres, guiWindowedModeStrs);
-	// HACK? updating resolution choice not just in GUI
+	// Keep engine-side selection aligned with refreshed GUI choices.
 	engine_arguments.windowWidth = engine_arguments.windowHeight = 0;
 	guiMenuItemWindowres.value = 0;
 }
@@ -176,7 +176,7 @@ void CVort_gui_handler_doNotEnterInputMapper(GUI_Menu_Item_T *item) {
 
 /*** Mapper reset warning page handlers ***/
 
-// HACK: "Borrowing" this function from above
+// Reuse the same "cancel mapper entry" flow as the warning page.
 //void CVort_gui_handler_doNotEnterInputMapper(GUI_Menu_Item_T *item) ...
 
 void CVort_gui_handler_doResetMapper(GUI_Menu_Item_T *item) {
@@ -281,10 +281,10 @@ void CVort_gui_handler_showNextMapperBinding(GUI_Menu_Item_T *item) {
 	                                                              &guiCurrentHostEventDetails.inputId,
 	                                                              &guiCurrentHostEventDetails.inputVal
 	);
-	// HACK...
+	// Preserve current selection while refreshing the mapper binding menu contents.
 	GUI_Menu_Item_T **menuItemSelectionPtr = guiCurrentMenuItemSelectionPtr;
 	CVort_gui_refreshMapperMenu();
-	// HACK...
+	// Restore selection pointer after the refresh rebuilt menu item bindings.
 	guiCurrentMenuItemSelectionPtr = menuItemSelectionPtr;
 	CVort_engine_gui_clearScreen();
 	CVort_gui_drawCurrentMenu();

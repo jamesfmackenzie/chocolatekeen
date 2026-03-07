@@ -26,10 +26,10 @@ typedef struct {
 } GUI_MenuChoiceHitBounds_T;
 
 static void CVort_gui_calcMenuChoiceHitBounds(const GUI_Menu_Item_T *item, GUI_MenuChoiceHitBounds_T *bounds) {
-	bounds->leftX0 = item->x + (guiCurrentMenuPtr->width - item->choiceMaxPixWidth - 4 * GUI_MENU_ITEM_TEXT_CHAR_WIDTH);
-	bounds->leftX1 = item->x + (guiCurrentMenuPtr->width - item->choiceMaxPixWidth / 2 - 2 * GUI_MENU_ITEM_TEXT_CHAR_WIDTH);
+	bounds->leftX0 = item->x + (item->width - item->choiceMaxPixWidth - 4 * GUI_MENU_ITEM_TEXT_CHAR_WIDTH);
+	bounds->leftX1 = item->x + (item->width - item->choiceMaxPixWidth / 2 - 2 * GUI_MENU_ITEM_TEXT_CHAR_WIDTH);
 	bounds->rightX0 = bounds->leftX1;
-	bounds->rightX1 = item->x + guiCurrentMenuPtr->width;
+	bounds->rightX1 = item->x + item->width;
 }
 
 static bool CVort_gui_isMouseInChoiceLeftArrow(
@@ -63,9 +63,8 @@ void CVort_gui_drawMenuItem(GUI_Menu_Item_T *item) {
 	}
 	// Next draw choice if it's relevant
 	if (item->choices) {
-		// FIXME: Accessing menu width directly
 		// Draw double left arrow, followed by a space
-		int x = item->x + (guiCurrentMenuPtr->width - item->choiceMaxPixWidth - 4*GUI_MENU_ITEM_TEXT_CHAR_WIDTH);
+		int x = item->x + (item->width - item->choiceMaxPixWidth - 4*GUI_MENU_ITEM_TEXT_CHAR_WIDTH);
 		CVort_engine_gui_drawFontChar_ptr(x, item->text_y, 8, 14, ega_8x14TextFont+112*174, 12, 1);
 		x+=GUI_MENU_ITEM_TEXT_CHAR_WIDTH;
 		CVort_engine_gui_drawFontChar_ptr(x, item->text_y, 8, 14, ega_8x14TextFont+112*32, 12, 1);
@@ -75,7 +74,7 @@ void CVort_gui_drawMenuItem(GUI_Menu_Item_T *item) {
 			CVort_engine_gui_drawFontChar_ptr(x, item->text_y, 8, 14, ega_8x14TextFont+112*(unsigned char)(*txtPtr), 14, 1);
 		}
 		// Draw double right arrow twice, preceded by a space
-		x = item->x + (guiCurrentMenuPtr->width - 2*GUI_MENU_ITEM_TEXT_CHAR_WIDTH);
+		x = item->x + (item->width - 2*GUI_MENU_ITEM_TEXT_CHAR_WIDTH);
 		CVort_engine_gui_drawFontChar_ptr(x, item->text_y, 8, 14, ega_8x14TextFont+112*32, 12, 1);
 		x+=GUI_MENU_ITEM_TEXT_CHAR_WIDTH;
 		CVort_engine_gui_drawFontChar_ptr(x, item->text_y, 8, 14, ega_8x14TextFont+112*175, 12, 1);
@@ -236,7 +235,7 @@ void CVort_gui_selectPrevItemChoice(GUI_Menu_Item_T *item) {
 		item->value = item->numOfChoices-1;
 	}
 	item->handler(item);
-	// FIXME HACK: Redrawing menu (still, not a common event)
+	// Handlers may update other menu item states, so redraw the full menu for consistency.
 	CVort_engine_gui_clearScreen();
 	CVort_gui_drawCurrentMenu();
 	//CVort_gui_drawMenuItem(item);
@@ -248,7 +247,7 @@ void CVort_gui_selectNextItemChoice(GUI_Menu_Item_T *item) {
 		item->value = 0;
 	}
 	item->handler(item);
-	// FIXME HACK: Redrawing menu (still, not a common event)
+	// Handlers may update other menu item states, so redraw the full menu for consistency.
 	CVort_engine_gui_clearScreen();
 	CVort_gui_drawCurrentMenu();
 	//CVort_gui_drawMenuItem(item);

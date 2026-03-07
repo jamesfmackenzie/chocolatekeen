@@ -1,3 +1,4 @@
+#include "core/globals.h"
 #include "episodes/episode3.h"
 
 void CVort3_engine_processEXE() {

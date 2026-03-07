@@ -7,6 +7,7 @@
 #endif
 #include <inttypes.h>
 
+#include "core/globals.h"
 #include "episodes/episode2.h"
 
 /******************************************************************************

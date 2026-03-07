@@ -1,8 +1,13 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
 #ifndef __STDC_FORMAT_MACROS
 #define __STDC_FORMAT_MACROS
 #endif
 #include <inttypes.h>
 
+#include "core/globals.h"
 #include "episodes/episode1.h"
 
 /******************************************************************************

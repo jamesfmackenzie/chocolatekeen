@@ -7,7 +7,7 @@
 #include "ui/gui_menu_loop.h"
 #include "ui/gui_runtime.h"
 
-static GUI_NavButtonsMouseState_T guiCurrentMenuStatus;
+static GUI_NavButtonsMouseState_T guiMenuNavMouseState;
 
 /************************************************************
 For each menu item:
@@ -42,7 +42,7 @@ static bool CVort_gui_isMouseInChoiceLeftArrow(
 }
 
 void CVort_gui_resetMenuStatus(void) {
-	CVort_gui_resetNavButtonsMouseState(&guiCurrentMenuStatus);
+	CVort_gui_resetNavButtonsMouseState(&guiMenuNavMouseState);
 }
 
 
@@ -205,13 +205,13 @@ void CVort_gui_drawCurrentMenu(void) {
 	CVort_engine_gui_drawColoredColumn(engine_screen.dims.clientRect.w-1, engine_screen.dims.clientRect.h-2/*1*/, 2);
 	// Navigation buttons
 	if (!(guiCurrentMenuPtr->hideBackButton) && (guiCurrentMenuPtr->backPage || guiCurrentMenuPtr->altBackHandler)) {
-		CVort_gui_drawBackButton(guiCurrentMenuStatus.isBackButtonMouseSelected);
+		CVort_gui_drawBackButton(guiMenuNavMouseState.isBackButtonMouseSelected);
 	}
 	if (guiCurrentMenuPtr->prevPage) {
-		CVort_gui_drawPrevButton(guiCurrentMenuStatus.isPrevButtonMouseSelected);
+		CVort_gui_drawPrevButton(guiMenuNavMouseState.isPrevButtonMouseSelected);
 	}
 	if (guiCurrentMenuPtr->nextPage) {
-		CVort_gui_drawNextButton(guiCurrentMenuStatus.isNextButtonMouseSelected);
+		CVort_gui_drawNextButton(guiMenuNavMouseState.isNextButtonMouseSelected);
 	}
 	engine_isFrameReadyToDisplay = true;
 }
@@ -510,8 +510,8 @@ void CVort_gui_runLoop(void) {
 					origPointerY = event.button.y;
 					CVort_gui_transformMouseCoordinates(&origPointerX, &origPointerY);
 					GUI_Menu_Item_T **lastItemPtr = guiCurrentMenuItemSelectionPtr;
-					GUI_NavButton_T selectedNavButton = CVort_gui_beginNavButtonMouseSelection(
-						&guiCurrentMenuStatus,
+						GUI_NavButton_T selectedNavButton = CVort_gui_beginNavButtonMouseSelection(
+						&guiMenuNavMouseState,
 						origPointerX, origPointerY,
 						!(guiCurrentMenuPtr->hideBackButton) && (guiCurrentMenuPtr->backPage || guiCurrentMenuPtr->altBackHandler),
 						guiCurrentMenuPtr->prevPage,
@@ -551,12 +551,12 @@ void CVort_gui_runLoop(void) {
 				break;
 				case SDL_MOUSEBUTTONUP:
 				{
-					if (!guiCurrentMenuStatus.waitForMouseButtonRelease || (event.button.button != SDL_BUTTON_LEFT)) {
+					if (!guiMenuNavMouseState.waitForMouseButtonRelease || (event.button.button != SDL_BUTTON_LEFT)) {
 						break;
 					}
 					int lastPointerX = event.button.x, lastPointerY = event.button.y;
 					CVort_gui_transformMouseCoordinates(&lastPointerX, &lastPointerY);
-					GUI_NavButton_T releasedNavButton = CVort_gui_getNavButtonMouseReleaseAction(&guiCurrentMenuStatus, lastPointerX, lastPointerY);
+					GUI_NavButton_T releasedNavButton = CVort_gui_getNavButtonMouseReleaseAction(&guiMenuNavMouseState, lastPointerX, lastPointerY);
 					if (releasedNavButton == GUI_NAV_BUTTON_BACK) {
 						CVort_gui_resetMenuStatus();
 						CVort_gui_handle_dpad_back();

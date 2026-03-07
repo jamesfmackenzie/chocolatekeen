@@ -6,7 +6,7 @@
 #include "ui/gui_mapper_nav.h"
 #include "ui/gui_runtime.h"
 
-static GUI_NavButtonsMouseState_T guiCurrentMapperStatus;
+static GUI_NavButtonsMouseState_T guiMapperNavMouseState;
 
 /************************************************************
 For each mapper UI tile (say a key):
@@ -62,18 +62,18 @@ void CVort_gui_mapper_drawCurrentPage(void) {
 	for (GUI_Mapper_Tile_T **mapperTilePtr = guiCurrentMapperPagePtr->tiles; *mapperTilePtr; mapperTilePtr++) {
 		CVort_gui_mapper_drawTile(*mapperTilePtr);
 	}
-	CVort_gui_drawBackButton(guiCurrentMapperStatus.isBackButtonMouseSelected); // Always done
+	CVort_gui_drawBackButton(guiMapperNavMouseState.isBackButtonMouseSelected); // Always done
 	if (guiCurrentMapperPagePtr->prevPage) {
-		CVort_gui_drawPrevButton(guiCurrentMapperStatus.isPrevButtonMouseSelected);
+		CVort_gui_drawPrevButton(guiMapperNavMouseState.isPrevButtonMouseSelected);
 	}
 	if (guiCurrentMapperPagePtr->nextPage) {
-		CVort_gui_drawNextButton(guiCurrentMapperStatus.isNextButtonMouseSelected);
+		CVort_gui_drawNextButton(guiMapperNavMouseState.isNextButtonMouseSelected);
 	}
 	engine_isFrameReadyToDisplay = true;
 }
 // Code duplication, but small for now...
 void CVort_gui_mapper_resetStatus(void) {
-	CVort_gui_resetNavButtonsMouseState(&guiCurrentMapperStatus);
+	CVort_gui_resetNavButtonsMouseState(&guiMapperNavMouseState);
 }
 
 GUI_Mapper_Tile_T **CVort_gui_mapper_getTileSelectionPtrFromMouse(int x, int y) {
@@ -108,11 +108,11 @@ void CVort_gui_mapper_changeToNextPage(void) {
 	}
 }
 
-static bool guiMapperLoopRunningStatus;
+static bool guiMapperLoopIsRunning;
 
 void CVort_gui_mapper_handle_tile(EmulatedInput_T emuInput, int value) {
 	// Technically return to main launcher UI, but in a special menu
-	guiMapperLoopRunningStatus = false;
+	guiMapperLoopIsRunning = false;
 	// Set emulated event (to be stored internally)
 	guiCurrentEmuEventDetails.emulatedInput = emuInput;
 	guiCurrentEmuEventDetails.value = value;
@@ -121,7 +121,7 @@ void CVort_gui_mapper_handle_tile(EmulatedInput_T emuInput, int value) {
 
 void CVort_gui_mapper_handle_dpad_back(void) {
 	// Return to main launcher UI loop with the settings menu
-	guiMapperLoopRunningStatus = false;
+	guiMapperLoopIsRunning = false;
 	//CVort_engine_saveInputMappings();
 	CVort_gui_setCurrentMenu(&guiSettingsMenu);
 }
@@ -170,7 +170,7 @@ static const GUI_KeyNavHandlers_T guiMapperKeyNavHandlers = {
 void CVort_gui_mapper_runLoop(void) {
 	int origPointerX, origPointerY;
 	SDL_Event event;
-	guiMapperLoopRunningStatus = true;
+	guiMapperLoopIsRunning = true;
 	do {
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
@@ -204,7 +204,7 @@ void CVort_gui_mapper_runLoop(void) {
 					CVort_gui_transformMouseCoordinates(&origPointerX, &origPointerY);
 					GUI_Mapper_Tile_T **lastTilePtr = guiCurrentMapperTilePtr;
 					GUI_NavButton_T selectedNavButton = CVort_gui_beginNavButtonMouseSelection(
-						&guiCurrentMapperStatus,
+						&guiMapperNavMouseState,
 						origPointerX, origPointerY,
 						true,
 						guiCurrentMapperPagePtr->prevPage,
@@ -244,12 +244,12 @@ void CVort_gui_mapper_runLoop(void) {
 				break;
 				case SDL_MOUSEBUTTONUP:
 				{
-					if (!guiCurrentMapperStatus.waitForMouseButtonRelease || (event.button.button != SDL_BUTTON_LEFT)) {
+					if (!guiMapperNavMouseState.waitForMouseButtonRelease || (event.button.button != SDL_BUTTON_LEFT)) {
 						break;
 					}
 					int lastPointerX = event.button.x, lastPointerY = event.button.y;
 					CVort_gui_transformMouseCoordinates(&lastPointerX, &lastPointerY);
-					GUI_NavButton_T releasedNavButton = CVort_gui_getNavButtonMouseReleaseAction(&guiCurrentMapperStatus, lastPointerX, lastPointerY);
+					GUI_NavButton_T releasedNavButton = CVort_gui_getNavButtonMouseReleaseAction(&guiMapperNavMouseState, lastPointerX, lastPointerY);
 					if (releasedNavButton == GUI_NAV_BUTTON_BACK) {
 						CVort_gui_mapper_resetStatus();
 						CVort_gui_mapper_handle_dpad_back();
@@ -283,5 +283,5 @@ void CVort_gui_mapper_runLoop(void) {
 			}
 		}
 		CVort_gui_updateDisplayAndSleep();
-	} while (guiMapperLoopRunningStatus);
+	} while (guiMapperLoopIsRunning);
 }

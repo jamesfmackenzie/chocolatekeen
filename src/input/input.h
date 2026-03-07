@@ -12,10 +12,6 @@ typedef enum GameControl_T {
     CONTROL_KEYB = 0, CONTROL_MOUSE, CONTROL_JOY_1, CONTROL_JOY_2, CONTROL_DEMO
 } GameControl_T;
 
-static const char * mapperHandlerNames[] = {
-    "shutdown", "capmouse", "fullscr"
-};
-
 // NOTE: The "lessthan" key (secondary backslash of 102-key layouts)
 // appears to generate (XT) scancode 0x56, in comparison to 0x2B
 // of the "normal" backslash key.
@@ -144,33 +140,12 @@ typedef enum EmulatedKeyIndex_T {
     EMULATEDKEYINDEX_KEY_INDICES_COUNT
 } EmulatedKeyIndex_T;
 
-static const char * mapperClientJoyButtonNames[] = {
-    "jbutton_0_0", "jbutton_0_1", "jbutton_1_0", "jbutton_1_1",
-    // EXTRAS (e.g. "jbutton_0_2" is gameport-equivalent to "jbutton_1_0")
-    "jbutton_0_2", "jbutton_0_3"
-};
-
-static const char * mapperClientJoyAxisNames[] = {
-    "jaxis_0_0-", "jaxis_0_0+", "jaxis_0_1-", "jaxis_0_1+",
-    "jaxis_1_0-", "jaxis_1_0+", "jaxis_1_1-", "jaxis_1_1+",
-};
-
-static const char * mapperClientMouseButtonNames[] = {
-    "mbutton_left", "mbutton_right", "mbutton_middle"
-};
-
-static const char * mapperClientMouseAxisNames[] = {
-    "maxis_horiz-", "maxis_horiz+", "maxis_vert-", "maxis_vert+"
-};
-
-static const char * mapperClientHandlerNames[] = {
-    "hand_shutdown", "hand_capcursor", "hand_fullscr",
-    /*"hand_savemap"*/
-};
-
-static const char * mapperClientModNames[] = {
-    "mod_1", "mod_2", "mod_3"
-};
+extern const char *const mapperClientJoyButtonNames[];
+extern const char *const mapperClientJoyAxisNames[];
+extern const char *const mapperClientMouseButtonNames[];
+extern const char *const mapperClientMouseAxisNames[];
+extern const char *const mapperClientHandlerNames[];
+extern const char *const mapperClientModNames[];
 
 typedef enum EmulatedInput_T {
     EMULATEDINPUT_NONE = 0,

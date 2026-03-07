@@ -6,6 +6,7 @@
 // Actually cvorticons.h includes that anyway...
 #include "SDL.h"
 #include "platform/platform.h"
+#include "ui/gui_internal.h"
 #include "ui/gui_runtime.h"
 #include "ui/gui_types.h"
 
@@ -431,4 +432,3 @@ void CVort_gui_widget_default_handler(GUI_Widget_T *widget) {
 void CVort_gui_page_esc_default_handler() {
 }
 #endif
-

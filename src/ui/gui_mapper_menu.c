@@ -1,9 +1,8 @@
 #include <stdio.h>
 
 #include "core/globals.h"
+#include "ui/gui_internal.h"
 #include "ui/gui_runtime.h"
-
-void CVort_gui_layoutMenu(GUI_Menu_T *menu);
 
 static void CVort_gui_refreshMapperMenuWithSomeBinding(void) {
 	guiMapperMenu.items = guiMenuItemsMapperSomeBindings;

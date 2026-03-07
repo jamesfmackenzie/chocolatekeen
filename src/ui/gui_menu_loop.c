@@ -3,6 +3,7 @@
 #include "../rsrc/chocolate-keen_vga_fonts.h"
 #include "core/globals.h"
 #include "platform/platform.h"
+#include "ui/gui_internal.h"
 #include "ui/gui_menu_loop.h"
 #include "ui/gui_runtime.h"
 
@@ -21,9 +22,6 @@ For each menu item:
 #define GUI_MENU_ITEM_TEXT_Y2_OFFSET 10
 #define GUI_MENU_ITEM_TEXT_CHAR_WIDTH 8
 #define GUI_MENU_ITEM_TEXT_CHAR_HEIGHT 14
-
-void CVort_gui_layoutMenu(GUI_Menu_T *menu);
-void CVort_gui_prepareMenuItemsChoiceBuffers(void);
 
 void CVort_gui_resetMenuStatus(void) {
 	guiCurrentMenuStatus.waitForMouseButtonRelease = false;

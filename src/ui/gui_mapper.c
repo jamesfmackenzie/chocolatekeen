@@ -18,8 +18,6 @@ static void CVort_gui_transformMouseCoordinates(int *xPtr, int *yPtr) {
 	*yPtr = (*yPtr) * ENGINE_GUI_HEIGHT / engine_screen.dims.borderedViewportRect.h;
 }
 
-void CVort_gui_showMapperMenu(void);
-
 /************************************************************
 For each mapper UI tile (say a key):
 - Have a total height of 34 pixels at the least.

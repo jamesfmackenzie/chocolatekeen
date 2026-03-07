@@ -56,9 +56,6 @@ void CVort_gui_handler_showMoreSettingsPage(GUI_Menu_Item_T *item) {
 	CVort_gui_setCurrentMenu(&guiMoreSettingsMenu);
 }
 
-void CVort_gui_mapper_setCurrentPage(GUI_Mapper_Page_T *page);
-void CVort_gui_mapper_runLoop(void);
-
 void CVort_gui_handler_showInputMapper(GUI_Menu_Item_T *item) {
 	CVort_gui_setCurrentMenu(&guiInputMapperEntranceWarningMenu);
 }
@@ -235,8 +232,6 @@ GUI_CurrentHostEventDetails_T guiCurrentHostEventDetails;
 MappedInputEvent_T *guiCurrentMappedInputEvent;
 
 char guiMapperMenuBindingString[64];
-
-void CVort_gui_refreshMapperMenu(void);
 
 void CVort_gui_handler_prepareToRecordMapperBinding(GUI_Menu_Item_T *item) {
 	//guiMenuItemMapperBindingLabel.label = "Please press on a key or a button, or\nmove mouse or a joystick axis/hat\n(5 seconds timeout).";

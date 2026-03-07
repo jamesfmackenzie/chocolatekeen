@@ -19,54 +19,41 @@ For each mapper UI tile (say a key):
 #define GUI_MAPPER_ITEM_TEXT_CHAR_WIDTH 8
 #define GUI_MAPPER_ITEM_TEXT_CHAR_HEIGHT 8
 
+static void CVort_gui_mapper_drawTileLabel(const char *label, int x, int y) {
+	for (; *label; x += GUI_MAPPER_ITEM_TEXT_CHAR_WIDTH, label++) {
+		CVort_engine_gui_drawFontChar_ptr(
+			x, y,
+			GUI_MAPPER_ITEM_TEXT_CHAR_WIDTH,
+			GUI_MAPPER_ITEM_TEXT_CHAR_HEIGHT,
+			cga_8x8TextFont + GUI_MAPPER_ITEM_TEXT_CHAR_WIDTH * GUI_MAPPER_ITEM_TEXT_CHAR_HEIGHT * (unsigned char)(*label),
+			0, 1
+		);
+	}
+}
+
 void CVort_gui_mapper_drawTile(GUI_Mapper_Tile_T *mapperTile) {
 	//int labelColor = 0;
 	int innerColor = (guiCurrentMapperTilePtr && (*guiCurrentMapperTilePtr == mapperTile)) ? 12 : 15;
 	int borderColor = (guiCurrentMapperTilePtr && (*guiCurrentMapperTilePtr == mapperTile)) ? 4 : 7;
 	CVort_engine_gui_drawRoundedRectBorder_ptr(mapperTile->x, mapperTile->y, mapperTile->width, mapperTile->height, borderColor, innerColor, 1);
 	int x, y;
-	// FIXME? Code duplication...
 	const char *label = mapperTile->topLeftLabel;
 	if (label) {
 		x = mapperTile->x + GUI_MAPPER_ITEM_TEXT_X1_OFFSET;
 		y = mapperTile->y + GUI_MAPPER_ITEM_TEXT_Y1_OFFSET;
-		for (; *label; x+=GUI_MAPPER_ITEM_TEXT_CHAR_WIDTH, label++) {
-			CVort_engine_gui_drawFontChar_ptr(
-				x, y,
-				GUI_MAPPER_ITEM_TEXT_CHAR_WIDTH,
-				GUI_MAPPER_ITEM_TEXT_CHAR_HEIGHT,
-				cga_8x8TextFont+GUI_MAPPER_ITEM_TEXT_CHAR_WIDTH*GUI_MAPPER_ITEM_TEXT_CHAR_HEIGHT*(unsigned char)(*label),
-				0, 1
-			);
-		}
+		CVort_gui_mapper_drawTileLabel(label, x, y);
 	}
 	label = mapperTile->midLeftLabel;
 	if (label) {
 		x = mapperTile->x + GUI_MAPPER_ITEM_TEXT_X1_OFFSET;
 		y = mapperTile->y + (mapperTile->height - GUI_MAPPER_ITEM_TEXT_CHAR_HEIGHT) / 2;
-		for (; *label; x+=GUI_MAPPER_ITEM_TEXT_CHAR_WIDTH, label++) {
-			CVort_engine_gui_drawFontChar_ptr(
-				x, y,
-				GUI_MAPPER_ITEM_TEXT_CHAR_WIDTH,
-				GUI_MAPPER_ITEM_TEXT_CHAR_HEIGHT,
-				cga_8x8TextFont+GUI_MAPPER_ITEM_TEXT_CHAR_WIDTH*GUI_MAPPER_ITEM_TEXT_CHAR_HEIGHT*(unsigned char)(*label),
-				0, 1
-			);
-		}
+		CVort_gui_mapper_drawTileLabel(label, x, y);
 	}
 	label = mapperTile->botLeftLabel;
 	if (label) {
 		x = mapperTile->x + GUI_MAPPER_ITEM_TEXT_X1_OFFSET;
 		y = mapperTile->y + (mapperTile->height - GUI_MAPPER_ITEM_TEXT_Y2_OFFSET - GUI_MAPPER_ITEM_TEXT_CHAR_HEIGHT);
-		for (; *label; x+=GUI_MAPPER_ITEM_TEXT_CHAR_WIDTH, label++) {
-			CVort_engine_gui_drawFontChar_ptr(
-				x, y,
-				GUI_MAPPER_ITEM_TEXT_CHAR_WIDTH,
-				GUI_MAPPER_ITEM_TEXT_CHAR_HEIGHT,
-				cga_8x8TextFont+GUI_MAPPER_ITEM_TEXT_CHAR_WIDTH*GUI_MAPPER_ITEM_TEXT_CHAR_HEIGHT*(unsigned char)(*label),
-				0, 1
-			);
-		}
+		CVort_gui_mapper_drawTileLabel(label, x, y);
 	}
 }
 

@@ -1,7 +1,7 @@
 # Makefile for Chocolate Keen tests
 
 CC=gcc
-CFLAGS=-std=c99 -I../src -I/usr/include/SDL2 -Wall -Wextra -g
+CFLAGS=-std=c99 -I../src -I/usr/include/SDL2 -Wall -Wextra -Wno-unused-variable -g
 SDLCONFIG=sdl2-config
 
 # Link against SDL (needed for CRLE which uses SDL types)

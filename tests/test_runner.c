@@ -11,7 +11,7 @@ int tests_run = 0;
 int tests_passed = 0;
 int tests_failed = 0;
 
-int main(int argc, char *argv[])
+int main(void)
 {
     printf("=== Chocolate Keen Test Suite ===\n\n");
 

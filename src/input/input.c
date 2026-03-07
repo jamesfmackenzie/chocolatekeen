@@ -2312,7 +2312,6 @@ void CVort_engine_handleEvent(const MappedInputEvent_T *pMappedEvent, int32_t ac
 // viewport/state updates are currently coupled with event processing.
 
 void CVort_engine_updateInputStatus() {
-    uint8_t dosScanCode;
     int eventLoopVar;
     int32_t scaledXDiff, scaledYDiff;
     SDL_Event event;

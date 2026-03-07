@@ -132,7 +132,15 @@ jobs:
           mkdir -p "$stage_dir/GAMEDATA"
           cp build/mingw/chocolate-keen.exe "$stage_dir/"
           cp "${{ matrix.dll_path }}" "$stage_dir/SDL2.dll"
-          cp build/linux/chocolate-keen.cfg "$stage_dir/"
+          if [ -f build/linux/chocolate-keen.cfg ]; then
+            cp build/linux/chocolate-keen.cfg "$stage_dir/"
+          else
+            # Fallback so packaging does not depend on Linux build outputs.
+            cat > "$stage_dir/chocolate-keen.cfg" <<'EOF'
+keyboard=0x0
+fullscreen=1
+EOF
+          fi
           cp -r data/GAMEDATA/* "$stage_dir/GAMEDATA/"
           (cd dist && zip -r "${{ matrix.zip_name }}" "${{ matrix.package_dir }}")
 

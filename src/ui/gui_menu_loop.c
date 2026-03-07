@@ -2,15 +2,12 @@
 
 #include "../rsrc/chocolate-keen_vga_fonts.h"
 #include "core/globals.h"
-#include "platform/platform.h"
 #include "ui/gui_internal.h"
+#include "ui/gui_loop_common.h"
 #include "ui/gui_menu_loop.h"
 #include "ui/gui_runtime.h"
 
-static struct {
-	bool waitForMouseButtonRelease;
-	bool isBackButtonMouseSelected, isPrevButtonMouseSelected, isNextButtonMouseSelected;
-} guiCurrentMenuStatus;
+static GUI_NavButtonsMouseState_T guiCurrentMenuStatus;
 
 /************************************************************
 For each menu item:
@@ -24,8 +21,7 @@ For each menu item:
 #define GUI_MENU_ITEM_TEXT_CHAR_HEIGHT 14
 
 void CVort_gui_resetMenuStatus(void) {
-	guiCurrentMenuStatus.waitForMouseButtonRelease = false;
-	guiCurrentMenuStatus.isBackButtonMouseSelected = guiCurrentMenuStatus.isPrevButtonMouseSelected = guiCurrentMenuStatus.isNextButtonMouseSelected = false;
+	CVort_gui_resetNavButtonsMouseState(&guiCurrentMenuStatus);
 }
 
 
@@ -156,13 +152,6 @@ void CVort_gui_drawCurrentMenu(void) {
 		CVort_gui_drawNextButton(guiCurrentMenuStatus.isNextButtonMouseSelected);
 	}
 	engine_isFrameReadyToDisplay = true;
-}
-
-static void CVort_gui_transformMouseCoordinates(int *xPtr, int *yPtr) {
-	(*xPtr) -= engine_screen.dims.borderedViewportRect.x;
-	(*yPtr) -= engine_screen.dims.borderedViewportRect.y;
-	*xPtr = (*xPtr) * ENGINE_GUI_WIDTH / engine_screen.dims.borderedViewportRect.w;
-	*yPtr = (*yPtr) * ENGINE_GUI_HEIGHT / engine_screen.dims.borderedViewportRect.h;
 }
 
 GUI_Menu_Item_T **CVort_gui_getMenuItemSelectionPtrFromMouse(int x, int y) {
@@ -397,6 +386,17 @@ void CVort_gui_prepareMainMenuItems(void) {
 	*itemPtr = 0;
 }
 
+static const GUI_KeyNavHandlers_T guiMenuKeyNavHandlers = {
+	.back = CVort_gui_handle_dpad_back,
+	.left = CVort_gui_handle_dpad_left,
+	.right = CVort_gui_handle_dpad_right,
+	.up = CVort_gui_handle_dpad_up,
+	.down = CVort_gui_handle_dpad_down,
+	.activate = CVort_gui_handle_dpad_activate,
+	.prevPage = CVort_gui_changeToPrevPage,
+	.nextPage = CVort_gui_changeToNextPage
+};
+
 void CVort_gui_runLoop(void) {
 	CVort_gui_prepareMainMenuItems();
 	CVort_gui_prepareMenuItemsChoiceBuffers();
@@ -435,65 +435,9 @@ void CVort_gui_runLoop(void) {
 					break;
 #endif
 				case SDL_KEYDOWN:
-#if SDL_VERSION_ATLEAST(2,0,0)
-				switch (event.key.keysym.scancode) {
-					case SDL_SCANCODE_ESCAPE:
-						CVort_gui_handle_dpad_back();
-						//guiCurrentPagePtr->pageEscapeHandler();
-						break;
-					case SDL_SCANCODE_LEFT:
-						CVort_gui_handle_dpad_left();
-						break;
-					case SDL_SCANCODE_RIGHT:
-						CVort_gui_handle_dpad_right();
-						break;
-					case SDL_SCANCODE_UP:
-						CVort_gui_handle_dpad_up();
-						break;
-					case SDL_SCANCODE_DOWN:
-						CVort_gui_handle_dpad_down();
-						break;
-					case SDL_SCANCODE_RETURN:
-						CVort_gui_handle_dpad_activate();
+					if (CVort_gui_handleKeydownAsNavigation(&event.key, &guiMenuKeyNavHandlers) == GUI_KEY_NAV_ACTIVATE) {
 						CVort_gui_resetMenuStatus();
-						break;
-					case SDL_SCANCODE_PAGEUP:
-						CVort_gui_changeToPrevPage();
-						break;
-					case SDL_SCANCODE_PAGEDOWN:
-						CVort_gui_changeToNextPage();
-						break;
-				}
-#else
-				switch (event.key.keysym.sym) {
-					case SDLK_ESCAPE:
-						CVort_gui_handle_dpad_back();
-						//guiCurrentPagePtr->pageEscapeHandler();
-						break;
-					case SDLK_LEFT:
-						CVort_gui_handle_dpad_left();
-						break;
-					case SDLK_RIGHT:
-						CVort_gui_handle_dpad_right();
-						break;
-					case SDLK_UP:
-						CVort_gui_handle_dpad_up();
-						break;
-					case SDLK_DOWN:
-						CVort_gui_handle_dpad_down();
-						break;
-					case SDLK_RETURN:
-						CVort_gui_handle_dpad_activate();
-						CVort_gui_resetMenuStatus();
-						break;
-					case SDLK_PAGEUP:
-						CVort_gui_changeToPrevPage();
-						break;
-					case SDLK_PAGEDOWN:
-						CVort_gui_changeToNextPage();
-						break;
-				}
-#endif
+					}
 				break;
 				//case SDL_KEYUP:
 				case SDL_MOUSEBUTTONDOWN:
@@ -504,38 +448,35 @@ void CVort_gui_runLoop(void) {
 						}
 						break;
 					}
-					guiCurrentMenuStatus.waitForMouseButtonRelease = true;
 					origPointerX = event.button.x;
 					origPointerY = event.button.y;
 					CVort_gui_transformMouseCoordinates(&origPointerX, &origPointerY);
 					GUI_Menu_Item_T **lastItemPtr = guiCurrentMenuItemSelectionPtr;
-					if (!(guiCurrentMenuPtr->hideBackButton) && (guiCurrentMenuPtr->backPage || guiCurrentMenuPtr->altBackHandler) && CVort_gui_isBackButtonSelectedByMouse(origPointerX, origPointerY)) {
-						guiCurrentMenuStatus.isBackButtonMouseSelected = true;
+					GUI_NavButton_T selectedNavButton = CVort_gui_beginNavButtonMouseSelection(
+						&guiCurrentMenuStatus,
+						origPointerX, origPointerY,
+						!(guiCurrentMenuPtr->hideBackButton) && (guiCurrentMenuPtr->backPage || guiCurrentMenuPtr->altBackHandler),
+						guiCurrentMenuPtr->prevPage,
+						guiCurrentMenuPtr->nextPage
+					);
+					if (selectedNavButton != GUI_NAV_BUTTON_NONE) {
 						if (lastItemPtr) {
 							guiCurrentMenuItemSelectionPtr = NULL;
 							CVort_gui_drawMenuItem(*lastItemPtr);
 						}
-						CVort_gui_drawBackButton(guiCurrentMenuStatus.isBackButtonMouseSelected);
-						engine_isFrameReadyToDisplay = true;
-						break;
-					}
-					if (guiCurrentMenuPtr->prevPage && CVort_gui_isPrevButtonSelectedByMouse(origPointerX, origPointerY)) {
-						guiCurrentMenuStatus.isPrevButtonMouseSelected = true;
-						if (lastItemPtr) {
-							guiCurrentMenuItemSelectionPtr = NULL;
-							CVort_gui_drawMenuItem(*lastItemPtr);
+						switch (selectedNavButton) {
+						case GUI_NAV_BUTTON_BACK:
+							CVort_gui_drawBackButton(true);
+							break;
+						case GUI_NAV_BUTTON_PREV:
+							CVort_gui_drawPrevButton(true);
+							break;
+						case GUI_NAV_BUTTON_NEXT:
+							CVort_gui_drawNextButton(true);
+							break;
+						default:
+							break;
 						}
-						CVort_gui_drawPrevButton(guiCurrentMenuStatus.isPrevButtonMouseSelected);
-						engine_isFrameReadyToDisplay = true;
-						break;
-					}
-					if (guiCurrentMenuPtr->nextPage && CVort_gui_isNextButtonSelectedByMouse(origPointerX, origPointerY)) {
-						guiCurrentMenuStatus.isNextButtonMouseSelected = true;
-						if (lastItemPtr) {
-							guiCurrentMenuItemSelectionPtr = NULL;
-							CVort_gui_drawMenuItem(*lastItemPtr);
-						}
-						CVort_gui_drawNextButton(guiCurrentMenuStatus.isNextButtonMouseSelected);
 						engine_isFrameReadyToDisplay = true;
 						break;
 					}
@@ -557,17 +498,18 @@ void CVort_gui_runLoop(void) {
 					}
 					int lastPointerX = event.button.x, lastPointerY = event.button.y;
 					CVort_gui_transformMouseCoordinates(&lastPointerX, &lastPointerY);
-					if (guiCurrentMenuStatus.isBackButtonMouseSelected && CVort_gui_isBackButtonSelectedByMouse(lastPointerX, lastPointerY)) {
+					GUI_NavButton_T releasedNavButton = CVort_gui_getNavButtonMouseReleaseAction(&guiCurrentMenuStatus, lastPointerX, lastPointerY);
+					if (releasedNavButton == GUI_NAV_BUTTON_BACK) {
 						CVort_gui_resetMenuStatus();
 						CVort_gui_handle_dpad_back();
 						break;
 					}
-					if (guiCurrentMenuStatus.isPrevButtonMouseSelected && CVort_gui_isPrevButtonSelectedByMouse(lastPointerX, lastPointerY)) {
+					if (releasedNavButton == GUI_NAV_BUTTON_PREV) {
 						CVort_gui_resetMenuStatus();
 						CVort_gui_changeToPrevPage();
 						break;
 					}
-					if (guiCurrentMenuStatus.isNextButtonMouseSelected && CVort_gui_isNextButtonSelectedByMouse(lastPointerX, lastPointerY)) {
+					if (releasedNavButton == GUI_NAV_BUTTON_NEXT) {
 						CVort_gui_resetMenuStatus();
 						CVort_gui_changeToNextPage();
 						break;
@@ -588,10 +530,6 @@ void CVort_gui_runLoop(void) {
 
 			}
 		}
-		if (engine_isFrameReadyToDisplay || ((uint32_t)(SDL_GetTicks() - engine_lastDisplayUpdateTime) >= 100)) {
-			CVort_engine_updateActualDisplay();
-			engine_lastDisplayUpdateTime = SDL_GetTicks();
-		}
-        CK_PlatformSleepMs(1);
+		CVort_gui_updateDisplayAndSleep();
 	}
 }

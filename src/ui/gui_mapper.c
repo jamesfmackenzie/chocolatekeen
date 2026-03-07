@@ -1,22 +1,11 @@
 #include "../rsrc/chocolate-keen_vga_fonts.h"
 #include "core/globals.h"
-#include "platform/platform.h"
+#include "ui/gui_loop_common.h"
 #include "ui/gui_menu_loop.h"
 #include "ui/gui_mapper.h"
 #include "ui/gui_runtime.h"
 
-static struct {
-	bool waitForMouseButtonRelease;
-	bool isBackButtonMouseSelected, isPrevButtonMouseSelected, isNextButtonMouseSelected;
-} guiCurrentMapperStatus;
-
-// Local copy for mapper loop coordinate handling.
-static void CVort_gui_transformMouseCoordinates(int *xPtr, int *yPtr) {
-	(*xPtr) -= engine_screen.dims.borderedViewportRect.x;
-	(*yPtr) -= engine_screen.dims.borderedViewportRect.y;
-	*xPtr = (*xPtr) * ENGINE_GUI_WIDTH / engine_screen.dims.borderedViewportRect.w;
-	*yPtr = (*yPtr) * ENGINE_GUI_HEIGHT / engine_screen.dims.borderedViewportRect.h;
-}
+static GUI_NavButtonsMouseState_T guiCurrentMapperStatus;
 
 /************************************************************
 For each mapper UI tile (say a key):
@@ -96,8 +85,7 @@ void CVort_gui_mapper_drawCurrentPage(void) {
 }
 // Code duplication, but small for now...
 void CVort_gui_mapper_resetStatus(void) {
-	guiCurrentMapperStatus.waitForMouseButtonRelease = false;
-	guiCurrentMapperStatus.isBackButtonMouseSelected = guiCurrentMapperStatus.isPrevButtonMouseSelected = guiCurrentMapperStatus.isNextButtonMouseSelected = false;
+	CVort_gui_resetNavButtonsMouseState(&guiCurrentMapperStatus);
 }
 /************************************
 Some additions for the mapper UI loop
@@ -204,6 +192,17 @@ void CVort_gui_mapper_handle_dpad_activate(void) {
 	CVort_gui_mapper_handle_tile((*guiCurrentMapperTilePtr)->emuEvent.emulatedInput, (*guiCurrentMapperTilePtr)->emuEvent.value);
 }
 
+static const GUI_KeyNavHandlers_T guiMapperKeyNavHandlers = {
+	.back = CVort_gui_mapper_handle_dpad_back,
+	.left = CVort_gui_mapper_handle_dpad_left,
+	.right = CVort_gui_mapper_handle_dpad_right,
+	.up = CVort_gui_mapper_handle_dpad_up,
+	.down = CVort_gui_mapper_handle_dpad_down,
+	.activate = CVort_gui_mapper_handle_dpad_activate,
+	.prevPage = CVort_gui_mapper_changeToPrevPage,
+	.nextPage = CVort_gui_mapper_changeToNextPage
+};
+
 // Does NOT set current mapper page, which should be set externally (if at all).
 void CVort_gui_mapper_runLoop(void) {
 	int origPointerX, origPointerY;
@@ -228,63 +227,7 @@ void CVort_gui_mapper_runLoop(void) {
 					break;
 #endif
 				case SDL_KEYDOWN:
-#if SDL_VERSION_ATLEAST(2,0,0)
-				switch (event.key.keysym.scancode) {
-					case SDL_SCANCODE_ESCAPE:
-						CVort_gui_mapper_handle_dpad_back();
-						//guiCurrentPagePtr->pageEscapeHandler();
-						break;
-					case SDL_SCANCODE_LEFT:
-						CVort_gui_mapper_handle_dpad_left();
-						break;
-					case SDL_SCANCODE_RIGHT:
-						CVort_gui_mapper_handle_dpad_right();
-						break;
-					case SDL_SCANCODE_UP:
-						CVort_gui_mapper_handle_dpad_up();
-						break;
-					case SDL_SCANCODE_DOWN:
-						CVort_gui_mapper_handle_dpad_down();
-						break;
-					case SDL_SCANCODE_RETURN:
-						CVort_gui_mapper_handle_dpad_activate();
-						break;
-					case SDL_SCANCODE_PAGEUP:
-						CVort_gui_mapper_changeToPrevPage();
-						break;
-					case SDL_SCANCODE_PAGEDOWN:
-						CVort_gui_mapper_changeToNextPage();
-						break;
-				}
-#else
-				switch (event.key.keysym.sym) {
-					case SDLK_ESCAPE:
-						CVort_gui_mapper_handle_dpad_back();
-						//guiCurrentPagePtr->pageEscapeHandler();
-						break;
-					case SDLK_LEFT:
-						CVort_gui_mapper_handle_dpad_left();
-						break;
-					case SDLK_RIGHT:
-						CVort_gui_mapper_handle_dpad_right();
-						break;
-					case SDLK_UP:
-						CVort_gui_mapper_handle_dpad_up();
-						break;
-					case SDLK_DOWN:
-						CVort_gui_mapper_handle_dpad_down();
-						break;
-					case SDLK_RETURN:
-						CVort_gui_mapper_handle_dpad_activate();
-						break;
-					case SDLK_PAGEUP:
-						CVort_gui_mapper_changeToPrevPage();
-						break;
-					case SDLK_PAGEDOWN:
-						CVort_gui_mapper_changeToNextPage();
-						break;
-				}
-#endif
+					CVort_gui_handleKeydownAsNavigation(&event.key, &guiMapperKeyNavHandlers);
 				break;
 				//case SDL_KEYUP:
 				case SDL_MOUSEBUTTONDOWN:
@@ -295,38 +238,35 @@ void CVort_gui_mapper_runLoop(void) {
 						}
 						break;
 					}
-					guiCurrentMapperStatus.waitForMouseButtonRelease = true;
 					origPointerX = event.button.x;
 					origPointerY = event.button.y;
 					CVort_gui_transformMouseCoordinates(&origPointerX, &origPointerY);
 					GUI_Mapper_Tile_T **lastTilePtr = guiCurrentMapperTilePtr;
-					if (CVort_gui_isBackButtonSelectedByMouse(origPointerX, origPointerY)) {
-						guiCurrentMapperStatus.isBackButtonMouseSelected = true;
+					GUI_NavButton_T selectedNavButton = CVort_gui_beginNavButtonMouseSelection(
+						&guiCurrentMapperStatus,
+						origPointerX, origPointerY,
+						true,
+						guiCurrentMapperPagePtr->prevPage,
+						guiCurrentMapperPagePtr->nextPage
+					);
+					if (selectedNavButton != GUI_NAV_BUTTON_NONE) {
 						if (lastTilePtr) {
 							guiCurrentMapperTilePtr = NULL;
 							CVort_gui_mapper_drawTile(*lastTilePtr);
 						}
-						CVort_gui_drawBackButton(guiCurrentMapperStatus.isBackButtonMouseSelected);
-						engine_isFrameReadyToDisplay = true;
-						break;
-					}
-					if (guiCurrentMapperPagePtr->prevPage && CVort_gui_isPrevButtonSelectedByMouse(origPointerX, origPointerY)) {
-						guiCurrentMapperStatus.isPrevButtonMouseSelected = true;
-						if (lastTilePtr) {
-							guiCurrentMapperTilePtr = NULL;
-							CVort_gui_mapper_drawTile(*lastTilePtr);
+						switch (selectedNavButton) {
+						case GUI_NAV_BUTTON_BACK:
+							CVort_gui_drawBackButton(true);
+							break;
+						case GUI_NAV_BUTTON_PREV:
+							CVort_gui_drawPrevButton(true);
+							break;
+						case GUI_NAV_BUTTON_NEXT:
+							CVort_gui_drawNextButton(true);
+							break;
+						default:
+							break;
 						}
-						CVort_gui_drawPrevButton(guiCurrentMapperStatus.isPrevButtonMouseSelected);
-						engine_isFrameReadyToDisplay = true;
-						break;
-					}
-					if (guiCurrentMapperPagePtr->nextPage && CVort_gui_isNextButtonSelectedByMouse(origPointerX, origPointerY)) {
-						guiCurrentMapperStatus.isNextButtonMouseSelected = true;
-						if (lastTilePtr) {
-							guiCurrentMapperTilePtr = NULL;
-							CVort_gui_mapper_drawTile(*lastTilePtr);
-						}
-						CVort_gui_drawNextButton(guiCurrentMapperStatus.isNextButtonMouseSelected);
 						engine_isFrameReadyToDisplay = true;
 						break;
 					}
@@ -348,17 +288,18 @@ void CVort_gui_mapper_runLoop(void) {
 					}
 					int lastPointerX = event.button.x, lastPointerY = event.button.y;
 					CVort_gui_transformMouseCoordinates(&lastPointerX, &lastPointerY);
-					if (guiCurrentMapperStatus.isBackButtonMouseSelected && CVort_gui_isBackButtonSelectedByMouse(lastPointerX, lastPointerY)) {
+					GUI_NavButton_T releasedNavButton = CVort_gui_getNavButtonMouseReleaseAction(&guiCurrentMapperStatus, lastPointerX, lastPointerY);
+					if (releasedNavButton == GUI_NAV_BUTTON_BACK) {
 						CVort_gui_mapper_resetStatus();
 						CVort_gui_mapper_handle_dpad_back();
 						break;
 					}
-					if (guiCurrentMapperStatus.isPrevButtonMouseSelected && CVort_gui_isPrevButtonSelectedByMouse(lastPointerX, lastPointerY)) {
+					if (releasedNavButton == GUI_NAV_BUTTON_PREV) {
 						CVort_gui_mapper_resetStatus();
 						CVort_gui_mapper_changeToPrevPage();
 						break;
 					}
-					if (guiCurrentMapperStatus.isNextButtonMouseSelected && CVort_gui_isNextButtonSelectedByMouse(lastPointerX, lastPointerY)) {
+					if (releasedNavButton == GUI_NAV_BUTTON_NEXT) {
 						CVort_gui_mapper_resetStatus();
 						CVort_gui_mapper_changeToNextPage();
 						break;
@@ -380,10 +321,6 @@ void CVort_gui_mapper_runLoop(void) {
 
 			}
 		}
-		if (engine_isFrameReadyToDisplay || ((uint32_t)(SDL_GetTicks() - engine_lastDisplayUpdateTime) >= 100)) {
-			CVort_engine_updateActualDisplay();
-			engine_lastDisplayUpdateTime = SDL_GetTicks();
-		}
-        CK_PlatformSleepMs(1);
+		CVort_gui_updateDisplayAndSleep();
 	} while (guiMapperLoopRunningStatus);
 }

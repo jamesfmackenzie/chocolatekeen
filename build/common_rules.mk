@@ -71,6 +71,8 @@ $(OBJ)/ui_gui_mapper_menu.o: $(SRC)/ui/gui_mapper_menu.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/ui_gui_menu_loop.o: $(SRC)/ui/gui_menu_loop.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/ui_gui_loop_common.o: $(SRC)/ui/gui_loop_common.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/ui_gui_mapper.o: $(SRC)/ui/gui_mapper.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(PLATFORM_SLEEP_OBJECT): $(PLATFORM_SLEEP_SOURCE)

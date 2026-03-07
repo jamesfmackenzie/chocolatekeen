@@ -83,6 +83,13 @@ build/emscripten/chocolate-keen*.wasm
 build/emscripten/chocolate-keen*.data
 build/emscripten/data.binary
 
+build/vita/obj/
+build/vita/dist/
+build/vita/chocolate-keen.elf
+build/vita/chocolate-keen.velf
+build/vita/eboot.bin
+build/vita/chocolate-keen-vita.vpk
+
 # WebAssembly output
 chocolate-keen.data
 chocolate-keen.html

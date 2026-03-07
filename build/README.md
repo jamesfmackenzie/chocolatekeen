@@ -5,6 +5,7 @@ This directory uses small shared makefile fragments to reduce duplication across
 - `build/linux/Makefile`
 - `build/mingw/Makefile`
 - `build/emscripten/Makefile`
+- `build/vita/Makefile`
 
 ## Shared Fragments
 
@@ -36,8 +37,10 @@ Platform makefiles should follow this order:
 - `BUILD_PROFILE=native` (default)
 - `BUILD_PROFILE=emscripten`
 - `BUILD_PROFILE=emscripten-legacy`
+- `BUILD_PROFILE=vita`
 
 `build/emscripten/Makefile` sets `BUILD_PROFILE=emscripten` and defaults `CC=emcc` unless `CC` is explicitly overridden by the caller.
+`build/vita/Makefile` sets `BUILD_PROFILE=vita` and defaults `CC=arm-vita-eabi-gcc`.
 
 ## Customization Points
 

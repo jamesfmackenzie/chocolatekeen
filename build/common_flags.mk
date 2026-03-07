@@ -35,6 +35,10 @@ ifneq ($(filter $(BUILD_PROFILE),emscripten emscripten-legacy),)
 	EXT=.html
 endif
 
+ifeq ($(BUILD_PROFILE),vita)
+	EXT=.elf
+endif
+
 ifeq ($(SINGLE_EPISODE),0)
 	EXE_PATH=chocolate-keen$(EXT)
 else

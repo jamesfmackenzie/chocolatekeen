@@ -76,6 +76,23 @@ Build and Debug with Microsoft Visual Studio / Visual C++
 
 Game data is automatically copied to the Target Directory as part of build - so everything should "just run"
 
+### PlayStation Vita (VitaSDK)
+The repository includes an initial VitaSDK target in `build/vita`.
+
+Prerequisites:
+1. Install VitaSDK and SDL2 for Vita.
+2. Source the VitaSDK environment so tools like `arm-vita-eabi-gcc`, `vita-elf-create`, and `vita-make-fself` are in `PATH`.
+
+Build steps:
+1. Launch a shell with VitaSDK environment loaded.
+2. Navigate to `/build/vita`.
+3. Run `./build_vita.sh -j4` to build `chocolate-keen.elf`.
+4. Run `make vpk` to package `chocolate-keen-vita.vpk`.
+
+Notes:
+* The Vita build defaults to software rendering (`USE_OPENGL=0`).
+* The first-pass input shim is intentionally minimal (`src/platform/input_vita.c`).
+
 ## Authors
 The original authors of Chocolate Keen are NY00123, QuantumG and Lemm. The project started with a reverse engineering of the original Keen code, and the goal is complete authenticity to the original - bugs and all. For more info see https://pckf.com/viewtopic.php?f=4&t=2536
 

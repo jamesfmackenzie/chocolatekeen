@@ -61,6 +61,8 @@ $(OBJ)/render_gfx.o: $(SRC)/render/gfx.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/input_input.o: $(SRC)/input/input.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/input_input_names.o: $(SRC)/input/input_names.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/input_input_default_mappings.o: $(SRC)/input/input_default_mappings.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/ui_gui.o: $(SRC)/ui/gui.c

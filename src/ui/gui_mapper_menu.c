@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "core/globals.h"
+#include "input/input_names.h"
 #include "ui/gui_internal.h"
 #include "ui/gui_runtime.h"
 

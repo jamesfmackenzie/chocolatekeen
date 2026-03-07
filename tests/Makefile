@@ -19,6 +19,7 @@ NAV_TEST_SRC=test_input_nav_runner.c
 # Source files under test
 CRLE_SRC=../src/third_party/cgenius/fileio/compression/CRLE.c
 INPUT_SRC=../src/input/input.c
+INPUT_NAMES_SRC=../src/input/input_names.c
 INPUT_DEFAULT_MAPPINGS_SRC=../src/input/input_default_mappings.c
 MEMDATA_SRC=../src/render/memdata.c
 
@@ -26,8 +27,8 @@ MEMDATA_SRC=../src/render/memdata.c
 $(TEST_EXE): $(TEST_SRC) $(CRLE_SRC) $(INPUT_SRC) $(MEMDATA_SRC)
 	$(CC) $(CFLAGS) $(TEST_SRC) $(CRLE_SRC) $(LDFLAGS) -o $(TEST_EXE)
 
-$(NAV_TEST_EXE): $(NAV_TEST_SRC) $(CRLE_SRC) $(INPUT_SRC) $(INPUT_DEFAULT_MAPPINGS_SRC) $(MEMDATA_SRC)
-	$(CC) $(NAV_CFLAGS) $(NAV_TEST_SRC) $(CRLE_SRC) $(INPUT_SRC) $(INPUT_DEFAULT_MAPPINGS_SRC) $(MEMDATA_SRC) $(LDFLAGS) -o $(NAV_TEST_EXE)
+$(NAV_TEST_EXE): $(NAV_TEST_SRC) $(CRLE_SRC) $(INPUT_SRC) $(INPUT_NAMES_SRC) $(INPUT_DEFAULT_MAPPINGS_SRC) $(MEMDATA_SRC)
+	$(CC) $(NAV_CFLAGS) $(NAV_TEST_SRC) $(CRLE_SRC) $(INPUT_SRC) $(INPUT_NAMES_SRC) $(INPUT_DEFAULT_MAPPINGS_SRC) $(MEMDATA_SRC) $(LDFLAGS) -o $(NAV_TEST_EXE)
 
 # Run tests
 run: $(TEST_EXE)

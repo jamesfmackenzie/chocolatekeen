@@ -140,13 +140,6 @@ typedef enum EmulatedKeyIndex_T {
     EMULATEDKEYINDEX_KEY_INDICES_COUNT
 } EmulatedKeyIndex_T;
 
-extern const char *const mapperClientJoyButtonNames[];
-extern const char *const mapperClientJoyAxisNames[];
-extern const char *const mapperClientMouseButtonNames[];
-extern const char *const mapperClientMouseAxisNames[];
-extern const char *const mapperClientHandlerNames[];
-extern const char *const mapperClientModNames[];
-
 typedef enum EmulatedInput_T {
     EMULATEDINPUT_NONE = 0,
     EMULATEDINPUT_KEYPRESS,

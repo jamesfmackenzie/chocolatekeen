@@ -22,7 +22,7 @@ void CVort_engine_loadSounds(void) {
     if (engine_gameVersion == GAMEVER_KEEN1) {
         snprintf(g_game.string_buf, sizeof(g_game.string_buf), "SOUNDS.%s", game_ext);
         FILE *fp = CVort_engine_cross_ro_data_fopen(g_game.string_buf);
-        // TODO: What if we fail to load the file?
+        // If the external sound file is missing/unreadable, we keep sound disabled.
         if (fp) {
             len = CVort_filelength(fp);
             soundDataPtr = (uint8_t *)malloc(len);
@@ -58,7 +58,7 @@ void CVort_engine_loadSounds(void) {
     sndChunksData = malloc(ENGINE_SNDBYTEDEPTH * samplesPerBeep * (len - 16 * (engine_sndCount + 1)));
 
     // Now fill the data.
-    // TODO: Again we assume 16-bit depth and a single channel.
+    // Audio conversion currently targets 16-bit mono sample output.
     uint16_t *currSndChunkPtr = (uint16_t *)sndChunksData;
     // 16-bit is always the size of a value representing a beep in
     // in vanilla Keen - and in LITTLE ENDIAN order (as loaded from file).

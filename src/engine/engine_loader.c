@@ -166,8 +166,8 @@ static bool load_exe_image(gameversion_T gameVer, uint8_t **pExeImageBuffer) {
     if (!fp)
         return false;
     uint32_t len = CVort_filelength(fp);
-    // TODO: If len = compressedSize,
-    // we currently assume valid uncompressed data.
+    // If len differs from the compressed size, this path treats input as a
+    // plain uncompressed MZ image and strips its header.
     wholeExeData = (uint8_t *)malloc(len);
     if (!wholeExeData) {
         CVort_engine_cross_logMessage(CVORT_LOG_MSG_ERROR, "Out of memory for temporary EXE storage!\n");
@@ -194,7 +194,7 @@ static bool load_exe_image(gameversion_T gameVer, uint8_t **pExeImageBuffer) {
         }
         memcpy(*pExeImageBuffer, uncompressedExeData + headerSize, Cunlzexe_getUncompressedExeSize() - headerSize);
         Cunlzexe_free(&uncompressedExeData);
-    } else { // TODO: For now assume a valid uncompressed file
+    } else { // Non-compressed-size path: treat as uncompressed MZ image.
         headerSize = 16 * (wholeExeData[8] + 16 * wholeExeData[9]);
         *pExeImageBuffer = (uint8_t *)malloc(len - headerSize);
         if (!(*pExeImageBuffer)) {
@@ -269,7 +269,7 @@ void CVort_engine_loadKeen(gameversion_T gameVer) {
         if (clear_keys_and_check_for_quit()) {
             // Don't call CVort_engine_shutdown:
             // We don't want to save (video) settings.
-            // FIXME: If the user changed something in the launcher?
+            // Current behavior intentionally skips settings persistence on this path.
             CVort_engine_shutdownSDL();
             exit(0);
         }
@@ -277,7 +277,7 @@ void CVort_engine_loadKeen(gameversion_T gameVer) {
             if (check_for_user_input_and_quit()) {
                 // Don't call CVort_engine_shutdown:
                 // We don't want to save (video) settings.
-                // FIXME: If the user changed something in the launcher?
+                // Current behavior intentionally skips settings persistence on this path.
                 CVort_engine_shutdownSDL();
                 exit(0);
             }
@@ -315,8 +315,8 @@ void CVort_engine_loadKeen(gameversion_T gameVer) {
         CVort_ptr_continue_game = CVort_private_continue_game;
     }
 
-    // TODEmulatedKey_TO: Support more format and adapt chunksize to the rate?
-    // TODO: Check against Mix_QuerySpec.
+    // Future enhancement: support more output formats and adapt chunk size to
+    // the actual opened device format/rate (e.g., from queried audio spec).
     if (!engine_arguments.disableSoundSystem) {
         if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0) {
             CVort_engine_cross_logMessage(CVORT_LOG_MSG_ERROR, "Couldn't initialize audio subsystem: %s\n", SDL_GetError());

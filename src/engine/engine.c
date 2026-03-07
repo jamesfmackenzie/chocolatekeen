@@ -492,8 +492,8 @@ int16_t CVort_engine_readGamePort() {
 }
 
 bool CVort_engine_isJoystickInUse() {
-    // TODO: Wire this to runtime input-device selection / disabled-joystick mode.
-    // For now keep legacy behavior: joystick path stays logically available.
+    // Known limitation: this does not reflect runtime device-selection state.
+    // We currently preserve legacy behavior and keep joystick logic available.
     return true;
 }
 
@@ -684,7 +684,7 @@ GameInput_T CVort_engine_getJoystickCtrl(int16_t joy_id) {
 
 void CVort_engine_cross_logMessage(CVort_Log_Message_Class_T msgClass, const char *format, ...) {
     // NOTE: Logging currently targets stderr only.
-    // TODO: Route through a configurable logger/file sink if needed.
+    // Logging currently writes to stderr only.
     va_list args;
     va_start(args, format);
     switch (msgClass) {
@@ -718,8 +718,8 @@ int16_t CVort_engine_toupper(int16_t c) {
     return (c & 0xff);
 }
 
-// TODO: Audit/verify behavior against DOS text-mode edge cases (wrapping,
-// attributes, cursor movement) and document any intentional deviations.
+// Known gap: DOS text-mode edge cases (wrapping, attributes, cursor movement)
+// are only partially verified against original behavior.
 
 void CVort_engine_puts(const char *str) {
     uint8_t *txtMemPtr;

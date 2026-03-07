@@ -43,7 +43,7 @@ void CVort_engine_prepareGameDataFilePathBuffers(gameversion_T gameVer) {
 }
 
 FILE *CVort_engine_cross_ro_data_fopen(const char *filename) {
-    // TODO: For now we have no more than old style 8.3 filenames
+    // Data-file lookup currently assumes uppercase DOS-style short names.
     char *ptr = engine_gameDataFullPathBuffer + engine_gameDataPrefixLen;
     strncpy(ptr, filename, 13);
     for (size_t loopVar = 0; loopVar < strlen(ptr); loopVar++) {
@@ -53,7 +53,7 @@ FILE *CVort_engine_cross_ro_data_fopen(const char *filename) {
 }
 
 FILE *CVort_engine_cross_rw_misc_fopen(const char *filename, const char *mode) {
-    // TODO: Not modifying path at all for now
+    // Misc RW files currently use the provided path unchanged.
     return fopen(filename, mode);
 }
 

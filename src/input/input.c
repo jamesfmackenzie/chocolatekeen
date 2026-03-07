@@ -1661,10 +1661,11 @@ static void inc_input_mapping_host_side(HostInput_T *pInputT, int *pInputId, int
 			return;
 		}
 		// Otherwise we should begin going over the joysticks
-		*pInputT = HOSTINPUT_JOYBUTTONPRESS;
-		*pInputId = -1; // Signal we're coming out of mouse motion handling
-		// Do NOT return now
-	case HOSTINPUT_JOYBUTTONPRESS:
+			*pInputT = HOSTINPUT_JOYBUTTONPRESS;
+			*pInputId = -1; // Signal we're coming out of mouse motion handling
+			// Do NOT return now
+			/* fall through */
+		case HOSTINPUT_JOYBUTTONPRESS:
 		// Coming out of mouse motion case?
 		if (*pInputId == -1) {
 			*pInputId = 0; // Any (first) joystick?
@@ -1685,10 +1686,11 @@ static void inc_input_mapping_host_side(HostInput_T *pInputT, int *pInputId, int
 		if (*pInputId < engine_inputMappings.numOfJoysticks)
 			return; // Joystick found with some button, so finish
 		// Otherwise we should begin going over the axes
-		*pInputT = HOSTINPUT_JOYMOTION;
-		*pInputId = -1; // Signal we're coming out of button handling
-		// Do NOT return now
-	case HOSTINPUT_JOYMOTION:
+			*pInputT = HOSTINPUT_JOYMOTION;
+			*pInputId = -1; // Signal we're coming out of button handling
+			// Do NOT return now
+			/* fall through */
+		case HOSTINPUT_JOYMOTION:
 		// Coming out of joystick button case
 		if (*pInputId == -1) {
 			*pInputId = 0; // Any (first) joystick?
@@ -1714,10 +1716,11 @@ static void inc_input_mapping_host_side(HostInput_T *pInputT, int *pInputId, int
 		if (*pInputId < engine_inputMappings.numOfJoysticks)
 			return; // Joystick found with some axis, so finish
 		// Otherwise we should begin going over the hats
-		*pInputT = HOSTINPUT_JOYHAT;
-		*pInputId = -1; // Signal we're coming out of axis handling
-		// Do NOT return now
-	case HOSTINPUT_JOYHAT:
+			*pInputT = HOSTINPUT_JOYHAT;
+			*pInputId = -1; // Signal we're coming out of axis handling
+			// Do NOT return now
+			/* fall through */
+		case HOSTINPUT_JOYHAT:
 		// Coming out of joystick axis case
 		if (*pInputId == -1) {
 			*pInputId = 0; // Any (first) joystick?
@@ -2350,13 +2353,13 @@ void CVort_engine_updateInputStatus() {
                 for (eventLoopVar = 0; eventLoopVar < engine_inputMappings.keyMappings[currSDLKeyId].numOfEvents; eventLoopVar++)
                     CVort_engine_handleEvent(&engine_inputMappings.keyMappings[currSDLKeyId].list[eventLoopVar], (event.type == SDL_KEYDOWN) ? 32767 : 0);
                 break;
-            case SDL_MOUSEBUTTONDOWN:
-                if (!engine_isCursorLocked) {
-                    CVort_engine_toggleCursorLock(true);
-                    break;
-                }
-                // Otherwise CONTINUE!
-            case SDL_MOUSEBUTTONUP:
+	            case SDL_MOUSEBUTTONDOWN:
+	                if (!engine_isCursorLocked) {
+	                    CVort_engine_toggleCursorLock(true);
+	                    break;
+	                }
+	                /* fall through */
+	            case SDL_MOUSEBUTTONUP:
                 if ((event.button.button < 1) || (event.button.button > 5))
                     break; // Again, without this a buffer overflow may occur...
                 for (eventLoopVar = 0; eventLoopVar < engine_inputMappings.mouseButtonMappings[event.button.button-1].numOfEvents; eventLoopVar++)

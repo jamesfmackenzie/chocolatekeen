@@ -78,6 +78,9 @@ void CVort_body_nop(Body_T* body) {
 
 }
 
+void CVort_think_nop(void) {
+}
+
 void CVort_think_dead_sprite() {
     g_entities.temp_sprite.time++;
     CVort_do_fall();

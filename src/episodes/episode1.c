@@ -296,9 +296,8 @@ void CVort1_add_sprite_chain(int16_t tileX, int16_t tileY) {
     g_entities.sprites[sprIndex].pos_x = tileX << 12;
     g_entities.sprites[sprIndex].pos_y = tileY << 12;
 
-    // NOTE NOTE!!!
-    // This could be a pretty bad idea!!!!!! But let's try anyway...
-    g_entities.sprites[sprIndex].think = (SpriteThinkFunction_T)(&CVort_think_keengun);
+    // Chain sprites are static; a no-op think callback avoids unsafe function-pointer casts.
+    g_entities.sprites[sprIndex].think = &CVort_think_nop;
 
     g_entities.sprites[sprIndex].contact = &CVort1_contact_chain;
     g_entities.sprites[sprIndex].frame = 0x72;

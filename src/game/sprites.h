@@ -18,13 +18,13 @@ struct SpriteStruct {
     int16_t varB;
     int16_t varC; // Seems to store the old vel_x (i.e. when keen jumps he pauses, then he continues with old vel x)
     int16_t varD; // If false, then think_13_keen_ground checks tiles
-    void (*think)();
+    void (*think)(void);
     void (*contact)(struct SpriteStruct *owner, struct SpriteStruct * contacted);
 };
 
 typedef struct SpriteStruct Sprite_T;
 typedef void (*SpriteContactFunction_T)(Sprite_T *owner, Sprite_T * contacted);
-typedef void (*SpriteThinkFunction_T)();
+typedef void (*SpriteThinkFunction_T)(void);
 
 struct BodyStruct {
     int32_t tile_x, tile_y; // x and y coordinates of body map tile

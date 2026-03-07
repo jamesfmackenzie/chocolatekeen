@@ -323,37 +323,37 @@ typedef struct {
     extern int16_t (*CVort_ptr_worldmap_sprites)(int16_t map_sprite_standing, Sprite_T* spritedraw, int16_t pos_x, int16_t pos_y);
     void CVort_wait_for_key();
 
-    extern void (*CVort_ptr_inlevel_message)();
+    extern void (*CVort_ptr_inlevel_message)(void);
 
     void CVort_add_sprite_keengun(int32_t pos_x, int32_t pos_y);
-    void CVort_think_zapzot();
-    void CVort_think_keengun();
+    void CVort_think_zapzot(void);
+    void CVort_think_keengun(void);
     void CVort_contact_keengun(Sprite_T *keengun, Sprite_T * contacted);
     void CVort_add_sprite_tankshot(int32_t pos_x, int32_t pos_y, int16_t vel_x);
     void CVort_contact_tankshot(Sprite_T *keengun, Sprite_T * contacted);
 
     void CVort_add_sprite_vorticon(int16_t tileX, int16_t tileY);
     void CVort_add_sprite_youth(int16_t tileX, int16_t tileY);
-    void CVort_think_vorticon_walk();
-    void CVort_think_vorticon_jump();
-    void CVort_think_vorticon_search();
+    void CVort_think_vorticon_walk(void);
+    void CVort_think_vorticon_jump(void);
+    void CVort_think_vorticon_search(void);
     void CVort_contact_vorticon(Sprite_T *vorticon, Sprite_T *contacted);
-    void CVort_think_youth_walk();
-    void CVort_think_youth_jump();
+    void CVort_think_youth_walk(void);
+    void CVort_think_youth_jump(void);
     void CVort_contact_youth(Sprite_T *youth, Sprite_T *contacted);
 
     int16_t CVort_add_sprite();
     int16_t CVort_add_body();
 
-    void CVort_think_keen_ground();
-    void CVort_think_keen_jump_ground();
-    void CVort_think_keen_jump_air();
-    void CVort_think_keen_shoot();
-    void CVort_think_keen_pogo_air();
-    void CVort_think_keen_pogo_ground();
-    void CVort_think_keen_exit();
-    void CVort_think_keen_death();
-    void CVort_think_keen_stunned();
+    void CVort_think_keen_ground(void);
+    void CVort_think_keen_jump_ground(void);
+    void CVort_think_keen_jump_air(void);
+    void CVort_think_keen_shoot(void);
+    void CVort_think_keen_pogo_air(void);
+    void CVort_think_keen_pogo_ground(void);
+    void CVort_think_keen_exit(void);
+    void CVort_think_keen_death(void);
+    void CVort_think_keen_stunned(void);
     extern void (*CVort_ptr_contact_keen)(Sprite_T *keen, Sprite_T * contacted);
     void CVort_body_border_flash(Body_T * body);
     void CVort_body_bridge_extend(Body_T * bridge);
@@ -364,10 +364,11 @@ typedef struct {
     void CVort_think_contact_nop(Sprite_T *curr, Sprite_T * other);
     void CVort_body_nop(Body_T * body);
 
-    void CVort_think_dead_sprite();
-    void CVort_think_kill_sprite();
-    void CVort_think_remove_sprite();
-    void CVort_default_think();
+    void CVort_think_dead_sprite(void);
+    void CVort_think_nop(void);
+    void CVort_think_kill_sprite(void);
+    void CVort_think_remove_sprite(void);
+    void CVort_default_think(void);
     void CVort_default_contact(Sprite_T *curr, Sprite_T * other);
 
     void CVort_kill_keen();

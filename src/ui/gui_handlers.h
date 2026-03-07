@@ -1,6 +1,7 @@
 #ifndef _CHOCOLATE_KEEN_GUI_HANDLERS_H_
 #define _CHOCOLATE_KEEN_GUI_HANDLERS_H_
 
+#include "SDL.h"
 #include "ui/gui_types.h"
 
 typedef struct GUI_CurrentEmuEventDetails_Struct {

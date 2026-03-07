@@ -6,85 +6,8 @@
 // Actually cvorticons.h includes that anyway...
 #include "SDL.h"
 #include "platform/platform.h"
-#include "ui/gui_data.h"
-#include "ui/gui_handlers.h"
+#include "ui/gui_runtime.h"
 #include "ui/gui_types.h"
-
-// Function forward declarations
-GUI_Menu_Item_HandlerNonPtr_T
-	// Main menu
-#ifdef CHOCOLATE_KEEN_IS_EPISODE1_ENABLED
-	CVort_gui_handler_startKeen1,
-#endif
-#ifdef CHOCOLATE_KEEN_IS_EPISODE2_ENABLED
-	CVort_gui_handler_startKeen2,
-#endif
-#ifdef CHOCOLATE_KEEN_IS_EPISODE3_ENABLED
-	CVort_gui_handler_startKeen3,
-#endif
-	CVort_gui_handler_toggleKeyPassToBios,
-	CVort_gui_handler_showSettingsPage,
-	CVort_gui_handler_askToQuit,
-	// Quit menu
-	CVort_gui_handler_dontQuit,
-	CVort_gui_handler_quit,
-	// Settings menu
-	CVort_gui_handler_showVideoSettingsPage,
-	CVort_gui_handler_showMoreSettingsPage,
-	CVort_gui_handler_showInputMapper,
-	CVort_gui_handler_resetMapperSetup,
-	CVort_gui_handler_showCompatibilityOptionsPage,
-	// Video settings menu, page 1
-	CVort_gui_handler_pickFullScreenResolution,
-	CVort_gui_handler_pickWindowedResolution,
-	CVort_gui_handler_toggleFullScreen,
-#if SDL_VERSION_ATLEAST(2,0,0)
-	CVort_gui_handler_pickDisplayNumber,
-#endif
-	// Video settings menu, page 2
-	CVort_gui_handler_pickVideoOutput,
-#ifdef _CHOCOLATE_KEEN_ENABLE_OPENGL_
-	CVort_gui_handler_pickGLVersion,
-#endif
-#if SDL_VERSION_ATLEAST(2,0,0)
-	CVort_gui_handler_pickSDLRendererDriver,
-#endif
-	CVort_gui_handler_toggleVSync,
-	CVort_gui_handler_toggleBilinearInterpolation,
-	// Video settings menu, page 3
-	CVort_gui_handler_pickScaleType,
-	CVort_gui_handler_pickScaleFactor,
-#ifdef _CHOCOLATE_KEEN_HAVE_OPENGL_2_0_ANY_
-	CVort_gui_handler_toggleGPUPaletteCycling,
-#endif
-#if (defined _CHOCOLATE_KEEN_ENABLE_OPENGL_) || SDL_VERSION_ATLEAST(2,0,0)
-	CVort_gui_handler_toggleOffScreenRendering,
-#endif
-
-	// Input mapper warning menu
-	CVort_gui_handler_doEnterInputMapper,
-	CVort_gui_handler_doNotEnterInputMapper,
-
-	// Mapper reset warning menu
-	//CVort_gui_handler_doNotEnterInputMapper, // HACK: "Borrowing" function
-	CVort_gui_handler_doResetMapper,
-
-	// More settings menu
-	CVort_gui_handler_pickGfxCard,
-	CVort_gui_handler_toggleMouseCursorAutoLock,
-	CVort_gui_handler_toggleMouseCursorHiding,
-	CVort_gui_handler_pickSampleRate,
-	CVort_gui_handler_toggleSoundSystem,
-	// Compatibility options menu
-	CVort_gui_handler_toggleInitialInputDevice,
-	CVort_gui_handler_toggleVorticonsDemoMode,
-	// Internal mapper menu (for a specific emulated event)
-	CVort_gui_handler_prepareToRecordMapperBinding,
-	CVort_gui_handler_deleteMapperBinding,
-	CVort_gui_handler_showNextMapperBinding,
-	//CVort_gui_handler_showPrevMapperBinding,
-	//CVort_gui_handler_leaveMapperBindingMenu,
-	CVort_gui_handler_pickMapperBindingModifiers;
 
 GUI_Menu_T *guiCurrentMenuPtr;
 GUI_Menu_Item_T **guiCurrentMenuItemSelectionPtr;
@@ -274,10 +197,6 @@ void CVort_gui_layoutMenu(GUI_Menu_T *menu) {
 		lastYCoord += (*items)->height;
 	}
 }
-
-typedef struct {
-	int w, h;
-} GUI_VideoMode_T;
 
 GUI_VideoMode_T *guiVideoModes;
 const char **guiFullScreenModeStrs;

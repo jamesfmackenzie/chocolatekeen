@@ -67,6 +67,8 @@ $(OBJ)/ui_gui_data.o: $(SRC)/ui/gui_data.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/ui_gui_handlers.o: $(SRC)/ui/gui_handlers.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/ui_gui_mapper_menu.o: $(SRC)/ui/gui_mapper_menu.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/ui_gui_menu_loop.o: $(SRC)/ui/gui_menu_loop.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/ui_gui_mapper.o: $(SRC)/ui/gui_mapper.c

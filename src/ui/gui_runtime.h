@@ -3,6 +3,7 @@
 
 #include "ui/gui_data.h"
 #include "ui/gui_handlers.h"
+#include "ui/gui_mapper_menu.h"
 #include "ui/gui_menu_loop.h"
 #include "ui/gui_mapper.h"
 
@@ -21,7 +22,5 @@ void CVort_gui_drawCurrentMenu(void);
 void CVort_gui_deleteScreenResolutionBuffers(void);
 int CVort_gui_createScreenResolutionBuffers(void);
 void CVort_gui_setChoicesBuffer(GUI_Menu_Item_T *item, const char **choices);
-void CVort_gui_refreshMapperMenu(void);
-void CVort_gui_showMapperMenu(void);
 
 #endif

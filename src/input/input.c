@@ -745,6 +745,25 @@ static void shutdown_and_exit(int status) {
     exit(status);
 }
 
+static void handle_input_handler_event(int handlerValue) {
+    switch (handlerValue) {
+        case INPUTHANDLER_FULLSCREEN:
+            engine_arguments.isFullscreen = !engine_arguments.isFullscreen;
+            if (!CVort_engine_resetWindow()) {
+                exit(1);
+            }
+            break;
+        case INPUTHANDLER_CAPTURECURSOR:
+            CVort_engine_toggleCursorLock(!engine_isCursorLocked);
+            break;
+        case INPUTHANDLER_SHUTDOWN:
+            shutdown_and_exit(0);
+            break;
+        default:
+            break;
+    }
+}
+
 /* fileBuffer contains the contents of the mapper file as-is;
  * tempBuffer should begin with a " char, followed by a string representing
  * some kind of host input. For instance: "key 100".
@@ -2257,21 +2276,7 @@ void CVort_engine_handleEvent(const MappedInputEvent_T *pMappedEvent, int32_t ac
         case EMULATEDINPUT_HANDLER:
             if ((action >= CHOCOLATE_KEEN_EVENT_HANDLING_THRESHOLD &&
                 pMappedEvent->modMask == (pMappedEvent->modMask & engine_inputMappings.currEmuInputStatus.modifiersMask))) {
-                // FIXME: There should be a better way of handling these..handlers..?
-                switch (pMappedEvent->value) {
-                    case INPUTHANDLER_FULLSCREEN:
-			engine_arguments.isFullscreen = !engine_arguments.isFullscreen;
-                        if (!CVort_engine_resetWindow())
-                            exit(1);
-                        break;
-                    case INPUTHANDLER_CAPTURECURSOR:
-                        CVort_engine_toggleCursorLock(!engine_isCursorLocked);
-                        break;
-                    case INPUTHANDLER_SHUTDOWN:
-                        shutdown_and_exit(0);
-                        break;
-                    default: ;
-                }
+                handle_input_handler_event(pMappedEvent->value);
             }
             break;
         case EMULATEDINPUT_MODTOGGLE:

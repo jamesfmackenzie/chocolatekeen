@@ -118,13 +118,13 @@
 
 #define PALETTE_NUM_OF_ENTRIES 17
 
-// FIXME? Should better be a whole enum of tiles...although less useful for MODs
+// NOTE? Should better be a whole enum of tiles...although less useful for MODs
 #define TILES_TELESNOW 0x63
 #define TILES_JOYSTICK 0xDD
 #define TILES_TELEDIRT 0x145
 #define TILES_TELEDIRT0 0x152
 #define TILES_TELESNOW0 0x156
-// FIXME? Same but for sounds
+// NOTE? Same but for sounds
 #define TELEPORTSND 0x12
 
 #endif

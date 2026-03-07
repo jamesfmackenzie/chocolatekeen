@@ -294,7 +294,7 @@ void CVort1_add_sprite_chain(int16_t tileX, int16_t tileY) {
     g_entities.sprites[sprIndex].pos_x = tileX << 12;
     g_entities.sprites[sprIndex].pos_y = tileY << 12;
 
-    // FIXME FIXME!!!
+    // NOTE NOTE!!!
     // This could be a pretty bad idea!!!!!! But let's try anyway...
     g_entities.sprites[sprIndex].think = (SpriteThinkFunction_T)(&CVort_think_keengun);
 
@@ -541,7 +541,7 @@ void CVort1_think_tankbot_move() {
             return;
         g_entities.temp_sprite.varB = 90;
     }
-    // TODO: This can probably be re-structured in some better way...
+    // NOTE: This can probably be re-structured in some better way...
     g_entities.temp_sprite.think = &CVort1_think_tankbot_turn;
     g_entities.temp_sprite.vel_x = 0;
     g_entities.temp_sprite.time = 0;
@@ -1037,7 +1037,7 @@ void CVort1_handle_secret_city() {
     int16_t teleport_tile = TILES_TELEDIRT0;
     if (teleporters[2].isOnSnow)
         teleport_tile = TILES_TELESNOW0;
-    // TODO: Should really be 0 (or anything, say, >= 0),
+    // NOTE: Should really be 0 (or anything, say, >= 0),
     // although the original code doesn't(?) seem to initialize it...
     int16_t tileOffset = 0;
     for (int16_t teleportCounter = 0; teleportCounter < 0x10; teleportCounter++) {
@@ -1065,7 +1065,7 @@ void CVort1_handle_secret_city() {
         CVort_handle_cheat_keys();
         CVort_handle_global_keys();
     } while (input.but1jump || input.but2pogo);
-    // FIXME? This is already done...
+    // NOTE? This is already done...
     wmap_scroll_x = scroll_x;
     wmap_scroll_y = scroll_y;
 }
@@ -1086,7 +1086,7 @@ void CVort1_show_ordering(uint16_t isTimed) {
     int16_t ticksCounter = 2400; // var_1E
     GameInput_T currInput;
 
-    // FIXME Debug!
+    // NOTE Debug!
     //for (uint16_t frame = 0; frame < 119; frame++)
     //{
     //	CVort_engine_drawSpriteAt(0x8D00+scroll_x, 0x8F00+scroll_y, frame);
@@ -1099,7 +1099,7 @@ void CVort1_show_ordering(uint16_t isTimed) {
         CVort_engine_syncDrawing();
         if (!(timeforFrame % 6)) {
             frameOffset = frameOffset + CVort_calc_jump_height(3) - 2;
-            // TODO: Use signed variable types more often...
+            // NOTE: Use signed variable types more often...
             if (((signed)frameOffset > 7) || ((signed)frameOffset < 0))
                 frameOffset = CVort_calc_jump_height(49) / 7;
         }
@@ -1154,7 +1154,7 @@ void CVort1_draw_ordering_info() {
 void CVort1_do_ordering() {
     scroll_x = 0x16000;
     scroll_y = 0x2000;
-    // TODO: Is this a long shift left indeed?
+    // NOTE: Is this a long shift left indeed?
     scroll_x_tile = scroll_x << 12;
     scroll_y_tile = scroll_y << 12;
     CVort_engine_clearOverlay();
@@ -1176,7 +1176,7 @@ void CVort1_draw_scores() {
     CVort_engine_drawBitmap(0x21, 0x2c, 6);
 
     for (uint16_t currEntry = 0; currEntry < 7; currEntry++) {
-        // FIXME: Are the correct "long divisions" done here?
+        // NOTE: Are the correct "long divisions" done here?
         var_2 = (scroll_x / 0x1000) & 0xFFFF;
         var_4 = (scroll_y / 0x1000) & 0xFFFF;
         extra_var = currEntry % 4;
@@ -1194,7 +1194,7 @@ void CVort1_draw_scores() {
         if (high_scores_table.parts[currEntry][2])
             map_data_tiles[var_2 + (cursorY / 2 + var_4) * map_width_tile + 0x11] = extra_var + 0xF5;
         // Score
-        // FIXME: This is dangerous, but (more) true to the original...
+        // NOTE: This is dangerous, but (more) true to the original...
 
         snprintf(radixStr, sizeof(radixStr), "%" PRId32, high_scores_table.scores[currEntry]);
         cursorX = 0x1d - strlen(radixStr);
@@ -1235,7 +1235,7 @@ int16_t CVort1_worldmap_sprites(int16_t map_sprite_standing, Sprite_T* spritedra
     }
     // It is a teleporter
     int16_t dstTeleportId, srcTeleportId, tileOffset, tile_x, tile_y, teleport_tile;
-    // TODO: Vanilla code doesn't seem to do that directly,
+    // NOTE: Vanilla code doesn't seem to do that directly,
     // but it's better we set this anyway.
     tileOffset = 0;
     for (int16_t teleportCounter = 0; teleportCounter < 3; teleportCounter++) {

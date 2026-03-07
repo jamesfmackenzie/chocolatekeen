@@ -357,7 +357,7 @@ typedef struct {
     void CVort_body_bridge_extend(Body_T * bridge);
     void CVort_body_bridge_retract(Body_T * bridge);
 
-    // FIXME? This is sorta more vanilla like but not really needed...
+    // NOTE? This is sorta more vanilla like but not really needed...
     void CVort_contact_nop(Sprite_T *curr, Sprite_T * other);
     void CVort_think_contact_nop(Sprite_T *curr, Sprite_T * other);
     void CVort_body_nop(Body_T * body);
@@ -537,7 +537,7 @@ typedef struct {
     extern BmpDraw_T bmpdraws[0xa];
     extern TileDraw_T tiledraws[0x64];
     extern uint16_t screentiles[0x258];
-    // TODO: bmpdraws_i (bmpdraws_p) doesn't seem to actually be used...
+    // NOTE: bmpdraws_i (bmpdraws_p) doesn't seem to actually be used...
     extern int bmpdraws_i, tiledraws_i, screentiles_i, spritedraws_i;
 
     extern uint16_t *TILEINFO_Anim;

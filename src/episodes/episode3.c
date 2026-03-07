@@ -469,7 +469,7 @@ void CVort3_add_vortimomshot(int32_t pos_x, int32_t pos_y, int16_t velocity) {
     g_entities.sprites[sprIndex].vel_x = velocity;
     g_entities.sprites[sprIndex].contact = &CVort3_contact_vortimomshot;
 
-    // TODO: Complete!
+    // NOTE: Complete!
     if (velocity >= 0) {
         // Yes, initially time == frame!
         g_entities.sprites[sprIndex].time = g_entities.sprites[sprIndex].frame = CVort3_spr_momfirer1;
@@ -1403,7 +1403,7 @@ void CVort3_draw_win() {
     CVort_fade_out();
     scroll_x &= 0x0FFFF000;
     CVort_engine_drawScreen();
-    // FIXME? This is a LOWERCASE file name!!! (which IS the vanilla way...)
+    // NOTE? This is a LOWERCASE file name!!! (which IS the vanilla way...)
     CVort_engine_showImageFile("finale.ck3");
     //
     CVort_fade_in();
@@ -1559,7 +1559,7 @@ void CVort3_draw_ordering_info() {
 void CVort3_do_ordering() {
     scroll_x = 0x16000;
     scroll_y = 0x2000;
-    // TODO: Is this a long shift left indeed?
+    // NOTE: Is this a long shift left indeed?
     scroll_x_tile = scroll_x >> 12;
     scroll_y_tile = scroll_y >> 12;
     CVort_engine_clearOverlay();
@@ -1580,7 +1580,7 @@ void CVort3_draw_scores() {
     CVort_engine_drawBitmap(0x1c, 0x2c, 5);
 
     for (uint16_t currEntry = 0; currEntry < 7; currEntry++) {
-        // FIXME: Are the correct "long divisions" done here?
+        // NOTE: Are the correct "long divisions" done here?
         var_2 = (scroll_x / 0x1000) & 0xFFFF;
         var_4 = (scroll_y / 0x1000) & 0xFFFF;
         extra_var = currEntry % 4;

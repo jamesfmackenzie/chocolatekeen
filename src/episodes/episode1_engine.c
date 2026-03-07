@@ -66,14 +66,14 @@ void CVort1_engine_processEXE() {
     }
 #endif
 
-    // TODO: Maybe we can remove "exeFields" from all things in general?
+    // NOTE: Maybe we can remove "exeFields" from all things in general?
     // Or do a different thing...
 
     // In this section we are initializing a whole bunch of variables
     // to whatever value was present in the datasegment
 
     // Get the tileinfo
-    // TODO: In some games (e.g., Slordax, Tileinfo is a separate file
+    // NOTE: In some games (e.g., Slordax, Tileinfo is a separate file
     // Add support for TILEINFO.XXX
     TILEINFO_Anim = (uint16_t *) (exeImage + CVort1_TILEINFO_OFFSET);
     TILEINFO_Type = (int16_t *) (exeImage + CVort1_TILEINFO_OFFSET) + CVort1_TILENUM;
@@ -95,7 +95,7 @@ void CVort1_engine_processEXE() {
 
 
     // Initialize some odds and ends
-    // TODO: Do we really need anim_plane *and* anim_frame_tiles?
+    // NOTE: Do we really need anim_plane *and* anim_frame_tiles?
     for (loopVar = 0; loopVar < 4; loopVar++)
         anim_plane[loopVar] = anim_frame_tiles[loopVar];
 
@@ -119,12 +119,12 @@ void CVort1_engine_processEXE() {
     teleporters[2].destY = SDL_SwapLE32(*(int32_t *)(exeImage + 0x158F6));
     teleporters[2].isOnSnow = SDL_SwapLE16(*(int16_t *)(exeImage + 0x158FA));
 
-    // TODO? These are apparently not done on vanilla Keen directly,
+    // NOTE? These are apparently not done on vanilla Keen directly,
     // but maybe indirectly they are...
     // They are located in the BSS, so they are set to zero by default
     // g_game.god_mode = 0;
     // memset(g_entities.sprites, 0, sizeof(g_entities.sprites));
     // memset(g_entities.bodies, 0, sizeof(g_entities.bodies));
 
-    // TODO: We can always fill more values...
+    // NOTE: We can always fill more values...
 }

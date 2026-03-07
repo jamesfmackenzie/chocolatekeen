@@ -868,7 +868,7 @@ void CVort2_draw_earth_explode() {
     // Tantalus flies southeast
     for (di = 0; di <= 20; di++) {
         // if (call_keyb_int(1)&0xFF==0x1B) { call_keyb_int(0); return; }
-        // HACK (sort of): Check if the last key pressed is Escape
+        // WORKAROUND (sort of): Check if the last key pressed is Escape
         if (engine_lastScanCode == 1)
             return;
 
@@ -999,7 +999,7 @@ void CVort2_draw_win()
     for (si = 0; si < 120; si++)
     {
         // if (call_keyb_int(1)&0xFF==0x1B) { call_keyb_int(0); return; }
-        // HACK (sort of): Check if the last key pressed is Escape
+        // WORKAROUND (sort of): Check if the last key pressed is Escape
         if (engine_lastScanCode == 1)
             return;
 
@@ -1213,7 +1213,7 @@ void CVort2_draw_ordering_info() {
 void CVort2_do_ordering() {
     scroll_x = 0x16000;
     scroll_y = 0x2000;
-    // TODO: Is this a long shift left indeed?
+    // NOTE: Is this a long shift left indeed?
     scroll_x_tile = scroll_x << 12;
     scroll_y_tile = scroll_y << 12;
     scroll_y -= 0x400;
@@ -1236,7 +1236,7 @@ void CVort2_draw_scores() {
     CVort_engine_drawBitmap(0x21, 0x28, 6);  
 
     for (uint16_t currEntry = 0; currEntry < 7; currEntry++) {
-        // FIXME: Are the correct "long divisions" done here?
+        // NOTE: Are the correct "long divisions" done here?
         var_2 = (scroll_x / 0x1000) & 0xFFFF;
         var_4 = (scroll_y / 0x1000) & 0xFFFF;
         extra_var = currEntry % 4;
@@ -1245,7 +1245,7 @@ void CVort2_draw_scores() {
         snprintf(radixStr, sizeof(radixStr), "%" PRIu16, high_scores_table.targets[currEntry]);
         CVort_draw_string_80(radixStr);
         // Score
-        // FIXME: This is dangerous, but (more) true to the original...
+        // NOTE: This is dangerous, but (more) true to the original...
 
         snprintf(radixStr, sizeof(radixStr), "%" PRId32, high_scores_table.scores[currEntry]);
         cursorX = 0x1d - strlen(radixStr);

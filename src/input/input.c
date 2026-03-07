@@ -1719,8 +1719,183 @@ static void inc_input_mapping_host_side(HostInput_T *pInputT, int *pInputId, int
 	}
 }
 
-// TODO: Should we implement this?
 static void dec_input_mapping_host_side(HostInput_T *pInputT, int *pInputId, int *pInputVal) {
+	int joyNum;
+	switch (*pInputT) {
+	case HOSTINPUT_NONE:
+		for (joyNum = engine_inputMappings.numOfJoysticks-1; joyNum >= 0; joyNum--) {
+			if (engine_inputMappings.joystickMappings[joyNum].numOfHats > 0) {
+				*pInputT = HOSTINPUT_JOYHAT;
+				*pInputId = joyNum;
+				*pInputVal = -(2 + 2*(engine_inputMappings.joystickMappings[joyNum].numOfHats-1));
+				return;
+			}
+		}
+		for (joyNum = engine_inputMappings.numOfJoysticks-1; joyNum >= 0; joyNum--) {
+			if (engine_inputMappings.joystickMappings[joyNum].numOfAxes > 0) {
+				*pInputT = HOSTINPUT_JOYMOTION;
+				*pInputId = joyNum;
+				*pInputVal = -(engine_inputMappings.joystickMappings[joyNum].numOfAxes);
+				return;
+			}
+		}
+		for (joyNum = engine_inputMappings.numOfJoysticks-1; joyNum >= 0; joyNum--) {
+			if (engine_inputMappings.joystickMappings[joyNum].numOfButtons > 0) {
+				*pInputT = HOSTINPUT_JOYBUTTONPRESS;
+				*pInputId = joyNum;
+				*pInputVal = engine_inputMappings.joystickMappings[joyNum].numOfButtons-1;
+				return;
+			}
+		}
+		*pInputT = HOSTINPUT_MOUSEMOTION;
+		*pInputId = 0;
+		*pInputVal = -2;
+		return;
+	case HOSTINPUT_KEYPRESS:
+		if (*pInputVal > 0) {
+			(*pInputVal)--;
+			return;
+		}
+		*pInputT = HOSTINPUT_NONE;
+		*pInputId = 0;
+		*pInputVal = 0;
+		return;
+	case HOSTINPUT_MOUSEBUTTONPRESS:
+		if (*pInputVal > 0) {
+			(*pInputVal)--;
+			return;
+		}
+		*pInputT = HOSTINPUT_KEYPRESS;
+		*pInputId = 0;
+		*pInputVal = sizeof(engine_inputMappings.keyMappings)/sizeof(MappedInputEventList_T)-1;
+		return;
+	case HOSTINPUT_MOUSEMOTION:
+		if (*pInputVal == -2) {
+			*pInputVal = 2;
+			return;
+		}
+		if (*pInputVal == 2) {
+			*pInputVal = -1;
+			return;
+		}
+		if (*pInputVal == -1) {
+			*pInputVal = 1;
+			return;
+		}
+		*pInputT = HOSTINPUT_MOUSEBUTTONPRESS;
+		*pInputId = 0;
+		*pInputVal = sizeof(engine_inputMappings.mouseButtonMappings)/sizeof(MappedInputEventList_T)-1;
+		return;
+	case HOSTINPUT_JOYBUTTONPRESS:
+		if (*pInputVal > 0) {
+			(*pInputVal)--;
+			return;
+		}
+		for (joyNum = (*pInputId)-1; joyNum >= 0; joyNum--) {
+			if (engine_inputMappings.joystickMappings[joyNum].numOfButtons > 0) {
+				*pInputId = joyNum;
+				*pInputVal = engine_inputMappings.joystickMappings[joyNum].numOfButtons-1;
+				return;
+			}
+		}
+		*pInputT = HOSTINPUT_MOUSEMOTION;
+		*pInputId = 0;
+		*pInputVal = -2;
+		return;
+	case HOSTINPUT_JOYMOTION:
+		if (*pInputVal < 0) {
+			*pInputVal = -(*pInputVal);
+			return;
+		}
+		if (*pInputVal > 1) {
+			*pInputVal = -(*pInputVal-1);
+			return;
+		}
+		for (joyNum = (*pInputId)-1; joyNum >= 0; joyNum--) {
+			if (engine_inputMappings.joystickMappings[joyNum].numOfAxes > 0) {
+				*pInputId = joyNum;
+				*pInputVal = -(engine_inputMappings.joystickMappings[joyNum].numOfAxes);
+				return;
+			}
+		}
+		for (joyNum = engine_inputMappings.numOfJoysticks-1; joyNum >= 0; joyNum--) {
+			if (engine_inputMappings.joystickMappings[joyNum].numOfButtons > 0) {
+				*pInputT = HOSTINPUT_JOYBUTTONPRESS;
+				*pInputId = joyNum;
+				*pInputVal = engine_inputMappings.joystickMappings[joyNum].numOfButtons-1;
+				return;
+			}
+		}
+		*pInputT = HOSTINPUT_MOUSEMOTION;
+		*pInputId = 0;
+		*pInputVal = -2;
+		return;
+	case HOSTINPUT_JOYHAT:
+	{
+		int hatNum, hatStep;
+		if (*pInputVal > 0) {
+			hatNum = (*pInputVal-1)/2;
+			hatStep = (*pInputVal % 2) ? 0 : 2;
+		} else {
+			hatNum = (-(*pInputVal)-1)/2;
+			hatStep = (*pInputVal % 2) ? 1 : 3;
+		}
+		hatStep--;
+		if (hatStep < 0) {
+			if (hatNum > 0) {
+				hatNum--;
+				hatStep = 3;
+			} else {
+				for (joyNum = (*pInputId)-1; joyNum >= 0; joyNum--) {
+					if (engine_inputMappings.joystickMappings[joyNum].numOfHats > 0) {
+						*pInputId = joyNum;
+						*pInputVal = -(2 + 2*(engine_inputMappings.joystickMappings[joyNum].numOfHats-1));
+						return;
+					}
+				}
+				for (joyNum = engine_inputMappings.numOfJoysticks-1; joyNum >= 0; joyNum--) {
+					if (engine_inputMappings.joystickMappings[joyNum].numOfAxes > 0) {
+						*pInputT = HOSTINPUT_JOYMOTION;
+						*pInputId = joyNum;
+						*pInputVal = -(engine_inputMappings.joystickMappings[joyNum].numOfAxes);
+						return;
+					}
+				}
+				for (joyNum = engine_inputMappings.numOfJoysticks-1; joyNum >= 0; joyNum--) {
+					if (engine_inputMappings.joystickMappings[joyNum].numOfButtons > 0) {
+						*pInputT = HOSTINPUT_JOYBUTTONPRESS;
+						*pInputId = joyNum;
+						*pInputVal = engine_inputMappings.joystickMappings[joyNum].numOfButtons-1;
+						return;
+					}
+				}
+				*pInputT = HOSTINPUT_MOUSEMOTION;
+				*pInputId = 0;
+				*pInputVal = -2;
+				return;
+			}
+		}
+		if (hatStep == 0) {
+			*pInputVal = 1+2*hatNum;
+			return;
+		}
+		if (hatStep == 1) {
+			*pInputVal = -(1+2*hatNum);
+			return;
+		}
+		if (hatStep == 2) {
+			*pInputVal = 2+2*hatNum;
+			return;
+		}
+		*pInputVal = -(2+2*hatNum);
+		return;
+	}
+	default:
+		*pInputT = HOSTINPUT_NONE;
+		*pInputId = 0;
+		*pInputVal = 0;
+		return;
+	}
 }
 
 static MappedInputEvent_T *get_input_mapping_template(

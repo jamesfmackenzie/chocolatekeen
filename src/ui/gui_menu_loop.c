@@ -20,6 +20,27 @@ For each menu item:
 #define GUI_MENU_ITEM_TEXT_CHAR_WIDTH 8
 #define GUI_MENU_ITEM_TEXT_CHAR_HEIGHT 14
 
+typedef struct {
+	int leftX0, leftX1;
+	int rightX0, rightX1;
+} GUI_MenuChoiceHitBounds_T;
+
+static void CVort_gui_calcMenuChoiceHitBounds(const GUI_Menu_Item_T *item, GUI_MenuChoiceHitBounds_T *bounds) {
+	bounds->leftX0 = item->x + (guiCurrentMenuPtr->width - item->choiceMaxPixWidth - 4 * GUI_MENU_ITEM_TEXT_CHAR_WIDTH);
+	bounds->leftX1 = item->x + (guiCurrentMenuPtr->width - item->choiceMaxPixWidth / 2 - 2 * GUI_MENU_ITEM_TEXT_CHAR_WIDTH);
+	bounds->rightX0 = bounds->leftX1;
+	bounds->rightX1 = item->x + guiCurrentMenuPtr->width;
+}
+
+static bool CVort_gui_isMouseInChoiceLeftArrow(
+	const GUI_MenuChoiceHitBounds_T *bounds,
+	int pressX,
+	int releaseX
+) {
+	return (pressX >= bounds->leftX0) && (pressX < bounds->leftX1) &&
+	       (releaseX >= bounds->leftX0) && (releaseX < bounds->leftX1);
+}
+
 void CVort_gui_resetMenuStatus(void) {
 	CVort_gui_resetNavButtonsMouseState(&guiCurrentMenuStatus);
 }
@@ -333,12 +354,9 @@ void CVort_gui_handle_dpad_activate(void) {
 void CVort_gui_handle_mouse_selection(int pressX, int pressY, int releaseX, int releaseY) {
 	// ASSUMPTION: guiCurrentMenuItemSelectionPtr is non-NULL
 	if ((*guiCurrentMenuItemSelectionPtr)->choices) {
-		// FIXME: Maybe store some of these offsets in the struct.
-		// On the other hand, we don't calculate these that often.
-		if ((pressX >= (*guiCurrentMenuItemSelectionPtr)->x + (guiCurrentMenuPtr->width - (*guiCurrentMenuItemSelectionPtr)->choiceMaxPixWidth - 4*GUI_MENU_ITEM_TEXT_CHAR_WIDTH)) &&
-		    (pressX  < (*guiCurrentMenuItemSelectionPtr)->x + (guiCurrentMenuPtr->width - (*guiCurrentMenuItemSelectionPtr)->choiceMaxPixWidth/2 - 2*GUI_MENU_ITEM_TEXT_CHAR_WIDTH)) &&
-		    (releaseX >= (*guiCurrentMenuItemSelectionPtr)->x + (guiCurrentMenuPtr->width - (*guiCurrentMenuItemSelectionPtr)->choiceMaxPixWidth - 4*GUI_MENU_ITEM_TEXT_CHAR_WIDTH)) &&
-		    (releaseX  < (*guiCurrentMenuItemSelectionPtr)->x + (guiCurrentMenuPtr->width - (*guiCurrentMenuItemSelectionPtr)->choiceMaxPixWidth/2 - 2*GUI_MENU_ITEM_TEXT_CHAR_WIDTH))) {
+		GUI_MenuChoiceHitBounds_T bounds;
+		CVort_gui_calcMenuChoiceHitBounds(*guiCurrentMenuItemSelectionPtr, &bounds);
+		if (CVort_gui_isMouseInChoiceLeftArrow(&bounds, pressX, releaseX)) {
 			CVort_gui_selectPrevItemChoice(*guiCurrentMenuItemSelectionPtr);
 		} else {
 			CVort_gui_selectNextItemChoice(*guiCurrentMenuItemSelectionPtr);

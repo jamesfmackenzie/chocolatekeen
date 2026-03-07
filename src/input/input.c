@@ -885,15 +885,15 @@ void CVort_engine_deleteInputMapping(EmulatedInput_T emuInput, int emuValue, Hos
 	if (!inputEventList)
 		return;
 	int loopVar;
-	for (loopVar = 0; loopVar < inputEventList->numOfEvents; loopVar++) {
-		if ((inputEventList->list[loopVar].emulatedInput == emuInput) &&
-		    (inputEventList->list[loopVar].value == emuValue)) {
-			// HACK: Relocate last entry to here
-			inputEventList->list[loopVar] = inputEventList->list[inputEventList->numOfEvents-1];
-			inputEventList->numOfEvents--;
-			return;
+		for (loopVar = 0; loopVar < inputEventList->numOfEvents; loopVar++) {
+			if ((inputEventList->list[loopVar].emulatedInput == emuInput) &&
+			    (inputEventList->list[loopVar].value == emuValue)) {
+				// Keep mappings densely packed with O(1) removal (order is not preserved).
+				inputEventList->list[loopVar] = inputEventList->list[inputEventList->numOfEvents-1];
+				inputEventList->numOfEvents--;
+				return;
+			}
 		}
-	}
 }
 
 static void inc_input_mapping_host_side(HostInput_T *pInputT, int *pInputId, int *pInputVal) {
@@ -1588,8 +1588,8 @@ void CVort_engine_handleEvent(const MappedInputEvent_T *pMappedEvent, int32_t ac
 }
 
 // NOTE: Joystick input handling is done separately.
-// TODO: Emulated Pause shares a DOS scancode with Ctrl in legacy mappings.
-// Revisit handling so "wait for key press" loops can't consume a release event.
+// Known limitation: Emulated Pause shares a DOS scancode with Ctrl in legacy
+// mappings, so "wait for key press" loops may consume a release event.
 // NOTE: Window resize is intentionally handled in this poll loop because
 // viewport/state updates are currently coupled with event processing.
 

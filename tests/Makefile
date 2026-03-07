@@ -2,7 +2,11 @@
 
 CC=gcc
 CFLAGS=-std=c99 -I../src -I/usr/include/SDL2 -Wall -Wextra -g
-NAV_CFLAGS=$(CFLAGS) -Wno-unused-variable
+# run-nav pulls in full src/input/input.c and headers used by multiple C files.
+# input.h currently exposes static lookup tables, so translation units that only
+# need declarations emit -Wunused-variable; keep that suppression local to nav tests.
+NAV_WARNING_SUPPRESSIONS=-Wno-unused-variable
+NAV_CFLAGS=$(CFLAGS) $(NAV_WARNING_SUPPRESSIONS)
 SDLCONFIG=sdl2-config
 
 # Link against SDL (needed for CRLE which uses SDL types)

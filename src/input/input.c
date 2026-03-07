@@ -8,6 +8,7 @@
 // And for mixing host mouse motion with whole different things
 // (as well as client mouse motion with different kinds of input)
 #define CHOCOLATE_KEEN_EVENT_HANDLING_MOUSE_MOTION_SCALE_FACTOR 4096
+#define CHOCOLATE_KEEN_ARRAY_LEN(arr) ((int)(sizeof(arr) / sizeof((arr)[0])))
 
 #if SDL_VERSION_ATLEAST(2,0,0)
 #define CHOCOLATE_KEEN_MAPPER_FILENAME "chocolate-keen-mapper-sdl2_0.map"
@@ -796,12 +797,12 @@ static void apply_mouse_delta_with_lower_bound(int16_t *value, int32_t delta) {
  */
 bool CVort_engine_addInputMappingsFromFile(const char *fileBuffer, const char *tempBuffer, MappedInputEventList_T *pEventList) {
     const char *ptrLoopVar = strstr(fileBuffer, tempBuffer), *ptr;
-    char eventBuffer[32];
     int loopVar;
     bool eventFound;
 
 #define CHOCOLATE_KEEN_IS_STRING_FOUND_IN_THE_RIGHT_PLACE(emuStr) \
-    ((strstr(ptr, emuStr) != ptr) || (strlen(emuStr) != strchr(ptr, ' ') - ptr))
+    ((strstr(ptr, emuStr) != ptr) || (strchr(ptr, ' ') == NULL) || \
+     (strlen(emuStr) != (size_t)(strchr(ptr, ' ') - ptr)))
 
 #define CHOCOLATE_KEEN_WARN_OF_HOST_MAPPING_OVERFLOW() \
     CVort_engine_cross_logMessage(CVORT_LOG_MSG_WARNING, "Mapper file has more than %d entries for a single host device.\nOnly %d are loaded and the rest may be removed in the future.\n", MAX_EMU_MAPPINGS_PER_HOST_ENTRY, MAX_EMU_MAPPINGS_PER_HOST_ENTRY)
@@ -818,7 +819,7 @@ bool CVort_engine_addInputMappingsFromFile(const char *fileBuffer, const char *t
         }
         // Check for emulated keyboard event
         eventFound = false;
-        for (loopVar = 0; loopVar < sizeof(engine_emulatedKeysTable)/sizeof(EmulatedKey_T); loopVar++) {
+        for (loopVar = 0; loopVar < CHOCOLATE_KEEN_ARRAY_LEN(engine_emulatedKeysTable); loopVar++) {
             if (CHOCOLATE_KEEN_IS_STRING_FOUND_IN_THE_RIGHT_PLACE(engine_emulatedKeysTable[loopVar].name)) {
                     continue;
             }
@@ -1051,38 +1052,38 @@ bool CVort_engine_tryToLoadInputMappings(void) {
     }
 
     // First, looking for host keyboard events...
-    for (loopVar = 0; loopVar < sizeof(engine_inputMappings.keyMappings)/sizeof(MappedInputEventList_T); loopVar++) {
+    for (loopVar = 0; loopVar < (uint32_t)CHOCOLATE_KEEN_ARRAY_LEN(engine_inputMappings.keyMappings); loopVar++) {
         snprintf(tempBuffer, sizeof(tempBuffer), "\"key %u ", loopVar);
         CHOCOLATE_KEEN_HANDLE_HOST_INPUT_MACRO(engine_inputMappings.keyMappings[loopVar]);
     }
     // Host mouse button events come next
-    for (loopVar = 0; loopVar < sizeof(engine_inputMappings.mouseButtonMappings)/sizeof(MappedInputEventList_T); loopVar++) {
+    for (loopVar = 0; loopVar < (uint32_t)CHOCOLATE_KEEN_ARRAY_LEN(engine_inputMappings.mouseButtonMappings); loopVar++) {
         snprintf(tempBuffer, sizeof(tempBuffer), "\"mouse button %u ", loopVar);
         CHOCOLATE_KEEN_HANDLE_HOST_INPUT_MACRO(engine_inputMappings.mouseButtonMappings[loopVar]);
     }
     // Mouse axes follow
-    for (loopVar = 0; loopVar < sizeof(engine_inputMappings.mouseRelPAxisMappings)/sizeof(MappedInputEventList_T); loopVar++) {
+    for (loopVar = 0; loopVar < (uint32_t)CHOCOLATE_KEEN_ARRAY_LEN(engine_inputMappings.mouseRelPAxisMappings); loopVar++) {
         snprintf(tempBuffer, sizeof(tempBuffer), "\"mouse axis %u 1 ", loopVar);
         CHOCOLATE_KEEN_HANDLE_HOST_INPUT_MACRO(engine_inputMappings.mouseRelPAxisMappings[loopVar]);
         snprintf(tempBuffer, sizeof(tempBuffer), "\"mouse axis %u 0 ", loopVar);
         CHOCOLATE_KEEN_HANDLE_HOST_INPUT_MACRO(engine_inputMappings.mouseRelNAxisMappings[loopVar]);
     }
     // Time to handle host joysticks
-    for (joystickNum = 0; joystickNum < engine_inputMappings.numOfJoysticks; joystickNum++) {
+    for (joystickNum = 0; joystickNum < (uint32_t)engine_inputMappings.numOfJoysticks; joystickNum++) {
         // Beginning with the buttions
-        for (loopVar = 0; loopVar < engine_inputMappings.joystickMappings[joystickNum].numOfButtons; loopVar++) {
+        for (loopVar = 0; loopVar < (uint32_t)engine_inputMappings.joystickMappings[joystickNum].numOfButtons; loopVar++) {
             snprintf(tempBuffer, sizeof(tempBuffer), "\"stick_%u button %u ", joystickNum, loopVar);
             CHOCOLATE_KEEN_HANDLE_HOST_INPUT_MACRO(engine_inputMappings.joystickMappings[joystickNum].joystickButtonMappings[loopVar]);
         }
         // Analog axes come next
-        for (loopVar = 0; loopVar < engine_inputMappings.joystickMappings[joystickNum].numOfAxes; loopVar++) {
+        for (loopVar = 0; loopVar < (uint32_t)engine_inputMappings.joystickMappings[joystickNum].numOfAxes; loopVar++) {
             snprintf(tempBuffer, sizeof(tempBuffer), "\"stick_%u axis %u 1 ", joystickNum, loopVar);
             CHOCOLATE_KEEN_HANDLE_HOST_INPUT_MACRO(engine_inputMappings.joystickMappings[joystickNum].joystickPAxisMappings[loopVar]);
             snprintf(tempBuffer, sizeof(tempBuffer), "\"stick_%u axis %u 0 ", joystickNum, loopVar);
             CHOCOLATE_KEEN_HANDLE_HOST_INPUT_MACRO(engine_inputMappings.joystickMappings[joystickNum].joystickNAxisMappings[loopVar]);
         }
         // Finally, HAT switches
-        for (loopVar = 0; loopVar < engine_inputMappings.joystickMappings[joystickNum].numOfHats; loopVar++) {
+        for (loopVar = 0; loopVar < (uint32_t)engine_inputMappings.joystickMappings[joystickNum].numOfHats; loopVar++) {
             snprintf(tempBuffer, sizeof(tempBuffer), "\"stick_%u hat %u %u ", joystickNum, loopVar, SDL_HAT_RIGHT);
             CHOCOLATE_KEEN_HANDLE_HOST_INPUT_MACRO(engine_inputMappings.joystickMappings[joystickNum].joystickPHorizHatMappings[loopVar]);
             snprintf(tempBuffer, sizeof(tempBuffer), "\"stick_%u hat %u %u ", joystickNum, loopVar, SDL_HAT_DOWN);
@@ -1118,7 +1119,7 @@ void CVort_engine_setDefaultInputMappings(void) {
     }
 
     // First prepare keyboard event maps
-    for (loopVar = 0; loopVar < sizeof(defaultKeyMappings)/sizeof(MappedInputEvent_T); loopVar++) {
+    for (loopVar = 0; loopVar < CHOCOLATE_KEEN_ARRAY_LEN(defaultKeyMappings); loopVar++) {
         if (defaultKeyMappings[loopVar].emulatedInput == EMULATEDINPUT_KEYPRESS) {
 #if SDL_VERSION_ATLEAST(2,0,0)
             if ((loopVar == SDL_SCANCODE_LALT) || (loopVar == SDL_SCANCODE_RALT))
@@ -1626,7 +1627,7 @@ static void inc_input_mapping_host_side(HostInput_T *pInputT, int *pInputId, int
 		return; // A valid host input so we're done
 	case HOSTINPUT_KEYPRESS:
 		// The number is either SDL_NUM_SCANCODES (SDL 2.0) or SDLK_LAST (SDL 1.2)
-		if ((*pInputVal) + 1 < sizeof(engine_inputMappings.keyMappings)/sizeof(MappedInputEventList_T)) {
+			if ((*pInputVal) + 1 < CHOCOLATE_KEEN_ARRAY_LEN(engine_inputMappings.keyMappings)) {
 			(*pInputVal)++;
 			return; // Finish
 		}
@@ -1637,7 +1638,7 @@ static void inc_input_mapping_host_side(HostInput_T *pInputT, int *pInputId, int
 		return; // Again we can finish
 	case HOSTINPUT_MOUSEBUTTONPRESS:
 		// Similarly checking if there's another mouse button
-		if ((*pInputVal) + 1 < sizeof(engine_inputMappings.mouseButtonMappings)/sizeof(MappedInputEventList_T)) {
+			if ((*pInputVal) + 1 < CHOCOLATE_KEEN_ARRAY_LEN(engine_inputMappings.mouseButtonMappings)) {
 			(*pInputVal)++;
 			return; // Finish
 		}
@@ -2023,7 +2024,7 @@ void CVort_engine_writeMappedHostInputs(FILE *fp, const MappedInputEvent_T *pTes
      (pTestEvent->value != (currEvent).value))
 
     // First, looking for host keyboard events...
-    for (loopVar = 0; loopVar < sizeof(engine_inputMappings.keyMappings)/sizeof(MappedInputEventList_T); loopVar++) {
+    for (loopVar = 0; loopVar < CHOCOLATE_KEEN_ARRAY_LEN(engine_inputMappings.keyMappings); loopVar++) {
         for (eventLoopVar = 0; eventLoopVar < engine_inputMappings.keyMappings[loopVar].numOfEvents; eventLoopVar++) {
             if (CHOCOLATE_KEEN_ARE_EVENTS_NOT_MATCHING(engine_inputMappings.keyMappings[loopVar].list[eventLoopVar])) {
                 continue;
@@ -2033,7 +2034,7 @@ void CVort_engine_writeMappedHostInputs(FILE *fp, const MappedInputEvent_T *pTes
         }
     }
     // Next follow host mouse button events
-    for (loopVar = 0; loopVar < sizeof(engine_inputMappings.mouseButtonMappings)/sizeof(MappedInputEventList_T); loopVar++) {
+    for (loopVar = 0; loopVar < CHOCOLATE_KEEN_ARRAY_LEN(engine_inputMappings.mouseButtonMappings); loopVar++) {
         for (eventLoopVar = 0; eventLoopVar < engine_inputMappings.mouseButtonMappings[loopVar].numOfEvents; eventLoopVar++) {
             if (CHOCOLATE_KEEN_ARE_EVENTS_NOT_MATCHING(engine_inputMappings.mouseButtonMappings[loopVar].list[eventLoopVar])) {
                 continue;
@@ -2043,7 +2044,7 @@ void CVort_engine_writeMappedHostInputs(FILE *fp, const MappedInputEvent_T *pTes
         }
     }
     // Host mouse motion
-    for (loopVar = 0; loopVar < sizeof(engine_inputMappings.mouseRelPAxisMappings)/sizeof(MappedInputEventList_T); loopVar++) {
+    for (loopVar = 0; loopVar < CHOCOLATE_KEEN_ARRAY_LEN(engine_inputMappings.mouseRelPAxisMappings); loopVar++) {
         // Negative
         for (eventLoopVar = 0; eventLoopVar < engine_inputMappings.mouseRelNAxisMappings[loopVar].numOfEvents; eventLoopVar++) {
             if (CHOCOLATE_KEEN_ARE_EVENTS_NOT_MATCHING(engine_inputMappings.mouseRelNAxisMappings[loopVar].list[eventLoopVar])) {
@@ -2148,7 +2149,7 @@ void CVort_engine_saveInputMappings() {
     // We first want to print the emulated events, beginning with the keyboard
     testEvent.emulatedInput = EMULATEDINPUT_KEYPRESS;
     int loopVar;
-    for (loopVar = 0; loopVar < sizeof(engine_emulatedKeysTable) / sizeof(EmulatedKey_T); loopVar++) {
+    for (loopVar = 0; loopVar < CHOCOLATE_KEEN_ARRAY_LEN(engine_emulatedKeysTable); loopVar++) {
         testEvent.value = loopVar;
         fprintf(fp, "%s", engine_emulatedKeysTable[loopVar].name);
         CVort_engine_writeMappedHostInputs(fp, &testEvent);

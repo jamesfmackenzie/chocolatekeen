@@ -185,7 +185,7 @@ extern glGenFramebuffersEXT_Func_T engine_glGenFramebuffers_CoreEXT;
 extern glCheckFramebufferStatusEXT_Func_T engine_glCheckFramebufferStatus_CoreEXT;
 extern glFramebufferTexture2DEXT_Func_T engine_glFramebufferTexture2D_CoreEXT;
 
-// (FIXME HACK) A few Core/EXT agnostic symbols to define
+// Core/EXT compatibility aliases used by shared framebuffer paths.
 #define ENGINE_GL_FRAMEBUFFER_COREEXT 0x8D40
 #define ENGINE_GL_READ_FRAMEBUFFER_COREEXT 0x8CA8
 #define ENGINE_GL_DRAW_FRAMEBUFFER_COREEXT 0x8CA9

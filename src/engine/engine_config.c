@@ -250,7 +250,8 @@ void CVort_engine_writeSDLRendererDriver(const char *key, int val, FILE *fp) {
 void CVort_engine_saveConfigFile(void) {
     FILE *fp = CVort_engine_configpath_fopen(CHOCOLATE_KEEN_CFG_FILENAME, "w");
     if (!fp) {
-        return; // TODO/FIXME: Actually what can be done at all?
+        // Keep startup/shutdown resilient: failing to persist config is non-fatal.
+        return;
     }
     CVort_engine_writeBool("fullscreen", engine_arguments.isFullscreen, fp);
     CVort_engine_writeDims("fullres", engine_arguments.fullWidth, engine_arguments.fullHeight, fp);

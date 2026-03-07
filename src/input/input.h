@@ -36,8 +36,8 @@ typedef struct {
     uint8_t joystickButtonsMask; // 1,2,4,8 (gameport output: 16,32,64,128)
 } EmulatedInputDevices_T;
 
-// FIXME: If this changes, so should the array engine_emulatedKeysTable.
-// It's better than using constant numbers directly, though..
+// Keep this enum in lock-step with engine_emulatedKeysTable.
+// src/input/input.c has a compile-time size check for this contract.
 typedef enum EmulatedKeyIndex_T {
     EMULATEDKEYINDEX_ESC = 0,
     EMULATEDKEYINDEX_F1,

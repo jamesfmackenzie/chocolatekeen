@@ -6,6 +6,8 @@
 // Actually cvorticons.h includes that anyway...
 #include "SDL.h"
 #include "platform/platform.h"
+#include "ui/gui_data.h"
+#include "ui/gui_handlers.h"
 #include "ui/gui_types.h"
 
 // Function forward declarations
@@ -87,7 +89,37 @@ GUI_Menu_Item_HandlerNonPtr_T
 GUI_Menu_T *guiCurrentMenuPtr;
 GUI_Menu_Item_T **guiCurrentMenuItemSelectionPtr;
 
-#include "ui/gui_data.inc"
+static int getMaxStringLength(const char **stringArray) {
+	int maxLength = 0;
+	for (; *stringArray; stringArray++) {
+		if (maxLength < strlen(*stringArray)) {
+			maxLength = strlen(*stringArray);
+		}
+	}
+	return maxLength;
+}
+
+static int getNumOfStrings(const char **stringArray) {
+	int count = 0;
+	for (; *stringArray; stringArray++, count++);
+	return count;
+}
+
+/************************************************************
+For each menu item:
+- Have a total height of 34 pixels at the least.
+- 14 pixels height for a row of text.
+- 10 pixels of top invisible border, and 10 of bottom border.
+************************************************************/
+#define GUI_MENU_ITEM_TEXT_Y1_OFFSET 10
+#define GUI_MENU_ITEM_TEXT_Y2_OFFSET 10
+#define GUI_MENU_ITEM_TEXT_CHAR_WIDTH 8
+#define GUI_MENU_ITEM_TEXT_CHAR_HEIGHT 14
+
+static struct {
+	bool waitForMouseButtonRelease;
+	bool isBackButtonMouseSelected, isPrevButtonMouseSelected, isNextButtonMouseSelected;
+} guiCurrentMenuStatus, guiCurrentMapperStatus;
 
 /************************************************************
 For each mapper UI tile (say a key):
@@ -568,8 +600,6 @@ void CVort_gui_page_esc_default_handler() {
 void CVort_gui_setCurrentMenu(GUI_Menu_T *menu);
 void CVort_gui_drawCurrentMenu(void);
 void CVort_gui_drawMenuItem(GUI_Menu_Item_T *item);
-
-#include "ui/gui_handlers.inc"
 
 void CVort_gui_refreshMapperMenuWithSomeBinding(void) {
 	guiMapperMenu.items = guiMenuItemsMapperSomeBindings;

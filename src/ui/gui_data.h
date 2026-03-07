@@ -1,0 +1,102 @@
+#ifndef _CHOCOLATE_KEEN_GUI_DATA_H_
+#define _CHOCOLATE_KEEN_GUI_DATA_H_
+
+#include "ui/gui_types.h"
+
+#ifdef CHOCOLATE_KEEN_IS_EPISODE1_ENABLED
+extern GUI_Menu_Item_T guiMenuItemStartKeen1;
+#endif
+#ifdef CHOCOLATE_KEEN_IS_EPISODE2_ENABLED
+extern GUI_Menu_Item_T guiMenuItemStartKeen2;
+#endif
+#ifdef CHOCOLATE_KEEN_IS_EPISODE3_ENABLED
+extern GUI_Menu_Item_T guiMenuItemStartKeen3;
+#endif
+extern GUI_Menu_Item_T guiMenuItemNoKeenGameEpisode;
+extern GUI_Menu_Item_T guiMenuItemKeysPassToBiosToggle;
+extern GUI_Menu_Item_T guiMenuItemSettings;
+extern GUI_Menu_Item_T guiMenuItemQuit;
+extern GUI_Menu_T guiMainMenu;
+
+extern GUI_Menu_Item_T guiMenuItemConfirmQuit;
+extern GUI_Menu_Item_T guiMenuItemDontQuit;
+extern GUI_Menu_T guiQuitMenu;
+
+extern GUI_Menu_Item_T guiMenuItemVideoSettings;
+extern GUI_Menu_Item_T guiMenuItemMoreSettings;
+extern GUI_Menu_Item_T guiMenuItemInputMapper;
+extern GUI_Menu_Item_T guiMenuItemResetMapperSetup;
+extern GUI_Menu_Item_T guiMenuItemCompatibilityOptions;
+extern GUI_Menu_T guiSettingsMenu;
+
+extern GUI_Menu_Item_T guiMenuItemFullres;
+extern GUI_Menu_Item_T guiMenuItemWindowres;
+extern GUI_Menu_Item_T guiMenuItemFullscreenToggle;
+#if SDL_VERSION_ATLEAST(2,0,0)
+extern GUI_Menu_Item_T guiMenuItemDisplayNumber;
+#endif
+extern GUI_Menu_Item_T guiMenuItemResolutionComment;
+extern GUI_Menu_Item_T guiMenuItemVideoOutput;
+#ifdef _CHOCOLATE_KEEN_ENABLE_OPENGL_
+extern GUI_Menu_Item_T guiMenuItemGLVersion;
+#endif
+#if SDL_VERSION_ATLEAST(2,0,0)
+extern GUI_Menu_Item_T guiMenuItemSDLRendererDriver;
+#endif
+extern GUI_Menu_Item_T guiMenuItemVSyncToggle;
+extern GUI_Menu_Item_T guiMenuItemRequiredRestartComment;
+extern GUI_Menu_Item_T guiMenuItemScaleType;
+extern GUI_Menu_Item_T guiMenuItemScaleFactor;
+extern GUI_Menu_Item_T guiMenuItemBilinearToggle;
+#ifdef _CHOCOLATE_KEEN_HAVE_OPENGL_2_0_ANY_
+extern GUI_Menu_Item_T guiMenuItemPalCyclingToggle;
+#endif
+#if (defined _CHOCOLATE_KEEN_ENABLE_OPENGL_) || SDL_VERSION_ATLEAST(2,0,0)
+extern GUI_Menu_Item_T guiMenuItemOffscreenToggle;
+#endif
+extern GUI_Menu_T guiVideoSettingsMenus[];
+
+extern GUI_Menu_Item_T guiMenuItemInputMapperEntranceWarningText;
+extern GUI_Menu_Item_T guiMenuItemInputMapperDoEnter;
+extern GUI_Menu_Item_T guiMenuItemInputMapperCancel;
+extern GUI_Menu_T guiInputMapperEntranceWarningMenu;
+
+extern GUI_Menu_Item_T guiMenuItemMapperResetWarningText;
+extern GUI_Menu_Item_T guiMenuItemMapperResetCancel;
+extern GUI_Menu_Item_T guiMenuItemMapperResetConfirm;
+extern GUI_Menu_T guiMapperResetWarningMenu;
+
+extern GUI_Menu_Item_T guiMenuItemEmulatedGfxCard;
+extern GUI_Menu_Item_T guiMenuItemMouseCursorAutoLock;
+extern GUI_Menu_Item_T guiMenuItemMouseCursorHiding;
+extern GUI_Menu_Item_T guiMenuItemAudioSampleRate;
+extern GUI_Menu_Item_T guiMenuItemSoundSystemToggle;
+extern GUI_Menu_Item_T guiMenuItemSoundVanillaBehaviorsComment;
+extern GUI_Menu_T guiMoreSettingsMenu;
+
+extern GUI_Menu_Item_T guiMenuItemInitialInputDeviceToggle;
+extern GUI_Menu_Item_T guiMenuItemVorticonsDemoModeToggle;
+extern GUI_Menu_Item_T guiMenuItemEmulatedInputDeviceComment;
+extern GUI_Menu_T guiCompatibilityOptionsMenu;
+
+extern GUI_Menu_Item_T guiMenuItemAddMapperBinding;
+extern GUI_Menu_Item_T guiMenuItemDelMapperBinding;
+extern GUI_Menu_Item_T guiMenuItemNextMapperBinding;
+extern GUI_Menu_Item_T guiMenuItemMapperBindingLabel;
+extern GUI_Menu_Item_T guiMenuItemMapperBindingModifiers;
+extern GUI_Menu_Item_T *guiMenuItemsMapperNoBinding[];
+extern GUI_Menu_Item_T *guiMenuItemsMapperSomeBindings[];
+extern GUI_Menu_T guiMapperMenu;
+extern GUI_Menu_Item_T guiMenuItemMapperBindingRecordingLabel;
+extern GUI_Menu_T guiMapperBindingRecordingMenu;
+
+extern GUI_Mapper_Page_T guiMapperMainLeftKeyPage;
+extern GUI_Mapper_Page_T guiMapperMainRightKeyPage;
+extern GUI_Mapper_Page_T guiMapperRemainingKeyPage;
+extern GUI_Mapper_Page_T guiMapperJoysticksPage;
+extern GUI_Mapper_Page_T guiMapperMousePage;
+extern GUI_Mapper_Page_T guiMapperHandlersAndModifiersPage;
+extern GUI_Mapper_Page_T *guiCurrentMapperPagePtr;
+extern GUI_Mapper_Tile_T **guiCurrentMapperTilePtr;
+
+#endif

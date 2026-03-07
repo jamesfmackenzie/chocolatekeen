@@ -1,3 +1,26 @@
+#include <stdlib.h>
+
+#include "core/globals.h"
+#include "ui/gui_data.h"
+#include "ui/gui_handlers.h"
+
+void CVort_gui_setCurrentMenu(GUI_Menu_T *menu);
+void CVort_gui_drawCurrentMenu(void);
+void CVort_gui_mapper_drawCurrentPage(void);
+void CVort_gui_mapper_setCurrentPage(GUI_Mapper_Page_T *page);
+void CVort_gui_mapper_runLoop(void);
+void CVort_gui_deleteScreenResolutionBuffers(void);
+void CVort_gui_createScreenResolutionBuffers(void);
+void CVort_gui_setChoicesBuffer(GUI_Menu_Item_T *item, const char **choices);
+void CVort_gui_refreshMapperMenu(void);
+extern GUI_Menu_Item_T **guiCurrentMenuItemSelectionPtr;
+typedef struct {
+	int w, h;
+} GUI_VideoMode_T;
+extern GUI_VideoMode_T *guiVideoModes;
+extern const char **guiFullScreenModeStrs;
+extern const char **guiWindowedModeStrs;
+
 /*** Main page handlers ***/
 
 #ifdef CHOCOLATE_KEEN_IS_EPISODE1_ENABLED
@@ -223,20 +246,13 @@ void CVort_gui_handler_toggleVorticonsDemoMode(GUI_Menu_Item_T *item) {
 
 /*** Internal mapper menu (for a specific emulated event ***/
 
-struct {
-	EmulatedInput_T emulatedInput;
-	int value;
-} guiCurrentEmuEventDetails;
+GUI_CurrentEmuEventDetails_T guiCurrentEmuEventDetails;
 
-struct {
-	HostInput_T inputT;
-	int inputId;
-	int inputVal;
-} guiCurrentHostEventDetails;
+GUI_CurrentHostEventDetails_T guiCurrentHostEventDetails;
 
 MappedInputEvent_T *guiCurrentMappedInputEvent;
 
-static char guiMapperMenuBindingString[64];
+char guiMapperMenuBindingString[64];
 
 void CVort_gui_refreshMapperMenu(void);
 
@@ -297,7 +313,7 @@ void CVort_gui_handler_showNextMapperBinding(GUI_Menu_Item_T *item) {
 	CVort_gui_drawCurrentMenu();
 }
 
-static void CVort_gui_handler_leaveMapperBindingMenu(void/*GUI_Menu_Item_T *item*/) {
+void CVort_gui_handler_leaveMapperBindingMenu(void/*GUI_Menu_Item_T *item*/) {
 	// We return to the mapper UI loop (but don't leave the usual loop!)
 	CVort_engine_gui_clearScreen();
 	CVort_gui_mapper_drawCurrentPage();

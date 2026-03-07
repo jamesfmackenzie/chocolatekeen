@@ -63,6 +63,10 @@ $(OBJ)/input_input.o: $(SRC)/input/input.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/ui_gui.o: $(SRC)/ui/gui.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/ui_gui_data.o: $(SRC)/ui/gui_data.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
+$(OBJ)/ui_gui_handlers.o: $(SRC)/ui/gui_handlers.c
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(PLATFORM_SLEEP_OBJECT): $(PLATFORM_SLEEP_SOURCE)
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(PLATFORM_INPUT_OBJECT): $(PLATFORM_INPUT_SOURCE)

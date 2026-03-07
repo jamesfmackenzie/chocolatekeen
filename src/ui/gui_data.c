@@ -1,3 +1,7 @@
+#include "core/globals.h"
+#include "ui/gui_data.h"
+#include "ui/gui_handlers.h"
+
 /*****************************************************
 Menus follow with menu items, but without some details
 like choices arrays to be filled during runtime.
@@ -430,8 +434,6 @@ GUI_Menu_Item_T *guiMenuItemsMapperSomeBindings[] = {
 0
 };
 
-static void CVort_gui_handler_leaveMapperBindingMenu(void);
-
 GUI_Menu_T guiMapperMenu = {
 	0, 0, "Current (emulated) event" /* May change */, 0,
 	guiMenuItemsMapperNoBinding, /* May change */
@@ -449,38 +451,6 @@ GUI_Menu_T guiMapperBindingRecordingMenu = {
 	(GUI_Menu_Item_T *[]){&guiMenuItemMapperBindingRecordingLabel, 0},
 	NULL, NULL, NULL, 0, false
 };
-
-static int getMaxStringLength(const char **stringArray) {
-	int maxLength = 0;
-	for (; *stringArray; stringArray++) {
-		if (maxLength < strlen(*stringArray)) {
-			maxLength = strlen(*stringArray);
-		}
-	}
-	return maxLength;
-}
-
-static int getNumOfStrings(const char **stringArray) {
-	int count = 0;
-	for (; *stringArray; stringArray++, count++);
-	return count;
-}
-
-/************************************************************
-For each menu item:
-- Have a total height of 34 pixels at the least.
-- 14 pixels height for a row of text.
-- 10 pixels of top invisible border, and 10 of bottom border.
-************************************************************/
-#define GUI_MENU_ITEM_TEXT_Y1_OFFSET 10
-#define GUI_MENU_ITEM_TEXT_Y2_OFFSET 10
-#define GUI_MENU_ITEM_TEXT_CHAR_WIDTH 8
-#define GUI_MENU_ITEM_TEXT_CHAR_HEIGHT 14
-
-static struct {
-	bool waitForMouseButtonRelease;
-	bool isBackButtonMouseSelected, isPrevButtonMouseSelected, isNextButtonMouseSelected;
-} guiCurrentMenuStatus, guiCurrentMapperStatus;
 
 /*******************
 Some mapper UI stuff

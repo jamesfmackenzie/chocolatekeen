@@ -3,6 +3,7 @@
 
 #include "ui/gui_data.h"
 #include "ui/gui_handlers.h"
+#include "ui/gui_menu_loop.h"
 #include "ui/gui_mapper.h"
 
 typedef struct {

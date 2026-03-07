@@ -17,6 +17,7 @@ COMMON_OBJECTS=$(OBJ)/game_gameplay.o \
         $(OBJ)/ui_gui.o \
         $(OBJ)/ui_gui_data.o \
         $(OBJ)/ui_gui_handlers.o \
+        $(OBJ)/ui_gui_menu_loop.o \
         $(OBJ)/ui_gui_mapper.o \
 	$(OBJ)/lz.o \
 	$(OBJ)/CRLE.o \

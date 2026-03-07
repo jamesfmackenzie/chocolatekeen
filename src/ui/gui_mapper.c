@@ -1,6 +1,7 @@
 #include "../rsrc/chocolate-keen_vga_fonts.h"
 #include "core/globals.h"
 #include "platform/platform.h"
+#include "ui/gui_menu_loop.h"
 #include "ui/gui_mapper.h"
 #include "ui/gui_runtime.h"
 
@@ -17,12 +18,6 @@ static void CVort_gui_transformMouseCoordinates(int *xPtr, int *yPtr) {
 	*yPtr = (*yPtr) * ENGINE_GUI_HEIGHT / engine_screen.dims.borderedViewportRect.h;
 }
 
-bool CVort_gui_isBackButtonSelectedByMouse(int x, int y);
-bool CVort_gui_isPrevButtonSelectedByMouse(int x, int y);
-bool CVort_gui_isNextButtonSelectedByMouse(int x, int y);
-void CVort_gui_drawBackButton(bool isMouseSelected);
-void CVort_gui_drawPrevButton(bool isMouseSelected);
-void CVort_gui_drawNextButton(bool isMouseSelected);
 void CVort_gui_showMapperMenu(void);
 
 /************************************************************

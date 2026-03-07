@@ -75,9 +75,6 @@ void CVort_gui_mapper_drawCurrentPage(void) {
 void CVort_gui_mapper_resetStatus(void) {
 	CVort_gui_resetNavButtonsMouseState(&guiCurrentMapperStatus);
 }
-/************************************
-Some additions for the mapper UI loop
-************************************/
 
 GUI_Mapper_Tile_T **CVort_gui_mapper_getTileSelectionPtrFromMouse(int x, int y) {
 	//Vort_gui_transformMouseCoordinates(&x, &y);
@@ -129,8 +126,6 @@ void CVort_gui_mapper_handle_dpad_back(void) {
 	CVort_gui_setCurrentMenu(&guiSettingsMenu);
 }
 
-// FIXME: Unnecessary code duplication
-
 static void CVort_gui_mapper_handle_dpad_move(GUI_Mapper_MoveDirection_T direction) {
 	CVort_gui_mapper_moveSelection(guiCurrentMapperPagePtr, &guiCurrentMapperTilePtr, direction);
 	CVort_engine_gui_clearScreen();
@@ -174,10 +169,8 @@ static const GUI_KeyNavHandlers_T guiMapperKeyNavHandlers = {
 // Does NOT set current mapper page, which should be set externally (if at all).
 void CVort_gui_mapper_runLoop(void) {
 	int origPointerX, origPointerY;
-	GUI_Mapper_Tile_T *mapperTile;
 	SDL_Event event;
 	guiMapperLoopRunningStatus = true;
-	// BIG FIXME: Lots of code duplication, although not identical.
 	do {
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
@@ -282,7 +275,7 @@ void CVort_gui_mapper_runLoop(void) {
 					CVort_gui_mapper_drawCurrentPage();
 				}
 				break;
-			case SDL_QUIT: // TODO Is this ok?
+			case SDL_QUIT:
 				CVort_engine_shutdown();
 				exit(0);
 			default:;

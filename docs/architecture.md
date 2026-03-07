@@ -69,3 +69,9 @@ mkdir -p build/linux/obj
 make -C build/linux -j4
 make -C tests run
 ```
+
+Quick CI-style smoke check from repo root:
+
+```bash
+./scripts/ci-local.sh
+```

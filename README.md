@@ -86,6 +86,14 @@ Since bringing this to GitHub, I've ported to WebAssembly and I intend to suppor
 
 ## Developer Notes
 
+### Local CI-Style Check
+
+Run this from the repo root to execute the same quick checks used during refactors:
+
+```bash
+./scripts/ci-local.sh
+```
+
 ### WebAssembly Notes
 
 #### Performance

@@ -412,7 +412,6 @@ void CVort_gui_runLoop(void) {
 	CVort_gui_layoutMenu(&guiCompatibilityOptionsMenu);
 	// CVort_gui_layoutMenu(&guiMapperMenu) // Not now
 	CVort_gui_layoutMenu(&guiMapperBindingRecordingMenu); // But do this one
-	// TODO: Prepare string lists and more
 	CVort_gui_setCurrentMenu(&guiMainMenu);
 
 	int origPointerX, origPointerY;
@@ -523,7 +522,7 @@ void CVort_gui_runLoop(void) {
 					CVort_gui_drawCurrentMenu();
 				}
 				break;
-			case SDL_QUIT: // TODO Is this ok?
+			case SDL_QUIT:
 				CVort_engine_shutdown();
 				exit(0);
 			default:;

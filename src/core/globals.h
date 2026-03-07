@@ -70,6 +70,7 @@ typedef struct {
     extern void (*CVort_ptr_engine_processEXE)();
 
     void CVort_engine_setupInputMappings(void);
+    void CVort_engine_teardownInputMappings(void);
     void CVort_engine_setDefaultInputMappings(void);
     bool CVort_engine_tryToLoadInputMappings(void);
     bool CVort_engine_addInputMappingsFromFile(const char *fileBuffer, const char *tempBuffer, MappedInputEventList_T *pEventList);

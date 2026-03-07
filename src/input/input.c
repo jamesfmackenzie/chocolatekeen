@@ -742,6 +742,11 @@ const MappedInputEvent_T defaultQuitHandlerMapping = {EMULATEDINPUT_HANDLER, INP
 const MappedInputEvent_T defaultFirstModifierMapping = {EMULATEDINPUT_MODTOGGLE, 1, 0};
 const MappedInputEvent_T defaultSecondModifierMapping = {EMULATEDINPUT_MODTOGGLE, 2, 0};
 
+static void shutdown_and_exit(int status) {
+    CVort_engine_shutdown();
+    exit(status);
+}
+
 /* fileBuffer contains the contents of the mapper file as-is;
  * tempBuffer should begin with a " char, followed by a string representing
  * some kind of host input. For instance: "key 100".
@@ -1306,6 +1311,37 @@ void CVort_engine_setupInputMappings(void) {
     CVort_engine_setDefaultInputMappings();
 }
 
+void CVort_engine_teardownInputMappings(void) {
+    int loopVar;
+
+    if (engine_inputMappings.sdlJoysticks) {
+        for (loopVar = 0; loopVar < engine_inputMappings.numOfJoysticks; loopVar++) {
+            if (engine_inputMappings.sdlJoysticks[loopVar]) {
+                SDL_JoystickClose(engine_inputMappings.sdlJoysticks[loopVar]);
+            }
+        }
+        free(engine_inputMappings.sdlJoysticks);
+        engine_inputMappings.sdlJoysticks = NULL;
+    }
+
+    if (engine_inputMappings.joystickMappings) {
+        for (loopVar = 0; loopVar < engine_inputMappings.numOfJoysticks; loopVar++) {
+            free(engine_inputMappings.joystickMappings[loopVar].joystickButtonMappings);
+            free(engine_inputMappings.joystickMappings[loopVar].joystickPAxisMappings);
+            free(engine_inputMappings.joystickMappings[loopVar].joystickNAxisMappings);
+            free(engine_inputMappings.joystickMappings[loopVar].joystickPHorizHatMappings);
+            free(engine_inputMappings.joystickMappings[loopVar].joystickNHorizHatMappings);
+            free(engine_inputMappings.joystickMappings[loopVar].joystickPVertHatMappings);
+            free(engine_inputMappings.joystickMappings[loopVar].joystickNVertHatMappings);
+            memset(&engine_inputMappings.joystickMappings[loopVar], 0, sizeof(HostJoystickMapping_T));
+        }
+        free(engine_inputMappings.joystickMappings);
+        engine_inputMappings.joystickMappings = NULL;
+    }
+
+    engine_inputMappings.numOfJoysticks = 0;
+}
+
 MappedInputEvent_T *CVort_engine_recordNewInputMapping(EmulatedInput_T emuInput, int value, unsigned int mstimeout, HostInput_T *retInputT, int *retInputId, int *retInputVal) {
 	SDL_Event event;
 	HostInput_T inputT;
@@ -1327,9 +1363,8 @@ MappedInputEvent_T *CVort_engine_recordNewInputMapping(EmulatedInput_T emuInput,
 			CVort_engine_reactToWindowResize(event.resize.w, event.resize.h);
 			break;
 #endif
-		case SDL_QUIT: // TODO Is this ok?
-			CVort_engine_shutdown();
-			exit(0);
+		case SDL_QUIT:
+			shutdown_and_exit(0);
 		default:; // Includes key/button presses and MUCH more
 		}
 	}
@@ -1444,9 +1479,8 @@ MappedInputEvent_T *CVort_engine_recordNewInputMapping(EmulatedInput_T emuInput,
 				inputId = event.jhat.which;
 				doWait = false;
 				break;
-			case SDL_QUIT: // TODO Is this ok?
-				CVort_engine_shutdown();
-				exit(0);
+			case SDL_QUIT:
+				shutdown_and_exit(0);
 			default:;
 			}
 		}
@@ -2061,8 +2095,7 @@ void CVort_engine_handleEvent(const MappedInputEvent_T *pMappedEvent, int32_t ac
                         CVort_engine_toggleCursorLock(!engine_isCursorLocked);
                         break;
                     case INPUTHANDLER_SHUTDOWN:
-                        CVort_engine_shutdown();
-                        exit(0); // TODO: Is this ok?
+                        shutdown_and_exit(0);
                         break;
                     default: ;
                 }
@@ -2080,9 +2113,10 @@ void CVort_engine_handleEvent(const MappedInputEvent_T *pMappedEvent, int32_t ac
 }
 
 // NOTE: Joystick input handling is done separately.
-// FIXME: Handle (emulated) pause key differently - currently not done correctly
-// (SDL_WaitEvent(NULL) may catch a key release event!)
-// FIXME: Window resize handled here?!
+// TODO: Emulated Pause shares a DOS scancode with Ctrl in legacy mappings.
+// Revisit handling so "wait for key press" loops can't consume a release event.
+// NOTE: Window resize is intentionally handled in this poll loop because
+// viewport/state updates are currently coupled with event processing.
 
 void CVort_engine_updateInputStatus() {
     uint8_t dosScanCode;
@@ -2226,9 +2260,8 @@ void CVort_engine_updateInputStatus() {
                         CVort_engine_handleEvent(&engine_inputMappings.joystickMappings[event.jhat.which].joystickNVertHatMappings[event.jhat.hat].list[eventLoopVar], (event.jhat.value & SDL_HAT_UP) ? 32767 : 0);
                 }
                 break;
-            case SDL_QUIT: // TODO Is this ok?
-                CVort_engine_shutdown();
-                exit(0);
+            case SDL_QUIT:
+                shutdown_and_exit(0);
             default:;
         }
     }

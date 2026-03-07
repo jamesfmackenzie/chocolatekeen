@@ -442,7 +442,7 @@ bool CVort_engine_start(void) {
 }
 
 void CVort_engine_shutdown() {
-    // TODO/FIXME: Free host joystick resources
+    CVort_engine_teardownInputMappings();
 
     //if (!engine_arguments.disableSoundSystem)
     //    SDL_CloseAudio();

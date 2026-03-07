@@ -33,7 +33,7 @@ typedef struct {
 } EmulatedInputDevices_T;
 
 // Keep this enum in lock-step with engine_emulatedKeysTable.
-// src/input/input.c has a compile-time size check for this contract.
+// src/input/input_keys.c has a compile-time size check for this contract.
 typedef enum EmulatedKeyIndex_T {
     EMULATEDKEYINDEX_ESC = 0,
     EMULATEDKEYINDEX_F1,

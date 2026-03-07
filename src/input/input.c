@@ -764,6 +764,17 @@ static void handle_input_handler_event(int handlerValue) {
     }
 }
 
+static int16_t get_scaled_joystick_axis_poll(int32_t action) {
+    int32_t poll = (action+32768) * 500 / 65535;
+    if (poll < 0) {
+        return 0;
+    }
+    if (poll > 500) {
+        return 500;
+    }
+    return (int16_t)poll;
+}
+
 /* fileBuffer contains the contents of the mapper file as-is;
  * tempBuffer should begin with a " char, followed by a string representing
  * some kind of host input. For instance: "key 100".
@@ -2243,32 +2254,21 @@ void CVort_engine_handleEvent(const MappedInputEvent_T *pMappedEvent, int32_t ac
             }
             break;
         case EMULATEDINPUT_JOYMOTION:
-            // FIXME: Better be done more efficiently...
+            // Convert SDL joystick axis values to the game's [0..500] gameport scale.
             switch (pMappedEvent->value) {
                 case 1:
                 case 2:
                 case 3:
                 case 4:
-                    // FIXME: This is a hack working with SDL joystick axis
-                    // values well... although it also works with signed values
-                    // in general.
-                    engine_inputMappings.currEmuInputStatus.joystickAxesPolls[pMappedEvent->value-1] = (action+32768) * 500 / 65535;
-                    if (engine_inputMappings.currEmuInputStatus.joystickAxesPolls[pMappedEvent->value-1] < 0) {
-                        engine_inputMappings.currEmuInputStatus.joystickAxesPolls[pMappedEvent->value-1] = 0;
-                    } else if (engine_inputMappings.currEmuInputStatus.joystickAxesPolls[pMappedEvent->value-1] > 500) {
-                        engine_inputMappings.currEmuInputStatus.joystickAxesPolls[pMappedEvent->value-1] = 500;
-                    }
+                    engine_inputMappings.currEmuInputStatus.joystickAxesPolls[pMappedEvent->value-1] =
+                        get_scaled_joystick_axis_poll(action);
                     break;
                 case -1:
                 case -2:
                 case -3:
                 case -4:
-                    engine_inputMappings.currEmuInputStatus.joystickAxesPolls[-pMappedEvent->value-1] = (-action+32768) * 500 / 65535;
-                    if (engine_inputMappings.currEmuInputStatus.joystickAxesPolls[-pMappedEvent->value-1] < 0) {
-                        engine_inputMappings.currEmuInputStatus.joystickAxesPolls[-pMappedEvent->value-1] = 0;
-                    } else if (engine_inputMappings.currEmuInputStatus.joystickAxesPolls[-pMappedEvent->value-1] > 500) {
-                        engine_inputMappings.currEmuInputStatus.joystickAxesPolls[-pMappedEvent->value-1] = 500;
-                    }
+                    engine_inputMappings.currEmuInputStatus.joystickAxesPolls[-pMappedEvent->value-1] =
+                        get_scaled_joystick_axis_poll(-action);
                     break;
                 default: ;
             }

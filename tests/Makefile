@@ -15,10 +15,12 @@ TEST_SRC=test_runner.c
 
 # Source files we're testing (need to compile these too)
 CRLE_SRC=../src/third_party/cgenius/fileio/compression/CRLE.c
+INPUT_SRC=../src/input/input.c
+MEMDATA_SRC=../src/render/memdata.c
 
 # Build rule
-$(TEST_EXE): $(TEST_SRC) $(CRLE_SRC)
-	$(CC) $(CFLAGS) $(TEST_SRC) $(CRLE_SRC) $(LDFLAGS) -o $(TEST_EXE)
+$(TEST_EXE): $(TEST_SRC) $(CRLE_SRC) $(INPUT_SRC) $(MEMDATA_SRC)
+	$(CC) $(CFLAGS) $(TEST_SRC) $(CRLE_SRC) $(INPUT_SRC) $(MEMDATA_SRC) $(LDFLAGS) -o $(TEST_EXE)
 
 # Run tests
 run: $(TEST_EXE)

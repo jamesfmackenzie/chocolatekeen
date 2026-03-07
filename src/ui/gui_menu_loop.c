@@ -82,37 +82,63 @@ void CVort_gui_drawMenuItem(GUI_Menu_Item_T *item) {
 	}
 }
 
-// HACK/FIXME: Always using 4 chars for back/prev/next button
-#define GUI_MENU_BACK_BUTTON_X 2
-#define GUI_MENU_BACK_BUTTON_Y 8
-#define GUI_MENU_BACK_BUTTON_WIDTH (4*GUI_MENU_ITEM_TEXT_CHAR_WIDTH + 4)
-#define GUI_MENU_BACK_BUTTON_HEIGHT (GUI_MENU_ITEM_TEXT_CHAR_HEIGHT + 4)
+static const unsigned char guiMenuBackButtonStr[] = {32, 174, 174, 32, 0};
+static const char guiMenuPrevButtonStr[] = "Prev";
+static const char guiMenuNextButtonStr[] = "Next";
 
-#define GUI_MENU_PREV_BUTTON_X 2
-#define GUI_MENU_PREV_BUTTON_WIDTH (4*GUI_MENU_ITEM_TEXT_CHAR_WIDTH + 4)
-#define GUI_MENU_PREV_BUTTON_HEIGHT (GUI_MENU_ITEM_TEXT_CHAR_HEIGHT + 4)
-#define GUI_MENU_PREV_BUTTON_Y (engine_screen.dims.clientRect.h-9-GUI_MENU_PREV_BUTTON_HEIGHT)
+#define GUI_MENU_NAV_BUTTON_MARGIN_X 2
+#define GUI_MENU_NAV_BUTTON_TOP_Y 8
+#define GUI_MENU_NAV_BUTTON_BOTTOM_MARGIN_Y 9
+#define GUI_MENU_NAV_BUTTON_HEIGHT (GUI_MENU_ITEM_TEXT_CHAR_HEIGHT + 4)
 
-#define GUI_MENU_NEXT_BUTTON_WIDTH (4*GUI_MENU_ITEM_TEXT_CHAR_WIDTH + 4)
-#define GUI_MENU_NEXT_BUTTON_HEIGHT (GUI_MENU_ITEM_TEXT_CHAR_HEIGHT + 4)
-#define GUI_MENU_NEXT_BUTTON_X (engine_screen.dims.clientRect.w-2-GUI_MENU_NEXT_BUTTON_WIDTH)
-#define GUI_MENU_NEXT_BUTTON_Y (engine_screen.dims.clientRect.h-9-GUI_MENU_NEXT_BUTTON_HEIGHT)
+static int CVort_gui_getNavButtonWidth(const char *label) {
+	return strlen(label) * GUI_MENU_ITEM_TEXT_CHAR_WIDTH + 4;
+}
+
+static void CVort_gui_getBackButtonRect(int *x, int *y, int *width, int *height) {
+	*x = GUI_MENU_NAV_BUTTON_MARGIN_X;
+	*y = GUI_MENU_NAV_BUTTON_TOP_Y;
+	*width = CVort_gui_getNavButtonWidth((const char *)guiMenuBackButtonStr);
+	*height = GUI_MENU_NAV_BUTTON_HEIGHT;
+}
+
+static void CVort_gui_getPrevButtonRect(int *x, int *y, int *width, int *height) {
+	*x = GUI_MENU_NAV_BUTTON_MARGIN_X;
+	*width = CVort_gui_getNavButtonWidth(guiMenuPrevButtonStr);
+	*height = GUI_MENU_NAV_BUTTON_HEIGHT;
+	*y = engine_screen.dims.clientRect.h - GUI_MENU_NAV_BUTTON_BOTTOM_MARGIN_Y - *height;
+}
+
+static void CVort_gui_getNextButtonRect(int *x, int *y, int *width, int *height) {
+	*width = CVort_gui_getNavButtonWidth(guiMenuNextButtonStr);
+	*height = GUI_MENU_NAV_BUTTON_HEIGHT;
+	*x = engine_screen.dims.clientRect.w - GUI_MENU_NAV_BUTTON_MARGIN_X - *width;
+	*y = engine_screen.dims.clientRect.h - GUI_MENU_NAV_BUTTON_BOTTOM_MARGIN_Y - *height;
+}
+
+static bool CVort_gui_isPointInRect(int x, int y, int rectX, int rectY, int rectW, int rectH) {
+	return (x >= rectX) && (x < rectX + rectW) &&
+	       (y >= rectY) && (y < rectY + rectH);
+}
 
 // ASSUMPTION: There is a back button
 bool CVort_gui_isBackButtonSelectedByMouse(int x, int y) {
-	return ((x >= GUI_MENU_BACK_BUTTON_X) && (x < GUI_MENU_BACK_BUTTON_X + GUI_MENU_BACK_BUTTON_WIDTH) &&
-	        (y >= GUI_MENU_BACK_BUTTON_Y) && (y < GUI_MENU_BACK_BUTTON_Y + GUI_MENU_BACK_BUTTON_HEIGHT));
+	int rectX, rectY, rectW, rectH;
+	CVort_gui_getBackButtonRect(&rectX, &rectY, &rectW, &rectH);
+	return CVort_gui_isPointInRect(x, y, rectX, rectY, rectW, rectH);
 }
 
 // ASSUMPTION: There is a prev button
 bool CVort_gui_isPrevButtonSelectedByMouse(int x, int y) {
-	return ((x >= GUI_MENU_PREV_BUTTON_X) && (x < GUI_MENU_PREV_BUTTON_X + GUI_MENU_PREV_BUTTON_WIDTH) &&
-	        (y >= GUI_MENU_PREV_BUTTON_Y) && (y < GUI_MENU_PREV_BUTTON_Y + GUI_MENU_PREV_BUTTON_HEIGHT));
+	int rectX, rectY, rectW, rectH;
+	CVort_gui_getPrevButtonRect(&rectX, &rectY, &rectW, &rectH);
+	return CVort_gui_isPointInRect(x, y, rectX, rectY, rectW, rectH);
 }
 // ASSUMPTION: There is a next button
 bool CVort_gui_isNextButtonSelectedByMouse(int x, int y) {
-	return ((x >= GUI_MENU_NEXT_BUTTON_X) && (x < GUI_MENU_NEXT_BUTTON_X + GUI_MENU_NEXT_BUTTON_WIDTH) &&
-	        (y >= GUI_MENU_NEXT_BUTTON_Y) && (y < GUI_MENU_NEXT_BUTTON_Y + GUI_MENU_NEXT_BUTTON_HEIGHT));
+	int rectX, rectY, rectW, rectH;
+	CVort_gui_getNextButtonRect(&rectX, &rectY, &rectW, &rectH);
+	return CVort_gui_isPointInRect(x, y, rectX, rectY, rectW, rectH);
 }
 
 // Draws a back/next/prev button (assuming it should be drawn)
@@ -126,18 +152,27 @@ void CVort_gui_drawMenuNavigationButton(int x, int y, const char *label, bool is
 }
 
 void CVort_gui_drawBackButton(bool isMouseSelected) {
-	static const unsigned char backButtonStr[] = {32, 174, 174, 32, 0};
-	CVort_gui_drawMenuNavigationButton(GUI_MENU_BACK_BUTTON_X, GUI_MENU_BACK_BUTTON_Y, (const char *)backButtonStr, isMouseSelected);
+	int rectX, rectY, rectW, rectH;
+	CVort_gui_getBackButtonRect(&rectX, &rectY, &rectW, &rectH);
+	(void)rectW;
+	(void)rectH;
+	CVort_gui_drawMenuNavigationButton(rectX, rectY, (const char *)guiMenuBackButtonStr, isMouseSelected);
 }
 
 void CVort_gui_drawPrevButton(bool isMouseSelected) {
-	static const char prevButtonStr[] = "Prev";
-	CVort_gui_drawMenuNavigationButton(GUI_MENU_PREV_BUTTON_X, GUI_MENU_PREV_BUTTON_Y, prevButtonStr, isMouseSelected);
+	int rectX, rectY, rectW, rectH;
+	CVort_gui_getPrevButtonRect(&rectX, &rectY, &rectW, &rectH);
+	(void)rectW;
+	(void)rectH;
+	CVort_gui_drawMenuNavigationButton(rectX, rectY, guiMenuPrevButtonStr, isMouseSelected);
 }
 
 void CVort_gui_drawNextButton(bool isMouseSelected) {
-	static const char nextButtonStr[] = "Next";
-	CVort_gui_drawMenuNavigationButton(GUI_MENU_NEXT_BUTTON_X, GUI_MENU_NEXT_BUTTON_Y, nextButtonStr, isMouseSelected);
+	int rectX, rectY, rectW, rectH;
+	CVort_gui_getNextButtonRect(&rectX, &rectY, &rectW, &rectH);
+	(void)rectW;
+	(void)rectH;
+	CVort_gui_drawMenuNavigationButton(rectX, rectY, guiMenuNextButtonStr, isMouseSelected);
 }
 
 void CVort_gui_drawCurrentMenu(void) {

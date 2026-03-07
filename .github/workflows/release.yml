@@ -122,7 +122,7 @@ jobs:
         shell: msys2 {0}
         run: |
           mkdir -p build/mingw/obj
-          make -C build/mingw BINPREFIX=${{ matrix.triplet }}- SDLCONFIG="${{ matrix.triplet }}-sdl2-config" PLATFORM=WINDOWS -j4
+          make -C build/mingw BINPREFIX=${{ matrix.triplet }}- SDLCONFIG="sdl2-config" PLATFORM=WINDOWS -j4
 
           stage_dir="dist/${{ matrix.package_dir }}"
           mkdir -p "$stage_dir/GAMEDATA"

@@ -122,17 +122,17 @@ const EmulatedKey_T engine_emulatedKeysTable[] = {
     {"key_kp_period", 0x53},
 };
 
-//const MappedInputEvent_T emptyInputMapping = {EMULATEDINPUT_NONE, 0, 0};
+typedef char EmulatedKeysTableSizeMustMatchEnumCount[
+    (sizeof(engine_emulatedKeysTable)/sizeof(engine_emulatedKeysTable[0]) == EMULATEDKEYINDEX_KEY_INDICES_COUNT) ? 1 : -1
+];
 
-//FIXME: HACK
-#define emptyInputMapping {EMULATEDINPUT_NONE, 0, 0}
 
 const MappedInputEvent_T defaultKeyMappings[] = {
 #if SDL_VERSION_ATLEAST(2,0,0)
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_A, 0}, // SDL_SCANCODE_A
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_B, 0}, // SDL_SCANCODE_B
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_C, 0}, // SDL_SCANCODE_C
@@ -183,7 +183,7 @@ const MappedInputEvent_T defaultKeyMappings[] = {
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_RBRACKET, 0}, // SDL_SCANCODE_RIGHTBRACKET
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_BACKSLASH, 0}, // SDL_SCANCODE_BACKSLASH
 
-    emptyInputMapping, // SDL_SCANCODE_NONUSHASH
+    {EMULATEDINPUT_NONE, 0, 0}, // SDL_SCANCODE_NONUSHASH
 
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_SEMICOLON, 0}, // SDL_SCANCODE_SEMICOLON
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_QUOTE, 0}, // SDL_SCANCODE_APOSTROPHE
@@ -242,135 +242,135 @@ const MappedInputEvent_T defaultKeyMappings[] = {
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_LESSTHAN, 0}, // SDL_SCANCODE_NONUSBACKSLASH,
 
     // SDL 2.0 scancodes 101 to 223 (either actually defined or not) follow...
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
 
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_LCTRL, 0}, // SDL_SCANCODE_LCTRL
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_LSHIFT, 0}, // SDL_SCANCODE_LSHIFT
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_LALT, 0}, // SDL_SCANCODE_LALT
 
-    emptyInputMapping, // SDL_SCANCODE_LGUI
+    {EMULATEDINPUT_NONE, 0, 0}, // SDL_SCANCODE_LGUI
 
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_RCTRL, 0}, // SDL_SCANCODE_RCTRL
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_RSHIFT, 0}, // SDL_SCANCODE_RSHIFT
@@ -378,50 +378,50 @@ const MappedInputEvent_T defaultKeyMappings[] = {
 
     // A couple of more SDL 2.0 scancodes follow, but are ignored
 #else
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_BSPACE, 0}, // SDLK_BACKSPACE
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_TAB, 0}, // SDLK_TAB
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping, // SDLK_CLEAR
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_CLEAR
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_ENTER, 0}, // SDLK_RETURN
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_PAUSE, 0}, // SDLK_PAUSE
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_ESC, 0}, // SDLK_ESCAPE
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_SPACE, 0}, // SDLK_SPACE
-    emptyInputMapping, // SDLK_EXCLAIM
-    emptyInputMapping, // SDLK_QUOTEDBL
-    emptyInputMapping, // SDLK_HASH
-    emptyInputMapping, // SDLK_DOLLAR
-    emptyInputMapping,
-    emptyInputMapping, // SDLK_AMPERSAND
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_EXCLAIM
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_QUOTEDBL
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_HASH
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_DOLLAR
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_AMPERSAND
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_QUOTE, 0}, // SDLK_QUOTE
-    emptyInputMapping, // SDLK_LEFTPAREN
-    emptyInputMapping, // SDLK_RIGHTPAREN
-    emptyInputMapping, // SDLK_ASTERISK
-    emptyInputMapping, // SDLK_PLUS
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_LEFTPAREN
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_RIGHTPAREN
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_ASTERISK
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_PLUS
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_COMMA, 0}, // SDLK_COMMA
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_MINUS, 0}, // SDLK_MINUS
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_PERIOD, 0}, // SDLK_PERIOD
@@ -436,46 +436,46 @@ const MappedInputEvent_T defaultKeyMappings[] = {
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_7, 0}, // SDLK_7
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_8, 0}, // SDLK_8
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_9, 0}, // SDLK_9
-    emptyInputMapping, // SDLK_COLON
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_COLON
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_SEMICOLON, 0}, // SDLK_SEMICOLON
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_LESSTHAN, 0}, // SDLK_LESS
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_EQUALS, 0}, // SDLK_EQUALS
-    emptyInputMapping, // SDLK_GREATER
-    emptyInputMapping, // SDLK_QUESTION
-    emptyInputMapping, // SDLK_AT
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_GREATER
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_QUESTION
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_AT
 
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
 
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_LBRACKET, 0}, // SDLK_LEFTBRACKET
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_BACKSLASH, 0}, // SDLK_BACKSLASH
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_RBRACKET, 0}, // SDLK_RIGHTBRACKET
-    emptyInputMapping, // SDLK_CARET
-    emptyInputMapping, // SDLK_UNDERSCORE
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_CARET
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_UNDERSCORE
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_GRAVE, 0}, // SDLK_BACKQUOTE
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_A, 0}, // SDLK_a
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_B, 0}, // SDLK_b
@@ -503,141 +503,141 @@ const MappedInputEvent_T defaultKeyMappings[] = {
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_X, 0}, // SDLK_x
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_Y, 0}, // SDLK_y
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_Z, 0}, // SDLK_z
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_DELETE, 0}, // SDLK_DELETE
 
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
 
-    emptyInputMapping, // SDLK_WORLD_0
-    emptyInputMapping, // SDLK_WORLD_1
-    emptyInputMapping, // SDLK_WORLD_2
-    emptyInputMapping, // SDLK_WORLD_3
-    emptyInputMapping, // SDLK_WORLD_4
-    emptyInputMapping, // SDLK_WORLD_5
-    emptyInputMapping, // SDLK_WORLD_6
-    emptyInputMapping, // SDLK_WORLD_7
-    emptyInputMapping, // SDLK_WORLD_8
-    emptyInputMapping, // SDLK_WORLD_9
-    emptyInputMapping, // SDLK_WORLD_10
-    emptyInputMapping, // SDLK_WORLD_11
-    emptyInputMapping, // SDLK_WORLD_12
-    emptyInputMapping, // SDLK_WORLD_13
-    emptyInputMapping, // SDLK_WORLD_14
-    emptyInputMapping, // SDLK_WORLD_15
-    emptyInputMapping, // SDLK_WORLD_16
-    emptyInputMapping, // SDLK_WORLD_17
-    emptyInputMapping, // SDLK_WORLD_18
-    emptyInputMapping, // SDLK_WORLD_19
-    emptyInputMapping, // SDLK_WORLD_20
-    emptyInputMapping, // SDLK_WORLD_21
-    emptyInputMapping, // SDLK_WORLD_22
-    emptyInputMapping, // SDLK_WORLD_23
-    emptyInputMapping, // SDLK_WORLD_24
-    emptyInputMapping, // SDLK_WORLD_25
-    emptyInputMapping, // SDLK_WORLD_26
-    emptyInputMapping, // SDLK_WORLD_27
-    emptyInputMapping, // SDLK_WORLD_28
-    emptyInputMapping, // SDLK_WORLD_29
-    emptyInputMapping, // SDLK_WORLD_30
-    emptyInputMapping, // SDLK_WORLD_31
-    emptyInputMapping, // SDLK_WORLD_32
-    emptyInputMapping, // SDLK_WORLD_33
-    emptyInputMapping, // SDLK_WORLD_34
-    emptyInputMapping, // SDLK_WORLD_35
-    emptyInputMapping, // SDLK_WORLD_36
-    emptyInputMapping, // SDLK_WORLD_37
-    emptyInputMapping, // SDLK_WORLD_38
-    emptyInputMapping, // SDLK_WORLD_39
-    emptyInputMapping, // SDLK_WORLD_40
-    emptyInputMapping, // SDLK_WORLD_41
-    emptyInputMapping, // SDLK_WORLD_42
-    emptyInputMapping, // SDLK_WORLD_43
-    emptyInputMapping, // SDLK_WORLD_44
-    emptyInputMapping, // SDLK_WORLD_45
-    emptyInputMapping, // SDLK_WORLD_46
-    emptyInputMapping, // SDLK_WORLD_47
-    emptyInputMapping, // SDLK_WORLD_48
-    emptyInputMapping, // SDLK_WORLD_49
-    emptyInputMapping, // SDLK_WORLD_50
-    emptyInputMapping, // SDLK_WORLD_51
-    emptyInputMapping, // SDLK_WORLD_52
-    emptyInputMapping, // SDLK_WORLD_53
-    emptyInputMapping, // SDLK_WORLD_54
-    emptyInputMapping, // SDLK_WORLD_55
-    emptyInputMapping, // SDLK_WORLD_56
-    emptyInputMapping, // SDLK_WORLD_57
-    emptyInputMapping, // SDLK_WORLD_58
-    emptyInputMapping, // SDLK_WORLD_59
-    emptyInputMapping, // SDLK_WORLD_60
-    emptyInputMapping, // SDLK_WORLD_61
-    emptyInputMapping, // SDLK_WORLD_62
-    emptyInputMapping, // SDLK_WORLD_63
-    emptyInputMapping, // SDLK_WORLD_64
-    emptyInputMapping, // SDLK_WORLD_65
-    emptyInputMapping, // SDLK_WORLD_66
-    emptyInputMapping, // SDLK_WORLD_67
-    emptyInputMapping, // SDLK_WORLD_68
-    emptyInputMapping, // SDLK_WORLD_69
-    emptyInputMapping, // SDLK_WORLD_70
-    emptyInputMapping, // SDLK_WORLD_71
-    emptyInputMapping, // SDLK_WORLD_72
-    emptyInputMapping, // SDLK_WORLD_73
-    emptyInputMapping, // SDLK_WORLD_74
-    emptyInputMapping, // SDLK_WORLD_75
-    emptyInputMapping, // SDLK_WORLD_76
-    emptyInputMapping, // SDLK_WORLD_77
-    emptyInputMapping, // SDLK_WORLD_78
-    emptyInputMapping, // SDLK_WORLD_79
-    emptyInputMapping, // SDLK_WORLD_80
-    emptyInputMapping, // SDLK_WORLD_81
-    emptyInputMapping, // SDLK_WORLD_82
-    emptyInputMapping, // SDLK_WORLD_83
-    emptyInputMapping, // SDLK_WORLD_84
-    emptyInputMapping, // SDLK_WORLD_85
-    emptyInputMapping, // SDLK_WORLD_86
-    emptyInputMapping, // SDLK_WORLD_87
-    emptyInputMapping, // SDLK_WORLD_88
-    emptyInputMapping, // SDLK_WORLD_89
-    emptyInputMapping, // SDLK_WORLD_90
-    emptyInputMapping, // SDLK_WORLD_91
-    emptyInputMapping, // SDLK_WORLD_92
-    emptyInputMapping, // SDLK_WORLD_93
-    emptyInputMapping, // SDLK_WORLD_94
-    emptyInputMapping, // SDLK_WORLD_95
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_0
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_1
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_2
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_3
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_4
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_5
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_6
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_7
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_8
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_9
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_10
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_11
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_12
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_13
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_14
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_15
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_16
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_17
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_18
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_19
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_20
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_21
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_22
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_23
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_24
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_25
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_26
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_27
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_28
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_29
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_30
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_31
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_32
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_33
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_34
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_35
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_36
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_37
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_38
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_39
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_40
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_41
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_42
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_43
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_44
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_45
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_46
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_47
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_48
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_49
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_50
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_51
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_52
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_53
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_54
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_55
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_56
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_57
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_58
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_59
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_60
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_61
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_62
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_63
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_64
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_65
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_66
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_67
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_68
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_69
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_70
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_71
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_72
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_73
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_74
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_75
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_76
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_77
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_78
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_79
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_80
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_81
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_82
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_83
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_84
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_85
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_86
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_87
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_88
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_89
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_90
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_91
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_92
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_93
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_94
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_WORLD_95
 
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_KP_0, 0}, // SDLK_KP0
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_KP_1, 0}, // SDLK_KP1
@@ -655,7 +655,7 @@ const MappedInputEvent_T defaultKeyMappings[] = {
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_KP_MINUS, 0}, // SDLK_KP_MINUS
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_KP_PLUS, 0}, // SDLK_KP_PLUS
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_KP_ENTER, 0}, // SDLK_KP_ENTER
-    emptyInputMapping, // SDLK_KP_EQUALS
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_KP_EQUALS
 
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_UP, 0}, // SDLK_UP
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_DOWN, 0}, // SDLK_DOWN
@@ -680,13 +680,13 @@ const MappedInputEvent_T defaultKeyMappings[] = {
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_F11, 0}, // SDLK_F11
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_F12, 0}, // SDLK_F12
 
-    emptyInputMapping, // SDLK_F13
-    emptyInputMapping, // SDLK_F14
-    emptyInputMapping, // SDLK_F15
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_F13
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_F14
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_F15
 
-    emptyInputMapping,
-    emptyInputMapping,
-    emptyInputMapping,
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
+    {EMULATEDINPUT_NONE, 0, 0},
 
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_NUMLOCK, 0}, // SDLK_NUMLOCK
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_CAPSLOCK, 0}, // SDLK_CAPSLOCK
@@ -697,22 +697,20 @@ const MappedInputEvent_T defaultKeyMappings[] = {
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_LCTRL, 0}, // SDLK_LCTRL
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_RALT, 0}, // SDLK_RALT
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_LALT, 0}, // SDLK_LALT
-    emptyInputMapping, // SDLK_RMETA
-    emptyInputMapping, // SDLK_LMETA
-    emptyInputMapping, // SDLK_LSUPER
-    emptyInputMapping, // SDLK_RSUPER
-    emptyInputMapping, // SDLK_MODE
-    emptyInputMapping, // SDLK_COMPOSE
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_RMETA
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_LMETA
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_LSUPER
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_RSUPER
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_MODE
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_COMPOSE
 
-    emptyInputMapping, // SDLK_HELP
+    {EMULATEDINPUT_NONE, 0, 0}, // SDLK_HELP
     {EMULATEDINPUT_KEYPRESS, EMULATEDKEYINDEX_PRINTSCREEN, 0}, // SDLK_PRINT
 
     // A few more SDL 1.2 keysyms follow, but are ignored
 #endif    
 };
 
-//FIXME: HACK
-#undef emptyInputMapping
 
 const MappedInputEvent_T defaultJoyButtonMappings[] = {
     {EMULATEDINPUT_JOYBUTTONPRESS, 1, 0},

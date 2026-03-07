@@ -1,27 +1,38 @@
 # Architecture Overview
 
-This repository is organized by subsystem to keep platform, game logic, rendering, and third-party code separated.
+Chocolate Keen is organized by subsystem so runtime orchestration, gameplay logic, rendering, UI, platform shims, and data loading stay separated.
 
-## Source Layout
+## Subsystems (`src/`)
 
 - `src/app/`
-  - Entrypoint and process startup.
+  - Program entrypoint.
+  - Key file: `chocolate-keen.c` (hands off to engine startup API).
 - `src/core/`
-  - Shared core types, globals, constants, and central engine-facing declarations.
+  - Cross-cutting definitions shared across subsystems.
+  - Core types/constants/globals plus small utility headers (`types.h`, `constants.h`, `globals.h`, `io_helpers.h`, `path_helpers.h`).
 - `src/engine/`
-  - Main engine runtime orchestration and high-level lifecycle.
+  - High-level runtime lifecycle and orchestration.
+  - Handles startup/shutdown flow, timing, audio glue, config/argument processing, and engine-level I/O helpers.
 - `src/game/`
-  - Game logic and gameplay systems (world map, menus, physics, enemies, UI helpers, sprite-related data).
+  - Core game simulation logic shared across episodes.
+  - Includes gameplay loop pieces such as world map flow, menus, physics, enemies, and in-game UI helpers.
 - `src/episodes/`
-  - Episode-specific game code/data for episodes 1, 2, and 3.
+  - Episode-specific behavior/data layers for episodes 1, 2, and 3.
+  - Split into per-episode logic modules and memory/data helpers.
 - `src/render/`
-  - Rendering and graphics pipeline, including OpenGL-related interfaces.
+  - Graphics/rendering pipeline and host output integration.
+  - Contains EGA/VGA-era rendering paths, display updates, and OpenGL-related interfaces.
 - `src/input/`
-  - Input handling and input mapping.
+  - Input mapping and runtime event handling.
+  - Includes mapping metadata, defaults, key-name tables, and host-event translation.
+- `src/ui/`
+  - Launcher/settings/input-mapper UI subsystem.
+  - Contains menu definitions, handlers, menu loop logic, mapper navigation, and shared UI runtime types.
 - `src/platform/`
-  - Platform-dependent shims (sleep/timing/input prep variants per target).
+  - Platform-dependent shims and target-specific host bindings.
+  - Includes native vs Emscripten sleep behavior and Windows/input stubs where required.
 - `src/decompression/`
-  - Project-owned decompression code (`imageRLE`).
+  - Project-owned decompression helpers (`imageRLE`).
 - `src/third_party/cgenius/`
   - Imported third-party decompression components.
 
@@ -29,36 +40,42 @@ This repository is organized by subsystem to keep platform, game logic, renderin
 
 - Files are named by subsystem responsibility and feature (for example: `src/render/gfx.c`, `src/episodes/episode1_engine.c`).
 - New file names should avoid historical `cvorticons_` prefixes unless matching untouched upstream content.
-- Core headers in `src/core/` use concise names (`core.h`, `types.h`, `globals.h`, `constants.h`).
+- Core headers in `src/core/` use concise names (`types.h`, `globals.h`, `constants.h`, `io_helpers.h`, `path_helpers.h`).
 - Build object targets in Makefiles should mirror subsystem-oriented names (for example: `game_gameplay.o`, `render_gfx.o`).
 - Public cross-file APIs currently keep legacy `CVort_` names for compatibility; prefer neutral names for new internal `static` helpers.
 
 ## Build Layout
 
 - `build/linux/`
-  - Linux Makefile and scripts.
+  - Linux Makefile/scripts.
 - `build/mingw/`
-  - MinGW Makefile and scripts.
+  - MinGW Makefile/scripts for Windows builds.
 - `build/emscripten/`
-  - Emscripten Makefile and scripts.
+  - Emscripten Makefile/scripts for WebAssembly builds.
 - `build/visual_studio/`
-  - Visual Studio solution/project files.
+  - Visual Studio solution/project files (Windows IDE workflow).
 
-## Docs and Releases
+## Other Top-Level Areas
 
 - `docs/`
-  - Project docs and web assets.
+  - Project docs plus static web/demo assets.
 - `docs/legacy/readme/`
   - Historical notes/reference material moved from the old root `readme/` folder.
-- `releases/`
-  - Packaged release artifacts by target platform.
+- `data/`
+  - Packaged game data used for local builds and release packaging.
+- `tests/`
+  - Unit-style and targeted regression tests.
 
 ## CI
 
-GitHub Actions workflow (`.github/workflows/ci.yml`):
+GitHub Actions workflows:
 
-- Linux build and unit tests.
-- Emscripten smoke build.
+- `.github/workflows/ci.yml`
+  - Linux build + tests.
+  - Emscripten smoke/build validation.
+- `.github/workflows/release.yml`
+  - Multi-platform release packaging (Linux, WebAssembly, Windows x86/x64).
+  - Publishes release zip artifacts to GitHub Releases.
 
 ## Local Validation
 

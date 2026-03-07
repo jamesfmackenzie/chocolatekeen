@@ -4,7 +4,6 @@
 
 #include "test_framework.h"
 #include "test_crle.c"
-#include "test_input_mapping_nav.c"
 #include "test_serialization_io.c"
 
 int tests_run = 0;
@@ -16,7 +15,6 @@ int main(void)
     printf("=== Chocolate Keen Test Suite ===\n\n");
 
     RUN_SUITE(test_crle);
-    RUN_SUITE(test_input_mapping_nav);
     RUN_SUITE(test_serialization_io);
 
     TEST_SUMMARY();

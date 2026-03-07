@@ -1,33 +1,44 @@
 # Makefile for Chocolate Keen tests
 
 CC=gcc
-CFLAGS=-std=c99 -I../src -I/usr/include/SDL2 -Wall -Wextra -Wno-unused-variable -g
+CFLAGS=-std=c99 -I../src -I/usr/include/SDL2 -Wall -Wextra -g
+NAV_CFLAGS=$(CFLAGS) -Wno-unused-variable
 SDLCONFIG=sdl2-config
 
 # Link against SDL (needed for CRLE which uses SDL types)
 LDFLAGS=`$(SDLCONFIG) --libs`
 
-# Test executable
+# Test executables
 TEST_EXE=test_runner
+NAV_TEST_EXE=test_input_nav_runner
 
 # Source files
 TEST_SRC=test_runner.c
+NAV_TEST_SRC=test_input_nav_runner.c
 
-# Source files we're testing (need to compile these too)
+# Source files under test
 CRLE_SRC=../src/third_party/cgenius/fileio/compression/CRLE.c
 INPUT_SRC=../src/input/input.c
 MEMDATA_SRC=../src/render/memdata.c
 
-# Build rule
+# Build rules
 $(TEST_EXE): $(TEST_SRC) $(CRLE_SRC) $(INPUT_SRC) $(MEMDATA_SRC)
-	$(CC) $(CFLAGS) $(TEST_SRC) $(CRLE_SRC) $(INPUT_SRC) $(MEMDATA_SRC) $(LDFLAGS) -o $(TEST_EXE)
+	$(CC) $(CFLAGS) $(TEST_SRC) $(CRLE_SRC) $(LDFLAGS) -o $(TEST_EXE)
+
+$(NAV_TEST_EXE): $(NAV_TEST_SRC) $(CRLE_SRC) $(INPUT_SRC) $(MEMDATA_SRC)
+	$(CC) $(NAV_CFLAGS) $(NAV_TEST_SRC) $(CRLE_SRC) $(INPUT_SRC) $(MEMDATA_SRC) $(LDFLAGS) -o $(NAV_TEST_EXE)
 
 # Run tests
 run: $(TEST_EXE)
 	./$(TEST_EXE)
 
+run-nav: $(NAV_TEST_EXE)
+	./$(NAV_TEST_EXE)
+
+run-all: run run-nav
+
 # Clean
 clean:
-	rm -f $(TEST_EXE)
+	rm -f $(TEST_EXE) $(NAV_TEST_EXE)
 
-.PHONY: run clean
+.PHONY: run run-nav run-all clean

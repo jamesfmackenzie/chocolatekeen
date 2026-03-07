@@ -775,6 +775,20 @@ static int16_t get_scaled_joystick_axis_poll(int32_t action) {
     return (int16_t)poll;
 }
 
+static void apply_mouse_delta_with_upper_bound(int16_t *value, int32_t delta, int16_t upperBound) {
+    *value += delta;
+    if (*value > upperBound) {
+        *value = upperBound;
+    }
+}
+
+static void apply_mouse_delta_with_lower_bound(int16_t *value, int32_t delta) {
+    *value -= delta;
+    if (*value < 0) {
+        *value = 0;
+    }
+}
+
 /* fileBuffer contains the contents of the mapper file as-is;
  * tempBuffer should begin with a " char, followed by a string representing
  * some kind of host input. For instance: "key 100".
@@ -2217,31 +2231,32 @@ void CVort_engine_handleEvent(const MappedInputEvent_T *pMappedEvent, int32_t ac
             // Revert scaling IF it is the result of real mouse motion;
             // Otherwise, well, we scale anyway...
             action /= CHOCOLATE_KEEN_EVENT_HANDLING_MOUSE_MOTION_SCALE_FACTOR;
-            // FIXME: Better be done more efficiently...
             switch (pMappedEvent->value) {
                 case 1:
-                    engine_inputMappings.currEmuInputStatus.mouseColumn += action;
-                    if (engine_inputMappings.currEmuInputStatus.mouseColumn >= EMULATED_MOUSE_HORIZONTAL_RES) {
-                        engine_inputMappings.currEmuInputStatus.mouseColumn = EMULATED_MOUSE_HORIZONTAL_RES - 1;
-                    }
+                    apply_mouse_delta_with_upper_bound(
+                        &engine_inputMappings.currEmuInputStatus.mouseColumn,
+                        action,
+                        EMULATED_MOUSE_HORIZONTAL_RES - 1
+                    );
                     break;
                 case 2:
-                    engine_inputMappings.currEmuInputStatus.mouseRow += action;
-                    if (engine_inputMappings.currEmuInputStatus.mouseRow >= EMULATED_MOUSE_VERTICAL_RES) {
-                        engine_inputMappings.currEmuInputStatus.mouseRow = EMULATED_MOUSE_VERTICAL_RES - 1;
-                    }
+                    apply_mouse_delta_with_upper_bound(
+                        &engine_inputMappings.currEmuInputStatus.mouseRow,
+                        action,
+                        EMULATED_MOUSE_VERTICAL_RES - 1
+                    );
                     break;
                 case -1:
-                    engine_inputMappings.currEmuInputStatus.mouseColumn -= action;
-                    if (engine_inputMappings.currEmuInputStatus.mouseColumn < 0) {
-                        engine_inputMappings.currEmuInputStatus.mouseColumn = 0;
-                    }
+                    apply_mouse_delta_with_lower_bound(
+                        &engine_inputMappings.currEmuInputStatus.mouseColumn,
+                        action
+                    );
                     break;
                 case -2:
-                    engine_inputMappings.currEmuInputStatus.mouseRow -= action;
-                    if (engine_inputMappings.currEmuInputStatus.mouseRow < 0) {
-                        engine_inputMappings.currEmuInputStatus.mouseRow = 0;
-                    }
+                    apply_mouse_delta_with_lower_bound(
+                        &engine_inputMappings.currEmuInputStatus.mouseRow,
+                        action
+                    );
                     break;
                 default: ;
             }

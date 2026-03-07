@@ -1,0 +1,165 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag name for the release (for example: v1.2.3)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+env:
+  RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag || github.ref_name }}
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libsdl2-dev zip
+
+      - name: Build (Linux)
+        run: |
+          mkdir -p build/linux/obj
+          make -C build/linux -j4
+
+      - name: Package (Linux)
+        run: |
+          stage_dir="dist/chocolate-keen-Linux"
+          mkdir -p "$stage_dir/GAMEDATA"
+          cp build/linux/chocolate-keen "$stage_dir/"
+          cp build/linux/chocolate-keen.cfg "$stage_dir/"
+          cp -r data/GAMEDATA/* "$stage_dir/GAMEDATA/"
+          (cd dist && zip -r chocolate-keen-Linux.zip chocolate-keen-Linux)
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-linux
+          path: dist/chocolate-keen-Linux.zip
+
+  build-emscripten:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Emscripten SDK
+        uses: mymindstorm/setup-emsdk@v14
+
+      - name: Build (Emscripten)
+        run: |
+          chmod +x build/emscripten/build_emscripten.sh
+          (cd build/emscripten && ./build_emscripten.sh -j4)
+
+      - name: Package (Emscripten)
+        run: |
+          stage_dir="dist/chocolate-keen-WebAssembly"
+          mkdir -p "$stage_dir"
+          cp build/emscripten/chocolate-keen.html "$stage_dir/"
+          cp build/emscripten/chocolate-keen.js "$stage_dir/"
+          cp build/emscripten/chocolate-keen.wasm "$stage_dir/"
+          cp build/emscripten/chocolate-keen.data "$stage_dir/"
+          (cd dist && zip -r chocolate-keen-WebAssembly.zip chocolate-keen-WebAssembly)
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-webassembly
+          path: dist/chocolate-keen-WebAssembly.zip
+
+  build-windows:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: x86
+            msystem: MINGW32
+            triplet: i686-w64-mingw32
+            sdl_pkg: mingw-w64-i686-SDL2
+            gcc_pkg: mingw-w64-i686-gcc
+            dll_path: /mingw32/bin/SDL2.dll
+            zip_name: chocolate-keen-x86.zip
+            package_dir: chocolate-keen-x86
+            artifact_name: release-windows-x86
+          - name: x64
+            msystem: MINGW64
+            triplet: x86_64-w64-mingw32
+            sdl_pkg: mingw-w64-x86_64-SDL2
+            gcc_pkg: mingw-w64-x86_64-gcc
+            dll_path: /mingw64/bin/SDL2.dll
+            zip_name: chocolate-keen-x64.zip
+            package_dir: chocolate-keen-x64
+            artifact_name: release-windows-x64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup MSYS2 (${{ matrix.name }})
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: ${{ matrix.msystem }}
+          update: true
+          install: >-
+            make
+            zip
+            ${{ matrix.gcc_pkg }}
+            ${{ matrix.sdl_pkg }}
+
+      - name: Build and package (Windows ${{ matrix.name }})
+        shell: msys2 {0}
+        run: |
+          mkdir -p build/mingw/obj
+          make -C build/mingw BINPREFIX=${{ matrix.triplet }}- SDLCONFIG="${{ matrix.triplet }}-sdl2-config" PLATFORM=WINDOWS -j4
+
+          stage_dir="dist/${{ matrix.package_dir }}"
+          mkdir -p "$stage_dir/GAMEDATA"
+          cp build/mingw/chocolate-keen.exe "$stage_dir/"
+          cp "${{ matrix.dll_path }}" "$stage_dir/SDL2.dll"
+          cp build/linux/chocolate-keen.cfg "$stage_dir/"
+          cp -r data/GAMEDATA/* "$stage_dir/GAMEDATA/"
+          (cd dist && zip -r "${{ matrix.zip_name }}" "${{ matrix.package_dir }}")
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: dist/${{ matrix.zip_name }}
+
+  publish-release:
+    runs-on: ubuntu-latest
+    needs:
+      - build-linux
+      - build-emscripten
+      - build-windows
+    steps:
+      - name: Download all package artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+
+      - name: Flatten package paths
+        run: |
+          mkdir -p release
+          find dist -type f -name "*.zip" -exec cp {} release/ \;
+          ls -lh release
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: ${{ env.RELEASE_TAG }}
+          files: release/*.zip
+          generate_release_notes: true

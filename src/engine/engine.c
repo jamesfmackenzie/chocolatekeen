@@ -2,8 +2,6 @@
 #include "SDL.h"
 #include "SDL_endian.h"
 
-/* TODO: Currently unused */
-
 #include "../rsrc/chocolate-keen_vga_fonts.h"
 #include "core/globals.h"
 #include "platform/platform.h"
@@ -494,7 +492,8 @@ int16_t CVort_engine_readGamePort() {
 }
 
 bool CVort_engine_isJoystickInUse() {
-    // TODO/FIXME: Let one have an effect on that?
+    // TODO: Wire this to runtime input-device selection / disabled-joystick mode.
+    // For now keep legacy behavior: joystick path stays logically available.
     return true;
 }
 
@@ -684,7 +683,8 @@ GameInput_T CVort_engine_getJoystickCtrl(int16_t joy_id) {
 }
 
 void CVort_engine_cross_logMessage(CVort_Log_Message_Class_T msgClass, const char *format, ...) {
-    // TODO: For now we simply do this.
+    // NOTE: Logging currently targets stderr only.
+    // TODO: Route through a configurable logger/file sink if needed.
     va_list args;
     va_start(args, format);
     switch (msgClass) {
@@ -718,8 +718,8 @@ int16_t CVort_engine_toupper(int16_t c) {
     return (c & 0xff);
 }
 
-// TODO/FIXME: There are almost surely a TON of inaccuracies here, but
-// for vanilla UNMODIFIED Keen 1 with no unusual error messages it seems OK.
+// TODO: Audit/verify behavior against DOS text-mode edge cases (wrapping,
+// attributes, cursor movement) and document any intentional deviations.
 
 void CVort_engine_puts(const char *str) {
     uint8_t *txtMemPtr;

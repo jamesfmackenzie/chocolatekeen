@@ -15,8 +15,8 @@
 #define CHOCOLATE_KEEN_MAPPER_FILENAME "chocolate-keen-mapper-sdl1_2.map"
 #endif
 
-// FIXME: If this changes, so should the enum EMULATEDKEYINDEX_T.
-// It's better than using constant numbers directly, though..
+// Keep this table in lock-step with EmulatedKeyIndex_T.
+// A compile-time size check right below enforces matching entry counts.
 const EmulatedKey_T engine_emulatedKeysTable[] = {
     {"key_esc", 1},
     {"key_f1", 0x3b},

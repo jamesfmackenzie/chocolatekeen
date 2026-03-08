@@ -66,7 +66,8 @@ void CVort_start_cheating() {
 
 void CVort_handle_cheat_keys() {
     //CVort_engine_updateInputStatus();
-    if (g_input.key_map[0x2E] && g_input.key_map[0x14] && g_input.key_map[0x39])
+    if (g_input.key_map[0x2E] && g_input.key_map[0x14] &&
+        (g_input.key_map[0x39] || CK_Action_IsHeld(CK_ACTION_STATUS)))
         CVort_start_cheating();
     if (g_input.key_map[0x22] && g_input.key_map[0x18] && g_input.key_map[0x20]) {
         CVort_clear_keys();
@@ -78,7 +79,7 @@ void CVort_handle_cheat_keys() {
             CVort_draw_string("God mode disabled");
         CVort_read_char_with_echo();
         CVort_engine_clearOverlay();
-    } else if (g_input.key_map[0x39]) {
+    } else if (g_input.key_map[0x39] || CK_Action_IsHeld(CK_ACTION_STATUS)) {
         CVort_engine_saveCurSound();
         CVort_ptr_show_pause_menu();
         CVort_engine_restoreCurSound();
@@ -932,7 +933,7 @@ void CVort_calibrate_joystick(int16_t joy_id) {
         topLeftPollInput = CVort_engine_pollJoystick(joy_id);
         currInput = CVort_engine_getJoystickCtrl(joy_id);
         //CVort_engine_updateInputStatus();
-        if (g_input.key_map[1]) // ESC pressed
+        if (g_input.key_map[1] || CK_Action_IsHeld(CK_ACTION_MENU_BACK)) // ESC pressed
         {
             CVort_clear_keys();
             return;
@@ -959,7 +960,7 @@ void CVort_calibrate_joystick(int16_t joy_id) {
         bottomRightPollInput = CVort_engine_pollJoystick(joy_id);
         currInput = CVort_engine_getJoystickCtrl(joy_id);
         CVort_engine_updateInputStatus();
-        if (g_input.key_map[1]) // ESC pressed
+        if (g_input.key_map[1] || CK_Action_IsHeld(CK_ACTION_MENU_BACK)) // ESC pressed
         {
             CVort_clear_keys();
             return;

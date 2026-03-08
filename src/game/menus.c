@@ -962,7 +962,7 @@ void CVort_do_text_viewer(uint8_t *text, uint16_t top_line_offset, uint16_t bott
                 //engine_updateActualDisplay();
             } while (g_input.key_map[0x51]);
         }
-    } while (!(g_input.key_map[1] || in.but1jump || in.but2pogo));
+    } while (!((g_input.key_map[1] || CK_Action_IsHeld(CK_ACTION_MENU_BACK)) || in.but1jump || in.but2pogo));
 
     CVort_waitForNoGameButtonPress(&in);
     CVort_clear_keys();

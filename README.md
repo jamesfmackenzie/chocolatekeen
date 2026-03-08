@@ -92,6 +92,7 @@ Build steps:
 Notes:
 * The Vita build defaults to software rendering (`USE_OPENGL=0`).
 * The first-pass input shim is intentionally minimal (`src/platform/input_vita.c`).
+* On Vita, read-only game data is loaded from `app0:/GAMEDATA/...`; config/save files are written under `ux0:data/chocolatekeen/`.
 
 ## Authors
 The original authors of Chocolate Keen are NY00123, QuantumG and Lemm. The project started with a reverse engineering of the original Keen code, and the goal is complete authenticity to the original - bugs and all. For more info see https://pckf.com/viewtopic.php?f=4&t=2536

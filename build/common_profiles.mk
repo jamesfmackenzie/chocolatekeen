@@ -21,5 +21,6 @@ VITA_CFLAGS ?= -D__VITA__
 VITA_PKG_CONFIG ?= $(or $(shell command -v arm-vita-eabi-pkg-config 2>/dev/null),pkg-config)
 VITA_SDL_CFLAGS ?= $(shell $(VITA_PKG_CONFIG) --cflags sdl2 2>/dev/null)
 VITA_SDL_LDFLAGS ?= $(shell $(VITA_PKG_CONFIG) --libs sdl2 2>/dev/null)
-VITA_LDFLAGS ?=
+# Keep VitaSDK linker expectations aligned with vita.toolchain.cmake defaults.
+VITA_LDFLAGS ?= -Wl,-q -Wl,-z,nocopyreloc
 endif

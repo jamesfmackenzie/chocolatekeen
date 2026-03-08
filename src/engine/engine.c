@@ -310,8 +310,12 @@ static bool check_for_user_input_and_quit(void) {
 }
 
 void CVort_engine_displayCommandLineHelp() {
-    if (SDL_Init(SDL_INIT_TIMER |
-            SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0) {
+#if SDL_VERSION_ATLEAST(2,0,0)
+    const uint32_t sdlInitFlags = SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER;
+#else
+    const uint32_t sdlInitFlags = SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_JOYSTICK;
+#endif
+    if (SDL_Init(sdlInitFlags) < 0) {
         CVort_engine_cross_logMessage(CVORT_LOG_MSG_ERROR, "Couldn't initialize SDL for displaying command-line arguments: %s\n", SDL_GetError());
         return;
     }
@@ -407,8 +411,13 @@ bool CVort_engine_start(void) {
     // }
 #endif
 
-    if (SDL_Init(SDL_INIT_TIMER |
-            SDL_INIT_VIDEO | SDL_INIT_JOYSTICK)) {
+#if SDL_VERSION_ATLEAST(2,0,0)
+    const uint32_t sdlInitFlags = SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER;
+#else
+    const uint32_t sdlInitFlags = SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_JOYSTICK;
+#endif
+
+    if (SDL_Init(sdlInitFlags)) {
         CVort_engine_cross_logMessage(CVORT_LOG_MSG_ERROR, "Couldn't initialize SDL: %s\n", SDL_GetError());
         return false;
     }

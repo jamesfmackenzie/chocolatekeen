@@ -343,6 +343,13 @@ bool CVort_has_ui_action_press(void) {
            CK_Action_IsHeld(CK_ACTION_STATUS);
 }
 
+bool CVort_has_any_ack_press(const GameInput_T *input) {
+    if (input && (input->but1jump || input->but2pogo)) {
+        return true;
+    }
+    return CVort_has_ui_action_press() || CVort_translate_key(1);
+}
+
 int16_t CVort_handle_global_keys() {
     int16_t result = 0;
     CVort_translate_key(1);

@@ -128,7 +128,7 @@ void CVort_draw_worldmap(void) {
             for (count_i = 0; count_i < 0x3C; count_i++) {
                 CVort_engine_delay(1);
                 input = CVort_handle_ctrl(1);
-                if (input.but1jump || input.but2pogo || CVort_has_ui_action_press() || CVort_translate_key(1))
+                if (CVort_has_any_ack_press(&input))
                     break;
             }
             CVort_waitForNoGameButtonPress(&input);
@@ -436,7 +436,7 @@ void CVort_game_over() {
         for (loopVar = 0; loopVar < 360; loopVar++) {
             CVort_engine_delay(1);
             input = CVort_handle_ctrl(1);
-            if (input.but1jump || input.but2pogo || CVort_has_ui_action_press() || CVort_translate_key(1))
+            if (CVort_has_any_ack_press(&input))
                 break;
         }
     }
@@ -454,9 +454,9 @@ void CVort_game_over() {
         if (CVort_handle_global_keys())
             CVort_do_scores();
         timeLeft -= g_game.sprite_sync;
-        if (input.but1jump || input.but2pogo || CVort_has_ui_action_press() || CVort_translate_key(1))
+        if (CVort_has_any_ack_press(&input))
             break;
-    } while (!(input.but1jump || input.but2pogo || CVort_has_ui_action_press() || CVort_translate_key(1))
+    } while (!CVort_has_any_ack_press(&input)
             && (timeLeft > 0));
     CVort_fade_out();
 }

@@ -426,6 +426,7 @@ typedef struct {
     void CVort_draw_box_opening_horiz(uint16_t width, uint16_t height);
     void CVort_draw_box_opening_vert(uint16_t width, uint16_t height);
     bool CVort_has_ui_action_press(void);
+    bool CVort_has_any_ack_press(const GameInput_T *input);
 
     uint16_t CVort_read_char_with_echo();
     bool CVort_isWaitingForCharInput(void);

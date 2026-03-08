@@ -271,7 +271,7 @@ void CVort_do_intro_and_menu() {
                             introCurrScreen++;
                             CVort_ptr_show_ordering(1);
                             currInput = CVort_handle_ctrl(1);
-                            doHalt = (CVort_has_ui_action_press() || CVort_translate_key(1) || currInput.but1jump || currInput.but2pogo);
+                            doHalt = CVort_has_any_ack_press(&currInput);
                             if (doHalt) {
                                 //introTickCounter = 0xC0;
                                 introTickCounter = 2400;
@@ -297,7 +297,7 @@ void CVort_do_intro_and_menu() {
                     }
                 }
             }
-            if (CVort_has_ui_action_press() || CVort_translate_key(1) || currInput.but1jump || currInput.but2pogo || g_game.intro_complete)
+            if (CVort_has_any_ack_press(&currInput) || g_game.intro_complete)
                 break;
         }
         g_game.intro_complete = 0;
@@ -567,7 +567,7 @@ void CVort_show_about_us() {
         // NOTE: What should be done here (i.e. like in vanilla code)???
         // For now check for jump or pogo control action.
         // Also check for general keyboard key presses.
-        if (input.but1jump || input.but2pogo || CVort_has_ui_action_press() || CVort_translate_key(1))
+        if (CVort_has_any_ack_press(&input))
             return;
     } while (1);
 }
@@ -644,7 +644,7 @@ void CVort_show_scores() {
         // NOTE: What should be done here (i.e. like in vanilla code)???
         // For now check for jump or pogo control action.
         // Also check for general keyboard key presses.
-        if (input.but1jump || input.but2pogo || CVort_has_ui_action_press() || CVort_translate_key(1))
+        if (CVort_has_any_ack_press(&input))
             return;
     } while (1);
 }
@@ -1019,7 +1019,7 @@ void CVort_scroll_up_logo() {
                 break;
         }
         currInput = CVort_handle_ctrl(1);
-        if (currInput.but1jump || currInput.but2pogo || CVort_has_ui_action_press() || CVort_translate_key(1)) {
+        if (CVort_has_any_ack_press(&currInput)) {
             g_game.intro_complete = 1;
             break;
         }
@@ -1053,7 +1053,7 @@ void CVort_wait_for_key() {
         for (delayLoopVar = 0; delayLoopVar < 6; delayLoopVar++) {
             CVort_engine_delay(1);
             input = CVort_handle_ctrl(1);
-            if (input.but1jump || input.but2pogo || CVort_has_ui_action_press() || CVort_translate_key(1)) {
+            if (CVort_has_any_ack_press(&input)) {
                 isKeyPressed++;
                 break;
             }

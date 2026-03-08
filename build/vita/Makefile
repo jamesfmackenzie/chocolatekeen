@@ -31,8 +31,6 @@ include ../common_toolchain.mk
 VITA_TITLE ?= Chocolate Keen
 VITA_TITLE_ID ?= CHKN00001
 VITA_ICON ?= ../../assets/vita/icon0.png
-VITA_PIC0 ?= ../../assets/vita/pic0.png
-VITA_LIVEAREA_CONTENTS_DIR ?= ../../assets/vita/livearea/contents
 VELF_PATH=chocolate-keen.velf
 SELF_PATH=eboot.bin
 VPK_PATH=chocolate-keen-vita.vpk
@@ -82,13 +80,6 @@ $(VPK_PATH): $(SELF_PATH)
 		echo "Missing Vita icon: $(VITA_ICON)"; \
 		echo "Add a 128x128 PNG at that path or override VITA_ICON=..."; \
 		exit 1; \
-	fi
-	if [ -f $(VITA_PIC0) ]; then \
-		cp $(VITA_PIC0) $(DIST_ROOT)/sce_sys/pic0.png; \
-	fi
-	if [ -d $(VITA_LIVEAREA_CONTENTS_DIR) ]; then \
-		mkdir -p $(DIST_ROOT)/sce_sys/livearea; \
-		cp -r $(VITA_LIVEAREA_CONTENTS_DIR) $(DIST_ROOT)/sce_sys/livearea/; \
 	fi
 	if [ -f ../linux/chocolate-keen.cfg ]; then \
 		cp ../linux/chocolate-keen.cfg $(DIST_ROOT)/chocolate-keen.cfg; \

@@ -3,6 +3,7 @@
 #include "SDL.h"
 
 #include "core/globals.h"
+#include "input/actions.h"
 #include "input/input_default_mappings.h"
 #include "input/input_keys.h"
 #include "input/input_names.h"
@@ -634,6 +635,7 @@ void CVort_engine_setupInputMappings(void) {
 
     // Clear all first
     memset(&engine_inputMappings, 0, sizeof(engine_inputMappings));
+    CK_ActionState_Init();
 
     // Initialize joystick related resources
     engine_inputMappings.numOfJoysticks = SDL_NumJoysticks();
@@ -1665,6 +1667,7 @@ void CVort_engine_updateInputStatus() {
 #endif
     static uint32_t lastMouseMotionTime = 0;
     static bool isAnyMouseMotionDone = false;
+    CK_ActionState_BeginFrame();
     // First we handle events as usual
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
@@ -1859,4 +1862,5 @@ void CVort_engine_updateInputStatus() {
             g_input.key_map[engine_lastScanCode] = 1;
         }
     }
+    CK_ActionState_UpdateFromLegacyInput();
 }

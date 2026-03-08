@@ -10,6 +10,7 @@
 #include <inttypes.h>
 
 #include "core/globals.h"
+#include "input/actions.h"
 #include "platform/platform.h"
 #include "episodes/episode1.h"
 #include "episodes/episode2.h"
@@ -514,6 +515,7 @@ So, to summarize, what is done is as follows:
 void CVort_clear_keys() {
     g_input.key_code = g_input.key_scane = 0;
     memset(g_input.key_map, 0, 0x80);
+    CK_ActionState_Init();
 }
 
 // NOTE: The original code simply sets g_game.rnd to the amount of hundredths of

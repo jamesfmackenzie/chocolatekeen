@@ -17,6 +17,7 @@
 static int g_rwMiscDirPrepared = 0;
 static bool g_wasStartPressed = false;
 static bool g_wasSelectPressed = false;
+static bool g_wasCircleEscPressed = false;
 static bool g_wasCrossPressed = false;
 static bool g_wasSquarePressed = false;
 
@@ -118,6 +119,7 @@ bool CK_PlatformPollInputState(CK_PlatformInputState_T *state) {
 void CK_PlatformApplyInputPolicy(const CK_PlatformInputState_T *state, bool isWaitingForCharInput) {
     int16_t xPoll;
     int16_t yPoll;
+    bool isMenuContext;
 
     if (!state || !state->valid) {
         return;
@@ -161,8 +163,11 @@ void CK_PlatformApplyInputPolicy(const CK_PlatformInputState_T *state, bool isWa
         engine_inputMappings.currEmuInputStatus.joystickButtonsMask |= (VITA_JOY_BUTTONMASK_JUMP | VITA_JOY_BUTTONMASK_POGO);
     }
 
+    isMenuContext = (draw_func != NULL);
+
     set_virtual_scancode_state(VITA_DOS_SCANCODE_ENTER, (state->buttonsMask & CK_PLATFORM_BTN_MENU_CONFIRM) != 0, &g_wasStartPressed);
-    set_virtual_scancode_state(VITA_DOS_SCANCODE_ESC, (state->buttonsMask & CK_PLATFORM_BTN_MENU_BACK) != 0, &g_wasSelectPressed);
+    set_virtual_scancode_state(VITA_DOS_SCANCODE_SPACE, (state->buttonsMask & CK_PLATFORM_BTN_MENU_BACK) != 0, &g_wasSelectPressed);
+    set_virtual_scancode_state(VITA_DOS_SCANCODE_ESC, isMenuContext && ((state->buttonsMask & CK_PLATFORM_BTN_FACE_RIGHT) != 0), &g_wasCircleEscPressed);
     set_virtual_scancode_state(VITA_DOS_SCANCODE_Y, isWaitingForCharInput && ((state->buttonsMask & CK_PLATFORM_BTN_FACE_BOTTOM) != 0), &g_wasCrossPressed);
     set_virtual_scancode_state(VITA_DOS_SCANCODE_N, isWaitingForCharInput && ((state->buttonsMask & CK_PLATFORM_BTN_FACE_LEFT) != 0), &g_wasSquarePressed);
 }

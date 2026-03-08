@@ -16,6 +16,12 @@
 
 #include "episodes/episode_macros.h"
 
+static bool CVort_has_ui_action_press(void) {
+    return CK_Action_IsHeld(CK_ACTION_MENU_CONFIRM) ||
+           CK_Action_IsHeld(CK_ACTION_MENU_BACK) ||
+           CK_Action_IsHeld(CK_ACTION_STATUS);
+}
+
 void CVort_draw_worldmap(void) {
     int16_t count_i, var4;
     int16_t level_return_code = 0; // draw_level return code; 0 == Died.
@@ -128,7 +134,7 @@ void CVort_draw_worldmap(void) {
             for (count_i = 0; count_i < 0x3C; count_i++) {
                 CVort_engine_delay(1);
                 input = CVort_handle_ctrl(1);
-                if (input.but1jump || input.but2pogo || CVort_translate_key(1))
+                if (input.but1jump || input.but2pogo || CVort_has_ui_action_press() || CVort_translate_key(1))
                     break;
             }
             CVort_waitForNoGameButtonPress(&input);
@@ -436,7 +442,7 @@ void CVort_game_over() {
         for (loopVar = 0; loopVar < 360; loopVar++) {
             CVort_engine_delay(1);
             input = CVort_handle_ctrl(1);
-            if (input.but1jump || input.but2pogo || CVort_translate_key(1))
+            if (input.but1jump || input.but2pogo || CVort_has_ui_action_press() || CVort_translate_key(1))
                 break;
         }
     }
@@ -454,9 +460,9 @@ void CVort_game_over() {
         if (CVort_handle_global_keys())
             CVort_do_scores();
         timeLeft -= g_game.sprite_sync;
-        if (input.but1jump || input.but2pogo || CVort_translate_key(1))
+        if (input.but1jump || input.but2pogo || CVort_has_ui_action_press() || CVort_translate_key(1))
             break;
-    } while (!(input.but1jump || input.but2pogo || CVort_translate_key(1))
+    } while (!(input.but1jump || input.but2pogo || CVort_has_ui_action_press() || CVort_translate_key(1))
             && (timeLeft > 0));
     CVort_fade_out();
 }

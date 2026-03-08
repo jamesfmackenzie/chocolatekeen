@@ -345,54 +345,46 @@ int16_t CVort_handle_global_keys() {
 
     uint32_t saved_tickcount = CVort_ptr_engine_getTicks();
 
-    int16_t filteredKeyScan = g_input.key_scane & 0x7F;
-    switch (filteredKeyScan) {
-        case 0x3D:
-            CVort_engine_saveCurSound();
-            CVort_clear_keys();
-            CVort_handle_redef_keys();
-            result++;
-            break;
-        case 0x3E:
-            CVort_engine_saveCurSound();
-            CVort_clear_keys();
-            CVort_calibrate_joystick(1);
-            result++;
-            break;
-        case 0x3F:
-            CVort_engine_saveCurSound();
-            CVort_save_game();
-            result++;
-            break;
-        case 1:
-            CVort_engine_saveCurSound();
-            CVort_handle_quit();
-            result++;
-            break;
-        case 0x3B:
-            CVort_engine_saveCurSound();
-            CVort_clear_keys();
-            CVort_do_help();
-            result++;
-            break;
-        case 0x3C:
-            CVort_engine_saveCurSound();
-            CVort_clear_keys();
-            CVort_draw_box_opening_main(13, 1);
-            CVort_draw_string("Sound (Y/N)?");
-            switch (CVort_engine_toupper(CVort_read_char_with_echo()) & 0xFF) {
-                case 0x4E: // 'N'
-                    g_game.want_sound = 0;
-                    break;
-                case 0x59: // 'Y'
-                    g_game.want_sound = 1;
-                    break;
-                default:;
-            }
-            result++;
-            break;
-        default:
-            return 0;
+    if (CK_Action_IsHeld(CK_ACTION_F3) || g_input.key_map[0x3D]) {
+        CVort_engine_saveCurSound();
+        CVort_clear_keys();
+        CVort_handle_redef_keys();
+        result++;
+    } else if (CK_Action_IsHeld(CK_ACTION_F4) || g_input.key_map[0x3E]) {
+        CVort_engine_saveCurSound();
+        CVort_clear_keys();
+        CVort_calibrate_joystick(1);
+        result++;
+    } else if (CK_Action_IsHeld(CK_ACTION_F5) || g_input.key_map[0x3F]) {
+        CVort_engine_saveCurSound();
+        CVort_save_game();
+        result++;
+    } else if (CK_Action_IsHeld(CK_ACTION_MENU_BACK) || g_input.key_map[1]) {
+        CVort_engine_saveCurSound();
+        CVort_handle_quit();
+        result++;
+    } else if (CK_Action_IsHeld(CK_ACTION_F1) || g_input.key_map[0x3B]) {
+        CVort_engine_saveCurSound();
+        CVort_clear_keys();
+        CVort_do_help();
+        result++;
+    } else if (CK_Action_IsHeld(CK_ACTION_F2) || g_input.key_map[0x3C]) {
+        CVort_engine_saveCurSound();
+        CVort_clear_keys();
+        CVort_draw_box_opening_main(13, 1);
+        CVort_draw_string("Sound (Y/N)?");
+        switch (CVort_engine_toupper(CVort_read_char_with_echo()) & 0xFF) {
+            case 0x4E: // 'N'
+                g_game.want_sound = 0;
+                break;
+            case 0x59: // 'Y'
+                g_game.want_sound = 1;
+                break;
+            default:;
+        }
+        result++;
+    } else {
+        return 0;
     }
     CVort_ptr_engine_setTicks(saved_tickcount);
     CVort_clear_keys();

@@ -337,6 +337,12 @@ inline void CVort_waitForNoGameButtonPress(GameInput_T *pInput) {
     };
 }
 
+bool CVort_has_ui_action_press(void) {
+    return CK_Action_IsHeld(CK_ACTION_MENU_CONFIRM) ||
+           CK_Action_IsHeld(CK_ACTION_MENU_BACK) ||
+           CK_Action_IsHeld(CK_ACTION_STATUS);
+}
+
 int16_t CVort_handle_global_keys() {
     int16_t result = 0;
     CVort_translate_key(1);

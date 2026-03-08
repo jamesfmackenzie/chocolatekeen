@@ -16,12 +16,6 @@
 
 #include "episodes/episode_macros.h"
 
-static bool CVort_has_ui_action_press(void) {
-    return CK_Action_IsHeld(CK_ACTION_MENU_CONFIRM) ||
-           CK_Action_IsHeld(CK_ACTION_MENU_BACK) ||
-           CK_Action_IsHeld(CK_ACTION_STATUS);
-}
-
 void CVort_draw_worldmap(void) {
     int16_t count_i, var4;
     int16_t level_return_code = 0; // draw_level return code; 0 == Died.

@@ -18,12 +18,6 @@
 
 #include "episodes/episode_macros.h"
 
-static bool CVort_has_ui_action_press(void) {
-    return CK_Action_IsHeld(CK_ACTION_MENU_CONFIRM) ||
-           CK_Action_IsHeld(CK_ACTION_MENU_BACK) ||
-           CK_Action_IsHeld(CK_ACTION_STATUS);
-}
-
 void CVort_demo_toggle_reset_player_partial_state_before();
 void CVort_demo_toggle_reset_player_partial_state_after();
 

@@ -49,5 +49,6 @@ const CK_ActionFrameState_T *CK_ActionState_Get(void);
 bool CK_Action_IsHeld(CK_Action action);
 bool CK_Action_WasPressed(CK_Action action);
 bool CK_Action_WasReleased(CK_Action action);
+bool CK_Action_HasUiAck(void);
 
 #endif

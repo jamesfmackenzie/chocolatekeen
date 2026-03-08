@@ -10,6 +10,7 @@
 #include <inttypes.h>
 
 #include "core/globals.h"
+#include "platform/platform.h"
 #include "episodes/episode1.h"
 #include "episodes/episode2.h"
 #include "episodes/episode3.h"
@@ -210,6 +211,8 @@ void CVort_main() {
         break;
     default: ; // EMU_INITIAL_INPUT_LAST
     }
+    g_input.ctrl_type[1] = CK_PlatformPreferredPlayer1ControlType(g_input.ctrl_type[1], engine_inputMappings.numOfJoysticks);
+    CK_PlatformApplyDefaultJoystickCalibration(g_input.joystick_ctrl);
 
     // We don't need to allocate memory for level data; It's done
     // statically: An array of 10000h bytes in the stack.
@@ -473,9 +476,11 @@ void CVort_handle_quit() {
     switch (CVort_engine_toupper(CVort_read_char_with_echo())) // A trick to avoid an extra var...
     {
         case 'D':
+        case 'N': // Vita alias: Square defaults to 'N'
             CVort_chg_vid_and_error("");
             break;
         case 'T':
+        case 'Y': // Vita alias: Cross defaults to 'Y'
             g_game.quit_to_title = 1;
             break;
         default:

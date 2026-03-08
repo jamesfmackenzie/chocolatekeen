@@ -63,6 +63,8 @@ static bool CVort_private_write_ctrls(FILE *fp) {
     return saveOk;
 }
 
+static bool g_isWaitingForCharInput = false;
+
 void CVort_draw_keyname(int16_t key) {
     key &= 0x7F;
     if (key == 1) {
@@ -246,8 +248,9 @@ void CVort_init_ctrls() {
     if (fp) {
         bool loadOk = CVort_private_read_ctrls(fp);
         fclose(fp);
-        if (loadOk)
+        if (loadOk) {
             return;
+        }
         CK_IO_WARN_ON_READ_FAIL(loadOk, g_game.string_buf);
     }
     {
@@ -438,6 +441,7 @@ void CVort_draw_box_opening_vert(uint16_t width, uint16_t height) {
 
 uint16_t CVort_read_char_with_echo() {
     uint16_t currOnScreenCh = 9, currCh;
+    g_isWaitingForCharInput = true;
     do {
         currCh = CVort_translate_key(1)&0xFF;
         if (!currCh && (currOnScreenCh < 0xD)) {
@@ -452,7 +456,12 @@ uint16_t CVort_read_char_with_echo() {
         currOnScreenCh = 9;
     } while (1);
     CVort_engine_drawChar(cursorX, cursorY << 3, ' ');
+    g_isWaitingForCharInput = false;
     return CVort_translate_key(0);
+}
+
+bool CVort_isWaitingForCharInput(void) {
+    return g_isWaitingForCharInput;
 }
 
 void CVort_draw_string(const char *str) {

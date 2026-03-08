@@ -427,6 +427,7 @@ typedef struct {
     void CVort_draw_box_opening_vert(uint16_t width, uint16_t height);
 
     uint16_t CVort_read_char_with_echo();
+    bool CVort_isWaitingForCharInput(void);
     void CVort_draw_string(const char *str);
     void CVort_draw_number_word(uint16_t value);
     void CVort_draw_number_dword(uint32_t value);

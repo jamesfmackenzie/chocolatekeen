@@ -1,6 +1,7 @@
 // engine_io.c: Implements engine io for the engine subsystem.
 
 #include <ctype.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,10 +10,13 @@
 
 #include "core/globals.h"
 #include "engine/engine_io.h"
+#include "platform/platform.h"
 
+#ifndef KEEN1_GAMEDATA_PREFIX_WITH_SLASH
 #define KEEN1_GAMEDATA_PREFIX_WITH_SLASH "GAMEDATA/KEEN1/"
 #define KEEN2_GAMEDATA_PREFIX_WITH_SLASH "GAMEDATA/KEEN2/"
 #define KEEN3_GAMEDATA_PREFIX_WITH_SLASH "GAMEDATA/KEEN3/"
+#endif
 
 static size_t engine_gameDataPrefixLen;
 static char *engine_gameDataFullPathBuffer = NULL;
@@ -45,23 +49,41 @@ void CVort_engine_prepareGameDataFilePathBuffers(gameversion_T gameVer) {
 }
 
 FILE *CVort_engine_cross_ro_data_fopen(const char *filename) {
+    char platformPath[1024];
+
+    if (!engine_gameDataFullPathBuffer) {
+        return NULL;
+    }
     // Data-file lookup currently assumes uppercase DOS-style short names.
     char *ptr = engine_gameDataFullPathBuffer + engine_gameDataPrefixLen;
     strncpy(ptr, filename, 13);
     for (size_t loopVar = 0; loopVar < strlen(ptr); loopVar++) {
         ptr[loopVar] = toupper(ptr[loopVar]);
     }
-    return fopen(engine_gameDataFullPathBuffer, "rb");
+    if (!CK_PlatformBuildRoDataPath(engine_gameDataFullPathBuffer, platformPath, sizeof(platformPath))) {
+        return NULL;
+    }
+    return fopen(platformPath, "rb");
 }
 
 FILE *CVort_engine_cross_rw_misc_fopen(const char *filename, const char *mode) {
-    // Misc RW files currently use the provided path unchanged.
-    return fopen(filename, mode);
+    char platformPath[1024];
+
+    CK_PlatformEnsureRwMiscDir();
+    if (!CK_PlatformBuildRwMiscPath(filename, platformPath, sizeof(platformPath))) {
+        return NULL;
+    }
+    return fopen(platformPath, mode);
 }
 
 FILE *CVort_engine_configpath_fopen(const char *filename, const char *mode) {
-    // NOTE For now it simply opens the file given by the name, as-is...
-    return fopen(filename, mode);
+    char platformPath[1024];
+
+    CK_PlatformEnsureRwMiscDir();
+    if (!CK_PlatformBuildRwMiscPath(filename, platformPath, sizeof(platformPath))) {
+        return NULL;
+    }
+    return fopen(platformPath, mode);
 }
 
 size_t CVort_engine_cross_freadInt8LE(void *ptr, size_t count, FILE *stream) {

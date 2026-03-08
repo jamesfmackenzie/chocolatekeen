@@ -67,7 +67,7 @@ void CVort_start_cheating() {
 void CVort_handle_cheat_keys() {
     //CVort_engine_updateInputStatus();
     if (g_input.key_map[0x2E] && g_input.key_map[0x14] &&
-        (g_input.key_map[0x39] || CK_Action_IsHeld(CK_ACTION_STATUS)))
+        (g_input.key_map[0x39] || CK_Action_HasMenuSelect()))
         CVort_start_cheating();
     if (g_input.key_map[0x22] && g_input.key_map[0x18] && g_input.key_map[0x20]) {
         CVort_clear_keys();
@@ -79,7 +79,7 @@ void CVort_handle_cheat_keys() {
             CVort_draw_string("God mode disabled");
         CVort_read_char_with_echo();
         CVort_engine_clearOverlay();
-    } else if (g_input.key_map[0x39] || CK_Action_IsHeld(CK_ACTION_STATUS)) {
+    } else if (g_input.key_map[0x39] || CK_Action_HasMenuSelect()) {
         CVort_engine_saveCurSound();
         CVort_ptr_show_pause_menu();
         CVort_engine_restoreCurSound();
@@ -370,7 +370,7 @@ int16_t CVort_handle_global_keys() {
         CVort_engine_saveCurSound();
         CVort_save_game();
         result++;
-    } else if (CK_Action_IsHeld(CK_ACTION_MENU_BACK) || g_input.key_map[1]) {
+    } else if (CK_Action_HasMenuDismiss() || g_input.key_map[1]) {
         CVort_engine_saveCurSound();
         CVort_handle_quit();
         result++;
@@ -936,7 +936,7 @@ void CVort_calibrate_joystick(int16_t joy_id) {
         topLeftPollInput = CVort_engine_pollJoystick(joy_id);
         currInput = CVort_engine_getJoystickCtrl(joy_id);
         //CVort_engine_updateInputStatus();
-        if (g_input.key_map[1] || CK_Action_IsHeld(CK_ACTION_MENU_BACK)) // ESC pressed
+        if (g_input.key_map[1] || CK_Action_HasMenuDismiss()) // ESC pressed
         {
             CVort_clear_keys();
             return;
@@ -963,7 +963,7 @@ void CVort_calibrate_joystick(int16_t joy_id) {
         bottomRightPollInput = CVort_engine_pollJoystick(joy_id);
         currInput = CVort_engine_getJoystickCtrl(joy_id);
         CVort_engine_updateInputStatus();
-        if (g_input.key_map[1] || CK_Action_IsHeld(CK_ACTION_MENU_BACK)) // ESC pressed
+        if (g_input.key_map[1] || CK_Action_HasMenuDismiss()) // ESC pressed
         {
             CVort_clear_keys();
             return;

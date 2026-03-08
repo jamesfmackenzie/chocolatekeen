@@ -423,9 +423,8 @@ select1:
     if (var_6 && g_input.ctrl_type[1])
         input.but1jump = 1;
     if ((!g_input.ctrl_type[1]) &&
-        ((var_6 == 0x20) || (var_6 == 0xD) ||
-         CK_Action_IsHeld(CK_ACTION_STATUS) ||
-         CK_Action_IsHeld(CK_ACTION_MENU_CONFIRM)))
+        ((var_6 == CHAR_SPACE) || (var_6 == CHAR_CARRIAGE) ||
+         CK_Action_HasMenuSelect()))
         input.but1jump = 1;
     if (CVort_handle_global_keys()) {
         CVort_do_start_menu();
@@ -962,7 +961,7 @@ void CVort_do_text_viewer(uint8_t *text, uint16_t top_line_offset, uint16_t bott
                 //engine_updateActualDisplay();
             } while (CK_Action_IsHeld(CK_ACTION_PAGE_DOWN) || g_input.key_map[0x51]);
         }
-    } while (!((g_input.key_map[1] || CK_Action_IsHeld(CK_ACTION_MENU_BACK)) || in.but1jump || in.but2pogo));
+    } while (!((g_input.key_map[1] || CK_Action_HasMenuDismiss()) || in.but1jump || in.but2pogo));
 
     CVort_waitForNoGameButtonPress(&in);
     CVort_clear_keys();

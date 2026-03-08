@@ -110,8 +110,16 @@ bool CK_Action_WasReleased(CK_Action action) {
     return (action >= 0) && (action < CK_ACTION_COUNT) && (g_actionState.released[action] != 0);
 }
 
-bool CK_Action_HasUiAck(void) {
+bool CK_Action_HasMenuSelect(void) {
     return CK_Action_IsHeld(CK_ACTION_MENU_CONFIRM) ||
-           CK_Action_IsHeld(CK_ACTION_MENU_BACK) ||
            CK_Action_IsHeld(CK_ACTION_STATUS);
+}
+
+bool CK_Action_HasMenuDismiss(void) {
+    return CK_Action_IsHeld(CK_ACTION_MENU_BACK);
+}
+
+bool CK_Action_HasUiAck(void) {
+    return CK_Action_HasMenuSelect() ||
+           CK_Action_HasMenuDismiss();
 }

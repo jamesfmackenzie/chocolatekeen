@@ -8,6 +8,7 @@
 #endif
 #include <inttypes.h>
 #include "core/globals.h"
+#include "input/actions.h"
 #include "core/io_helpers.h"
 #include "core/path_helpers.h"
 #include "episodes/episode1.h"
@@ -421,7 +422,10 @@ select1:
     var_6 = CVort_translate_key(1)&0xFF;
     if (var_6 && g_input.ctrl_type[1])
         input.but1jump = 1;
-    if (((var_6 == 0x20) || (var_6 == 0xD)) && (!g_input.ctrl_type[1]))
+    if ((!g_input.ctrl_type[1]) &&
+        ((var_6 == 0x20) || (var_6 == 0xD) ||
+         CK_Action_IsHeld(CK_ACTION_STATUS) ||
+         CK_Action_IsHeld(CK_ACTION_MENU_CONFIRM)))
         input.but1jump = 1;
     if (CVort_handle_global_keys()) {
         CVort_do_start_menu();

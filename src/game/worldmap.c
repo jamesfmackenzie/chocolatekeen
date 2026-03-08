@@ -8,6 +8,7 @@
 #endif
 #include <inttypes.h>
 #include "core/globals.h"
+#include "input/actions.h"
 #include "episodes/episode1.h"
 #include "episodes/episode2.h"
 #include "episodes/episode3.h"
@@ -155,7 +156,7 @@ void CVort_draw_worldmap(void) {
             wmap_scroll_x = scroll_x;
             wmap_scroll_y = scroll_y;
             CVort_handle_global_keys();
-            if (g_input.key_map[0x39])
+            if (CK_Action_IsHeld(CK_ACTION_STATUS) || g_input.key_map[0x39])
                 CVort_ptr_show_pause_menu();
             if (g_game.quit_to_title) {
                 CVort_game_over();

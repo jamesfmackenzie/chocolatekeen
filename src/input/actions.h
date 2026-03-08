@@ -31,6 +31,8 @@ typedef enum CK_Action {
     CK_ACTION_F10,
     CK_ACTION_F11,
     CK_ACTION_F12,
+    CK_ACTION_PAGE_UP,
+    CK_ACTION_PAGE_DOWN,
     CK_ACTION_COUNT
 } CK_Action;
 

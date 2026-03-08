@@ -84,6 +84,8 @@ void CK_ActionState_UpdateFromLegacyInput(void) {
     currHeld[CK_ACTION_F10] = is_dos_scancode_pressed(dos_scancode_for_emulated_key(EMULATEDKEYINDEX_F10));
     currHeld[CK_ACTION_F11] = is_dos_scancode_pressed(dos_scancode_for_emulated_key(EMULATEDKEYINDEX_F11));
     currHeld[CK_ACTION_F12] = is_dos_scancode_pressed(dos_scancode_for_emulated_key(EMULATEDKEYINDEX_F12));
+    currHeld[CK_ACTION_PAGE_UP] = is_dos_scancode_pressed(dos_scancode_for_emulated_key(EMULATEDKEYINDEX_PAGEUP));
+    currHeld[CK_ACTION_PAGE_DOWN] = is_dos_scancode_pressed(dos_scancode_for_emulated_key(EMULATEDKEYINDEX_PAGEDOWN));
 
     for (loopVar = 0; loopVar < CK_ACTION_COUNT; ++loopVar) {
         g_actionState.held[loopVar] = currHeld[loopVar] ? 1 : 0;

@@ -943,7 +943,7 @@ void CVort_do_text_viewer(uint8_t *text, uint16_t top_line_offset, uint16_t bott
             CVort_engine_shortSleep();
             //engine_updateActualDisplay();
         }
-        if (g_input.key_map[0x49]) // Page Up
+        if (CK_Action_IsHeld(CK_ACTION_PAGE_UP) || g_input.key_map[0x49]) // Page Up
         {
             if (currRow - height + 1 <= 0)
                 currRow = 0;
@@ -953,9 +953,9 @@ void CVort_do_text_viewer(uint8_t *text, uint16_t top_line_offset, uint16_t bott
             do {
                 CVort_engine_shortSleep();
                 //engine_updateActualDisplay();
-            } while (g_input.key_map[0x49]);
+            } while (CK_Action_IsHeld(CK_ACTION_PAGE_UP) || g_input.key_map[0x49]);
         }
-        if (g_input.key_map[0x51]) // Page Down
+        if (CK_Action_IsHeld(CK_ACTION_PAGE_DOWN) || g_input.key_map[0x51]) // Page Down
         {
             if (currRow + (height << 1) >= tp)
                 currRow = tp - height + 1;
@@ -966,7 +966,7 @@ void CVort_do_text_viewer(uint8_t *text, uint16_t top_line_offset, uint16_t bott
             do {
                 CVort_engine_shortSleep();
                 //engine_updateActualDisplay();
-            } while (g_input.key_map[0x51]);
+            } while (CK_Action_IsHeld(CK_ACTION_PAGE_DOWN) || g_input.key_map[0x51]);
         }
     } while (!((g_input.key_map[1] || CK_Action_IsHeld(CK_ACTION_MENU_BACK)) || in.but1jump || in.but2pogo));
 

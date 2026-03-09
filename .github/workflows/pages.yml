@@ -6,6 +6,9 @@ on:
       - master
     paths:
       - "site/**"
+      - "build/emscripten/**"
+      - "src/**"
+      - "data/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -30,6 +33,23 @@ jobs:
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
+
+      - name: Setup Emscripten SDK
+        uses: mymindstorm/setup-emsdk@v14
+
+      - name: Build and package WebAssembly zip
+        run: |
+          chmod +x build/emscripten/build_emscripten.sh
+          (cd build/emscripten && ./build_emscripten.sh -j4)
+          stage_dir="dist/chocolate-keen-WebAssembly"
+          rm -rf "$stage_dir"
+          mkdir -p "$stage_dir"
+          cp build/emscripten/chocolate-keen.html "$stage_dir/"
+          cp build/emscripten/chocolate-keen.js "$stage_dir/"
+          cp build/emscripten/chocolate-keen.wasm "$stage_dir/"
+          cp build/emscripten/chocolate-keen.data "$stage_dir/"
+          (cd "$stage_dir" && zip -r ../chocolate-keen.zip .)
+          unzip -o dist/chocolate-keen.zip -d site
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

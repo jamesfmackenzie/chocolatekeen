@@ -36,6 +36,13 @@ You can then start each episode via `chocolate-keen.exe -startkeen1`, `chocolate
 ## Building
 You can clone or download the chocolatekeen repo and build it yourself
 
+## Documentation
+
+- [Architecture Overview](docs/architecture.md)
+- [Technical Debt Backlog](docs/tech-debt.md)
+- [PlayStation Vita Controls](docs/vita-controls.md)
+- [Docs Layout Note](docs/README.md)
+
 ### Linux
 For Linux builds you'll need a C compiler (e.g. gcc) and toolchain. The setup varies between distros. For Ubuntu you can install the build-essential package via `sudo apt-get install build-essential`. Once you have that setup:
 

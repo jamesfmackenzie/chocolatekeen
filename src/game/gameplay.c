@@ -38,6 +38,13 @@ void (*CVort_ptr_inlevel_message)();
 int16_t (*CVort_ptr_worldmap_sprites)(int16_t map_sprite_standing, Sprite_T* spritedraw, int16_t pos_x, int16_t pos_y);
 void (*CVort_ptr_contact_keen)(Sprite_T *keen, Sprite_T * contacted);
 
+static bool cvort_is_action_newly_held(CK_Action action, bool *wasHeld) {
+    const bool isHeld = CK_Action_IsHeld(action);
+    const bool isNewPress = isHeld && !(*wasHeld);
+    *wasHeld = isHeld;
+    return isNewPress;
+}
+
 void CVort_start_cheating() {
     uint32_t origTicks = CVort_ptr_engine_getTicks();
     CVort_clear_keys();
@@ -65,9 +72,10 @@ void CVort_start_cheating() {
 }
 
 void CVort_handle_cheat_keys() {
+    static bool wasStatusHeld = false;
     //CVort_engine_updateInputStatus();
     if (g_input.key_map[0x2E] && g_input.key_map[0x14] &&
-        (g_input.key_map[0x39] || CK_Action_HasMenuSelect()))
+        (g_input.key_map[0x39] || CK_Action_IsHeld(CK_ACTION_STATUS)))
         CVort_start_cheating();
     if (g_input.key_map[0x22] && g_input.key_map[0x18] && g_input.key_map[0x20]) {
         CVort_clear_keys();
@@ -79,7 +87,7 @@ void CVort_handle_cheat_keys() {
             CVort_draw_string("God mode disabled");
         CVort_read_char_with_echo();
         CVort_engine_clearOverlay();
-    } else if (g_input.key_map[0x39] || CK_Action_HasMenuSelect()) {
+    } else if (cvort_is_action_newly_held(CK_ACTION_STATUS, &wasStatusHeld)) {
         CVort_engine_saveCurSound();
         CVort_ptr_show_pause_menu();
         CVort_engine_restoreCurSound();
@@ -349,6 +357,7 @@ bool CVort_has_any_ack_press(const GameInput_T *input) {
 }
 
 int16_t CVort_handle_global_keys() {
+    static bool wasMenuBackHeld = false;
     int16_t result = 0;
     CVort_translate_key(1);
     // Original debugging code?
@@ -370,7 +379,7 @@ int16_t CVort_handle_global_keys() {
         CVort_engine_saveCurSound();
         CVort_save_game();
         result++;
-    } else if (CK_Action_HasMenuDismiss() || g_input.key_map[1]) {
+    } else if (cvort_is_action_newly_held(CK_ACTION_MENU_BACK, &wasMenuBackHeld)) {
         CVort_engine_saveCurSound();
         CVort_handle_quit();
         result++;

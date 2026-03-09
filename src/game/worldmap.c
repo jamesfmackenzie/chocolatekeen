@@ -156,8 +156,6 @@ void CVort_draw_worldmap(void) {
             wmap_scroll_x = scroll_x;
             wmap_scroll_y = scroll_y;
             CVort_handle_global_keys();
-            if (CK_Action_HasMenuSelect() || g_input.key_map[0x39])
-                CVort_ptr_show_pause_menu();
             if (g_game.quit_to_title) {
                 CVort_game_over();
                 return;

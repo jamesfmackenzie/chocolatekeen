@@ -15,11 +15,12 @@
 #define VITA_RW_MISC_PREFIX "ux0:data/chocolatekeen/"
 
 static int g_rwMiscDirPrepared = 0;
-static bool g_wasStartPressed = false;
-static bool g_wasSelectPressed = false;
-static bool g_wasCircleEscPressed = false;
-static bool g_wasCrossPressed = false;
-static bool g_wasSquarePressed = false;
+static bool g_wasEnterPressed = false;
+static bool g_wasStatusPressed = false;
+static bool g_wasEscPressed = false;
+static bool g_wasPromptYPressed = false;
+static bool g_wasPromptTPressed = false;
+static bool g_wasPromptDPressed = false;
 
 static int16_t get_poll_from_analog_u8(uint8_t analogVal) {
     return (int16_t)((analogVal * 500) / 255);
@@ -103,9 +104,6 @@ bool CK_PlatformPollInputState(CK_PlatformInputState_T *state) {
     if (ctrl.buttons & SCE_CTRL_RTRIGGER) {
         state->buttonsMask |= CK_PLATFORM_BTN_SHOULDER_R;
     }
-    if (ctrl.buttons & SCE_CTRL_SELECT) {
-        state->buttonsMask |= CK_PLATFORM_BTN_MENU_BACK;
-    }
     if (ctrl.buttons & SCE_CTRL_START) {
         state->buttonsMask |= CK_PLATFORM_BTN_MENU_CONFIRM;
     }
@@ -120,6 +118,8 @@ void CK_PlatformApplyInputPolicy(const CK_PlatformInputState_T *state, bool isWa
     int16_t xPoll;
     int16_t yPoll;
     bool isMenuContext;
+    bool isWorldMapContext;
+    bool isMainMenuContext;
 
     if (!state || !state->valid) {
         return;
@@ -152,24 +152,57 @@ void CK_PlatformApplyInputPolicy(const CK_PlatformInputState_T *state, bool isWa
     engine_inputMappings.currEmuInputStatus.joystickAxesPolls[0] = xPoll;
     engine_inputMappings.currEmuInputStatus.joystickAxesPolls[1] = yPoll;
 
+    isMenuContext = (draw_func != NULL);
+    isWorldMapContext = (g_game.on_world_map != 0);
+    isMainMenuContext = isMenuContext && !isWorldMapContext;
+
     engine_inputMappings.currEmuInputStatus.joystickButtonsMask &= ~(VITA_JOY_BUTTONMASK_JUMP | VITA_JOY_BUTTONMASK_POGO);
     if (state->buttonsMask & CK_PLATFORM_BTN_FACE_BOTTOM) {
         engine_inputMappings.currEmuInputStatus.joystickButtonsMask |= VITA_JOY_BUTTONMASK_JUMP;
     }
-    if (state->buttonsMask & CK_PLATFORM_BTN_FACE_RIGHT) {
+    if (!isMenuContext && !g_game.on_world_map && (state->buttonsMask & CK_PLATFORM_BTN_FACE_RIGHT)) {
         engine_inputMappings.currEmuInputStatus.joystickButtonsMask |= VITA_JOY_BUTTONMASK_POGO;
     }
-    if (state->buttonsMask & CK_PLATFORM_BTN_FACE_LEFT) {
+    if (!isMenuContext && (state->buttonsMask & CK_PLATFORM_BTN_FACE_LEFT)) {
         engine_inputMappings.currEmuInputStatus.joystickButtonsMask |= (VITA_JOY_BUTTONMASK_JUMP | VITA_JOY_BUTTONMASK_POGO);
     }
 
-    isMenuContext = (draw_func != NULL);
-
-    set_virtual_scancode_state(VITA_DOS_SCANCODE_ENTER, (state->buttonsMask & CK_PLATFORM_BTN_MENU_CONFIRM) != 0, &g_wasStartPressed);
-    set_virtual_scancode_state(VITA_DOS_SCANCODE_SPACE, (state->buttonsMask & CK_PLATFORM_BTN_MENU_BACK) != 0, &g_wasSelectPressed);
-    set_virtual_scancode_state(VITA_DOS_SCANCODE_ESC, isMenuContext && ((state->buttonsMask & CK_PLATFORM_BTN_FACE_RIGHT) != 0), &g_wasCircleEscPressed);
-    set_virtual_scancode_state(VITA_DOS_SCANCODE_Y, isWaitingForCharInput && ((state->buttonsMask & CK_PLATFORM_BTN_FACE_BOTTOM) != 0), &g_wasCrossPressed);
-    set_virtual_scancode_state(VITA_DOS_SCANCODE_N, isWaitingForCharInput && ((state->buttonsMask & CK_PLATFORM_BTN_FACE_LEFT) != 0), &g_wasSquarePressed);
+    set_virtual_scancode_state(
+        VITA_DOS_SCANCODE_ENTER,
+        ((state->buttonsMask & CK_PLATFORM_BTN_MENU_CONFIRM) != 0) ||
+            (!isMainMenuContext && ((state->buttonsMask & CK_PLATFORM_BTN_FACE_BOTTOM) != 0)),
+        &g_wasEnterPressed
+    );
+    set_virtual_scancode_state(
+        VITA_DOS_SCANCODE_SPACE,
+        !isWaitingForCharInput && !isMainMenuContext &&
+            ((state->buttonsMask & CK_PLATFORM_BTN_FACE_TOP) != 0),
+        &g_wasStatusPressed
+    );
+    set_virtual_scancode_state(
+        VITA_DOS_SCANCODE_ESC,
+        (isMainMenuContext || isWorldMapContext) &&
+            ((state->buttonsMask & CK_PLATFORM_BTN_FACE_RIGHT) != 0),
+        &g_wasEscPressed
+    );
+    set_virtual_scancode_state(
+        VITA_DOS_SCANCODE_Y,
+        isWaitingForCharInput && isMainMenuContext &&
+            ((state->buttonsMask & CK_PLATFORM_BTN_FACE_BOTTOM) != 0),
+        &g_wasPromptYPressed
+    );
+    set_virtual_scancode_state(
+        VITA_DOS_SCANCODE_T,
+        isWaitingForCharInput && isWorldMapContext &&
+            ((state->buttonsMask & CK_PLATFORM_BTN_FACE_BOTTOM) != 0),
+        &g_wasPromptTPressed
+    );
+    set_virtual_scancode_state(
+        VITA_DOS_SCANCODE_D,
+        isWaitingForCharInput && isWorldMapContext &&
+            ((state->buttonsMask & CK_PLATFORM_BTN_FACE_LEFT) != 0),
+        &g_wasPromptDPressed
+    );
 }
 
 uint16_t CK_PlatformPreferredPlayer1ControlType(uint16_t currentControlType, int numOfJoysticks) {

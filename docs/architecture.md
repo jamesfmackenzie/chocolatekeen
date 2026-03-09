@@ -30,7 +30,7 @@ Chocolate Keen is organized by subsystem so runtime orchestration, gameplay logi
   - Contains menu definitions, handlers, menu loop logic, mapper navigation, and shared UI runtime types.
 - `src/platform/`
   - Platform-dependent shims and target-specific host bindings.
-  - Includes native vs Emscripten sleep behavior and Windows/input stubs where required.
+  - Includes native vs Emscripten sleep behavior, path policies, and target-specific input mapping/policy shims.
 - `src/decompression/`
   - Project-owned decompression helpers (`imageRLE`).
 - `src/third_party/cgenius/`
@@ -58,7 +58,9 @@ Chocolate Keen is organized by subsystem so runtime orchestration, gameplay logi
 ## Other Top-Level Areas
 
 - `docs/`
-  - Project docs plus static web/demo assets.
+  - Project and engineering documentation.
+- `site/`
+  - GitHub Pages web/demo site assets.
 - `docs/legacy/readme/`
   - Historical notes/reference material moved from the old root `readme/` folder.
 - `data/`
@@ -76,6 +78,14 @@ GitHub Actions workflows:
 - `.github/workflows/release.yml`
   - Multi-platform release packaging (Linux, WebAssembly, Windows x86/x64).
   - Publishes release zip artifacts to GitHub Releases.
+- `.github/workflows/pages.yml`
+  - Publishes the static web/demo site from `site/` to GitHub Pages.
+
+## Platform Boundaries
+
+- `src/game/*`, `src/input/*`, and `src/engine/*` should stay platform-neutral.
+- Platform-specific behavior and policy should live under `src/platform/*` behind `platform.h` hooks.
+- Direct platform branches (for example `__VITA__`) in core gameplay/input/engine code are considered exceptions and should be justified narrowly when unavoidable.
 
 ## Local Validation
 
@@ -91,4 +101,11 @@ Quick CI-style smoke check from repo root:
 
 ```bash
 ./scripts/ci-local.sh
+```
+
+Vita-specific local validation (when VitaSDK is installed):
+
+```bash
+make -C build/vita -j4
+make -C build/vita vpk -j4
 ```

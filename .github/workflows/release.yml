@@ -161,8 +161,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          apt-get update
-          apt-get install -y zip
+          apk add --no-cache zip
 
       - name: Build (Vita)
         run: |

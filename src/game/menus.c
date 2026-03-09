@@ -420,7 +420,11 @@ loc_192F8:
         CVort_engine_delay(7);
 select1:
     var_6 = CVort_translate_key(1)&0xFF;
-    if (var_6 && g_input.ctrl_type[1])
+    if (var_6 && g_input.ctrl_type[1]
+#ifdef __VITA__
+        && (var_6 != 0x1B)
+#endif
+    )
         input.but1jump = 1;
     if ((!g_input.ctrl_type[1]) &&
         ((var_6 == CHAR_SPACE) || (var_6 == CHAR_CARRIAGE) ||
@@ -430,7 +434,12 @@ select1:
         CVort_do_start_menu();
         cursorY = sel + cursorY_b;
     }
+    // On Vita, main-menu activation is intentionally bound to button1 only.
+#ifdef __VITA__
+    if (!input.but1jump)
+#else
     if (!input.but1jump && !input.but2pogo)
+#endif
         goto loc_192C0; // NOTE NOTE NOTE NOTE NOTE NOTE GOTO?!!!
 
     CVort_clear_keys();

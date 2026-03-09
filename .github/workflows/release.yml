@@ -159,6 +159,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y zip
+
       - name: Build (Vita)
         run: |
           make -C build/vita vpk -j4

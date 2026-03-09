@@ -154,16 +154,19 @@ void CK_PlatformApplyInputPolicy(const CK_PlatformInputState_T *state, bool isWa
 
     isMenuContext = (draw_func != NULL);
     isWorldMapContext = (g_game.on_world_map != 0);
-    isMainMenuContext = isMenuContext && !isWorldMapContext;
+    isMainMenuContext = (isMenuContext && !isWorldMapContext) ||
+        (!isWorldMapContext && (g_game.current_level == 90));
 
     engine_inputMappings.currEmuInputStatus.joystickButtonsMask &= ~(VITA_JOY_BUTTONMASK_JUMP | VITA_JOY_BUTTONMASK_POGO);
     if (state->buttonsMask & CK_PLATFORM_BTN_FACE_BOTTOM) {
         engine_inputMappings.currEmuInputStatus.joystickButtonsMask |= VITA_JOY_BUTTONMASK_JUMP;
     }
-    if (!isMenuContext && !g_game.on_world_map && (state->buttonsMask & CK_PLATFORM_BTN_FACE_RIGHT)) {
+    if (!isMenuContext && !isMainMenuContext && !g_game.on_world_map &&
+        (state->buttonsMask & CK_PLATFORM_BTN_FACE_RIGHT)) {
         engine_inputMappings.currEmuInputStatus.joystickButtonsMask |= VITA_JOY_BUTTONMASK_POGO;
     }
-    if (!isMenuContext && (state->buttonsMask & CK_PLATFORM_BTN_FACE_LEFT)) {
+    if (!isMenuContext && !isMainMenuContext &&
+        (state->buttonsMask & CK_PLATFORM_BTN_FACE_LEFT)) {
         engine_inputMappings.currEmuInputStatus.joystickButtonsMask |= (VITA_JOY_BUTTONMASK_JUMP | VITA_JOY_BUTTONMASK_POGO);
     }
 

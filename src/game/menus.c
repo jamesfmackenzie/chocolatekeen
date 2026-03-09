@@ -420,7 +420,9 @@ loc_192F8:
         CVort_engine_delay(7);
 select1:
     var_6 = CVort_translate_key(1)&0xFF;
-    if (var_6 && g_input.ctrl_type[1])
+    // In joystick-driven menu mode, Esc is a dismiss key and must not be
+    // reinterpreted as a generic "confirm" key.
+    if (var_6 && g_input.ctrl_type[1] && (var_6 != 0x1B))
         input.but1jump = 1;
     if ((!g_input.ctrl_type[1]) &&
         ((var_6 == CHAR_SPACE) || (var_6 == CHAR_CARRIAGE) ||

@@ -39,10 +39,12 @@ static int16_t get_deadzone_poll_from_analog_u8(uint8_t analogVal) {
 static void set_virtual_scancode_state(uint8_t dosScanCode, bool isPressedNow, bool *wasPressed) {
     if (isPressedNow) {
         g_input.key_map[dosScanCode] = 1;
-        g_input.key_scane = dosScanCode | 0x80;
-        engine_lastScanCode = dosScanCode;
-        engine_lastKeyTime = SDL_GetTicks();
-        engine_isBeforeKeyDelay = true;
+        if (!(*wasPressed)) {
+            g_input.key_scane = dosScanCode | 0x80;
+            engine_lastScanCode = dosScanCode;
+            engine_lastKeyTime = SDL_GetTicks();
+            engine_isBeforeKeyDelay = true;
+        }
     } else if (*wasPressed) {
         g_input.key_map[dosScanCode] = 0;
         if ((g_input.key_scane & 0x7F) == dosScanCode) {

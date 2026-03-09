@@ -86,8 +86,8 @@ Prerequisites:
 Build steps:
 1. Launch a shell with VitaSDK environment loaded.
 2. Navigate to `/build/vita`.
-3. Run `./build_vita.sh -j4` to build `chocolate-keen.elf`.
-4. Run `make vpk` to package `chocolate-keen-vita.vpk`.
+3. Run `./build_vita.sh -j4` to build and package `chocolate-keen-vita.vpk`.
+4. Optional: Run `./build_vita.sh game -j4` if you only want `chocolate-keen.elf`.
 
 Notes:
 * The Vita build defaults to software rendering (`USE_OPENGL=0`).

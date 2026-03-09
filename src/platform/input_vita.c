@@ -36,10 +36,15 @@ static int16_t get_deadzone_poll_from_analog_u8(uint8_t analogVal) {
     return get_poll_from_analog_u8(analogVal);
 }
 
-static void set_virtual_scancode_state(uint8_t dosScanCode, bool isPressedNow, bool *wasPressed) {
+static void set_virtual_scancode_state_ex(
+    uint8_t dosScanCode,
+    bool isPressedNow,
+    bool emitScanEvent,
+    bool *wasPressed
+) {
     if (isPressedNow) {
         g_input.key_map[dosScanCode] = 1;
-        if (!(*wasPressed)) {
+        if (emitScanEvent && !(*wasPressed)) {
             g_input.key_scane = dosScanCode | 0x80;
             engine_lastScanCode = dosScanCode;
             engine_lastKeyTime = SDL_GetTicks();
@@ -55,6 +60,10 @@ static void set_virtual_scancode_state(uint8_t dosScanCode, bool isPressedNow, b
         }
     }
     *wasPressed = isPressedNow;
+}
+
+static void set_virtual_scancode_state(uint8_t dosScanCode, bool isPressedNow, bool *wasPressed) {
+    set_virtual_scancode_state_ex(dosScanCode, isPressedNow, true, wasPressed);
 }
 
 void CK_PlatformPrepareInput(void) {
@@ -184,10 +193,13 @@ void CK_PlatformApplyInputPolicy(const CK_PlatformInputState_T *state, bool isWa
             ((state->buttonsMask & CK_PLATFORM_BTN_FACE_TOP) != 0),
         &g_wasStatusPressed
     );
-    set_virtual_scancode_state(
+    // Main-menu Circle should act as dismiss only (via key_map/CK_Action), not as
+    // a translated "any key confirms" scan event in legacy menu code.
+    set_virtual_scancode_state_ex(
         VITA_DOS_SCANCODE_ESC,
         (isMainMenuContext || isWorldMapContext) &&
             ((state->buttonsMask & CK_PLATFORM_BTN_FACE_RIGHT) != 0),
+        (!isMainMenuContext) || isWaitingForCharInput,
         &g_wasEscPressed
     );
     set_virtual_scancode_state(

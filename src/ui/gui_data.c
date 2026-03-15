@@ -33,7 +33,7 @@ GUI_Menu_Item_T guiMenuItemNoKeenGameEpisode = {
 };
 
 GUI_Menu_Item_T guiMenuItemKeysPassToBiosToggle = {
-0, 0, 0, 0, 0, 0, "Add vanilla Keen cmdline arg /K", NULL, 0, 0, &CVort_gui_handler_toggleKeyPassToBios
+0, 0, 0, 0, 0, 0, "Emulate vanilla /K BIOS keyboard mode", NULL, 0, 0, &CVort_gui_handler_toggleKeyPassToBios
 };
 
 GUI_Menu_Item_T guiMenuItemSettings = {
@@ -61,7 +61,6 @@ GUI_Menu_T guiMainMenu = {
 #ifdef CHOCOLATE_KEEN_IS_EPISODE3_ENABLED
 	&guiMenuItemStartKeen3,
 #endif
-	&guiMenuItemKeysPassToBiosToggle,
 	&guiMenuItemSettings,
 	&guiMenuItemQuit,
 	0
@@ -383,6 +382,7 @@ GUI_Menu_T guiCompatibilityOptionsMenu = {
 	0, 0, "Compatibility options", 0,
 	(GUI_Menu_Item_T *[])
 	{
+	&guiMenuItemKeysPassToBiosToggle,
 	&guiMenuItemInitialInputDeviceToggle,
 	&guiMenuItemVorticonsDemoModeToggle,
 	&guiMenuItemEmulatedInputDeviceComment,

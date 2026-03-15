@@ -111,3 +111,7 @@ CTLPANEL.CK3
 SCORES.CK1
 SCORES.CK2
 SCORES.CK3
+
+# Commercial episode data should remain local-only
+data/GAMEDATA/KEEN2/
+data/GAMEDATA/KEEN3/

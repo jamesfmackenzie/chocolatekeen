@@ -149,7 +149,7 @@ static bool process_engine_arguments(int argc, char **argv) {
     CVort_engine_loadConfigFile();
 
     // Just before going over command line arguments
-    engine_skipLauncher = true;
+    engine_skipLauncher = CK_PlatformShouldSkipLauncherByDefault();
 #ifdef CHOCOLATE_KEEN_CONFIG_SPECIFIC_EPISODE
     engine_forceSpecificEpisode = true;
 #ifdef CHOCOLATE_KEEN_IS_EPISODE1_ENABLED

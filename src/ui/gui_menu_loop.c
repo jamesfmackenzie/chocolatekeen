@@ -4,6 +4,7 @@
 
 #include "../rsrc/chocolate-keen_vga_fonts.h"
 #include "core/globals.h"
+#include "platform/platform.h"
 #include "ui/gui_internal.h"
 #include "ui/gui_loop_common.h"
 #include "ui/gui_menu_loop.h"
@@ -458,6 +459,63 @@ static const GUI_KeyNavHandlers_T guiMenuKeyNavHandlers = {
 	.nextPage = CVort_gui_changeToNextPage
 };
 
+static void CVort_gui_handleActionNavigation(void) {
+	CK_PlatformInputState_T state;
+	static bool wasBackPressed = false;
+	static bool wasLeftPressed = false;
+	static bool wasRightPressed = false;
+	static bool wasUpPressed = false;
+	static bool wasDownPressed = false;
+	static bool wasConfirmPressed = false;
+	bool isBackPressed = false;
+	bool isLeftPressed = false;
+	bool isRightPressed = false;
+	bool isUpPressed = false;
+	bool isDownPressed = false;
+	bool isConfirmPressed = false;
+
+	if (!CK_PlatformPollInputState(&state) || !state.valid) {
+		wasBackPressed = false;
+		wasLeftPressed = false;
+		wasRightPressed = false;
+		wasUpPressed = false;
+		wasDownPressed = false;
+		wasConfirmPressed = false;
+		return;
+	}
+
+	isBackPressed = (state.buttonsMask & CK_PLATFORM_BTN_FACE_RIGHT) != 0;
+	isLeftPressed = ((state.buttonsMask & CK_PLATFORM_BTN_DPAD_LEFT) != 0) || (state.leftX < 96);
+	isRightPressed = ((state.buttonsMask & CK_PLATFORM_BTN_DPAD_RIGHT) != 0) || (state.leftX > 160);
+	isUpPressed = ((state.buttonsMask & CK_PLATFORM_BTN_DPAD_UP) != 0) || (state.leftY < 96);
+	isDownPressed = ((state.buttonsMask & CK_PLATFORM_BTN_DPAD_DOWN) != 0) || (state.leftY > 160);
+	isConfirmPressed = ((state.buttonsMask & CK_PLATFORM_BTN_MENU_CONFIRM) != 0) ||
+	                   ((state.buttonsMask & CK_PLATFORM_BTN_FACE_BOTTOM) != 0);
+
+	if (isBackPressed && !wasBackPressed) {
+		CVort_gui_handle_dpad_back();
+		CVort_gui_resetMenuStatus();
+	} else if (isLeftPressed && !wasLeftPressed) {
+		CVort_gui_handle_dpad_left();
+	} else if (isRightPressed && !wasRightPressed) {
+		CVort_gui_handle_dpad_right();
+	} else if (isUpPressed && !wasUpPressed) {
+		CVort_gui_handle_dpad_up();
+	} else if (isDownPressed && !wasDownPressed) {
+		CVort_gui_handle_dpad_down();
+	} else if (isConfirmPressed && !wasConfirmPressed) {
+		CVort_gui_handle_dpad_activate();
+		CVort_gui_resetMenuStatus();
+	}
+
+	wasBackPressed = isBackPressed;
+	wasLeftPressed = isLeftPressed;
+	wasRightPressed = isRightPressed;
+	wasUpPressed = isUpPressed;
+	wasDownPressed = isDownPressed;
+	wasConfirmPressed = isConfirmPressed;
+}
+
 void CVort_gui_runLoop(void) {
 	CVort_gui_prepareMainMenuItems();
 	CVort_gui_prepareMenuItemsChoiceBuffers();
@@ -590,6 +648,7 @@ void CVort_gui_runLoop(void) {
 
 			}
 		}
+		CVort_gui_handleActionNavigation();
 		CVort_gui_updateDisplayAndSleep();
 	}
 }

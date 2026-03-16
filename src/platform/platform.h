@@ -38,6 +38,6 @@ void CK_PlatformApplyDefaultJoystickCalibration(int16_t joystickCtrl[4][3]);
 void CK_PlatformEnsureRwMiscDir(void);
 bool CK_PlatformBuildRoDataPath(const char *relativePath, char *outPath, size_t outPathSize);
 bool CK_PlatformBuildRwMiscPath(const char *filename, char *outPath, size_t outPathSize);
-bool CK_PlatformShouldSkipLauncherByDefault(void);
+bool CK_PlatformShouldAutoShowLauncher(int availableEpisodes);
 
 #endif

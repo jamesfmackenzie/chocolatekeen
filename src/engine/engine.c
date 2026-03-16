@@ -149,7 +149,7 @@ static bool process_engine_arguments(int argc, char **argv) {
     CVort_engine_loadConfigFile();
 
     // Just before going over command line arguments
-    engine_skipLauncher = CK_PlatformShouldSkipLauncherByDefault();
+    engine_skipLauncher = true;
 #ifdef CHOCOLATE_KEEN_CONFIG_SPECIFIC_EPISODE
     engine_forceSpecificEpisode = true;
 #ifdef CHOCOLATE_KEEN_IS_EPISODE1_ENABLED
@@ -205,6 +205,30 @@ static bool process_engine_arguments(int argc, char **argv) {
             return false;
         }
     }
+
+#ifndef CHOCOLATE_KEEN_CONFIG_SPECIFIC_EPISODE
+    if (engine_skipLauncher && !engine_forceSpecificEpisode) {
+        int availableEpisodes = 0;
+#ifdef CHOCOLATE_KEEN_IS_EPISODE1_ENABLED
+        if (CVort_engine_isGameExeAvailable(GAMEVER_KEEN1)) {
+            availableEpisodes++;
+        }
+#endif
+#ifdef CHOCOLATE_KEEN_IS_EPISODE2_ENABLED
+        if (CVort_engine_isGameExeAvailable(GAMEVER_KEEN2)) {
+            availableEpisodes++;
+        }
+#endif
+#ifdef CHOCOLATE_KEEN_IS_EPISODE3_ENABLED
+        if (CVort_engine_isGameExeAvailable(GAMEVER_KEEN3)) {
+            availableEpisodes++;
+        }
+#endif
+        if (CK_PlatformShouldAutoShowLauncher(availableEpisodes)) {
+            engine_skipLauncher = false;
+        }
+    }
+#endif
 
     // Finally calculate some additional fields
     CVort_engine_parseCalculatedEngineArguments();

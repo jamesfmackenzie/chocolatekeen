@@ -267,6 +267,6 @@ bool CK_PlatformBuildRwMiscPath(const char *filename, char *outPath, size_t outP
     return (written > 0) && ((size_t)written < outPathSize);
 }
 
-bool CK_PlatformShouldSkipLauncherByDefault(void) {
-    return false;
+bool CK_PlatformShouldAutoShowLauncher(int availableEpisodes) {
+    return (availableEpisodes > 1);
 }

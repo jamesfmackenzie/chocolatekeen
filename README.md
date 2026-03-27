@@ -135,7 +135,7 @@ Run this from the repo root to execute the same quick checks used during refacto
 ### WebAssembly Notes
 
 #### Performance
-The WebAssembly build of Chocolate Keen relies on <a href="https://github.com/emscripten-core/emscripten/wiki/Emterpreter" target="_blank">Emterpreter</a>. This hinders performance significantly vs using Emscripten loops. If you don't have a sufficiently fast machine you may notice audio stutters or frame skips
+The default WebAssembly build of Chocolate Keen uses Emscripten Asyncify rather than the older Emterpreter-based path. Performance can still vary depending on the browser and host machine, and on slower systems you may notice audio stutters or frame skips. The legacy `emscripten-legacy` profile still exists for older experiments and continues to use Emterpreter-style settings.
 
 #### Graphics
 Although the original game supports both EGA and VGA graphics modes, the WebAssembly build is hardcoded to VGA. The original game resolution is 320x200, which is internally scan-doubled to 320x400. The x-axis is then doubled also to preserve the aspect ratio, yielding 640x400. Once overscan borders are added, the internal game resolution jumps to 672x414. This is rendered into the HTML canvas to provide a pixel perfect image, and then aspect-ratio corrected to 4:3 via CSS

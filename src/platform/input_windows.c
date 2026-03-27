@@ -41,3 +41,8 @@ bool CK_PlatformBuildRwMiscPath(const char *filename, char *outPath, size_t outP
     int written = snprintf(outPath, outPathSize, "%s", filename);
     return (written > 0) && ((size_t)written < outPathSize);
 }
+
+bool CK_PlatformShouldAutoShowLauncher(int availableEpisodes) {
+    (void)availableEpisodes;
+    return false;
+}

@@ -112,6 +112,11 @@ SCORES.CK1
 SCORES.CK2
 SCORES.CK3
 
+# Test build output
+tests/test_runner
+tests/test_input_nav_runner
+tests/*.dSYM/
+
 # Commercial episode data should remain local-only
 data/GAMEDATA/KEEN2/
 data/GAMEDATA/KEEN3/

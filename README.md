@@ -13,10 +13,12 @@ Chocolate Keen is a reverse engineering of Commander Keen in C and SDL. The goal
 
 If you’re having issues with the controls (e.g. on a Mac keyboard), you can change the key bindings with F3.
 
+On PlayStation Vita, use D-Pad or left analog for movement/navigation, Cross for jump/confirm, Circle for pogo or back, Square to fire, Triangle for status, and Start for confirm. For the full context-sensitive Vita mapping table, see [PlayStation Vita Controls](docs/vita-controls.md).
+
 ## Releases
 Downloadable game packages are published on <a href="https://github.com/jamesfmackenzie/chocolatekeen/releases">GitHub Releases</a>. All versions come packaged as zip files with game data. Just extract and run. On Linux, you'll need the <a href="https://wiki.libsdl.org/Installation#Linux.2FUnix" target="_blank">SDL 2.0 runtime</a> installed. Other versions come pre-packaged with SDL.
 
-* <a href="https://github.com/jamesfmackenzie/chocolatekeen/releases/latest">Latest release</a> - includes Linux, WebAssembly, Windows x86, and Windows x64 packages
+* <a href="https://github.com/jamesfmackenzie/chocolatekeen/releases/latest">Latest release</a> - includes Linux, WebAssembly, Windows x86, Windows x64, and PlayStation Vita packages
 
 ### Episodes Two and Three
 The downloadable releases above come packaged with Commander Keen "Invasion of the Vorticons" Episode One: Marooned on Mars. But the engine supports the entire Vorticons trilogy. If you have Episode Two or Three, drop the level/data files into the GAMEDATA folder as follows:
@@ -32,6 +34,8 @@ The downloadable releases above come packaged with Commander Keen "Invasion of t
             └── ... Episode Three level data
     
 You can then start each episode via `chocolate-keen.exe -startkeen1`, `chocolate-keen.exe -startkeen2` and `chocolate-keen.exe -startkeen3` respectively
+
+On PlayStation Vita, episode data is currently loaded from bundled `app0:/GAMEDATA/KEEN1`, `app0:/GAMEDATA/KEEN2`, and `app0:/GAMEDATA/KEEN3` paths inside the installed VPK. That means Episodes Two and Three need to be included during VPK packaging rather than copied onto the device after install. If more than one episode is bundled, the Vita build will show the launcher so you can choose between them at startup.
 
 ## Building
 You can clone or download the chocolatekeen repo and build it yourself
@@ -84,22 +88,30 @@ Build and Debug with Microsoft Visual Studio / Visual C++
 Game data is automatically copied to the Target Directory as part of build - so everything should "just run"
 
 ### PlayStation Vita (VitaSDK)
-The repository includes an initial VitaSDK target in `build/vita`.
+The repository includes a VitaSDK target in `build/vita`. It builds a `.vpk` that packages the executable, default config, and bundled Episode One `GAMEDATA`.
 
 Prerequisites:
 1. Install VitaSDK and SDL2 for Vita.
-2. Source the VitaSDK environment so tools like `arm-vita-eabi-gcc`, `vita-elf-create`, and `vita-make-fself` are in `PATH`.
+2. Source the VitaSDK environment so tools like `arm-vita-eabi-gcc`, `vita-elf-create`, `vita-make-fself`, and `vita-mksfoex` are in `PATH`.
+3. Make sure `zip` is available on the host machine that is building the VPK.
 
 Build steps:
 1. Launch a shell with VitaSDK environment loaded.
 2. Navigate to `/build/vita`.
 3. Run `./build_vita.sh -j4` to build and package `chocolate-keen-vita.vpk`.
 4. Optional: Run `./build_vita.sh game -j4` if you only want `chocolate-keen.elf`.
+5. Copy `build/vita/chocolate-keen-vita.vpk` to the Vita and install it with VitaShell or another VPK installer.
+
+Install/runtime layout:
+* Read-only bundled game data is loaded from `app0:/GAMEDATA/...`
+* Config, save data, mapper data, and other writable files are created under `ux0:data/chocolatekeen/`
+* The build copies `data/GAMEDATA/*` into the VPK, so Episode One is available immediately after install
+* Episode data lookup currently targets bundled `app0:/GAMEDATA/KEEN1`, `app0:/GAMEDATA/KEEN2`, and `app0:/GAMEDATA/KEEN3`
 
 Notes:
 * The Vita build defaults to software rendering (`USE_OPENGL=0`).
-* The first-pass input shim is intentionally minimal (`src/platform/input_vita.c`).
-* On Vita, read-only game data is loaded from `app0:/GAMEDATA/...`; config/save files are written under `ux0:data/chocolatekeen/`.
+* The Vita target uses a platform-specific input policy in [src/platform/input_vita.c](/Users/jamesmackenzie/Documents/Code/GitHub/chocolatekeen/src/platform/input_vita.c) and still has open follow-up work tracked in [docs/tech-debt.md](/Users/jamesmackenzie/Documents/Code/GitHub/chocolatekeen/docs/tech-debt.md).
+* The build currently places a default `chocolate-keen.cfg` in the VPK, but the runtime config path on Vita is `ux0:data/chocolatekeen/chocolate-keen.cfg`.
 
 ## Authors
 The original authors of Chocolate Keen are NY00123, QuantumG and Lemm. The project started with a reverse engineering of the original Keen code, and the goal is complete authenticity to the original - bugs and all. For more info see https://pckf.com/viewtopic.php?f=4&t=2536

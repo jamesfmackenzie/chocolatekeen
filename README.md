@@ -8,8 +8,8 @@ Chocolate Keen is a reverse engineering of Commander Keen in C and SDL. The goal
 ### Controls
 * Arrows - Move Keen around
 * Ctrl - Jump
-* Alt/Option - Use Pogo/Stop Pogo (if you have one)
-* Ctrl AND Alt/Option - Fire raygun (if it has charges)
+* Alt on Windows/Linux, or Option on Mac - Use Pogo/Stop Pogo (if you have one)
+* Ctrl AND Alt on Windows/Linux, or Ctrl AND Option on Mac - Fire raygun (if it has charges)
 
 If you’re having issues with the controls (e.g. on a Mac keyboard), you can change the key bindings with F3.
 

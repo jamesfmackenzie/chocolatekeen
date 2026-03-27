@@ -41,6 +41,8 @@ chocolate-keen
 *.suo
 *.sdf
 *.opendb
+.DS_Store
+**/.DS_Store
 packages/
 .user
 /build/visual_studio/ChocolateKeen.vcxproj.user

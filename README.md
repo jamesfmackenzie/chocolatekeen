@@ -1,5 +1,5 @@
 # Chocolate Keen
-Chocolate Keen is a reverse engineering of Commander Keen in C and SDL. The goal is to be super accurate versus the original
+Chocolate Keen is a reverse engineering of Commander Keen in C and SDL. The goal is to be as accurate as possible to the original.
 
 ## How to Play
 * You can play directly in the browser! Click <a href="http://www.jamesfmackenzie.com/chocolatekeen">here</a>
@@ -16,15 +16,17 @@ If you’re having issues with the controls (e.g. on a Mac keyboard), you can ch
 On PlayStation Vita, use D-Pad or left analog for movement/navigation, Cross for jump/confirm, Circle for pogo or back, Square to fire, Triangle for status, and Start for confirm. For the full context-sensitive Vita mapping table, see [PlayStation Vita Controls](docs/vita-controls.md).
 
 ## Releases
-Downloadable game packages are published on <a href="https://github.com/jamesfmackenzie/chocolatekeen/releases">GitHub Releases</a>. All versions come packaged as zip files with game data. Just extract and run. On Linux, you'll need the <a href="https://wiki.libsdl.org/Installation#Linux.2FUnix" target="_blank">SDL 2.0 runtime</a> installed. Other versions come pre-packaged with SDL.
+Downloadable game packages are published on <a href="https://github.com/jamesfmackenzie/chocolatekeen/releases">GitHub Releases</a>. Desktop and WebAssembly builds are published as zip files with game data; PlayStation Vita builds are published as `.vpk` packages. On Linux, you'll need the <a href="https://wiki.libsdl.org/Installation#Linux.2FUnix" target="_blank">SDL 2.0 runtime</a> installed. Other release packages include what they need to run.
 
 * <a href="https://github.com/jamesfmackenzie/chocolatekeen/releases/latest">Latest release</a> - includes Linux, WebAssembly, Windows x86, Windows x64, and PlayStation Vita packages
 
 ### Episodes Two and Three
-The downloadable releases above come packaged with Commander Keen "Invasion of the Vorticons" Episode One: Marooned on Mars. But the engine supports the entire Vorticons trilogy. If you have Episode Two or Three, drop the level/data files into the GAMEDATA folder as follows:
+The downloadable releases above come packaged with Commander Keen "Invasion of the Vorticons" Episode One: Marooned on Mars. But the engine supports the entire Vorticons trilogy.
+
+For desktop builds, if you have Episode Two or Three, drop the level/data files into the `GAMEDATA` folder as follows:
 
     .
-    ├── chocolate-keen.exe
+    ├── chocolate-keen
     └── GAMEDATA
         ├── KEEN1
         |   └── ... Episode One level data (pre-packaged)
@@ -33,12 +35,12 @@ The downloadable releases above come packaged with Commander Keen "Invasion of t
         └── KEEN3
             └── ... Episode Three level data
     
-You can then start each episode via `chocolate-keen.exe -startkeen1`, `chocolate-keen.exe -startkeen2` and `chocolate-keen.exe -startkeen3` respectively
+You can then start each episode via `chocolate-keen -startkeen1`, `chocolate-keen -startkeen2`, and `chocolate-keen -startkeen3` respectively. On Windows, the executable is `chocolate-keen.exe`.
 
-On PlayStation Vita, episode data is currently loaded from bundled `app0:/GAMEDATA/KEEN1`, `app0:/GAMEDATA/KEEN2`, and `app0:/GAMEDATA/KEEN3` paths inside the installed VPK. That means Episodes Two and Three need to be included during VPK packaging rather than copied onto the device after install. If more than one episode is bundled, the Vita build will show the launcher so you can choose between them at startup.
+On PlayStation Vita, episode data is currently loaded from bundled `app0:/GAMEDATA/KEEN1`, `app0:/GAMEDATA/KEEN2`, and `app0:/GAMEDATA/KEEN3` paths inside the installed VPK. That means Episodes Two and Three need to be included during VPK packaging rather than copied onto the device after install. If more than one episode is bundled, the Vita build shows the launcher so you can choose between them at startup.
 
 ## Building
-You can clone or download the chocolatekeen repo and build it yourself
+You can clone or download the `chocolatekeen` repo and build it yourself.
 
 ## Documentation
 
@@ -63,18 +65,20 @@ To build for WebAssembly, you'll need the <a href="https://github.com/emscripten
 3. Run `./build_emscripten.sh`
 
 ### Windows (MinGW)
-This is a Makefile project. To build for Windows you'll need something like <a href="https://www.msys2.org/" target="_blank">MSYS2</a> and a gcc toolchain. Find setup instructions <a href="https://www.math.ucla.edu/~wotaoyin/windows_coding.html" target="_blank">here</a>
+This is a Makefile project. To build for Windows, the supported path is <a href="https://www.msys2.org/" target="_blank">MSYS2</a> with the MinGW toolchain and SDL2 package installed.
 
-1. Download and unzip SDL 2.0 development libraries: https://www.libsdl.org/download-2.0.php
-2. Launch a UNIX shell
-3. Navigate to `/build/mingw`
-4. Run build script that corresponds to your platform:
+1. Install MSYS2 and open the matching MinGW shell (`MINGW32` for x86, `MINGW64` for x64).
+2. Install the required packages:
+   `pacman -S --needed make mingw-w64-i686-gcc mingw-w64-i686-SDL2` for x86, or
+   `pacman -S --needed make mingw-w64-x86_64-gcc mingw-w64-x86_64-SDL2` for x64.
+3. Navigate to `/build/mingw`.
+4. Run the build script that corresponds to your platform:
 * Windows x86:
-  * `./build_mingw32.sh /path/to/SDL2`
-  * e.g. `./build_mingw32.sh /d/Development/SDL2-2.0.9/i686-w64-mingw32/`
-* Window x64:
-  * `./build_mingw-w64.sh /path/to/SDL2`
-  * e.g. `./build_mingw-w64.sh /d/Development/SDL2-2.0.9/x86_64-w64-mingw32/`
+  * `./build_mingw32.sh -j4`
+* Windows x64:
+  * `./build_mingw-w64.sh -j4`
+
+The scripts expect `sdl2-config` to be in `PATH` and copy `SDL2.dll` from the active MSYS2 MinGW environment.
 
 ### Windows (Visual Studio)
 Build and Debug with Microsoft Visual Studio / Visual C++
@@ -88,7 +92,7 @@ Build and Debug with Microsoft Visual Studio / Visual C++
 Game data is automatically copied to the Target Directory as part of build - so everything should "just run"
 
 ### PlayStation Vita (VitaSDK)
-The repository includes a VitaSDK target in `build/vita`. It builds a `.vpk` that packages the executable, default config, and bundled Episode One `GAMEDATA`.
+The repository includes a VitaSDK target in `build/vita`. It builds a `.vpk` that packages the executable and bundled Episode One `GAMEDATA`.
 
 Prerequisites:
 1. Install VitaSDK and SDL2 for Vita.
@@ -111,12 +115,12 @@ Install/runtime layout:
 Notes:
 * The Vita build defaults to software rendering (`USE_OPENGL=0`).
 * The Vita target uses a platform-specific input policy in [src/platform/input_vita.c](/Users/jamesmackenzie/Documents/Code/GitHub/chocolatekeen/src/platform/input_vita.c) and still has open follow-up work tracked in [docs/tech-debt.md](/Users/jamesmackenzie/Documents/Code/GitHub/chocolatekeen/docs/tech-debt.md).
-* The build currently places a default `chocolate-keen.cfg` in the VPK, but the runtime config path on Vita is `ux0:data/chocolatekeen/chocolate-keen.cfg`.
+* The build currently places a default `chocolate-keen.cfg` in the VPK for packaging completeness, but the writable runtime config path on Vita is `ux0:data/chocolatekeen/chocolate-keen.cfg`.
 
 ## Authors
 The original authors of Chocolate Keen are NY00123, QuantumG and Lemm. The project started with a reverse engineering of the original Keen code, and the goal is complete authenticity to the original - bugs and all. For more info see https://pckf.com/viewtopic.php?f=4&t=2536
 
-Since bringing this to GitHub, I've ported to WebAssembly and I intend to support other platforms too 
+Since bringing this to GitHub, I've ported to WebAssembly and I intend to support other platforms too.
 
 ## Developer Notes
 

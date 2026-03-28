@@ -172,7 +172,7 @@ void CVort_engine_decompGraphics()
 	"Internal" part: As in Vanilla Keen,
 	we set the video mode to be graphical.
 	**************************************/
-	CVort_engine_setVideoMode(CVORT_VIDEO_MODE_EGA_GRAPHICS);
+	CVort_engine_setVideoMode(CVORT_VIDEO_MODE_GRAPHICS);
 	/**************************
 	OK back to part 2 itself...
 	**************************/
@@ -1131,7 +1131,7 @@ void CVort_engine_prepareWindowRects(bool doBoxing) {
 	engine_screen.dims.viewportRect.h = engine_screen.dims.viewportRect.h*engine_screen.dims.clientOffsettedZoomedRect.h/engine_screen.dims.clientZoomedBorderedHeight;
 	// Finally correct the offsets,
 	// again taking VGA 200-line mode double scanning into consideration
-	if (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_EGA_GRAPHICS) { // Graphical
+	if (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_GRAPHICS) { // Graphical
 		engine_screen.dims.viewportRect.x += engine_arguments.calc.overscanGfxLeft * engine_screen.dims.viewportRect.w / engine_screen.dims.clientRect.w;
 		engine_screen.dims.viewportRect.y += engine_arguments.calc.overscanGfxTop * engine_screen.dims.zoomFactor * engine_screen.dims.viewportRect.h / (engine_screen.dims.clientOffsettedZoomedRect.h * engine_arguments.calc.gfxHeightScalingFactor);
 	} else if (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_TEXT) { // Textual
@@ -2062,12 +2062,12 @@ bool privCreateHostWindow(void) {
 }
 
 void privSetVideoModeLow(int16_t vidMode) {
-	assert((vidMode == CVORT_VIDEO_MODE_LAUNCHER) || (vidMode == CVORT_VIDEO_MODE_TEXT) || (vidMode == CVORT_VIDEO_MODE_EGA_GRAPHICS));
+	assert((vidMode == CVORT_VIDEO_MODE_LAUNCHER) || (vidMode == CVORT_VIDEO_MODE_TEXT) || (vidMode == CVORT_VIDEO_MODE_GRAPHICS));
 	//Don't yet reset border color - we also reset the palette
 	//CVort_engine_setBorderColor(0);
 
 	// Set some client-side things
-	if (vidMode == CVORT_VIDEO_MODE_EGA_GRAPHICS) { // Graphical
+	if (vidMode == CVORT_VIDEO_MODE_GRAPHICS) { // Graphical
 		engine_screen.client.totalScanHeight = engine_arguments.calc.gfxTotalScanHeight;
 		engine_screen.client.vertRetraceLen = engine_arguments.calc.gfxVertRetraceLen;
 
@@ -2105,7 +2105,7 @@ void privSetVideoModeLow(int16_t vidMode) {
 void privUpdateClientWindowDims(void) {
 	engine_screen.dims.clientRect.x = 0;
 	engine_screen.dims.clientRect.y = 0;
-	if (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_EGA_GRAPHICS) { // Graphical
+	if (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_GRAPHICS) { // Graphical
 		engine_screen.dims.clientRect.w = ENGINE_EGA_GFX_WIDTH;
 		engine_screen.dims.clientRect.h = ENGINE_EGA_GFX_HEIGHT;
 		engine_screen.dims.clientBorderedWidth = ENGINE_EGA_GFX_WIDTH+engine_arguments.calc.overscanGfxLeft+engine_arguments.calc.overscanGfxRight;
@@ -2124,14 +2124,14 @@ void privUpdateClientWindowDims(void) {
 		engine_screen.dims.clientBorderedHeight = ENGINE_GUI_HEIGHT;
 	}
 	// Further set this
-	engine_screen.dims.clientScanLineLength = (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_EGA_GRAPHICS) ? ENGINE_EGA_GFX_SCANLINE_LEN : engine_screen.dims.clientRect.w;
+	engine_screen.dims.clientScanLineLength = (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_GRAPHICS) ? ENGINE_EGA_GFX_SCANLINE_LEN : engine_screen.dims.clientRect.w;
 	// For now, if no zoom level is manually specified, assume 2
 	// for graphical/GUI mode or non-boxed scaling and 1 otherwise.
 	engine_screen.dims.zoomFactor = engine_gfx_effective_arguments.zoomLevel ? engine_gfx_effective_arguments.zoomLevel
 	                                : (((engine_screen.client.currVidMode != CVORT_VIDEO_MODE_TEXT) || (engine_gfx_effective_arguments.scaleType != GFX_SCALE_BOXED)) ? 2 : 1);
-	engine_screen.dims.clientOffsettedZoomedRect.x = engine_screen.dims.zoomFactor*((engine_screen.client.currVidMode == CVORT_VIDEO_MODE_EGA_GRAPHICS) ? engine_arguments.calc.overscanGfxLeft : (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_TEXT) ? engine_arguments.calc.overscanTxtLeft : 0);
+	engine_screen.dims.clientOffsettedZoomedRect.x = engine_screen.dims.zoomFactor*((engine_screen.client.currVidMode == CVORT_VIDEO_MODE_GRAPHICS) ? engine_arguments.calc.overscanGfxLeft : (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_TEXT) ? engine_arguments.calc.overscanTxtLeft : 0);
 	// Take VGA 200-line mode double scanning into consideration
-	if (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_EGA_GRAPHICS) { // Graphical
+	if (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_GRAPHICS) { // Graphical
 		engine_screen.dims.clientOffsettedZoomedRect.y = engine_screen.dims.zoomFactor*engine_arguments.calc.overscanGfxTop/engine_arguments.calc.gfxHeightScalingFactor;
 	} else if (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_TEXT) { // Textual
 		engine_screen.dims.clientOffsettedZoomedRect.y = engine_screen.dims.zoomFactor*engine_arguments.calc.overscanTxtTop;
@@ -2143,7 +2143,7 @@ void privUpdateClientWindowDims(void) {
 	engine_screen.dims.clientZoomedBorderedWidth = engine_screen.dims.zoomFactor*engine_screen.dims.clientBorderedWidth;
 	// Take VGA 200-line mode double scanning into consideration,
 	// shrinking a bit each horizontal overscan border strip SEPARATELY if needed
-	if (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_EGA_GRAPHICS) { // Graphical
+	if (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_GRAPHICS) { // Graphical
 		engine_screen.dims.clientZoomedBorderedHeight = engine_screen.dims.zoomFactor*ENGINE_EGA_GFX_HEIGHT+engine_screen.dims.zoomFactor*engine_arguments.calc.overscanGfxTop/engine_arguments.calc.gfxHeightScalingFactor+engine_screen.dims.zoomFactor*engine_arguments.calc.overscanGfxBottom/engine_arguments.calc.gfxHeightScalingFactor;
 	} else { // Textual or GUI/Launcher
 		engine_screen.dims.clientZoomedBorderedHeight = engine_screen.dims.zoomFactor*engine_screen.dims.clientBorderedHeight;

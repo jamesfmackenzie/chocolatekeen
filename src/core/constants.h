@@ -29,7 +29,9 @@
 // Video modes used by the engine for launcher, text, and graphics output.
 #define CVORT_VIDEO_MODE_LAUNCHER     (-1)
 #define CVORT_VIDEO_MODE_TEXT         3
-#define CVORT_VIDEO_MODE_EGA_GRAPHICS 0xD
+// BIOS mode 0x0D is the graphics-mode identifier used here; VGA vs EGA
+// behavior is configured separately via the emulated adapter settings.
+#define CVORT_VIDEO_MODE_GRAPHICS     0xD
 
 // A scanline width of 320x2*32=384. This is the length of a scanline used in
 // vanilla Keen (where only 320 pixels are actually seen).

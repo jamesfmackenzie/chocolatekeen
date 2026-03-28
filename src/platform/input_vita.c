@@ -13,6 +13,7 @@
 #define VITA_RO_DATA_PREFIX "app0:/"
 #define VITA_RW_MISC_DIR "ux0:data/chocolatekeen"
 #define VITA_RW_MISC_PREFIX "ux0:data/chocolatekeen/"
+#define VITA_RW_GAMEDATA_PREFIX "ux0:data/chocolatekeen/"
 
 static int g_rwMiscDirPrepared = 0;
 static bool g_wasEnterPressed = false;
@@ -259,6 +260,11 @@ void CK_PlatformEnsureRwMiscDir(void) {
 
 bool CK_PlatformBuildRoDataPath(const char *relativePath, char *outPath, size_t outPathSize) {
     int written = snprintf(outPath, outPathSize, "%s%s", VITA_RO_DATA_PREFIX, relativePath);
+    return (written > 0) && ((size_t)written < outPathSize);
+}
+
+bool CK_PlatformBuildExternalGameDataPath(const char *relativePath, char *outPath, size_t outPathSize) {
+    int written = snprintf(outPath, outPathSize, "%s%s", VITA_RW_GAMEDATA_PREFIX, relativePath);
     return (written > 0) && ((size_t)written < outPathSize);
 }
 

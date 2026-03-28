@@ -37,6 +37,13 @@ bool CK_PlatformBuildRoDataPath(const char *relativePath, char *outPath, size_t 
     return (written > 0) && ((size_t)written < outPathSize);
 }
 
+bool CK_PlatformBuildExternalGameDataPath(const char *relativePath, char *outPath, size_t outPathSize) {
+    (void)relativePath;
+    (void)outPath;
+    (void)outPathSize;
+    return false;
+}
+
 bool CK_PlatformBuildRwMiscPath(const char *filename, char *outPath, size_t outPathSize) {
     int written = snprintf(outPath, outPathSize, "%s", filename);
     return (written > 0) && ((size_t)written < outPathSize);

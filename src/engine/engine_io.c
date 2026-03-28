@@ -50,6 +50,8 @@ void CVort_engine_prepareGameDataFilePathBuffers(gameversion_T gameVer) {
 
 FILE *CVort_engine_cross_ro_data_fopen(const char *filename) {
     char platformPath[1024];
+    char externalPlatformPath[1024];
+    FILE *fp;
 
     if (!engine_gameDataFullPathBuffer) {
         return NULL;
@@ -59,6 +61,12 @@ FILE *CVort_engine_cross_ro_data_fopen(const char *filename) {
     strncpy(ptr, filename, 13);
     for (size_t loopVar = 0; loopVar < strlen(ptr); loopVar++) {
         ptr[loopVar] = toupper(ptr[loopVar]);
+    }
+    if (CK_PlatformBuildExternalGameDataPath(engine_gameDataFullPathBuffer, externalPlatformPath, sizeof(externalPlatformPath))) {
+        fp = fopen(externalPlatformPath, "rb");
+        if (fp) {
+            return fp;
+        }
     }
     if (!CK_PlatformBuildRoDataPath(engine_gameDataFullPathBuffer, platformPath, sizeof(platformPath))) {
         return NULL;

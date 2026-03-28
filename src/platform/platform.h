@@ -37,6 +37,7 @@ uint16_t CK_PlatformPreferredPlayer1ControlType(uint16_t currentControlType, int
 void CK_PlatformApplyDefaultJoystickCalibration(int16_t joystickCtrl[4][3]);
 void CK_PlatformEnsureRwMiscDir(void);
 bool CK_PlatformBuildRoDataPath(const char *relativePath, char *outPath, size_t outPathSize);
+bool CK_PlatformBuildExternalGameDataPath(const char *relativePath, char *outPath, size_t outPathSize);
 bool CK_PlatformBuildRwMiscPath(const char *filename, char *outPath, size_t outPathSize);
 bool CK_PlatformShouldAutoShowLauncher(int availableEpisodes);
 

@@ -37,6 +37,11 @@ struct {
 	bool offScreenRendering;
 } engine_gfx_effective_arguments;
 
+#ifdef __VITA__
+#define VITA_SCREEN_WIDTH 960
+#define VITA_SCREEN_HEIGHT 544
+#endif
+
 // Rendering/decompression paths here are legacy-heavy and intentionally kept close
 // to original behavior; prefer small behavior-preserving refactors.
 void CVort_engine_decompGraphics()
@@ -2296,6 +2301,18 @@ bool CVort_engine_resetWindow(void) {
 #endif
 		engine_gfx_effective_arguments.bilinearInterpolation = true; // Just to be somewhat consistent...
 		engine_gfx_effective_arguments.offScreenRendering = false;
+#ifdef __VITA__
+		/* Vita launcher presentation should target the native handheld surface
+		 * explicitly instead of relying on desktop-fullscreen behavior. */
+		engine_gfx_effective_arguments.fullWidth = VITA_SCREEN_WIDTH;
+		engine_gfx_effective_arguments.fullHeight = VITA_SCREEN_HEIGHT;
+		engine_gfx_effective_arguments.windowWidth = VITA_SCREEN_WIDTH;
+		engine_gfx_effective_arguments.windowHeight = VITA_SCREEN_HEIGHT;
+		engine_gfx_effective_arguments.isFullscreen = true;
+		engine_gfx_effective_arguments.scaleType = GFX_SCALE_ASPECT;
+		engine_gfx_effective_arguments.zoomLevel = 0;
+		engine_gfx_effective_arguments.bilinearInterpolation = false;
+#endif
 	} else {
 		engine_gfx_effective_arguments.fullWidth = engine_arguments.fullWidth;
 		engine_gfx_effective_arguments.fullHeight = engine_arguments.fullHeight;

@@ -148,8 +148,9 @@ typedef struct KeenVer_Info_T {
 } KeenVer_Info_T;
 
 static KeenVer_Info_T keen_version_info[GAMEVER_TOTALAMOUNT];
+static bool keen_version_info_initialized = false;
 
-void CVort_engine_initializeKeenVerStructs(void) {
+void CVort_engine_initializeKeenVersionInfo(void) {
     keen_version_info[GAMEVER_KEEN1].exeSize.compressed = KEEN1_EXE_COMPRESSED_SIZE;
     keen_version_info[GAMEVER_KEEN1].exeSize.decompressed = KEEN1_EXE_DECOMPRESSED_SIZE;
     keen_version_info[GAMEVER_KEEN1].exeFilename = KEEN1_EXE_FILENAME;
@@ -159,10 +160,18 @@ void CVort_engine_initializeKeenVerStructs(void) {
     keen_version_info[GAMEVER_KEEN3].exeSize.compressed = KEEN3_EXE_COMPRESSED_SIZE;
     keen_version_info[GAMEVER_KEEN3].exeSize.decompressed = KEEN3_EXE_DECOMPRESSED_SIZE;
     keen_version_info[GAMEVER_KEEN3].exeFilename = KEEN3_EXE_FILENAME;
+    keen_version_info_initialized = true;
+}
+
+static void ensure_keen_version_info_initialized(void) {
+    if (!keen_version_info_initialized) {
+        CVort_engine_initializeKeenVersionInfo();
+    }
 }
 
 static bool load_exe_image(gameversion_T gameVer, uint8_t **pExeImageBuffer) {
     uint8_t *wholeExeData;
+    ensure_keen_version_info_initialized();
     CVort_engine_prepareGameDataFilePathBuffers(gameVer);
     FILE *fp = CVort_engine_cross_ro_data_fopen(keen_version_info[gameVer].exeFilename);
     if (!fp)
@@ -211,6 +220,7 @@ static bool load_exe_image(gameversion_T gameVer, uint8_t **pExeImageBuffer) {
 }
 
 bool CVort_engine_isGameExeAvailable(gameversion_T gameVer) {
+    ensure_keen_version_info_initialized();
     CVort_engine_prepareGameDataFilePathBuffers(gameVer);
     FILE *fp = CVort_engine_cross_ro_data_fopen(keen_version_info[gameVer].exeFilename);
     if (!fp) {

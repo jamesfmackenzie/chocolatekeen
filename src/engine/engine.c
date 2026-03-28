@@ -420,7 +420,7 @@ bool CVort_engine_processArguments(int argc, char **argv) {
     return false;
 }
 
-void CVort_engine_initializeKeenVerStructs(void);
+void CVort_engine_initializeKeenVersionInfo(void);
 
 bool CVort_engine_start(void) {
 #if SDL_VERSION_ATLEAST(2,0,0)
@@ -453,7 +453,7 @@ bool CVort_engine_start(void) {
         return false;
     }
 
-    CVort_engine_initializeKeenVerStructs();
+    CVort_engine_initializeKeenVersionInfo();
 
     if (engine_skipLauncher) {
         CVort_engine_loadKeen(engine_gameVersion);

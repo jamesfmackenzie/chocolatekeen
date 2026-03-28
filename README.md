@@ -45,6 +45,7 @@ You can clone or download the `chocolatekeen` repo and build it yourself.
 ## Documentation
 
 - [Architecture Overview](docs/architecture.md)
+- [Graphics Modes and Timing](docs/graphics-modes.md)
 - [Technical Debt Backlog](docs/tech-debt.md)
 - [PlayStation Vita Controls](docs/vita-controls.md)
 - [Docs Layout Note](docs/README.md)

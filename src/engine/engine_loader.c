@@ -302,7 +302,7 @@ void CVort_engine_loadKeen(gameversion_T gameVer) {
         } while (1);
         // We should NEVER reach this stage...
     }
-    if (!CVort_engine_setVideoMode(3)) {
+    if (!CVort_engine_setVideoMode(CVORT_VIDEO_MODE_TEXT)) {
         // Don't call CVort_engine_shutdown:
         // We don't want to save (video) settings (makes sense here).
         CVort_engine_shutdownSDL();

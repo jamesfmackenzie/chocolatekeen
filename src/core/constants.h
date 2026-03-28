@@ -26,6 +26,11 @@
 #define ENGINE_GUI_WIDTH 320
 #define ENGINE_GUI_HEIGHT 240
 
+// Video modes used by the engine for launcher, text, and graphics output.
+#define CVORT_VIDEO_MODE_LAUNCHER     (-1)
+#define CVORT_VIDEO_MODE_TEXT         3
+#define CVORT_VIDEO_MODE_EGA_GRAPHICS 0xD
+
 // A scanline width of 320x2*32=384. This is the length of a scanline used in
 // vanilla Keen (where only 320 pixels are actually seen).
 // Note that the vanilla code itself sets this by sending the number 24

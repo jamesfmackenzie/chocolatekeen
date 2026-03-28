@@ -624,7 +624,7 @@ int16_t CVort_calc_jump_height(uint16_t max_height) {
 }
 
 void CVort_chg_vid_and_error(const char *msg) {
-    CVort_engine_setVideoMode(3);
+    CVort_engine_setVideoMode(CVORT_VIDEO_MODE_TEXT);
     if (!(*msg)) {
         CVort_save_ctrls();
         // NOTE: The 7 offset is the vanilla way.

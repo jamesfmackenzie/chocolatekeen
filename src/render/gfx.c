@@ -172,7 +172,7 @@ void CVort_engine_decompGraphics()
 	"Internal" part: As in Vanilla Keen,
 	we set the video mode to be graphical.
 	**************************************/
-	CVort_engine_setVideoMode(0xD);
+	CVort_engine_setVideoMode(CVORT_VIDEO_MODE_EGA_GRAPHICS);
 	/**************************
 	OK back to part 2 itself...
 	**************************/
@@ -744,7 +744,7 @@ void CVort_engine_gui_drawColoredColumn(int columnNum, int columnLength, int col
 
 void CVort_engine_updateActualDisplay(void) {
 	// Text mode handling
-	if (engine_screen.client.currVidMode == 3) {
+	if (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_TEXT) {
 		static bool haveBlinkingCharsShownLast = true, hasCursorShownLast = true;
 		bool areBlinkingCharsShown = (((Uint64)(engine_arguments.calc.scaledRefreshRate*SDL_GetTicks()/ENGINE_EGAVGA_REFRESHRATE_SCALE_FACTOR)/(1000*engine_arguments.calc.txtBlinkRate)) % 2),
 		     isCursorShown = (((Uint64)(engine_arguments.calc.scaledRefreshRate*SDL_GetTicks()/ENGINE_EGAVGA_REFRESHRATE_SCALE_FACTOR)/(1000*engine_arguments.calc.txtCursorBlinkRate)) % 2);
@@ -1131,10 +1131,10 @@ void CVort_engine_prepareWindowRects(bool doBoxing) {
 	engine_screen.dims.viewportRect.h = engine_screen.dims.viewportRect.h*engine_screen.dims.clientOffsettedZoomedRect.h/engine_screen.dims.clientZoomedBorderedHeight;
 	// Finally correct the offsets,
 	// again taking VGA 200-line mode double scanning into consideration
-	if (engine_screen.client.currVidMode == 0xD) { // Graphical
+	if (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_EGA_GRAPHICS) { // Graphical
 		engine_screen.dims.viewportRect.x += engine_arguments.calc.overscanGfxLeft * engine_screen.dims.viewportRect.w / engine_screen.dims.clientRect.w;
 		engine_screen.dims.viewportRect.y += engine_arguments.calc.overscanGfxTop * engine_screen.dims.zoomFactor * engine_screen.dims.viewportRect.h / (engine_screen.dims.clientOffsettedZoomedRect.h * engine_arguments.calc.gfxHeightScalingFactor);
-	} else if (engine_screen.client.currVidMode == 3) { // Textual
+	} else if (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_TEXT) { // Textual
 		engine_screen.dims.viewportRect.x += engine_arguments.calc.overscanTxtLeft * engine_screen.dims.viewportRect.w / engine_screen.dims.clientRect.w;
 		engine_screen.dims.viewportRect.y += engine_arguments.calc.overscanTxtTop * engine_screen.dims.viewportRect.h / engine_screen.dims.clientRect.h;
 	} // For GUI/Launcher there's no overscan border so we do nothing
@@ -1534,10 +1534,10 @@ bool privCreateHostWindow(void) {
 
 	// Still under the assumption _CHOCOLATE_KEEN_ENABLE_OPENGL_ is defined;
 	// Make window resizable ONLY if it should have the launcher UI
-	engine_screen.sdl.window = SDL_CreateWindow("", SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), screenWidth, screenHeight, (engine_gfx_effective_arguments.isFullscreen ? (engine_screen.host.useFullDesktopDims ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_FULLSCREEN) : 0) | ((engine_gfx_effective_arguments.outputSystem == OUTPUTSYS_OPENGL) ? SDL_WINDOW_OPENGL : 0) | ((engine_screen.client.currVidMode == -1) ? SDL_WINDOW_RESIZABLE : 0));
+	engine_screen.sdl.window = SDL_CreateWindow("", SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), screenWidth, screenHeight, (engine_gfx_effective_arguments.isFullscreen ? (engine_screen.host.useFullDesktopDims ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_FULLSCREEN) : 0) | ((engine_gfx_effective_arguments.outputSystem == OUTPUTSYS_OPENGL) ? SDL_WINDOW_OPENGL : 0) | ((engine_screen.client.currVidMode == CVORT_VIDEO_MODE_LAUNCHER) ? SDL_WINDOW_RESIZABLE : 0));
 #else // Not OpenGL
 	// Make window resizable ONLY if it should have the launcher UI
-	engine_screen.sdl.window = SDL_CreateWindow("", SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), screenWidth, screenHeight, (engine_gfx_effective_arguments.isFullscreen ? (engine_screen.host.useFullDesktopDims ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_FULLSCREEN) : 0) | ((engine_screen.client.currVidMode == -1) ? SDL_WINDOW_RESIZABLE : 0));
+	engine_screen.sdl.window = SDL_CreateWindow("", SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), SDL_WINDOWPOS_UNDEFINED_DISPLAY(engine_arguments.displayNumber), screenWidth, screenHeight, (engine_gfx_effective_arguments.isFullscreen ? (engine_screen.host.useFullDesktopDims ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_FULLSCREEN) : 0) | ((engine_screen.client.currVidMode == CVORT_VIDEO_MODE_LAUNCHER) ? SDL_WINDOW_RESIZABLE : 0));
 #endif // GL
 	if (!engine_screen.sdl.window) {
 #ifdef _CHOCOLATE_KEEN_ENABLE_OPENGL_
@@ -2062,17 +2062,17 @@ bool privCreateHostWindow(void) {
 }
 
 void privSetVideoModeLow(int16_t vidMode) {
-	assert((vidMode == -1) || (vidMode == 3) || (vidMode == 0xD));
+	assert((vidMode == CVORT_VIDEO_MODE_LAUNCHER) || (vidMode == CVORT_VIDEO_MODE_TEXT) || (vidMode == CVORT_VIDEO_MODE_EGA_GRAPHICS));
 	//Don't yet reset border color - we also reset the palette
 	//CVort_engine_setBorderColor(0);
 
 	// Set some client-side things
-	if (vidMode == 0xD) { // Graphical
+	if (vidMode == CVORT_VIDEO_MODE_EGA_GRAPHICS) { // Graphical
 		engine_screen.client.totalScanHeight = engine_arguments.calc.gfxTotalScanHeight;
 		engine_screen.client.vertRetraceLen = engine_arguments.calc.gfxVertRetraceLen;
 
 		memset(engine_screen.client.byteEgaMemory, 0, sizeof(engine_screen.client.byteEgaMemory));
-	} else if (vidMode == 3) { // Textual
+	} else if (vidMode == CVORT_VIDEO_MODE_TEXT) { // Textual
 		engine_screen.client.totalScanHeight = engine_arguments.calc.txtTotalScanHeight;
 		engine_screen.client.vertRetraceLen = engine_arguments.calc.txtVertRetraceLen;
 		// Set color attribute to gray and reset cursor position
@@ -2105,14 +2105,14 @@ void privSetVideoModeLow(int16_t vidMode) {
 void privUpdateClientWindowDims(void) {
 	engine_screen.dims.clientRect.x = 0;
 	engine_screen.dims.clientRect.y = 0;
-	if (engine_screen.client.currVidMode == 0xD) { // Graphical
+	if (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_EGA_GRAPHICS) { // Graphical
 		engine_screen.dims.clientRect.w = ENGINE_EGA_GFX_WIDTH;
 		engine_screen.dims.clientRect.h = ENGINE_EGA_GFX_HEIGHT;
 		engine_screen.dims.clientBorderedWidth = ENGINE_EGA_GFX_WIDTH+engine_arguments.calc.overscanGfxLeft+engine_arguments.calc.overscanGfxRight;
 		// Take VGA 200-line mode double scanning into consideration,
 		// shrinking a bit each horizontal overscan border strip SEPARATELY if needed
 		engine_screen.dims.clientBorderedHeight = ENGINE_EGA_GFX_HEIGHT+engine_arguments.calc.overscanGfxTop/engine_arguments.calc.gfxHeightScalingFactor+engine_arguments.calc.overscanGfxBottom/engine_arguments.calc.gfxHeightScalingFactor;
-	} else if (engine_screen.client.currVidMode == 3) { // Textual
+	} else if (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_TEXT) { // Textual
 		engine_screen.dims.clientRect.w = engine_arguments.calc.txtPixelWidth;
 		engine_screen.dims.clientRect.h = engine_arguments.calc.txtPixelHeight;
 		engine_screen.dims.clientBorderedWidth = engine_arguments.calc.txtPixelWidth+engine_arguments.calc.overscanTxtLeft+engine_arguments.calc.overscanTxtRight;
@@ -2124,16 +2124,16 @@ void privUpdateClientWindowDims(void) {
 		engine_screen.dims.clientBorderedHeight = ENGINE_GUI_HEIGHT;
 	}
 	// Further set this
-	engine_screen.dims.clientScanLineLength = (engine_screen.client.currVidMode == 0xD) ? ENGINE_EGA_GFX_SCANLINE_LEN : engine_screen.dims.clientRect.w;
+	engine_screen.dims.clientScanLineLength = (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_EGA_GRAPHICS) ? ENGINE_EGA_GFX_SCANLINE_LEN : engine_screen.dims.clientRect.w;
 	// For now, if no zoom level is manually specified, assume 2
 	// for graphical/GUI mode or non-boxed scaling and 1 otherwise.
 	engine_screen.dims.zoomFactor = engine_gfx_effective_arguments.zoomLevel ? engine_gfx_effective_arguments.zoomLevel
-	                                : (((engine_screen.client.currVidMode != 3) || (engine_gfx_effective_arguments.scaleType != GFX_SCALE_BOXED)) ? 2 : 1);
-	engine_screen.dims.clientOffsettedZoomedRect.x = engine_screen.dims.zoomFactor*((engine_screen.client.currVidMode == 0xD) ? engine_arguments.calc.overscanGfxLeft : (engine_screen.client.currVidMode == 3) ? engine_arguments.calc.overscanTxtLeft : 0);
+	                                : (((engine_screen.client.currVidMode != CVORT_VIDEO_MODE_TEXT) || (engine_gfx_effective_arguments.scaleType != GFX_SCALE_BOXED)) ? 2 : 1);
+	engine_screen.dims.clientOffsettedZoomedRect.x = engine_screen.dims.zoomFactor*((engine_screen.client.currVidMode == CVORT_VIDEO_MODE_EGA_GRAPHICS) ? engine_arguments.calc.overscanGfxLeft : (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_TEXT) ? engine_arguments.calc.overscanTxtLeft : 0);
 	// Take VGA 200-line mode double scanning into consideration
-	if (engine_screen.client.currVidMode == 0xD) { // Graphical
+	if (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_EGA_GRAPHICS) { // Graphical
 		engine_screen.dims.clientOffsettedZoomedRect.y = engine_screen.dims.zoomFactor*engine_arguments.calc.overscanGfxTop/engine_arguments.calc.gfxHeightScalingFactor;
-	} else if (engine_screen.client.currVidMode == 3) { // Textual
+	} else if (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_TEXT) { // Textual
 		engine_screen.dims.clientOffsettedZoomedRect.y = engine_screen.dims.zoomFactor*engine_arguments.calc.overscanTxtTop;
 	} else { // GUI/Launcher
 		engine_screen.dims.clientOffsettedZoomedRect.y = 0;
@@ -2143,7 +2143,7 @@ void privUpdateClientWindowDims(void) {
 	engine_screen.dims.clientZoomedBorderedWidth = engine_screen.dims.zoomFactor*engine_screen.dims.clientBorderedWidth;
 	// Take VGA 200-line mode double scanning into consideration,
 	// shrinking a bit each horizontal overscan border strip SEPARATELY if needed
-	if (engine_screen.client.currVidMode == 0xD) { // Graphical
+	if (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_EGA_GRAPHICS) { // Graphical
 		engine_screen.dims.clientZoomedBorderedHeight = engine_screen.dims.zoomFactor*ENGINE_EGA_GFX_HEIGHT+engine_screen.dims.zoomFactor*engine_arguments.calc.overscanGfxTop/engine_arguments.calc.gfxHeightScalingFactor+engine_screen.dims.zoomFactor*engine_arguments.calc.overscanGfxBottom/engine_arguments.calc.gfxHeightScalingFactor;
 	} else { // Textual or GUI/Launcher
 		engine_screen.dims.clientZoomedBorderedHeight = engine_screen.dims.zoomFactor*engine_screen.dims.clientBorderedHeight;
@@ -2281,7 +2281,7 @@ bool CVort_engine_resetWindow(void) {
 	privDestroyWindowResources();
 	privDestroyHostWindow();
 
-	if (engine_screen.client.currVidMode == -1) {
+	if (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_LAUNCHER) {
 		// Use safer defaults
 		engine_gfx_effective_arguments.fullWidth = engine_gfx_effective_arguments.fullHeight = 0;
 		engine_gfx_effective_arguments.windowWidth = engine_gfx_effective_arguments.windowHeight = 0;
@@ -2338,13 +2338,13 @@ bool CVort_engine_resetWindow(void) {
 	privResetBorderColor();
 	privResetPalette();
 	privResetEgaMemStartLocAndPanning();
-	CVort_engine_toggleCursorLock((engine_screen.client.currVidMode != -1) && engine_gfx_effective_arguments.isFullscreen && engine_arguments.cursorAutoLock);
+	CVort_engine_toggleCursorLock((engine_screen.client.currVidMode != CVORT_VIDEO_MODE_LAUNCHER) && engine_gfx_effective_arguments.isFullscreen && engine_arguments.cursorAutoLock);
 	return true;
 }
 
 bool CVort_engine_setVideoMode(int16_t vidMode) {
 	static bool isFirstTime = true;
-	bool launcherTransitionNeedsWindowReset = ((vidMode != engine_screen.client.currVidMode) && ((vidMode == -1) || (engine_screen.client.currVidMode == -1)));
+	bool launcherTransitionNeedsWindowReset = ((vidMode != engine_screen.client.currVidMode) && ((vidMode == CVORT_VIDEO_MODE_LAUNCHER) || (engine_screen.client.currVidMode == CVORT_VIDEO_MODE_LAUNCHER)));
 #ifdef __VITA__
 	/* Vita3K is sensitive to tearing down and recreating the host window
 	 * during launcher-to-game transitions, so keep the existing window. */
@@ -2375,7 +2375,7 @@ bool CVort_engine_setVideoMode(int16_t vidMode) {
 	// (Snap fullscreen window to the left on Ubuntu 12.04/14.04 with Unity
 	// during gameplay, then unlock the cursor and finally quit to text
 	// mode, only to get a (maximized) fullscreen windows again)
-	//CVort_engine_toggleCursorLock((engine_screen.client.currVidMode != -1) && engine_gfx_effective_arguments.isFullscreen && engine_arguments.cursorAutoLock);
+	//CVort_engine_toggleCursorLock((engine_screen.client.currVidMode != CVORT_VIDEO_MODE_LAUNCHER) && engine_gfx_effective_arguments.isFullscreen && engine_arguments.cursorAutoLock);
 	return true;
 }
 

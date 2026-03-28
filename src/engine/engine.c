@@ -268,7 +268,7 @@ bool CVort_engine_prepareInstructionsScreen() {
     engine_arguments.scaleType = GFX_SCALE_BOXED;
     engine_arguments.doForceCutFullScreen = false;
 
-    if (!CVort_engine_setVideoMode(3)) {
+    if (!CVort_engine_setVideoMode(CVORT_VIDEO_MODE_TEXT)) {
         CVort_engine_shutdownSDL();
         return false;
     }
@@ -459,7 +459,7 @@ bool CVort_engine_start(void) {
         CVort_engine_loadKeen(engine_gameVersion);
     }
 
-    if (!CVort_engine_setVideoMode(-1)) {
+    if (!CVort_engine_setVideoMode(CVORT_VIDEO_MODE_LAUNCHER)) {
         return false;
     }
 

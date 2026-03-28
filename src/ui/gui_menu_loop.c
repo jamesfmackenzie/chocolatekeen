@@ -439,8 +439,6 @@ void CVort_gui_prepareMainMenuItems(void) {
 		*itemPtr = &guiMenuItemNoKeenGameEpisode;
 		itemPtr++;
 	}
-	*itemPtr = &guiMenuItemKeysPassToBiosToggle;
-	itemPtr++;
 	*itemPtr = &guiMenuItemSettings;
 	itemPtr++;
 	*itemPtr = &guiMenuItemQuit;

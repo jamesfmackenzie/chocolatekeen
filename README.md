@@ -37,7 +37,7 @@ For desktop builds, if you have Episode Two or Three, drop the level/data files 
     
 You can then start each episode via `chocolate-keen -startkeen1`, `chocolate-keen -startkeen2`, and `chocolate-keen -startkeen3` respectively. On Windows, the executable is `chocolate-keen.exe`.
 
-On PlayStation Vita, bundled episode data is loaded from `app0:/GAMEDATA/KEEN1`, `app0:/GAMEDATA/KEEN2`, and `app0:/GAMEDATA/KEEN3`, but the game now checks `ux0:data/chocolatekeen/GAMEDATA/KEEN1`, `ux0:data/chocolatekeen/GAMEDATA/KEEN2`, and `ux0:data/chocolatekeen/GAMEDATA/KEEN3` first. That means you can install the VPK once and then add or override episode data later via VitaShell by copying files into `ux0:data/chocolatekeen/GAMEDATA/...`. If more than one episode is available, the Vita build shows the launcher so you can choose between them at startup.
+On PlayStation Vita, you can copy Episode 2 and Episode 3 data into `ux0:data/chocolatekeen/GAMEDATA/KEEN2` and `ux0:data/chocolatekeen/GAMEDATA/KEEN3`. If more than one episode is available, the Vita build automatically shows the launcher so you can pick which episode to start.
 
 ## Building
 You can clone or download the `chocolatekeen` repo and build it yourself.
@@ -108,10 +108,10 @@ Build steps:
 
 Install/runtime layout:
 * Read-only bundled game data is loaded from `app0:/GAMEDATA/...`
-* On Vita, external episode data placed under `ux0:data/chocolatekeen/GAMEDATA/...` overrides bundled `app0:/GAMEDATA/...` files when present
+* On Vita, you can add Episode 2 and Episode 3 under `ux0:data/chocolatekeen/GAMEDATA/...`
 * Config, save data, mapper data, and other writable files are created under `ux0:data/chocolatekeen/`
 * The build copies `data/GAMEDATA/*` into the VPK, so Episode One is available immediately after install
-* Bundled episode data still ships in the VPK under `app0:/GAMEDATA/KEEN1`, `app0:/GAMEDATA/KEEN2`, and `app0:/GAMEDATA/KEEN3`
+* If more than one episode is available, the Vita build automatically shows the launcher at startup
 
 Notes:
 * The Vita build defaults to software rendering (`USE_OPENGL=0`).

@@ -2344,9 +2344,15 @@ bool CVort_engine_resetWindow(void) {
 
 bool CVort_engine_setVideoMode(int16_t vidMode) {
 	static bool isFirstTime = true;
+	bool launcherTransitionNeedsWindowReset = ((vidMode != engine_screen.client.currVidMode) && ((vidMode == -1) || (engine_screen.client.currVidMode == -1)));
+#ifdef __VITA__
+	/* Vita3K is sensitive to tearing down and recreating the host window
+	 * during launcher-to-game transitions, so keep the existing window. */
+	launcherTransitionNeedsWindowReset = false;
+#endif
 	// If it's either our very first time, or we change from/to
 	// the launcher UI, then (re)create the window
-	if (isFirstTime || ((vidMode != engine_screen.client.currVidMode) && ((vidMode == -1) || (engine_screen.client.currVidMode == -1)))) {
+	if (isFirstTime || launcherTransitionNeedsWindowReset) {
 		isFirstTime = false;
 		privSetVideoModeLow(vidMode);
 		return CVort_engine_resetWindow();

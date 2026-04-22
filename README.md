@@ -92,6 +92,16 @@ Build and Debug with Microsoft Visual Studio / Visual C++
 
 Game data is automatically copied to the Target Directory as part of build - so everything should "just run"
 
+### Gameboy Advance (DevKitPro)
+The repository includes a DevKitPro target in `build/gba`. It builds a `.gba` ROM that packages the executable and bundled Episode One `GAMEDATA`
+
+Prerequisites:
+1. Install DevKitPro for GBA
+
+Build steps:
+1. DEVKITPRO=/path/to/devkitpro DEVKITARM=/path/to/devkitpro/devkitarm make EPISODE=X (X = 1,2 or 3).
+2. Now you have a .gba ROM. You can flash this to a GBA cartridge or run in an emulator (VisualBoyAdvande-m or mGBA are tested).
+
 ### PlayStation Vita (VitaSDK)
 The repository includes a VitaSDK target in `build/vita`. It builds a `.vpk` that packages the executable and bundled Episode One `GAMEDATA`.
 

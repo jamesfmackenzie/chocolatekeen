@@ -305,10 +305,18 @@ void CVort_main_loop() {
 
         }
 
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+        /* exeImage points into read-only cart ROM — CVort_process_text_file's
+         * in-place rewrites would be silent no-ops while still running a
+         * potentially-large memmove per iteration. scripts/bake_gba_data.sh
+         * applies the same transform to the four embedded regions on the
+         * host, so the runtime can consume them as-is. */
+#else
         CVort_process_text_file(help_text);
         CVort_process_text_file(story_text);
         CVort_process_text_file(end_text);
         CVort_process_text_file(previews_txt);
+#endif
     }
 
     g_game.on_world_map = 0;

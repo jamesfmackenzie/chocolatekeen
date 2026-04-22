@@ -17,6 +17,13 @@
  *   ENDTEXT.<ext>      bytes later) overwrite as 0x20 + memmove the tail
  *   PREVIEWS.<ext>     one byte forward. Terminator is 0x1A.
  *
+ *   KEEN2.EXE /        Apply the same text-file transform in place to the
+ *   KEEN3.EXE          four embedded HELP/STORY/END/PREVIEWS regions. At
+ *                      runtime these pointers resolve into cart ROM, so the
+ *                      GBA build skips CVort_process_text_file entirely.
+ *                      Offsets are relative to the MZ-stripped exeImage
+ *                      origin (matching src/episodes/episode{2,3}.h).
+ *
  * Usage: gba_preprocess_misc_host <staged_dir> <ext>
  *
  * Missing files are silently skipped (per-episode bakes may stage only a
@@ -160,6 +167,54 @@ static int process_text(const char *path) {
     return rc;
 }
 
+/* Mirror of the four CVort{2,3}_{HELP,STORY,END,PREVIEWS}_TEXT_OFFSET
+ * constants in src/episodes/episode{2,3}.h. Offsets are relative to the
+ * MZ-stripped exeImage origin. */
+typedef struct {
+    const char *filename;
+    size_t offsets[4]; /* HELP, STORY, END, PREVIEWS */
+} ExeTextTable_T;
+
+static const ExeTextTable_T kExeTextTables[] = {
+    { "KEEN2.EXE", { 0x15BC0, 0x16AC0, 0x15840, 0x163A0 } },
+    { "KEEN3.EXE", { 0x179D0, 0x18BD0, 0x181A0, 0x184E0 } },
+};
+
+static int process_exe_embedded_texts(const char *path, const ExeTextTable_T *tbl) {
+    size_t sz = 0;
+    uint8_t *buf = read_file(path, &sz);
+    if (!buf) return 0; /* missing is fine — not every episode stages an EXE */
+    if (sz < 64 || buf[0] != 'M' || buf[1] != 'Z') {
+        fprintf(stderr, "%s: not an MZ executable, skipping\n", path);
+        free(buf);
+        return 0;
+    }
+    size_t hdr = 16u * ((size_t)buf[8] | ((size_t)buf[9] << 8));
+    if (hdr >= sz) {
+        fprintf(stderr, "%s: MZ header size %zu >= file size %zu\n", path, hdr, sz);
+        free(buf);
+        return 1;
+    }
+    for (size_t i = 0; i < 4; i++) {
+        size_t off = tbl->offsets[i];
+        size_t abs = hdr + off;
+        if (abs >= sz) {
+            fprintf(stderr, "%s: text region %zu (off=0x%zX) out of bounds\n",
+                    path, i, off);
+            free(buf);
+            return 1;
+        }
+        process_text_file(buf + abs, sz - abs);
+    }
+    int rc = write_file(path, buf, sz);
+    free(buf);
+    if (rc == 0) {
+        fprintf(stderr, "gba_preprocess_misc_host: %s (embedded texts processed)\n",
+                path);
+    }
+    return rc;
+}
+
 /* Case-insensitive suffix/equality helpers against an already-uppercased
  * 8.3 name. */
 static int str_eq_icase(const char *a, const char *b) {
@@ -219,6 +274,13 @@ int main(int argc, char **argv) {
             snprintf(want, sizeof want, "%s%s", text_bases[i], ext_dot);
             if (str_eq_icase(ent->d_name, want)) {
                 if (process_text(full)) { rc = 1; }
+                break;
+            }
+        }
+        if (rc) break;
+        for (size_t i = 0; i < sizeof(kExeTextTables)/sizeof(kExeTextTables[0]); i++) {
+            if (str_eq_icase(ent->d_name, kExeTextTables[i].filename)) {
+                if (process_exe_embedded_texts(full, &kExeTextTables[i])) { rc = 1; }
                 break;
             }
         }

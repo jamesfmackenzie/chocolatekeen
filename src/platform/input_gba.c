@@ -10,7 +10,7 @@
  *   D-Pad   → movement
  *   A       → jump (virtual Enter in menus)
  *   B       → pogo / back (virtual Esc in menus)
- *   L       → fire raygun
+ *   L       → save game on the world map (virtual F5); fire raygun in-level
  *   R       → status / pause screen
  *   Start   → confirm (virtual Enter)
  *   Select  → modifier: Select+B=quit, Select+A=god mode, etc. (unused today)
@@ -37,6 +37,7 @@
 #define GBA_DOS_SCANCODE_N      0x31
 #define GBA_DOS_SCANCODE_T      0x14
 #define GBA_DOS_SCANCODE_D      0x20
+#define GBA_DOS_SCANCODE_F5     0x3F
 
 /* Mask used on the emulated joystick for jump / pogo. Must not collide
  * with any bit the engine already uses; bits 0..3 are axis hats, so we
@@ -51,6 +52,7 @@ static bool s_wasEscPressed   = false;
 static bool s_wasStatusPressed = false;
 static bool s_wasYPressed     = false;
 static bool s_wasNPressed     = false;
+static bool s_wasLPressed     = false;
 
 static void ck_set_virtual_key(uint8_t dosScanCode, bool isPressed, bool *wasPressed) {
     if (!dosScanCode) { *wasPressed = isPressed; return; }
@@ -131,14 +133,37 @@ void CK_PlatformApplyInputPolicy(const CK_PlatformInputState_T *state, bool isWa
      * joystickAxesPolls directly, and CK_ActionState_MOVE_* are unused
      * by the engine, so the scancode mirror is dead weight here. */
 
-    /* Jump = A, Pogo = B (only during gameplay, not menus). */
+    /* Jump = A, Pogo = B (only during gameplay, not menus). L mirrors both
+     * bits while in-level so a single shoulder tap satisfies the engine's
+     * "Jump+Pogo newly held on the same frame" raygun-fire trigger (see
+     * enemies.c:455). On the world map L is repurposed as save-game, not
+     * fire, so skip the mirror there. */
+    const bool lHeld = (state->buttonsMask & CK_PLATFORM_BTN_SHOULDER_L) != 0;
+    const bool lPressEdge = lHeld && !s_wasLPressed;
+    const bool inLevel = !g_game.on_world_map;
     uint32_t jbm = engine_inputMappings.currEmuInputStatus.joystickButtonsMask;
     jbm &= ~(GBA_JOY_BUTTON_JUMP | GBA_JOY_BUTTON_POGO);
     if (state->buttonsMask & CK_PLATFORM_BTN_FACE_BOTTOM) jbm |= GBA_JOY_BUTTON_JUMP;
     if ((state->buttonsMask & CK_PLATFORM_BTN_FACE_RIGHT) && !isWaitingForCharInput) {
         jbm |= GBA_JOY_BUTTON_POGO;
     }
+    if (lHeld && inLevel && !isWaitingForCharInput) {
+        jbm |= GBA_JOY_BUTTON_JUMP | GBA_JOY_BUTTON_POGO;
+    }
     engine_inputMappings.currEmuInputStatus.joystickButtonsMask = jbm;
+
+    /* L on the world map = save game. Pulse the F5 scancode for exactly one
+     * frame on the press edge. handle_global_keys checks key_map[0x3F]
+     * directly (gameplay.c:397), so we don't need to arm key_scane. Clearing
+     * on any non-edge frame prevents holding L from re-triggering save_game
+     * after it returns, and also prevents a level→worldmap transition with L
+     * already held from spuriously saving. */
+    if (lPressEdge && !inLevel) {
+        g_input.key_map[GBA_DOS_SCANCODE_F5] = 1;
+    } else {
+        g_input.key_map[GBA_DOS_SCANCODE_F5] = 0;
+    }
+    s_wasLPressed = lHeld;
 
     /* sc_but1/sc_but2 are intentionally NOT armed for the same reason as
      * sc_dir[] above: getJoystickCtrl reads joystickButtonsMask, and

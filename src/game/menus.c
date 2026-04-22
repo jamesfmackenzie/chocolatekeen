@@ -18,6 +18,10 @@
 
 #include "episodes/episode_macros.h"
 
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+#include "platform/gba_data.h"
+#endif
+
 void CVort_demo_toggle_reset_player_partial_state_before();
 void CVort_demo_toggle_reset_player_partial_state_after();
 
@@ -574,7 +578,15 @@ void CVort_show_about_us() {
 }
 
 void CVort_draw_mural() {
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+    /* Title (264 px wide) scaled 3/4 to the 240 px GBA LCD: the DOS
+     * origin of src x=64 lands the visible span right-of-centre and
+     * clips 8 px at the right edge. Origin x=32 fits the whole bmp
+     * and centres it on the LCD (±3 px, bounded by tile granularity). */
+    CVort_engine_drawBitmap(4, 1, 0);
+#else
     CVort_engine_drawBitmap(8, 1, 0);
+#endif
     CVort_engine_drawBitmap((engine_gameVersion == GAMEVER_KEEN3) ? 0x13 : 0x10, 0xb6, 2);
 }
 
@@ -1101,6 +1113,20 @@ void CVort_process_text_file(uint8_t *buffer) {
 }
 
 void CVort_load_and_process_text_file(const char *filename, uint8_t ** pBuffer) {
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+    /* GBA bake applies CVort_process_text_file on the host and stores the
+     * already-processed payload in ROM. The runtime just hands back a cast
+     * pointer into cart .rodata — no malloc, no copy, no in-place mutation.
+     * Safe because the text viewer only reads from the buffer. */
+    const uint8_t *rom_ptr = NULL;
+    size_t rom_size = 0;
+    if (ck_gba_lookup_rom(filename, &rom_ptr, &rom_size) != 0) {
+        *pBuffer = NULL;
+        CVort_chg_vid_and_error("Missing a text file!");
+        return;
+    }
+    *pBuffer = (uint8_t *)rom_ptr;
+#else
     FILE *fp = CVort_engine_cross_ro_data_fopen(filename);
     if (!fp)
         CVort_chg_vid_and_error("Missing a text file!");
@@ -1118,6 +1144,7 @@ void CVort_load_and_process_text_file(const char *filename, uint8_t ** pBuffer) 
     fclose(fp);
 
     CVort_process_text_file(*pBuffer);
+#endif
 }
 
 uint16_t CVort_draw_text_page(uint8_t *text_src_ptr, int16_t *text_viewer_buffer, int16_t arg_6, int16_t arg_8) {

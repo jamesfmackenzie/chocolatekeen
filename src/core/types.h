@@ -18,7 +18,11 @@
 #ifdef WIN32
 #include "../windows/include/GL/glext.h"
 #else
+#if defined(__APPLE__)
+#include <OpenGL/glext.h>
+#else
 #include "GL/glext.h"
+#endif
 #endif
 #endif
 

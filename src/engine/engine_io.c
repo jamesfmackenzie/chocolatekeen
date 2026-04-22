@@ -21,31 +21,46 @@
 static size_t engine_gameDataPrefixLen;
 static char *engine_gameDataFullPathBuffer = NULL;
 
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+/* Longest prefix is "GAMEDATA/KEENx/" (15) + 13 for the 8.3 name = 28.
+ * Using a fixed EWRAM BSS buffer eliminates three per-session mallocs. */
+static char s_gbaGameDataPathBuffer[32] __attribute__((section(".sbss")));
+#endif
+
+#ifdef __APPLE__
+extern const char *getBundlePath(const char *suffix);
+#endif
+
 void CVort_engine_prepareGameDataFilePathBuffers(gameversion_T gameVer) {
-    if (engine_gameDataFullPathBuffer) {
-        free(engine_gameDataFullPathBuffer);
-    }
+    const char *prefix = NULL;
     switch (gameVer) {
-    case GAMEVER_KEEN1:
-        engine_gameDataPrefixLen = strlen(KEEN1_GAMEDATA_PREFIX_WITH_SLASH);
-        engine_gameDataFullPathBuffer = (char *)malloc(engine_gameDataPrefixLen + 13);
-        snprintf(engine_gameDataFullPathBuffer, engine_gameDataPrefixLen + 13, "%s", KEEN1_GAMEDATA_PREFIX_WITH_SLASH);
-        break;
-    case GAMEVER_KEEN2:
-        engine_gameDataPrefixLen = strlen(KEEN2_GAMEDATA_PREFIX_WITH_SLASH);
-        engine_gameDataFullPathBuffer = (char *)malloc(engine_gameDataPrefixLen + 13);
-        snprintf(engine_gameDataFullPathBuffer, engine_gameDataPrefixLen + 13, "%s", KEEN2_GAMEDATA_PREFIX_WITH_SLASH);
-        break;
-    case GAMEVER_KEEN3:
-        engine_gameDataPrefixLen = strlen(KEEN3_GAMEDATA_PREFIX_WITH_SLASH);
-        engine_gameDataFullPathBuffer = (char *)malloc(engine_gameDataPrefixLen + 13);
-        snprintf(engine_gameDataFullPathBuffer, engine_gameDataPrefixLen + 13, "%s", KEEN3_GAMEDATA_PREFIX_WITH_SLASH);
-        break;
+#ifdef __APPLE__
+    case GAMEVER_KEEN1: prefix = getBundlePath(KEEN1_GAMEDATA_PREFIX_WITH_SLASH); break;
+    case GAMEVER_KEEN2: prefix = getBundlePath(KEEN2_GAMEDATA_PREFIX_WITH_SLASH); break;
+    case GAMEVER_KEEN3: prefix = getBundlePath(KEEN3_GAMEDATA_PREFIX_WITH_SLASH); break;
+#else
+    case GAMEVER_KEEN1: prefix = KEEN1_GAMEDATA_PREFIX_WITH_SLASH; break;
+    case GAMEVER_KEEN2: prefix = KEEN2_GAMEDATA_PREFIX_WITH_SLASH; break;
+    case GAMEVER_KEEN3: prefix = KEEN3_GAMEDATA_PREFIX_WITH_SLASH; break;
+#endif
+
     default:
         engine_gameDataPrefixLen = 0;
+#ifndef CHOCOLATE_KEEN_TARGET_GBA
+        if (engine_gameDataFullPathBuffer) { free(engine_gameDataFullPathBuffer); }
+#endif
         engine_gameDataFullPathBuffer = NULL;
-        break;
+        return;
     }
+    engine_gameDataPrefixLen = strlen(prefix);
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+    engine_gameDataFullPathBuffer = s_gbaGameDataPathBuffer;
+    snprintf(engine_gameDataFullPathBuffer, sizeof(s_gbaGameDataPathBuffer), "%s", prefix);
+#else
+    if (engine_gameDataFullPathBuffer) { free(engine_gameDataFullPathBuffer); }
+    engine_gameDataFullPathBuffer = (char *)malloc(engine_gameDataPrefixLen + 13);
+    snprintf(engine_gameDataFullPathBuffer, engine_gameDataPrefixLen + 13, "%s", prefix);
+#endif
 }
 
 FILE *CVort_engine_cross_ro_data_fopen(const char *filename) {

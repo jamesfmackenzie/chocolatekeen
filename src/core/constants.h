@@ -116,7 +116,13 @@
 // ...HOWEVER, with just 0x30000 bytes, out-of-bounds write attempts are
 // expected. The Apogee logo seen on startup (well, drawn but not yet seen) is
 // such an example. So we... double the memory amount for now.
+//
+// The GBA build overrides this to something much smaller (see build/gba/
+// Makefile) because 384 KB does not fit in 256 KB EWRAM. Out-of-bounds
+// writes on the overridden size are tolerated for boot purposes only.
+#ifndef ENGINE_EGA_MEMORY_IN_BITS
 #define ENGINE_EGA_MEMORY_IN_BITS 0x60000
+#endif
 //#define ENGINE_EGA_MEMORY_IN_BITS 0x30000
 
 // Memory for 80x25 text mode, including color attributes

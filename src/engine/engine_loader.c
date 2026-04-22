@@ -15,6 +15,11 @@
 #include "platform/platform.h"
 #include "third_party/cgenius/fileio/compression/Cunlzexe.h"
 
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+#include <ctype.h>
+#include "platform/gba_data.h"
+#endif
+
 uint16_t CVort_private_continue_game(void);
 uint16_t CVort_demo_toggle_prepare_to_record(void);
 
@@ -123,7 +128,25 @@ void CVort_engine_prepareEpisodeSpecificFuncPointers(void) {
         CVort_engine_cross_logMessage(CVORT_LOG_MSG_ERROR, "Unsupported game version while preparing episode pointers.\n");
         return;
     }
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+    /* GBA ROMs are built one episode at a time; the enabled episode's
+     * TILENUM determines the size of this fixed EWRAM BSS slab so we
+     * don't need a runtime malloc. */
+#  if defined(CHOCOLATE_KEEN_IS_EPISODE1_ENABLED)
+#    define GBA_ANIM_TILES_CAPACITY CVort1_TILENUM
+#  elif defined(CHOCOLATE_KEEN_IS_EPISODE2_ENABLED)
+#    define GBA_ANIM_TILES_CAPACITY CVort2_TILENUM
+#  elif defined(CHOCOLATE_KEEN_IS_EPISODE3_ENABLED)
+#    define GBA_ANIM_TILES_CAPACITY CVort3_TILENUM
+#  else
+#    error "No episode enabled for GBA build"
+#  endif
+    static uint16_t s_gbaAnimFrameTiles[4 * GBA_ANIM_TILES_CAPACITY]
+        __attribute__((section(".sbss")));
+    anim_frame_tiles[0] = s_gbaAnimFrameTiles;
+#else
     anim_frame_tiles[0] = (uint16_t *)malloc(4 * numOfTiles * sizeof(uint16_t));
+#endif
     anim_frame_tiles[1] = anim_frame_tiles[0] + numOfTiles;
     anim_frame_tiles[2] = anim_frame_tiles[0] + 2 * numOfTiles;
     anim_frame_tiles[3] = anim_frame_tiles[0] + 3 * numOfTiles;
@@ -169,7 +192,41 @@ static void ensure_keen_version_info_initialized(void) {
     }
 }
 
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+/* The GBA build bakes already-decompressed KEEN*.EXE into ROM (see
+ * scripts/bake_gba_data.sh) so we can hand the engine a pointer straight
+ * into cart ROM. This sidesteps the ~200 KiB peak heap Cunlzexe would
+ * otherwise need. Nothing in the code writes through the exeImage
+ * pointer; it is used purely for constant-data reads. */
+static const ck_gba_rom_entry *gba_find_rom_entry(const char *name) {
+    if (!name) return NULL;
+    for (unsigned i = 0; i < ck_gba_rom_entry_count; i++) {
+        const char *a = ck_gba_rom_entries[i].name;
+        const char *b = name;
+        while (*a && *b && toupper((unsigned char)*a) == toupper((unsigned char)*b)) { a++; b++; }
+        if (*a == '\0' && *b == '\0') return &ck_gba_rom_entries[i];
+    }
+    return NULL;
+}
+#endif
+
 static bool load_exe_image(gameversion_T gameVer, uint8_t **pExeImageBuffer) {
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+    ensure_keen_version_info_initialized();
+    CVort_engine_prepareGameDataFilePathBuffers(gameVer);
+    const ck_gba_rom_entry *ent = gba_find_rom_entry(keen_version_info[gameVer].exeFilename);
+    if (!ent) {
+        return false;
+    }
+    /* The staged exe is an uncompressed DOS MZ image. Skip the MZ
+     * header so the engine's byte offsets line up with the DOS layout. */
+    unsigned headerSize = 16u * ((unsigned)ent->data[8] + ((unsigned)ent->data[9] << 8));
+    if (headerSize >= ent->size) {
+        return false;
+    }
+    *pExeImageBuffer = (uint8_t *)(ent->data + headerSize);
+    return true;
+#else
     uint8_t *wholeExeData;
     ensure_keen_version_info_initialized();
     CVort_engine_prepareGameDataFilePathBuffers(gameVer);
@@ -193,19 +250,34 @@ static bool load_exe_image(gameversion_T gameVer, uint8_t **pExeImageBuffer) {
     fclose(fp);
 
     uint32_t headerSize;
-    if (len == keen_version_info[gameVer].exeSize.compressed) {
-        BYTE *uncompressedExeData;
-        Cunlzexe_decompress(wholeExeData, &uncompressedExeData);
+    // Prefer LZEXE decompression unless the file is exactly the known
+    // v1.31 decompressed size. Some builds of KEEN2/KEEN3 are LZEXE-compressed
+    // with a slightly different total length than v1.31, so matching on size
+    // alone would misclassify them as uncompressed MZ images.
+    bool triedDecompress = false;
+    bool decompressed = false;
+    BYTE *uncompressedExeData = NULL;
+    if (len != keen_version_info[gameVer].exeSize.decompressed) {
+        triedDecompress = true;
+        decompressed = Cunlzexe_decompress(wholeExeData, &uncompressedExeData);
+    }
+    if (decompressed) {
         headerSize = Cunlzexe_getHeaderSize();
         *pExeImageBuffer = (uint8_t *)malloc(Cunlzexe_getUncompressedExeSize() - headerSize);
         if (!(*pExeImageBuffer)) {
+            Cunlzexe_free(&uncompressedExeData);
             free(wholeExeData);
             CVort_engine_cross_logMessage(CVORT_LOG_MSG_ERROR, "Out of memory for uncompressed EXE image storage!\n");
             return false;
         }
         memcpy(*pExeImageBuffer, uncompressedExeData + headerSize, Cunlzexe_getUncompressedExeSize() - headerSize);
         Cunlzexe_free(&uncompressedExeData);
-    } else { // Non-compressed-size path: treat as uncompressed MZ image.
+    } else {
+        // The Cunlzexe_decompress API allocates *uncompressedExeData even on
+        // failure, so release it before we fall through to the MZ path.
+        if (triedDecompress && uncompressedExeData) {
+            Cunlzexe_free(&uncompressedExeData);
+        }
         headerSize = 16 * (wholeExeData[8] + 16 * wholeExeData[9]);
         *pExeImageBuffer = (uint8_t *)malloc(len - headerSize);
         if (!(*pExeImageBuffer)) {
@@ -217,6 +289,7 @@ static bool load_exe_image(gameversion_T gameVer, uint8_t **pExeImageBuffer) {
     }
     free(wholeExeData);
     return true;
+#endif /* CHOCOLATE_KEEN_TARGET_GBA */
 }
 
 bool CVort_engine_isGameExeAvailable(gameversion_T gameVer) {
@@ -227,8 +300,23 @@ bool CVort_engine_isGameExeAvailable(gameversion_T gameVer) {
         return false;
     }
     uint32_t len = CVort_filelength(fp);
+    if ((len == keen_version_info[gameVer].exeSize.compressed) || (len == keen_version_info[gameVer].exeSize.decompressed)) {
+        fclose(fp);
+        return true;
+    }
+    // Some KEEN2/KEEN3 distributions are LZEXE-compressed with a slightly
+    // different total size than v1.31. Accept them when the MZ header and
+    // its LZEXE relocation-offset marker look valid, so load_exe_image can
+    // still decompress the image at launch time.
+    uint8_t header[32];
+    size_t got = fread(header, 1, sizeof(header), fp);
     fclose(fp);
-    return ((len == keen_version_info[gameVer].exeSize.compressed) || (len == keen_version_info[gameVer].exeSize.decompressed));
+    if (got < sizeof(header)) {
+        return false;
+    }
+    bool isMZ = (header[0] == 'M' && header[1] == 'Z') || (header[0] == 'Z' && header[1] == 'M');
+    bool lzexeRelocMarker = (header[0x18] == 0x1c) && (header[0x19] == 0x00);
+    return isMZ && lzexeRelocMarker;
 }
 
 void CVort_engine_loadKeen(gameversion_T gameVer) {

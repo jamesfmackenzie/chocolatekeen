@@ -185,7 +185,17 @@ typedef struct {
 // - 3 possible mouse buttons
 // - 4 possible mouse axis directions
 // - (INPUTHANDLER_HANDLER_AMOUNT_COUNT_PLUS_ONE-1) special handlers
+/* On GBA, 256 KiB of EWRAM caps how much the input map can swell to. A
+ * MappedInputEventList_T is sized by MAX_EMU_MAPPINGS_PER_HOST_ENTRY and
+ * replicated SDL_NUM_SCANCODES times inside InputMappingStruct_T — the
+ * default bound (~120) explodes that table past EWRAM. In practice the
+ * GBA build only ever binds one or two emulated keys per host button, so
+ * 4 is plenty. */
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+#define MAX_EMU_MAPPINGS_PER_HOST_ENTRY 4
+#else
 #define MAX_EMU_MAPPINGS_PER_HOST_ENTRY (EMULATEDKEYINDEX_KEY_INDICES_COUNT + INPUTHANDLER_HANDLER_AMOUNT_COUNT_PLUS_ONE + 18)
+#endif
 
 typedef struct {
     MappedInputEvent_T list[MAX_EMU_MAPPINGS_PER_HOST_ENTRY];

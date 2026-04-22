@@ -19,6 +19,11 @@
 
 #include "episodes/episode_macros.h"
 
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+#include <string.h>
+#include "platform/gba_data.h"
+#endif
+
 void (*CVort_ptr_engine_processEXE)();
 void (*CVort_ptr_engine_setTicks)(uint32_t currTicks);
 uint32_t (*CVort_ptr_engine_getTicks)();
@@ -226,7 +231,13 @@ void CVort_main() {
 
     // We don't need to allocate memory for level data; It's done
     // statically: An array of 10000h bytes in the stack.
+#if CHOCOLATE_KEEN_TARGET_GBA
+    /* Center dialogs on the 240x160 1:1 crop (visible source cols are
+     * [5, 35), so col 20 is exactly the LCD mid-point). */
+    textbox_offs_x = 20;
+#else
     textbox_offs_x = 0x17;
+#endif
     g_game.anim_speed = 7;
     CVort_ptr_engine_setTicksSync(0);
     CVort_ptr_engine_setTicks(0);
@@ -426,6 +437,19 @@ void CVort_load_level_data(uint16_t levelnum) {
     g_game.current_level = levelnum;
     char filename[16];
     snprintf(filename, sizeof(filename), "%s%02" PRIu16 ".%s", "LEVEL", levelnum, game_ext);
+
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+    /* GBA bake pre-expands LEVEL*.<ext> with CRLE and drops the leading
+     * word (see scripts/gba_preprocess_misc_host.c). The runtime just
+     * memcpys the ROM blob into map_data — no compressed-scratch malloc,
+     * no on-device CRLE expansion. */
+    const uint8_t *rom_ptr = NULL;
+    size_t rom_size = 0;
+    if (ck_gba_lookup_rom(filename, &rom_ptr, &rom_size) != 0)
+        return;
+    if (rom_size > sizeof(map_data)) rom_size = sizeof(map_data);
+    memcpy(map_data, rom_ptr, rom_size);
+#else
     FILE *fp = CVort_engine_cross_ro_data_fopen(filename);
     /* NOTE? We could apply random map generation if file is not found */
     /* (e.g. if Keen enters a "random" map from the worldmap while a   */
@@ -452,6 +476,7 @@ void CVort_load_level_data(uint16_t levelnum) {
     memmove(map_data, map_data+1, sizeof(map_data)/sizeof(int16_t)-2);
     // NOTE: Are byteswaps required for the Big-Endian architectures?
     // (Apparently not)
+#endif
 
     map_data_tiles = map_data + 16;
     map_data_sprites = map_data + 16 + map_data[7] / 2; // map_data[7] == Plane size

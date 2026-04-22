@@ -3,6 +3,18 @@
 #include "chocolate-keen_config.h"
 #include "core/globals.h"
 
+/* On GBA, iwram is only 32KiB — engine state (input maps, screen buffer,
+ * map_data) would overflow it. Force uninitialised globals here into
+ * `.sbss`, which the gba_cart.ld linker script places in EWRAM (256KiB).
+ * The few initialised globals go in `.ewram` (same region, loaded). */
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+#define CKGBA_EWRAM_BSS  __attribute__((section(".sbss")))
+#define CKGBA_EWRAM_DATA __attribute__((section(".ewram")))
+#else
+#define CKGBA_EWRAM_BSS
+#define CKGBA_EWRAM_DATA
+#endif
+
     /* Contains MOST data declared in cvorticons.h at the moment */
 
     /***********
@@ -15,12 +27,12 @@
 
     char *engine_configFileLocation;
 
-    InputMappingStruct_T engine_inputMappings;
+    CKGBA_EWRAM_BSS InputMappingStruct_T engine_inputMappings;
     //const EmulatedKey_T engine_emulatedKeysTable[];
 
     //const uint32_t engine_egaRGBColorTable[];
 
-    CVort_engine_screen_T engine_screen;
+    CKGBA_EWRAM_BSS CVort_engine_screen_T engine_screen;
 
     uint8_t engine_currPage;
     uint16_t pel_panning;
@@ -185,10 +197,10 @@
     uint32_t ticks_sync;
     uint16_t tiledraws_c, bmpdraws_c, spritedraws_c;
     // Same for bmpdraws and more
-    SpriteDraw_T spritedraws[0x1f4];
-    BmpDraw_T bmpdraws[0xa];
-    TileDraw_T tiledraws[0x64];
-    uint16_t screentiles[0x258];
+    CKGBA_EWRAM_BSS SpriteDraw_T spritedraws[0x1f4];
+    CKGBA_EWRAM_BSS BmpDraw_T bmpdraws[0xa];
+    CKGBA_EWRAM_BSS TileDraw_T tiledraws[0x64];
+    CKGBA_EWRAM_BSS uint16_t screentiles[0x258];
     // Legacy counters are kept for compatibility with original draw pipeline flow.
     int bmpdraws_i, tiledraws_i, screentiles_i, spritedraws_i;
 
@@ -208,12 +220,13 @@
 
     uint8_t *sound_data;
 
-    uint16_t ATR[2][0x14A];
+    CKGBA_EWRAM_BSS uint16_t ATR[2][0x14A];
 
-    uint8_t demo_actions_including_level_num[5001];
+    CKGBA_EWRAM_BSS uint8_t demo_actions_including_level_num[5001];
     uint8_t *demo_action_ptr, *end_of_demo_ptr, *demo_after_last_byte_char_offset = demo_actions_including_level_num + sizeof(demo_actions_including_level_num);
 
-    int16_t map_data[0x10000 / 2], *map_data_tiles, *map_data_sprites;
+    CKGBA_EWRAM_BSS int16_t map_data[0x10000 / 2];
+    int16_t *map_data_tiles, *map_data_sprites;
     int16_t map_width_tile, map_height_tile, map_width_bytes;
     uint16_t screen_wrap_single;
     //uint16_t screen_wrap;
@@ -244,7 +257,8 @@
     uint16_t text_viewer_top_pos, text_viewer_height, text_viewer_bottom;
     uint8_t *text_ptr;
 
-    int16_t text_viewer_buffer[0x190], *text_viewer_buffer_ptr;
+    CKGBA_EWRAM_BSS int16_t text_viewer_buffer[0x190];
+    int16_t *text_viewer_buffer_ptr;
 
     uint16_t messie_mounted, messie_frame, messie_time_to_climb, messie_move_tics;
     uint16_t messie_x_T, messie_y_T;

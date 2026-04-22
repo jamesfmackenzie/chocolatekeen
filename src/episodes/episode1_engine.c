@@ -101,8 +101,16 @@ void CVort1_engine_processEXE() {
     for (loopVar = 0; loopVar < 4; loopVar++)
         anim_plane[loopVar] = anim_frame_tiles[loopVar];
 
+#if CHOCOLATE_KEEN_TARGET_GBA
+    /* GBA shows a 240x160 center-crop of the 320x200 source. Visible
+     * source cols are [5, 35), so col 20 is the horizontal midpoint;
+     * visible rows are [20, 180), so row-in-8px = 0x0C is midpoint. */
+    textbox_offs_x = 20;
+    textbox_offs_y = 0xC;
+#else
     textbox_offs_x = 0x13;
     textbox_offs_y = 0xB;
+#endif
     g_game.reshow_scroll_up = 1;
     sound_limiter = 0;
     g_game.sound_disabled = 0;

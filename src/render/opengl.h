@@ -13,7 +13,11 @@
 #ifdef WIN32
 #include "../windows/include/GL/glext.h"
 #else
+#ifdef __APPLE__
+#include <OpenGL/glext.h>
+#else
 #include "GL/glext.h"
+#endif
 #endif
 
 /****** OpenGL functions retrieved dynamically if required ******/

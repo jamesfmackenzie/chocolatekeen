@@ -1449,9 +1449,9 @@ void CVort3_show_ordering(uint16_t isTimed) {
     uint16_t di;
     uint16_t foobTicker;
     int16_t ticksCounter;
-    int32_t foobX, foobVelX;
+    int32_t foobX, foobVelX = 0;
     uint32_t var10, var14; // Don't seem to have any use
-    uint16_t foobFrame;
+    uint16_t foobFrame = 0;
 
     di = 100;
     foobTicker = 0;
@@ -1602,7 +1602,7 @@ void CVort3_draw_scores() {
 
 int16_t CVort3_worldmap_sprites(int16_t map_sprite_standing, Sprite_T* spritedraw, int16_t pos_x, int16_t pos_y) {
 
-    int16_t si, di, var2, var4;
+    int16_t si, di, var2, var4 = 0;
 
     if (map_sprite_standing == 0x14) // Show BWB text
     {

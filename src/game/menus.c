@@ -335,7 +335,9 @@ loc_19297:
         CVort_fade_in();
     } else
         CVort_do_start_menu();
+#if 0
 loc_192B1:
+#endif
     CVort_clear_keys();
     sel = 0;
     currCharOffset = 0;
@@ -347,7 +349,9 @@ loc_192C0:
         if (input.direction != 8)
             break;
     }
+#if 0
 loc_192F8:
+#endif
     CVort_engine_drawChar(cursorX, cursorY << 3, currCharOffset + 9);
     //engine_updateActualDisplay();
     currCharOffset++;
@@ -426,7 +430,9 @@ loc_192F8:
         CVort_clear_keys();
     } else // No move
         CVort_engine_delay(7);
+#if 0
 select1:
+#endif
     var_6 = CVort_translate_key(1)&0xFF;
     // In joystick-driven menu mode, Esc is a dismiss key and must not be
     // reinterpreted as a generic "confirm" key.

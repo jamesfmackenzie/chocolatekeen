@@ -588,7 +588,7 @@ int16_t CVort_check_world_map_col(Sprite_T *sprite) {
 }
 
 void CVort_move_worldmap(GameInput_T input, Sprite_T *spritedraw) {
-    int16_t x, y, x1, y1, x2, y2, sprite_x, sprite_y, s, csd;
+    int16_t x, y, x1, y1, x2, y2, sprite_x = 0, sprite_y = 0, s, csd;
     uint16_t fr;
 
     if (engine_gameVersion == GAMEVER_KEEN3)
@@ -719,7 +719,9 @@ void CVort_move_worldmap(GameInput_T input, Sprite_T *spritedraw) {
 
     int32_t tempDiff;
 
+#if 0
 scroll_x:
+#endif
     if (spritedraw->del_x <= 0)
         goto scroll_x_lo;
     tempDiff = spritedraw->pos_x - scroll_x;

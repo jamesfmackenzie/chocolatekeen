@@ -177,3 +177,49 @@ void CK_PlatformApplyDefaultJoystickCalibration(int16_t joystickCtrl[4][3]) {
     joystickCtrl[2][1] = 180;
     joystickCtrl[3][1] = 320;
 }
+
+/*
+ * Slot-picker at a "1-9 or ESC" save/continue prompt. The GBA has no digit
+ * keys, so D-pad cycles the slot (LEFT/UP = down, RIGHT/DOWN = up, with
+ * wraparound 1..9), A or START confirms, B or SELECT cancels. The digit is
+ * echoed at the prompt cursor so the UX matches typing: the user sees which
+ * slot is currently selected. Returns '1'..'9' on confirm or 0x1B (Esc) on
+ * cancel — matching the return value the engine expects from
+ * CVort_read_char_with_echo at these prompts.
+ */
+uint8_t CK_GBA_ReadSlotDigit(void) {
+    uint8_t slot = 1;
+    CVort_engine_drawChar(cursorX, cursorY << 3, (uint16_t)('0' + slot));
+
+    /* Seed with the current button state so a still-held A (the one that
+     * opened this prompt) doesn't immediately register as "confirm". */
+    uint16_t prevRaw = (uint16_t)(~REG_KEYINPUT) & 0x03FF;
+
+    for (;;) {
+        CVort_engine_shortSleep();
+        uint16_t raw = (uint16_t)(~REG_KEYINPUT) & 0x03FF;
+        uint16_t pressed = (uint16_t)(raw & ~prevRaw);
+        prevRaw = raw;
+
+        if (pressed & (KEY_A | KEY_START)) {
+            CVort_engine_drawChar(cursorX, cursorY << 3, ' ');
+            return (uint8_t)('0' + slot);
+        }
+        if (pressed & (KEY_B | KEY_SELECT)) {
+            CVort_engine_drawChar(cursorX, cursorY << 3, ' ');
+            return 0x1B;
+        }
+        bool changed = false;
+        if (pressed & (KEY_RIGHT | KEY_DOWN)) {
+            slot = (uint8_t)((slot % 9) + 1);
+            changed = true;
+        }
+        if (pressed & (KEY_LEFT | KEY_UP)) {
+            slot = (uint8_t)((slot == 1) ? 9 : slot - 1);
+            changed = true;
+        }
+        if (changed) {
+            CVort_engine_drawChar(cursorX, cursorY << 3, (uint16_t)('0' + slot));
+        }
+    }
+}

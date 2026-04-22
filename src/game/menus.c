@@ -19,6 +19,10 @@
 #include "episodes/episode_macros.h"
 
 #ifdef CHOCOLATE_KEEN_TARGET_GBA
+uint8_t CK_GBA_ReadSlotDigit(void);
+#endif
+
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
 #include "platform/gba_data.h"
 #endif
 
@@ -681,9 +685,16 @@ void CVort_save_game() {
         CVort_draw_box_opening_main(0x14, 3);
         CVort_draw_string("Which game position\n");
         CVort_draw_string("do you want to save?\n");
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+        /* No digit keys on GBA — D-pad cycles the slot, A/START confirm,
+         * B/SELECT cancel. CK_GBA_ReadSlotDigit returns '1'..'9' or 0x1B. */
+        CVort_draw_string("   <> pick A ok B esc:");
+        inputChar = (int8_t)CK_GBA_ReadSlotDigit();
+#else
         CVort_draw_string("    1-9 or ESC:");
         do
             inputChar = CVort_read_char_with_echo()&0xFF; while (((inputChar < '1') || (inputChar > '9')) && (inputChar != 0x1B));
+#endif
         if (inputChar == 0x1B)
             return;
         // NOTE: Seems a bit hackish but... well...
@@ -738,9 +749,14 @@ uint16_t CVort_private_continue_game() {
         cursorX_b = cursorX;
         cursorY_b = cursorY;
         CVort_draw_string("  Continue Which Game?\n");
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+        CVort_draw_string("   <> pick A ok B esc:");
+        inputChar = (int8_t)CK_GBA_ReadSlotDigit();
+#else
         CVort_draw_string("    1-9 or ESC:");
         do
             inputChar = CVort_read_char_with_echo()&0xFF; while (((inputChar < '1') || (inputChar > '9')) && (inputChar != 0x1B));
+#endif
         if (inputChar == 0x1B)
             return 0;
         // NOTE: Hackish just like in CVort_save_game()...

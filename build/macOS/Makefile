@@ -50,9 +50,9 @@ chocolate-keen.app: $(EXE_PATH)
 	cp -Rf /usr/local/lib/libSDL2-2.0.0.dylib $@/Contents/Frameworks
 	cp -f ../../rsrc/Info.plist $@/Contents
 	cp -f ../../rsrc/chocolate-keen.icns $@/Contents/Resources
-	cp -f $(EXE_PATH) $@/Contents/MacOS
+	cp -f $(EXE_PATH) $@/Contents/MacOS/chocolate-keen
 	cp -Rf ../../data/* $@/Contents/Resources
-	install_name_tool -add_rpath @executable_path/../Frameworks $@/Contents/MacOS/$(EXE_PATH)
+	install_name_tool -add_rpath @executable_path/../Frameworks $@/Contents/MacOS/chocolate-keen
 
 # Run tests
 test:

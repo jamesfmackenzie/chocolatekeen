@@ -1,5 +1,0 @@
-@echo off 
-cd ..
-cd ..
-cd ..
-".\scummvm\scummvm.exe" -f -p.\games\loom\ loom

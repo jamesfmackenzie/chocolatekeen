@@ -1,6 +1,8 @@
 $(OBJ)/chocolate-keen_icon.o: $(RSRC)/chocolate-keen.rc
 	$(WINDRES) $< -O coff -o $@
 
+$(OBJ)/macbundle.o: $(SRC)/platform/macbundle.m
+	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/lz.o: $(SRC)/third_party/cgenius/fileio/lz.c
 	$(CXX) -c $(INTCXXFLAGS) $(CXXFLAGS) $< -o $@
 $(OBJ)/CRLE.o: $(SRC)/third_party/cgenius/fileio/compression/CRLE.c

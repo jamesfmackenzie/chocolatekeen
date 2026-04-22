@@ -18,6 +18,14 @@
 
 #include "episodes/episode_macros.h"
 
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+uint8_t CK_GBA_ReadSlotDigit(void);
+#endif
+
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+#include "platform/gba_data.h"
+#endif
+
 void CVort_demo_toggle_reset_player_partial_state_before();
 void CVort_demo_toggle_reset_player_partial_state_after();
 
@@ -327,7 +335,9 @@ loc_19297:
         CVort_fade_in();
     } else
         CVort_do_start_menu();
+#if 0
 loc_192B1:
+#endif
     CVort_clear_keys();
     sel = 0;
     currCharOffset = 0;
@@ -339,7 +349,9 @@ loc_192C0:
         if (input.direction != 8)
             break;
     }
+#if 0
 loc_192F8:
+#endif
     CVort_engine_drawChar(cursorX, cursorY << 3, currCharOffset + 9);
     //engine_updateActualDisplay();
     currCharOffset++;
@@ -418,7 +430,9 @@ loc_192F8:
         CVort_clear_keys();
     } else // No move
         CVort_engine_delay(7);
+#if 0
 select1:
+#endif
     var_6 = CVort_translate_key(1)&0xFF;
     // In joystick-driven menu mode, Esc is a dismiss key and must not be
     // reinterpreted as a generic "confirm" key.
@@ -574,7 +588,15 @@ void CVort_show_about_us() {
 }
 
 void CVort_draw_mural() {
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+    /* Title (264 px wide) scaled 3/4 to the 240 px GBA LCD: the DOS
+     * origin of src x=64 lands the visible span right-of-centre and
+     * clips 8 px at the right edge. Origin x=32 fits the whole bmp
+     * and centres it on the LCD (±3 px, bounded by tile granularity). */
+    CVort_engine_drawBitmap(4, 1, 0);
+#else
     CVort_engine_drawBitmap(8, 1, 0);
+#endif
     CVort_engine_drawBitmap((engine_gameVersion == GAMEVER_KEEN3) ? 0x13 : 0x10, 0xb6, 2);
 }
 
@@ -669,9 +691,16 @@ void CVort_save_game() {
         CVort_draw_box_opening_main(0x14, 3);
         CVort_draw_string("Which game position\n");
         CVort_draw_string("do you want to save?\n");
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+        /* No digit keys on GBA — D-pad cycles the slot, A/START confirm,
+         * B/SELECT cancel. CK_GBA_ReadSlotDigit returns '1'..'9' or 0x1B. */
+        CVort_draw_string("   <> pick A ok B esc:");
+        inputChar = (int8_t)CK_GBA_ReadSlotDigit();
+#else
         CVort_draw_string("    1-9 or ESC:");
         do
             inputChar = CVort_read_char_with_echo()&0xFF; while (((inputChar < '1') || (inputChar > '9')) && (inputChar != 0x1B));
+#endif
         if (inputChar == 0x1B)
             return;
         // NOTE: Seems a bit hackish but... well...
@@ -726,9 +755,14 @@ uint16_t CVort_private_continue_game() {
         cursorX_b = cursorX;
         cursorY_b = cursorY;
         CVort_draw_string("  Continue Which Game?\n");
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+        CVort_draw_string("   <> pick A ok B esc:");
+        inputChar = (int8_t)CK_GBA_ReadSlotDigit();
+#else
         CVort_draw_string("    1-9 or ESC:");
         do
             inputChar = CVort_read_char_with_echo()&0xFF; while (((inputChar < '1') || (inputChar > '9')) && (inputChar != 0x1B));
+#endif
         if (inputChar == 0x1B)
             return 0;
         // NOTE: Hackish just like in CVort_save_game()...
@@ -1101,6 +1135,20 @@ void CVort_process_text_file(uint8_t *buffer) {
 }
 
 void CVort_load_and_process_text_file(const char *filename, uint8_t ** pBuffer) {
+#ifdef CHOCOLATE_KEEN_TARGET_GBA
+    /* GBA bake applies CVort_process_text_file on the host and stores the
+     * already-processed payload in ROM. The runtime just hands back a cast
+     * pointer into cart .rodata — no malloc, no copy, no in-place mutation.
+     * Safe because the text viewer only reads from the buffer. */
+    const uint8_t *rom_ptr = NULL;
+    size_t rom_size = 0;
+    if (ck_gba_lookup_rom(filename, &rom_ptr, &rom_size) != 0) {
+        *pBuffer = NULL;
+        CVort_chg_vid_and_error("Missing a text file!");
+        return;
+    }
+    *pBuffer = (uint8_t *)rom_ptr;
+#else
     FILE *fp = CVort_engine_cross_ro_data_fopen(filename);
     if (!fp)
         CVort_chg_vid_and_error("Missing a text file!");
@@ -1118,6 +1166,7 @@ void CVort_load_and_process_text_file(const char *filename, uint8_t ** pBuffer) 
     fclose(fp);
 
     CVort_process_text_file(*pBuffer);
+#endif
 }
 
 uint16_t CVort_draw_text_page(uint8_t *text_src_ptr, int16_t *text_viewer_buffer, int16_t arg_6, int16_t arg_8) {
